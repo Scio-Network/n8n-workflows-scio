@@ -1,0 +1,30 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {},
+  "createdAt": "2026-03-31T07:51:48.974Z",
+  "id": "5URN1c0h9AcyprGj",
+  "isArchived": true,
+  "meta": null,
+  "name": "Workshop",
+  "nodes": [],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-31T07:51:48.977Z",
+      "createdAt": "2026-03-31T07:51:48.977Z",
+      "role": "workflow:owner",
+      "workflowId": "5URN1c0h9AcyprGj",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-14T06:21:49.000Z",
+  "versionId": "c0949346-b0a7-4b71-85b1-e3f3850bc7b1"
+}
