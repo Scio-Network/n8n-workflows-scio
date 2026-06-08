@@ -1,0 +1,1388 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-20T08:09:30.286Z",
+    "createdAt": "2026-01-20T08:09:30.286Z",
+    "versionId": "862598c3-541d-44d9-812c-82198f9b9f89",
+    "workflowId": "isfhThjrM95ViVVo",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 12
+              }
+            ]
+          }
+        },
+        "id": "610e70dc-c3af-4c2c-9c0e-c25fac3e9a2d",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -96,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "stakeholders",
+          "returnAll": true,
+          "matchType": "allFilters",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "news_url",
+                "condition": "neq",
+                "keyValue": "null"
+              }
+            ]
+          }
+        },
+        "id": "61d1d669-3733-45d4-b803-87043eac6dfd",
+        "name": "Supabase - Get Active Feeds",
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          176,
+          0
+        ],
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "1052ee8f-10e9-42fd-83cb-dc5f746f9732",
+        "name": "Loop Over Items",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          416,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Normalize RSS item + compute stable SHA-256 hash for deduping\n// Outputs fields compatible with your Supabase articles insert,\n// including: n8n_content_hash and content_hash (mirrored).\n\nconst crypto = require('crypto');\n\nfunction normalizeWhitespace(s) {\n  return String(s || '')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction canonicalUrl(url) {\n  // Remove common tracking params so hashes stay stable.\n  // Keep the core URL path + essential query if any.\n  try {\n    const u = new URL(String(url || '').trim());\n    const drop = new Set([\n      'utm_source','utm_medium','utm_campaign','utm_term','utm_content',\n      'at_medium','at_campaign','at_custom1','at_custom2','at_custom3',\n      'fbclid','gclid','igshid','mc_cid','mc_eid'\n    ]);\n\n    // remove dropped params\n    [...u.searchParams.keys()].forEach(k => {\n      if (drop.has(k.toLowerCase())) u.searchParams.delete(k);\n    });\n\n    // normalize: sort params\n    const params = [...u.searchParams.entries()].sort(([a],[b]) => a.localeCompare(b));\n    u.search = '';\n    for (const [k, v] of params) u.searchParams.append(k, v);\n\n    // remove trailing slash\n    u.pathname = u.pathname.replace(/\\/+$/, '');\n\n    return u.toString();\n  } catch {\n    return String(url || '').trim();\n  }\n}\n\nfunction sha256Hex(input) {\n  return crypto.createHash('sha256').update(input, 'utf8').digest('hex');\n}\n\nfunction pickFirst(...vals) {\n  for (const v of vals) {\n    if (v !== undefined && v !== null && String(v).trim() !== '') return v;\n  }\n  return '';\n}\n\n// --------- INPUT MAPPING ---------\n// Adjust these if your RSS parser node uses different field names.\nconst rawTitle = pickFirst($json.title, $json.raw_title, $json.headline, $json.title_uk);\nconst rawSummary = pickFirst($json.contentSnippet, $json.summary, $json.raw_content, $json.description, $json.summary_uk);\nconst rawLink = pickFirst($json.link, $json.url, $json.raw_link, $json.source_url);\n\n// If your feed metadata is attached like __feed, keep it.\nconst feed = ($json.__feed && typeof $json.__feed === 'object') ? $json.__feed : {};\n\n// Your pipeline already sets source_id earlier; keep it.\nconst source_id = pickFirst($json.source_id, feed.source_id);\n\n// Default sector guess (AI will override later)\nconst primary_sector = pickFirst($json.primary_sector, feed.primary_sector, 'infrastructure');\n\n// Published date normalization\nconst published_date =\n  pickFirst($json.isoDate, $json.pubDate, $json.published_date) || new Date().toISOString();\n\n// Canonicalize content for hashing\nconst titleNorm = normalizeWhitespace(rawTitle);\nconst summaryNorm = normalizeWhitespace(rawSummary);\nconst urlCanon = canonicalUrl(rawLink);\n\n// IMPORTANT: hash should be stable and not depend on translations.\n// Include source_id + canonical url + normalized title.\n// Add summaryNorm to reduce collision risk when same URL varies (rare but possible).\nconst hashMaterial = [\n  'v1',\n  source_id || '',\n  urlCanon,\n  titleNorm.toLowerCase(),\n  summaryNorm.toLowerCase()\n].join('|');\n\nconst n8n_content_hash = sha256Hex(hashMaterial);\n\n// --------- OUTPUT OBJECT ---------\nconst out = {\n  // Ukrainian fields (you currently store into title_uk / summary_uk even if source is EN)\n  // Keep naming consistent with your DB columns.\n  title_uk: titleNorm,\n  summary_uk: summaryNorm,\n\n  // Core metadata\n  published_date: new Date(published_date).toISOString(),\n  source_url: urlCanon,\n  primary_sector,\n  source_id: source_id || null,\n\n  // Defaults you can override later\n  article_type: pickFirst($json.article_type, 'news'),\n  secondary_sectors: Array.isArray($json.secondary_sectors) ? $json.secondary_sectors : [],\n  credibility_tier: Number.isFinite($json.credibility_tier) ? $json.credibility_tier : (feed.source_credibility_tier ?? 2),\n  original_language: pickFirst($json.original_language, feed.language, 'uk'),\n  translation_status: pickFirst($json.translation_status, 'machine'),\n\n  // New + legacy hash fields\n  n8n_content_hash,\n  content_hash: n8n_content_hash, // mirror for compatibility\n\n  // Pass through feed context for later decisions (optional)\n  __feed: feed\n};\n\nreturn [{ json: out }];\n"
+        },
+        "id": "5b70d62e-d72e-40f7-a3d1-2d8d948065d4",
+        "name": "Normalize RSS Items",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2032,
+          16
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const feed = $node[\"Loop Over Items\"].json;\n\nreturn $input.all().map((item) => ({\n  json: {\n    ...item.json,\n    __feed: {\n      source_id: feed.id,\n      stakeholder_id: feed.stakeholder_id,\n      source_name: feed.name_en,\n      source_credibility_tier: feed.credibility_tier ?? 2,\n      source_verification_status: feed.verification_status ?? \"pending\",\n      primary_sector: feed.primary_sector ?? feed.default_primary_sector ?? null,\n      language: feed.language ?? \"uk\"\n    }\n  }\n}));\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1616,
+          16
+        ],
+        "id": "00b1e17c-5116-400e-b375-2e4ce55e9264",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "url": "={{ $('Loop Over Items').item.json.news_url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          912,
+          16
+        ],
+        "id": "fabef579-b087-4c7c-830c-8b7afe212f16",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.xml",
+        "typeVersion": 1,
+        "position": [
+          1424,
+          -192
+        ],
+        "id": "41aa1491-10f2-4bfc-bcd6-3c67a551262e",
+        "name": "XML",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const channel = $json?.rss?.channel;\nconst ch = Array.isArray(channel) ? channel[0] : channel;\n\nlet items = ch?.item ?? [];\nif (!Array.isArray(items)) items = [items];\n\nreturn items.map((it) => {\n  const title = (it.title?.['#text'] ?? it.title ?? '').toString().trim();\n  const link = (it.link?.['#text'] ?? it.link ?? '').toString().trim();\n  const description = (it.description?.['#text'] ?? it.description ?? '').toString().trim();\n  const guid = (it.guid?.['#text'] ?? it.guid ?? null);\n\n  const pubDate =\n    (it.pubDate?.['#text'] ?? it.pubDate ?? it.published ?? it.updated ?? null);\n\n  return {\n    json: {\n      title,\n      link,\n      description,\n      guid,\n      pubDate\n    }\n  };\n});\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1392,
+          16
+        ],
+        "id": "ced3e8e3-bc9e-4a64-84f4-64d3f4d5957f",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "tableId": "articles",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "title_uk",
+                "fieldValue": "={{ $json.title_en }}"
+              },
+              {
+                "fieldId": "summary_en",
+                "fieldValue": "={{ $json.summary_en }}"
+              },
+              {
+                "fieldId": "source_url",
+                "fieldValue": "={{ $json.source_url }}"
+              },
+              {
+                "fieldId": "primary_sector",
+                "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+              },
+              {
+                "fieldId": "summary_en",
+                "fieldValue": "={{ $json.summary_en }}"
+              },
+              {
+                "fieldId": "article_type",
+                "fieldValue": "={{ $json.article_type }}"
+              },
+              {
+                "fieldId": "published_date",
+                "fieldValue": "={{ $json.published_date }}"
+              },
+              {
+                "fieldId": "source_id",
+                "fieldValue": "={{ $('Normalize RSS Items').item.json.__feed.source_id }}"
+              },
+              {
+                "fieldId": "source_url",
+                "fieldValue": "={{ $json.source_url }}"
+              },
+              {
+                "fieldId": "translation_status",
+                "fieldValue": "={{ $json.translation_status }}"
+              },
+              {
+                "fieldId": "summary_de",
+                "fieldValue": "={{ $json.summary_de }}"
+              },
+              {
+                "fieldId": "n8n_content_hash",
+                "fieldValue": "={{ $('Normalize RSS Items').item.json.n8n_content_hash }}"
+              },
+              {
+                "fieldId": "title_de",
+                "fieldValue": "={{ $json.title_de }}"
+              },
+              {
+                "fieldId": "title_en",
+                "fieldValue": "={{ $json.title_en }}"
+              },
+              {
+                "fieldId": "source_url",
+                "fieldValue": "={{ $('Normalize RSS Items').item.json.source_url }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          4320,
+          192
+        ],
+        "id": "435b8400-2642-4849-8d0a-06c00e60d663",
+        "name": "Create a row",
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "jsCode": "const feed = $json;\n\n// hard requirement: stakeholder_id must exist\nif (!feed.stakeholder_id) {\n  feed.__skip_feed = true;\n  feed.__skip_reason = `Missing stakeholder_id for source ${feed.id} (${feed.name_en})`;\n}\n\nreturn [{ json: feed }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          656,
+          16
+        ],
+        "id": "fa01b066-ca8f-46cc-821d-5e45cf6ef5c5",
+        "name": "Assert Stakeholder ID"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "articles",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "n8n_content_hash",
+                "condition": "eq",
+                "keyValue": "={{ $json.n8n_content_hash }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          2272,
+          -112
+        ],
+        "id": "2b3f9b71-ff0f-4900-86fd-952ba9762ef5",
+        "name": "Get many rows",
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d73fc842-d80a-4925-9626-a1909e92c430",
+                "leftValue": "={{ $json.__is_duplicate }}",
+                "rightValue": "true",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          3056,
+          0
+        ],
+        "id": "66aa555f-3050-4e6b-ad22-13b88b7b4242",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "jsCode": "/**\n * Filter: UA Reconstruction Relevance\n *\n * Keeps:\n * - Anything from Ukrainian ministries / govt sources (allowlist by domain/name/stakeholder_id if present)\n * - Reconstruction / recovery / donor funding / infrastructure / housing / energy / transport / governance signals\n *\n * Drops:\n * - Generic global news unrelated to Ukraine\n * - Sports/celebrity/entertainment noise\n *\n * Outputs:\n * - Returns only items marked keep\n * - Adds __relevance_score, __relevance_reasons, __relevance_bucket\n */\n\nfunction safeStr(v) {\n  return (v ?? \"\").toString().trim();\n}\n\nfunction lower(v) {\n  return safeStr(v).toLowerCase();\n}\n\nfunction tryParseUrl(u) {\n  try {\n    return new URL(u);\n  } catch (e) {\n    return null;\n  }\n}\n\nfunction domainFromUrl(u) {\n  const parsed = tryParseUrl(u);\n  if (!parsed) return \"\";\n  return parsed.hostname.replace(/^www\\./, \"\").toLowerCase();\n}\n\nfunction includesAny(text, needles) {\n  for (const n of needles) {\n    if (text.includes(n)) return true;\n  }\n  return false;\n}\n\nfunction countMatches(text, needles) {\n  let c = 0;\n  for (const n of needles) {\n    if (text.includes(n)) c++;\n  }\n  return c;\n}\n\n/**\n * --- CONFIGURATION ---\n * Tune these lists over time. Start conservative.\n */\n\n// Domains that are always UA-government-ish or ministry-ish.\n// Add domains for ministries, Cabinet, Verkhovna Rada, etc. as you discover them.\nconst GOV_DOMAIN_ALLOWLIST = new Set([\n  \"kmu.gov.ua\",             // Cabinet of Ministers\n  \"rada.gov.ua\",            // Verkhovna Rada\n  \"president.gov.ua\",       // President\n  \"mfa.gov.ua\",             // Foreign Affairs\n  \"me.gov.ua\",              // Economy\n  \"minfin.gov.ua\",          // Finance\n  \"msp.gov.ua\",             // Social Policy (example)\n  \"mon.gov.ua\",             // Education & Science\n  \"moz.gov.ua\",             // Health\n  \"mip.gov.ua\",             // (legacy) Info Policy (example)\n  \"mtu.gov.ua\",             // Infrastructure/Transport (legacy)\n  \"mku.gov.ua\",             // Culture (example)\n  \"menr.gov.ua\",            // Environment (legacy)\n  \"nabu.gov.ua\",            // Anti-corruption (example)\n  \"diia.gov.ua\",            // Digital govt portal\n  \"thedigital.gov.ua\",      // Ministry of Digital Transformation (often used)\n]);\n\n// If you store stakeholder_id for ministries and can pass it through the pipeline,\n// put the known ministry stakeholder IDs here. If you don’t have them, leave empty.\n// (You can add later once you have them in Supabase.)\nconst MINISTRY_STAKEHOLDER_IDS = new Set([\n  // \"025c5f7a-0c9d-47cb-9f52-ead06c7201c9\"\n]);\n\n// Source name signals for Ukrainian government / ministries (fallback if domain unknown)\nconst GOV_NAME_KEYWORDS = [\n  \"ministry\", \"cabinet\", \"kmu\", \"verkhovna rada\", \"rada\",\n  \"state\", \"government\", \"council of ministers\",\n  \"містерство\", \"міністерство\", \"кабінет міністрів\", \"верховна рада\",\n  \"уряд\", \"держав\", \"держслужб\", \"обласна\", \"міська рада\"\n];\n\n// Core Ukraine signals\nconst UA_CORE = [\n  \"ukraine\", \"ukrainian\", \"kyiv\", \"kiev\", \"kharkiv\", \"dnipro\", \"odesa\", \"odesa\",\n  \"lviv\", \"mykolaiv\", \"zaporizhzhia\", \"zaporizhia\", \"sumy\", \"chernihiv\",\n  \"donetsk\", \"luhansk\", \"mariupol\", \"kherson\", \"poltava\", \"vinnitsia\", \"vinnytsia\",\n  \"crimea\", \"donbas\", \"dnipropetrovsk\", \"ivano-frankivsk\", \"chernivtsi\",\n  \"ukrenergo\", \"naftogaz\"\n];\n\n// Reconstruction / recovery / infrastructure signals\nconst RECON = [\n  \"reconstruction\", \"rebuild\", \"rebuilding\", \"recovery\", \"restoration\", \"renovation\",\n  \"repair\", \"repairs\", \"damaged\", \"destroyed\", \"debris\", \"demining\",\n  \"housing\", \"shelter\", \"schools\", \"hospitals\", \"clinics\", \"kindergarten\",\n  \"infrastructure\", \"critical infrastructure\", \"utilities\",\n  \"water supply\", \"wastewater\", \"sewage\", \"district heating\", \"heat supply\",\n  \"power grid\", \"electricity\", \"substation\", \"transformer\", \"grid\", \"energy system\",\n  \"bridge\", \"rail\", \"railway\", \"road\", \"highway\", \"port\", \"airport\",\n  \"urban\", \"municipal\", \"city\", \"community\", \"hromada\",\n  \"master plan\", \"spatial\", \"zoning\", \"urban planning\",\n  \"green recovery\", \"green transition\", \"resilience\", \"resilient\"\n];\n\n// Finance / donors / procurement signals\nconst DONORS_FINANCE = [\n  \"world bank\", \"ebrd\", \"eib\", \"imf\", \"ifc\", \"undp\", \"unops\", \"unicef\", \"who\", \"oecd\",\n  \"eu\", \"european union\", \"commission\", \"european commission\",\n  \"g7\", \"g20\", \"usaid\", \"u.s. aid\", \"uk aid\", \"fcd o\", \"giz\", \"kfw\", \"sida\", \"norad\",\n  \"jica\", \"council of europe\",\n  \"donor\", \"grant\", \"loan\", \"financing\", \"funding\", \"budget support\", \"guarantee\",\n  \"procurement\", \"tender\", \"bid\", \"contract\", \"framework agreement\",\n  \"reconstruction fund\", \"recovery fund\", \"trust fund\"\n];\n\n// Governance / reforms signals relevant to reconstruction\nconst GOV_REFORMS = [\n  \"reform\", \"decentralization\", \"decentralisation\", \"anti-corruption\", \"anticorruption\",\n  \"transparency\", \"audit\", \"oversight\", \"public procurement\", \"prozor\",\n  \"registry\", \"digitalisation\", \"digitalization\", \"e-governance\", \"open data\",\n  \"municipal finance\", \"capacity building\"\n];\n\n// Negative noise signals (drop candidates)\nconst NOISE = [\n  \"celebrity\", \"gossip\", \"movie\", \"film\", \"music\", \"grammy\", \"oscar\",\n  \"football\", \"soccer\", \"nba\", \"nfl\", \"tennis\", \"match\", \"tournament\",\n  \"horoscope\", \"recipe\", \"fashion\", \"beauty\", \"gaming\", \"esports\"\n];\n\n// Sometimes feeds include Ukraine but it's clearly unrelated (very rare).\n// Keep this list short; you can expand later.\nconst HARD_EXCLUDE_PHRASES = [\n  \"ukraine war live blog\", // if you don’t want pure war live blogs in reconstruction pipeline\n];\n\n/**\n * --- SCORING LOGIC ---\n * We use conservative thresholds:\n * - Allowlist always keeps.\n * - Otherwise require a minimum score or minimum combination of signals.\n */\nconst THRESHOLD_KEEP = 6; // tune: higher = stricter\n\nfunction evaluateItem(item) {\n  const j = item.json;\n\n  // Use your normalized fields; adjust if your names differ\n  const title = lower(j.title_uk || j.title_en || j.title || \"\");\n  const summary = lower(j.summary_en || j.summary_uk || j.content_en || j.content_uk || j.description || \"\");\n  const url = safeStr(j.source_url || j.article_url || j.url || \"\");\n  const domain = domainFromUrl(url);\n\n  // Feed/source metadata if available\n  const sourceName = lower(j.source_name || j.name_en || j.feed_name || \"\");\n  const stakeholderId = safeStr(j.stakeholder_id || j.__stakeholder_id || \"\");\n\n  // --- Hard excludes ---\n  const fullText = `${title}\\n${summary}`;\n  if (includesAny(fullText, HARD_EXCLUDE_PHRASES.map(lower))) {\n    return { keep: false, score: 0, bucket: \"exclude\", reasons: [\"Hard exclude phrase\"] };\n  }\n\n  // --- Hard allow: UA government/ministry sources ---\n  const govDomain = domain && GOV_DOMAIN_ALLOWLIST.has(domain);\n  const govName = includesAny(sourceName, GOV_NAME_KEYWORDS) || includesAny(fullText, GOV_NAME_KEYWORDS);\n  const govStakeholder = stakeholderId && MINISTRY_STAKEHOLDER_IDS.has(stakeholderId);\n\n  if (govDomain || govStakeholder) {\n    return {\n      keep: true,\n      score: 999,\n      bucket: \"gov_allowlist\",\n      reasons: [\n        govDomain ? `Gov domain allowlist: ${domain}` : null,\n        govStakeholder ? `Gov stakeholder allowlist: ${stakeholderId}` : null\n      ].filter(Boolean)\n    };\n  }\n\n  // --- Soft allow: gov-like name + UA context ---\n  // (Keeps ministry press releases hosted on non-.gov.ua domains, but only if UA context present)\n  // Example: ministry posts mirrored on partner sites.\n  // We'll score it; not a guaranteed keep.\n\n  // --- Scoring ---\n  let score = 0;\n  const reasons = [];\n\n  // Noise penalty\n  const noiseCount = countMatches(fullText, NOISE);\n  if (noiseCount > 0) {\n    score -= 3 * noiseCount;\n    reasons.push(`Noise signals x${noiseCount} (-${3 * noiseCount})`);\n  }\n\n  // UA context\n  const uaCount = countMatches(fullText, UA_CORE);\n  if (uaCount > 0) {\n    score += Math.min(8, uaCount * 2);\n    reasons.push(`Ukraine context x${uaCount} (+${Math.min(8, uaCount * 2)})`);\n  }\n\n  // Reconstruction signals\n  const reconCount = countMatches(fullText, RECON);\n  if (reconCount > 0) {\n    score += Math.min(10, reconCount * 2);\n    reasons.push(`Reconstruction signals x${reconCount} (+${Math.min(10, reconCount * 2)})`);\n  }\n\n  // Donor/finance signals\n  const donorCount = countMatches(fullText, DONORS_FINANCE);\n  if (donorCount > 0) {\n    score += Math.min(8, donorCount * 2);\n    reasons.push(`Donor/finance signals x${donorCount} (+${Math.min(8, donorCount * 2)})`);\n  }\n\n  // Governance/reform signals\n  const govRefCount = countMatches(fullText, GOV_REFORMS);\n  if (govRefCount > 0) {\n    score += Math.min(6, govRefCount * 2);\n    reasons.push(`Governance/reform signals x${govRefCount} (+${Math.min(6, govRefCount * 2)})`);\n  }\n\n  // Soft gov name boost\n  if (govName) {\n    score += 3;\n    reasons.push(\"Gov/ministry language (+3)\");\n  }\n\n  // Domain heuristic: .gov.ua usually indicates government even if not in allowlist\n  if (domain.endsWith(\".gov.ua\")) {\n    score += 6;\n    reasons.push(\"Domain ends with .gov.ua (+6)\");\n  }\n\n  // Final rule: require either (UA + recon) OR (score threshold)\n  const hasUA = uaCount > 0;\n  const hasRecon = reconCount > 0;\n\n  const keep = (hasUA && hasRecon) || score >= THRESHOLD_KEEP;\n\n  const bucket =\n    keep\n      ? (hasUA && hasRecon ? \"ua_recon\" : \"score_keep\")\n      : \"drop\";\n\n  // Extra safety: if it’s clearly global-only and no UA signal, drop even if donors appear\n  // (prevents generic “World Bank approves loan for X” without any UA mention)\n  if (!hasUA && score < THRESHOLD_KEEP + 3) {\n    // allow if govName is present (ministry press release might omit UA)\n    if (!govName) {\n      return { keep: false, score, bucket: \"drop_no_ua\", reasons: reasons.concat([\"No UA signal\"]) };\n    }\n  }\n\n  return { keep, score, bucket, reasons };\n}\n\nconst kept = [];\nfor (const item of $input.all()) {\n  const res = evaluateItem(item);\n\n  // Attach debug fields for traceability\n  item.json.__decision = res.keep ? \"keep\" : \"drop\";\n  item.json.__relevance_score = res.score;\n  item.json.__relevance_bucket = res.bucket;\n  item.json.__relevance_reasons = res.reasons;\n\n  if (res.keep) kept.push(item);\n}\n\nreturn kept;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1808,
+          16
+        ],
+        "id": "38c19cb8-1fe1-47de-8d97-9328ddf298b0",
+        "name": "Relevance filter"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=You are an AI enrichment component inside an automated ingestion pipeline.\nYou will receive EXACTLY ONE input item as JSON (the item currently in context).\nYou MUST ONLY use information present in the input JSON. You are NOT allowed to invent facts, locations, events, numbers, actors, or details that are not explicitly present in the input fields.\n\nINPUT (SOURCE OF TRUTH)\n\nThe input JSON contains the fields below. You must read them from the current item:\n\nUkrainian title: {{$json.title_uk}}\n\nUkrainian summary: {{$json.summary_uk}}\n\nUkrainian content (may be empty): {{$json.content_uk}}\n\nSource URL: {{$json.source_url}}\n\nPublished date: {{$json.published_date}}\n\nCurrent primary sector guess (may be wrong): {{$json.primary_sector}}\n\nOriginal language code: {{$json.original_language}}\n\nOptional relevance context: {{$json.__relevance_reasons}}\n\nSTRICT NO-HALLUCINATION RULES\n\nYou MUST NOT introduce any proper nouns, organizations, locations, or projects unless they appear in at least one of:\n\n{{$json.title_uk}}\n\n{{$json.summary_uk}}\n\n{{$json.content_uk}}\n\nIf the input title/summary/content does NOT mention a specific place/person/project, your translations and summaries must remain generic and faithful.\n\nDo NOT “improve” or “rewrite” the story. Translate only what exists.\n\nIf {{$json.summary_uk}} is empty, create the summary by paraphrasing ONLY {{$json.title_uk}} (do not add details).\n\nIf {{$json.content_uk}} is empty, ignore it.\n\nIf the text is not Ukrainian (e.g. English), still produce title_en/title_de and summaries based only on the text you see.\n\nTASKS\n\nA) Create faithful translations:\n\ntitle_en: English translation of {{$json.title_uk}}\n\ntitle_de: German translation of {{$json.title_uk}}\n\nB) Create short summaries:\n\nsummary_en: 1–2 sentences summarizing ONLY the information in {{$json.summary_uk}} (or if empty, use ONLY the title)\n\nsummary_de: 1–2 sentences summarizing ONLY the information in {{$json.summary_uk}} (or if empty, use ONLY the title)\n\nC) Choose one primary sector from this strict list (no other values allowed):\n\nDisaster Risk Management: Activities, systems, and governance whose primary purpose is to anticipate, reduce, manage, and recover from hazards by strengthening risk assessment, preparedness, emergency response capacity, and disaster recovery coordination.\n\nBasic Infrastructure: Reconstruction or provision of essential public utilities and everyday service infrastructure that keeps settlements functioning, including lifeline networks (energy, water, wastewater, heating, waste, transport, communications) and critical public facilities such as hospitals and other health infrastructure.\n\nHousing: Repair, reconstruction, or development of permanent residential dwellings and residential buildings, focused on restoring safe, adequate, long-term living conditions for households.\n\nUrban Resilience: Integrated city- or neighborhood-level planning, governance, and multi-sector interventions that increase a city’s ability to withstand and adapt to shocks and long-term stresses while improving recovery capacity and overall urban livability.\nSector choice must be based ONLY on the input text.\nIf unclear, default to infrastructure.\n\nD) Set:\n\ntranslation_status: always \"machine\"\n\nOUTPUT FORMAT (ABSOLUTE)\n\nReturn ONLY a single valid JSON object.\nNo markdown. No backticks. No commentary. No extra keys.\n\nRequired keys exactly:\n{\n\"title_en\": \"...\",\n\"title_de\": \"...\",\n\"summary_en\": \"...\",\n\"summary_de\": \"...\",\n\"primary_sector\": \"housing|infrastructure|urban-resilience|disaster-risk\",\n\"translation_status\": \"machine\"\n}\n\nFINAL CHECK BEFORE YOU OUTPUT\n\nDid you accidentally mention a place/person/project not in the input? If yes, remove it.\n\nDid you add any facts not present in the input? If yes, remove them.\n\nIs primary_sector exactly one of the four allowed strings? If not, set it to infrastructure.\n\nNow produce the JSON for the current input item.",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3,
+        "position": [
+          3648,
+          16
+        ],
+        "id": "dac2d252-8538-4283-ab64-df5d8ab003b5",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4.1-mini"
+          },
+          "builtInTools": {},
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.3,
+        "position": [
+          3648,
+          224
+        ],
+        "id": "2fae7bfd-0dc7-44d3-a21e-dd889aa3390a",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "a4ja82V4nnlunpii",
+            "name": "openai"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "function stripFences(s) {\n  return String(s || \"\")\n    .trim()\n    .replace(/^```json\\s*/i, \"\")\n    .replace(/^```\\s*/i, \"\")\n    .replace(/```$/i, \"\")\n    .trim();\n}\n\nfunction safeParseJsonString(s) {\n  const cleaned = stripFences(s);\n  try {\n    const parsed = JSON.parse(cleaned);\n    // Must be an object\n    if (parsed && typeof parsed === \"object\" && !Array.isArray(parsed)) return parsed;\n    return null;\n  } catch {\n    return null;\n  }\n}\n\n// 1) Base item is always an object\nconst base = ($json && typeof $json === \"object\" && !Array.isArray($json)) ? $json : {};\n\n// 2) AI output string (may be in output, text, response depending on your AI node)\nconst aiRaw = base.output ?? base.text ?? base.response ?? \"\";\n\n// 3) Parse AI JSON string safely\nconst ai = safeParseJsonString(aiRaw) || {};\n\n// 4) Build final object (MUST be an object)\nconst out = {\n  title_uk: base.title_uk ?? \"\",\n  summary_uk: base.summary_uk ?? \"\",\n\n  title_en: ai.title_en ?? \"\",\n  title_de: ai.title_de ?? \"\",\n  summary_en: ai.summary_en ?? \"\",\n  summary_de: ai.summary_de ?? \"\",\n\n  primary_sector: ai.primary_sector ?? base.primary_sector ?? \"infrastructure\",\n  translation_status: ai.translation_status ?? \"machine\",\n\n  article_type: base.article_type ?? \"news\",\n  published_date: base.published_date ?? new Date().toISOString(),\n  source_url: base.source_url ?? \"\",\n  source_id: base.source_id ?? null,\n  secondary_sectors: Array.isArray(base.secondary_sectors) ? base.secondary_sectors : [],\n  credibility_tier: Number.isFinite(base.credibility_tier) ? base.credibility_tier : 2,\n  original_language: base.original_language ?? \"uk\",\n  content_hash: base.content_hash ?? null,\n\n  processing_status: base.processing_status ?? \"ready_for_review\",\n  requires_review: base.requires_review ?? false\n};\n\n// 5) Enforce allowed sectors\nconst allowed = new Set([\"housing\",\"basic infrastructure\",\"urban-resilience\",\"disaster-risk management\"]);\nif (!allowed.has(out.primary_sector)) {\n  out.primary_sector = \"infrastructure\";\n  out.requires_review = true;\n  out.processing_status = \"needs_enrichment\";\n  out.review_reason = \"invalid_primary_sector_from_ai\";\n}\n\n// 6) If AI fields missing, mark review but still return valid object\nif (!out.title_en || !out.title_de || !out.summary_en || !out.summary_de) {\n  out.requires_review = true;\n  out.processing_status = \"needs_enrichment\";\n  out.review_reason = out.review_reason ?? \"ai_missing_required_fields\";\n}\n\n// 7) CRITICAL: Always return json as an OBJECT\nreturn [{ json: out }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4032,
+          16
+        ],
+        "id": "dd3e9aac-9534-4e11-8a23-2a7daba8387b",
+        "name": "Code in JavaScript2"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          2848,
+          0
+        ],
+        "id": "62a2cbd7-8e00-40a2-be7e-8c0c0697012d",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Supabase \"Get many rows\" with Always Output Data ON can emit {} when no match.\n// If a match exists, the returned item will contain at least content_hash or id.\n// We produce a stable boolean flag.\n\nconst hasMatch =\n  !!$json && typeof $json === \"object\" && (\n    !!$json.id ||\n    !!$json.content_hash ||\n    !!$json.source_url\n  );\n\nreturn [{ json: { __is_duplicate: hasMatch } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2560,
+          -112
+        ],
+        "id": "0069ce5f-1aaa-464a-a91c-7a17d2783692",
+        "name": "Code in JavaScript3"
+      },
+      {
+        "parameters": {
+          "jsCode": "return items.filter(item => {\n  // Drop items that only contain the duplicate flag\n  if (!item.json) return false;\n\n  const keys = Object.keys(item.json);\n\n  // If the item ONLY contains the duplicate flag, remove it\n  if (keys.length === 1 && keys[0] === '__is_duplicate') {\n    return false;\n  }\n\n  // Keep everything else\n  return true;\n});\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3360,
+          16
+        ],
+        "id": "283c8dfd-b8b8-40ac-a598-c768680343dc",
+        "name": "Code in JavaScript4"
+      },
+      {
+        "parameters": {
+          "operation": "fromJson",
+          "binaryPropertyName": "={{ $json.data }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1.1,
+        "position": [
+          1216,
+          -192
+        ],
+        "id": "af3af5d8-2623-4b6d-9d83-6f1a5526a12c",
+        "name": "Extract from File",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "operation": "extractHtmlContent",
+          "extractionValues": {
+            "values": [
+              {
+                "key": "title",
+                "cssSelector": "meta[property=\"og:title\"]",
+                "returnValue": "attribute",
+                "returnArray": true
+              },
+              {
+                "key": "description",
+                "cssSelector": "meta[name=\"description\"]",
+                "returnValue": "attribute",
+                "attribute": "content"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          1184,
+          16
+        ],
+        "id": "be2b5934-c164-43a0-9e61-dd5527b689a8",
+        "name": "HTML"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Supabase - Get Active Feeds",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Supabase - Get Active Feeds": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Assert Stakeholder ID",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Normalize RSS Items": {
+        "main": [
+          [
+            {
+              "node": "Get many rows",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Relevance filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "XML": {
+        "main": [
+          []
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a row": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Assert Stakeholder ID": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many rows": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Code in JavaScript4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Relevance filter": {
+        "main": [
+          [
+            {
+              "node": "Normalize RSS Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript2": {
+        "main": [
+          [
+            {
+              "node": "Create a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript3": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript4": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": " Scio Network ",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "862598c3-541d-44d9-812c-82198f9b9f89",
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Get Active Feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Get Active Feeds": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Assert Stakeholder ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize RSS Items": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Relevance filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "XML": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assert Stakeholder ID": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Relevance filter": {
+      "main": [
+        [
+          {
+            "node": "Normalize RSS Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-12T16:43:54.188Z",
+  "id": "isfhThjrM95ViVVo",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_website_Ingestion_v1_live copy",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "id": "610e70dc-c3af-4c2c-9c0e-c25fac3e9a2d",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -96,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "stakeholders",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "news_url",
+              "condition": "neq",
+              "keyValue": "null"
+            }
+          ]
+        }
+      },
+      "id": "61d1d669-3733-45d4-b803-87043eac6dfd",
+      "name": "Supabase - Get Active Feeds",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        176,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "1052ee8f-10e9-42fd-83cb-dc5f746f9732",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        416,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalize RSS item + compute stable SHA-256 hash for deduping\n// Outputs fields compatible with your Supabase articles insert,\n// including: n8n_content_hash and content_hash (mirrored).\n\nconst crypto = require('crypto');\n\nfunction normalizeWhitespace(s) {\n  return String(s || '')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction canonicalUrl(url) {\n  // Remove common tracking params so hashes stay stable.\n  // Keep the core URL path + essential query if any.\n  try {\n    const u = new URL(String(url || '').trim());\n    const drop = new Set([\n      'utm_source','utm_medium','utm_campaign','utm_term','utm_content',\n      'at_medium','at_campaign','at_custom1','at_custom2','at_custom3',\n      'fbclid','gclid','igshid','mc_cid','mc_eid'\n    ]);\n\n    // remove dropped params\n    [...u.searchParams.keys()].forEach(k => {\n      if (drop.has(k.toLowerCase())) u.searchParams.delete(k);\n    });\n\n    // normalize: sort params\n    const params = [...u.searchParams.entries()].sort(([a],[b]) => a.localeCompare(b));\n    u.search = '';\n    for (const [k, v] of params) u.searchParams.append(k, v);\n\n    // remove trailing slash\n    u.pathname = u.pathname.replace(/\\/+$/, '');\n\n    return u.toString();\n  } catch {\n    return String(url || '').trim();\n  }\n}\n\nfunction sha256Hex(input) {\n  return crypto.createHash('sha256').update(input, 'utf8').digest('hex');\n}\n\nfunction pickFirst(...vals) {\n  for (const v of vals) {\n    if (v !== undefined && v !== null && String(v).trim() !== '') return v;\n  }\n  return '';\n}\n\n// --------- INPUT MAPPING ---------\n// Adjust these if your RSS parser node uses different field names.\nconst rawTitle = pickFirst($json.title, $json.raw_title, $json.headline, $json.title_uk);\nconst rawSummary = pickFirst($json.contentSnippet, $json.summary, $json.raw_content, $json.description, $json.summary_uk);\nconst rawLink = pickFirst($json.link, $json.url, $json.raw_link, $json.source_url);\n\n// If your feed metadata is attached like __feed, keep it.\nconst feed = ($json.__feed && typeof $json.__feed === 'object') ? $json.__feed : {};\n\n// Your pipeline already sets source_id earlier; keep it.\nconst source_id = pickFirst($json.source_id, feed.source_id);\n\n// Default sector guess (AI will override later)\nconst primary_sector = pickFirst($json.primary_sector, feed.primary_sector, 'infrastructure');\n\n// Published date normalization\nconst published_date =\n  pickFirst($json.isoDate, $json.pubDate, $json.published_date) || new Date().toISOString();\n\n// Canonicalize content for hashing\nconst titleNorm = normalizeWhitespace(rawTitle);\nconst summaryNorm = normalizeWhitespace(rawSummary);\nconst urlCanon = canonicalUrl(rawLink);\n\n// IMPORTANT: hash should be stable and not depend on translations.\n// Include source_id + canonical url + normalized title.\n// Add summaryNorm to reduce collision risk when same URL varies (rare but possible).\nconst hashMaterial = [\n  'v1',\n  source_id || '',\n  urlCanon,\n  titleNorm.toLowerCase(),\n  summaryNorm.toLowerCase()\n].join('|');\n\nconst n8n_content_hash = sha256Hex(hashMaterial);\n\n// --------- OUTPUT OBJECT ---------\nconst out = {\n  // Ukrainian fields (you currently store into title_uk / summary_uk even if source is EN)\n  // Keep naming consistent with your DB columns.\n  title_uk: titleNorm,\n  summary_uk: summaryNorm,\n\n  // Core metadata\n  published_date: new Date(published_date).toISOString(),\n  source_url: urlCanon,\n  primary_sector,\n  source_id: source_id || null,\n\n  // Defaults you can override later\n  article_type: pickFirst($json.article_type, 'news'),\n  secondary_sectors: Array.isArray($json.secondary_sectors) ? $json.secondary_sectors : [],\n  credibility_tier: Number.isFinite($json.credibility_tier) ? $json.credibility_tier : (feed.source_credibility_tier ?? 2),\n  original_language: pickFirst($json.original_language, feed.language, 'uk'),\n  translation_status: pickFirst($json.translation_status, 'machine'),\n\n  // New + legacy hash fields\n  n8n_content_hash,\n  content_hash: n8n_content_hash, // mirror for compatibility\n\n  // Pass through feed context for later decisions (optional)\n  __feed: feed\n};\n\nreturn [{ json: out }];\n"
+      },
+      "id": "5b70d62e-d72e-40f7-a3d1-2d8d948065d4",
+      "name": "Normalize RSS Items",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2032,
+        16
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const feed = $node[\"Loop Over Items\"].json;\n\nreturn $input.all().map((item) => ({\n  json: {\n    ...item.json,\n    __feed: {\n      source_id: feed.id,\n      stakeholder_id: feed.stakeholder_id,\n      source_name: feed.name_en,\n      source_credibility_tier: feed.credibility_tier ?? 2,\n      source_verification_status: feed.verification_status ?? \"pending\",\n      primary_sector: feed.primary_sector ?? feed.default_primary_sector ?? null,\n      language: feed.language ?? \"uk\"\n    }\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        16
+      ],
+      "id": "00b1e17c-5116-400e-b375-2e4ce55e9264",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Loop Over Items').item.json.news_url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        912,
+        16
+      ],
+      "id": "fabef579-b087-4c7c-830c-8b7afe212f16",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        -192
+      ],
+      "id": "41aa1491-10f2-4bfc-bcd6-3c67a551262e",
+      "name": "XML",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const channel = $json?.rss?.channel;\nconst ch = Array.isArray(channel) ? channel[0] : channel;\n\nlet items = ch?.item ?? [];\nif (!Array.isArray(items)) items = [items];\n\nreturn items.map((it) => {\n  const title = (it.title?.['#text'] ?? it.title ?? '').toString().trim();\n  const link = (it.link?.['#text'] ?? it.link ?? '').toString().trim();\n  const description = (it.description?.['#text'] ?? it.description ?? '').toString().trim();\n  const guid = (it.guid?.['#text'] ?? it.guid ?? null);\n\n  const pubDate =\n    (it.pubDate?.['#text'] ?? it.pubDate ?? it.published ?? it.updated ?? null);\n\n  return {\n    json: {\n      title,\n      link,\n      description,\n      guid,\n      pubDate\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1392,
+        16
+      ],
+      "id": "ced3e8e3-bc9e-4a64-84f4-64d3f4d5957f",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.title_en }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.summary_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.summary_en }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "={{ $json.article_type }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.published_date }}"
+            },
+            {
+              "fieldId": "source_id",
+              "fieldValue": "={{ $('Normalize RSS Items').item.json.__feed.source_id }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "translation_status",
+              "fieldValue": "={{ $json.translation_status }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.summary_de }}"
+            },
+            {
+              "fieldId": "n8n_content_hash",
+              "fieldValue": "={{ $('Normalize RSS Items').item.json.n8n_content_hash }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.title_de }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.title_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $('Normalize RSS Items').item.json.source_url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        4320,
+        192
+      ],
+      "id": "435b8400-2642-4849-8d0a-06c00e60d663",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const feed = $json;\n\n// hard requirement: stakeholder_id must exist\nif (!feed.stakeholder_id) {\n  feed.__skip_feed = true;\n  feed.__skip_reason = `Missing stakeholder_id for source ${feed.id} (${feed.name_en})`;\n}\n\nreturn [{ json: feed }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        16
+      ],
+      "id": "fa01b066-ca8f-46cc-821d-5e45cf6ef5c5",
+      "name": "Assert Stakeholder ID"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "articles",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "n8n_content_hash",
+              "condition": "eq",
+              "keyValue": "={{ $json.n8n_content_hash }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2272,
+        -112
+      ],
+      "id": "2b3f9b71-ff0f-4900-86fd-952ba9762ef5",
+      "name": "Get many rows",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d73fc842-d80a-4925-9626-a1909e92c430",
+              "leftValue": "={{ $json.__is_duplicate }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3056,
+        0
+      ],
+      "id": "66aa555f-3050-4e6b-ad22-13b88b7b4242",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Filter: UA Reconstruction Relevance\n *\n * Keeps:\n * - Anything from Ukrainian ministries / govt sources (allowlist by domain/name/stakeholder_id if present)\n * - Reconstruction / recovery / donor funding / infrastructure / housing / energy / transport / governance signals\n *\n * Drops:\n * - Generic global news unrelated to Ukraine\n * - Sports/celebrity/entertainment noise\n *\n * Outputs:\n * - Returns only items marked keep\n * - Adds __relevance_score, __relevance_reasons, __relevance_bucket\n */\n\nfunction safeStr(v) {\n  return (v ?? \"\").toString().trim();\n}\n\nfunction lower(v) {\n  return safeStr(v).toLowerCase();\n}\n\nfunction tryParseUrl(u) {\n  try {\n    return new URL(u);\n  } catch (e) {\n    return null;\n  }\n}\n\nfunction domainFromUrl(u) {\n  const parsed = tryParseUrl(u);\n  if (!parsed) return \"\";\n  return parsed.hostname.replace(/^www\\./, \"\").toLowerCase();\n}\n\nfunction includesAny(text, needles) {\n  for (const n of needles) {\n    if (text.includes(n)) return true;\n  }\n  return false;\n}\n\nfunction countMatches(text, needles) {\n  let c = 0;\n  for (const n of needles) {\n    if (text.includes(n)) c++;\n  }\n  return c;\n}\n\n/**\n * --- CONFIGURATION ---\n * Tune these lists over time. Start conservative.\n */\n\n// Domains that are always UA-government-ish or ministry-ish.\n// Add domains for ministries, Cabinet, Verkhovna Rada, etc. as you discover them.\nconst GOV_DOMAIN_ALLOWLIST = new Set([\n  \"kmu.gov.ua\",             // Cabinet of Ministers\n  \"rada.gov.ua\",            // Verkhovna Rada\n  \"president.gov.ua\",       // President\n  \"mfa.gov.ua\",             // Foreign Affairs\n  \"me.gov.ua\",              // Economy\n  \"minfin.gov.ua\",          // Finance\n  \"msp.gov.ua\",             // Social Policy (example)\n  \"mon.gov.ua\",             // Education & Science\n  \"moz.gov.ua\",             // Health\n  \"mip.gov.ua\",             // (legacy) Info Policy (example)\n  \"mtu.gov.ua\",             // Infrastructure/Transport (legacy)\n  \"mku.gov.ua\",             // Culture (example)\n  \"menr.gov.ua\",            // Environment (legacy)\n  \"nabu.gov.ua\",            // Anti-corruption (example)\n  \"diia.gov.ua\",            // Digital govt portal\n  \"thedigital.gov.ua\",      // Ministry of Digital Transformation (often used)\n]);\n\n// If you store stakeholder_id for ministries and can pass it through the pipeline,\n// put the known ministry stakeholder IDs here. If you don’t have them, leave empty.\n// (You can add later once you have them in Supabase.)\nconst MINISTRY_STAKEHOLDER_IDS = new Set([\n  // \"025c5f7a-0c9d-47cb-9f52-ead06c7201c9\"\n]);\n\n// Source name signals for Ukrainian government / ministries (fallback if domain unknown)\nconst GOV_NAME_KEYWORDS = [\n  \"ministry\", \"cabinet\", \"kmu\", \"verkhovna rada\", \"rada\",\n  \"state\", \"government\", \"council of ministers\",\n  \"містерство\", \"міністерство\", \"кабінет міністрів\", \"верховна рада\",\n  \"уряд\", \"держав\", \"держслужб\", \"обласна\", \"міська рада\"\n];\n\n// Core Ukraine signals\nconst UA_CORE = [\n  \"ukraine\", \"ukrainian\", \"kyiv\", \"kiev\", \"kharkiv\", \"dnipro\", \"odesa\", \"odesa\",\n  \"lviv\", \"mykolaiv\", \"zaporizhzhia\", \"zaporizhia\", \"sumy\", \"chernihiv\",\n  \"donetsk\", \"luhansk\", \"mariupol\", \"kherson\", \"poltava\", \"vinnitsia\", \"vinnytsia\",\n  \"crimea\", \"donbas\", \"dnipropetrovsk\", \"ivano-frankivsk\", \"chernivtsi\",\n  \"ukrenergo\", \"naftogaz\"\n];\n\n// Reconstruction / recovery / infrastructure signals\nconst RECON = [\n  \"reconstruction\", \"rebuild\", \"rebuilding\", \"recovery\", \"restoration\", \"renovation\",\n  \"repair\", \"repairs\", \"damaged\", \"destroyed\", \"debris\", \"demining\",\n  \"housing\", \"shelter\", \"schools\", \"hospitals\", \"clinics\", \"kindergarten\",\n  \"infrastructure\", \"critical infrastructure\", \"utilities\",\n  \"water supply\", \"wastewater\", \"sewage\", \"district heating\", \"heat supply\",\n  \"power grid\", \"electricity\", \"substation\", \"transformer\", \"grid\", \"energy system\",\n  \"bridge\", \"rail\", \"railway\", \"road\", \"highway\", \"port\", \"airport\",\n  \"urban\", \"municipal\", \"city\", \"community\", \"hromada\",\n  \"master plan\", \"spatial\", \"zoning\", \"urban planning\",\n  \"green recovery\", \"green transition\", \"resilience\", \"resilient\"\n];\n\n// Finance / donors / procurement signals\nconst DONORS_FINANCE = [\n  \"world bank\", \"ebrd\", \"eib\", \"imf\", \"ifc\", \"undp\", \"unops\", \"unicef\", \"who\", \"oecd\",\n  \"eu\", \"european union\", \"commission\", \"european commission\",\n  \"g7\", \"g20\", \"usaid\", \"u.s. aid\", \"uk aid\", \"fcd o\", \"giz\", \"kfw\", \"sida\", \"norad\",\n  \"jica\", \"council of europe\",\n  \"donor\", \"grant\", \"loan\", \"financing\", \"funding\", \"budget support\", \"guarantee\",\n  \"procurement\", \"tender\", \"bid\", \"contract\", \"framework agreement\",\n  \"reconstruction fund\", \"recovery fund\", \"trust fund\"\n];\n\n// Governance / reforms signals relevant to reconstruction\nconst GOV_REFORMS = [\n  \"reform\", \"decentralization\", \"decentralisation\", \"anti-corruption\", \"anticorruption\",\n  \"transparency\", \"audit\", \"oversight\", \"public procurement\", \"prozor\",\n  \"registry\", \"digitalisation\", \"digitalization\", \"e-governance\", \"open data\",\n  \"municipal finance\", \"capacity building\"\n];\n\n// Negative noise signals (drop candidates)\nconst NOISE = [\n  \"celebrity\", \"gossip\", \"movie\", \"film\", \"music\", \"grammy\", \"oscar\",\n  \"football\", \"soccer\", \"nba\", \"nfl\", \"tennis\", \"match\", \"tournament\",\n  \"horoscope\", \"recipe\", \"fashion\", \"beauty\", \"gaming\", \"esports\"\n];\n\n// Sometimes feeds include Ukraine but it's clearly unrelated (very rare).\n// Keep this list short; you can expand later.\nconst HARD_EXCLUDE_PHRASES = [\n  \"ukraine war live blog\", // if you don’t want pure war live blogs in reconstruction pipeline\n];\n\n/**\n * --- SCORING LOGIC ---\n * We use conservative thresholds:\n * - Allowlist always keeps.\n * - Otherwise require a minimum score or minimum combination of signals.\n */\nconst THRESHOLD_KEEP = 6; // tune: higher = stricter\n\nfunction evaluateItem(item) {\n  const j = item.json;\n\n  // Use your normalized fields; adjust if your names differ\n  const title = lower(j.title_uk || j.title_en || j.title || \"\");\n  const summary = lower(j.summary_en || j.summary_uk || j.content_en || j.content_uk || j.description || \"\");\n  const url = safeStr(j.source_url || j.article_url || j.url || \"\");\n  const domain = domainFromUrl(url);\n\n  // Feed/source metadata if available\n  const sourceName = lower(j.source_name || j.name_en || j.feed_name || \"\");\n  const stakeholderId = safeStr(j.stakeholder_id || j.__stakeholder_id || \"\");\n\n  // --- Hard excludes ---\n  const fullText = `${title}\\n${summary}`;\n  if (includesAny(fullText, HARD_EXCLUDE_PHRASES.map(lower))) {\n    return { keep: false, score: 0, bucket: \"exclude\", reasons: [\"Hard exclude phrase\"] };\n  }\n\n  // --- Hard allow: UA government/ministry sources ---\n  const govDomain = domain && GOV_DOMAIN_ALLOWLIST.has(domain);\n  const govName = includesAny(sourceName, GOV_NAME_KEYWORDS) || includesAny(fullText, GOV_NAME_KEYWORDS);\n  const govStakeholder = stakeholderId && MINISTRY_STAKEHOLDER_IDS.has(stakeholderId);\n\n  if (govDomain || govStakeholder) {\n    return {\n      keep: true,\n      score: 999,\n      bucket: \"gov_allowlist\",\n      reasons: [\n        govDomain ? `Gov domain allowlist: ${domain}` : null,\n        govStakeholder ? `Gov stakeholder allowlist: ${stakeholderId}` : null\n      ].filter(Boolean)\n    };\n  }\n\n  // --- Soft allow: gov-like name + UA context ---\n  // (Keeps ministry press releases hosted on non-.gov.ua domains, but only if UA context present)\n  // Example: ministry posts mirrored on partner sites.\n  // We'll score it; not a guaranteed keep.\n\n  // --- Scoring ---\n  let score = 0;\n  const reasons = [];\n\n  // Noise penalty\n  const noiseCount = countMatches(fullText, NOISE);\n  if (noiseCount > 0) {\n    score -= 3 * noiseCount;\n    reasons.push(`Noise signals x${noiseCount} (-${3 * noiseCount})`);\n  }\n\n  // UA context\n  const uaCount = countMatches(fullText, UA_CORE);\n  if (uaCount > 0) {\n    score += Math.min(8, uaCount * 2);\n    reasons.push(`Ukraine context x${uaCount} (+${Math.min(8, uaCount * 2)})`);\n  }\n\n  // Reconstruction signals\n  const reconCount = countMatches(fullText, RECON);\n  if (reconCount > 0) {\n    score += Math.min(10, reconCount * 2);\n    reasons.push(`Reconstruction signals x${reconCount} (+${Math.min(10, reconCount * 2)})`);\n  }\n\n  // Donor/finance signals\n  const donorCount = countMatches(fullText, DONORS_FINANCE);\n  if (donorCount > 0) {\n    score += Math.min(8, donorCount * 2);\n    reasons.push(`Donor/finance signals x${donorCount} (+${Math.min(8, donorCount * 2)})`);\n  }\n\n  // Governance/reform signals\n  const govRefCount = countMatches(fullText, GOV_REFORMS);\n  if (govRefCount > 0) {\n    score += Math.min(6, govRefCount * 2);\n    reasons.push(`Governance/reform signals x${govRefCount} (+${Math.min(6, govRefCount * 2)})`);\n  }\n\n  // Soft gov name boost\n  if (govName) {\n    score += 3;\n    reasons.push(\"Gov/ministry language (+3)\");\n  }\n\n  // Domain heuristic: .gov.ua usually indicates government even if not in allowlist\n  if (domain.endsWith(\".gov.ua\")) {\n    score += 6;\n    reasons.push(\"Domain ends with .gov.ua (+6)\");\n  }\n\n  // Final rule: require either (UA + recon) OR (score threshold)\n  const hasUA = uaCount > 0;\n  const hasRecon = reconCount > 0;\n\n  const keep = (hasUA && hasRecon) || score >= THRESHOLD_KEEP;\n\n  const bucket =\n    keep\n      ? (hasUA && hasRecon ? \"ua_recon\" : \"score_keep\")\n      : \"drop\";\n\n  // Extra safety: if it’s clearly global-only and no UA signal, drop even if donors appear\n  // (prevents generic “World Bank approves loan for X” without any UA mention)\n  if (!hasUA && score < THRESHOLD_KEEP + 3) {\n    // allow if govName is present (ministry press release might omit UA)\n    if (!govName) {\n      return { keep: false, score, bucket: \"drop_no_ua\", reasons: reasons.concat([\"No UA signal\"]) };\n    }\n  }\n\n  return { keep, score, bucket, reasons };\n}\n\nconst kept = [];\nfor (const item of $input.all()) {\n  const res = evaluateItem(item);\n\n  // Attach debug fields for traceability\n  item.json.__decision = res.keep ? \"keep\" : \"drop\";\n  item.json.__relevance_score = res.score;\n  item.json.__relevance_bucket = res.bucket;\n  item.json.__relevance_reasons = res.reasons;\n\n  if (res.keep) kept.push(item);\n}\n\nreturn kept;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1808,
+        16
+      ],
+      "id": "38c19cb8-1fe1-47de-8d97-9328ddf298b0",
+      "name": "Relevance filter"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI enrichment component inside an automated ingestion pipeline.\nYou will receive EXACTLY ONE input item as JSON (the item currently in context).\nYou MUST ONLY use information present in the input JSON. You are NOT allowed to invent facts, locations, events, numbers, actors, or details that are not explicitly present in the input fields.\n\nINPUT (SOURCE OF TRUTH)\n\nThe input JSON contains the fields below. You must read them from the current item:\n\nUkrainian title: {{$json.title_uk}}\n\nUkrainian summary: {{$json.summary_uk}}\n\nUkrainian content (may be empty): {{$json.content_uk}}\n\nSource URL: {{$json.source_url}}\n\nPublished date: {{$json.published_date}}\n\nCurrent primary sector guess (may be wrong): {{$json.primary_sector}}\n\nOriginal language code: {{$json.original_language}}\n\nOptional relevance context: {{$json.__relevance_reasons}}\n\nSTRICT NO-HALLUCINATION RULES\n\nYou MUST NOT introduce any proper nouns, organizations, locations, or projects unless they appear in at least one of:\n\n{{$json.title_uk}}\n\n{{$json.summary_uk}}\n\n{{$json.content_uk}}\n\nIf the input title/summary/content does NOT mention a specific place/person/project, your translations and summaries must remain generic and faithful.\n\nDo NOT “improve” or “rewrite” the story. Translate only what exists.\n\nIf {{$json.summary_uk}} is empty, create the summary by paraphrasing ONLY {{$json.title_uk}} (do not add details).\n\nIf {{$json.content_uk}} is empty, ignore it.\n\nIf the text is not Ukrainian (e.g. English), still produce title_en/title_de and summaries based only on the text you see.\n\nTASKS\n\nA) Create faithful translations:\n\ntitle_en: English translation of {{$json.title_uk}}\n\ntitle_de: German translation of {{$json.title_uk}}\n\nB) Create short summaries:\n\nsummary_en: 1–2 sentences summarizing ONLY the information in {{$json.summary_uk}} (or if empty, use ONLY the title)\n\nsummary_de: 1–2 sentences summarizing ONLY the information in {{$json.summary_uk}} (or if empty, use ONLY the title)\n\nC) Choose one primary sector from this strict list (no other values allowed):\n\nDisaster Risk Management: Activities, systems, and governance whose primary purpose is to anticipate, reduce, manage, and recover from hazards by strengthening risk assessment, preparedness, emergency response capacity, and disaster recovery coordination.\n\nBasic Infrastructure: Reconstruction or provision of essential public utilities and everyday service infrastructure that keeps settlements functioning, including lifeline networks (energy, water, wastewater, heating, waste, transport, communications) and critical public facilities such as hospitals and other health infrastructure.\n\nHousing: Repair, reconstruction, or development of permanent residential dwellings and residential buildings, focused on restoring safe, adequate, long-term living conditions for households.\n\nUrban Resilience: Integrated city- or neighborhood-level planning, governance, and multi-sector interventions that increase a city’s ability to withstand and adapt to shocks and long-term stresses while improving recovery capacity and overall urban livability.\nSector choice must be based ONLY on the input text.\nIf unclear, default to infrastructure.\n\nD) Set:\n\ntranslation_status: always \"machine\"\n\nOUTPUT FORMAT (ABSOLUTE)\n\nReturn ONLY a single valid JSON object.\nNo markdown. No backticks. No commentary. No extra keys.\n\nRequired keys exactly:\n{\n\"title_en\": \"...\",\n\"title_de\": \"...\",\n\"summary_en\": \"...\",\n\"summary_de\": \"...\",\n\"primary_sector\": \"housing|infrastructure|urban-resilience|disaster-risk\",\n\"translation_status\": \"machine\"\n}\n\nFINAL CHECK BEFORE YOU OUTPUT\n\nDid you accidentally mention a place/person/project not in the input? If yes, remove it.\n\nDid you add any facts not present in the input? If yes, remove them.\n\nIs primary_sector exactly one of the four allowed strings? If not, set it to infrastructure.\n\nNow produce the JSON for the current input item.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        3648,
+        16
+      ],
+      "id": "dac2d252-8538-4283-ab64-df5d8ab003b5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        3648,
+        224
+      ],
+      "id": "2fae7bfd-0dc7-44d3-a21e-dd889aa3390a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function stripFences(s) {\n  return String(s || \"\")\n    .trim()\n    .replace(/^```json\\s*/i, \"\")\n    .replace(/^```\\s*/i, \"\")\n    .replace(/```$/i, \"\")\n    .trim();\n}\n\nfunction safeParseJsonString(s) {\n  const cleaned = stripFences(s);\n  try {\n    const parsed = JSON.parse(cleaned);\n    // Must be an object\n    if (parsed && typeof parsed === \"object\" && !Array.isArray(parsed)) return parsed;\n    return null;\n  } catch {\n    return null;\n  }\n}\n\n// 1) Base item is always an object\nconst base = ($json && typeof $json === \"object\" && !Array.isArray($json)) ? $json : {};\n\n// 2) AI output string (may be in output, text, response depending on your AI node)\nconst aiRaw = base.output ?? base.text ?? base.response ?? \"\";\n\n// 3) Parse AI JSON string safely\nconst ai = safeParseJsonString(aiRaw) || {};\n\n// 4) Build final object (MUST be an object)\nconst out = {\n  title_uk: base.title_uk ?? \"\",\n  summary_uk: base.summary_uk ?? \"\",\n\n  title_en: ai.title_en ?? \"\",\n  title_de: ai.title_de ?? \"\",\n  summary_en: ai.summary_en ?? \"\",\n  summary_de: ai.summary_de ?? \"\",\n\n  primary_sector: ai.primary_sector ?? base.primary_sector ?? \"infrastructure\",\n  translation_status: ai.translation_status ?? \"machine\",\n\n  article_type: base.article_type ?? \"news\",\n  published_date: base.published_date ?? new Date().toISOString(),\n  source_url: base.source_url ?? \"\",\n  source_id: base.source_id ?? null,\n  secondary_sectors: Array.isArray(base.secondary_sectors) ? base.secondary_sectors : [],\n  credibility_tier: Number.isFinite(base.credibility_tier) ? base.credibility_tier : 2,\n  original_language: base.original_language ?? \"uk\",\n  content_hash: base.content_hash ?? null,\n\n  processing_status: base.processing_status ?? \"ready_for_review\",\n  requires_review: base.requires_review ?? false\n};\n\n// 5) Enforce allowed sectors\nconst allowed = new Set([\"housing\",\"basic infrastructure\",\"urban-resilience\",\"disaster-risk management\"]);\nif (!allowed.has(out.primary_sector)) {\n  out.primary_sector = \"infrastructure\";\n  out.requires_review = true;\n  out.processing_status = \"needs_enrichment\";\n  out.review_reason = \"invalid_primary_sector_from_ai\";\n}\n\n// 6) If AI fields missing, mark review but still return valid object\nif (!out.title_en || !out.title_de || !out.summary_en || !out.summary_de) {\n  out.requires_review = true;\n  out.processing_status = \"needs_enrichment\";\n  out.review_reason = out.review_reason ?? \"ai_missing_required_fields\";\n}\n\n// 7) CRITICAL: Always return json as an OBJECT\nreturn [{ json: out }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4032,
+        16
+      ],
+      "id": "dd3e9aac-9534-4e11-8a23-2a7daba8387b",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2848,
+        0
+      ],
+      "id": "62a2cbd7-8e00-40a2-be7e-8c0c0697012d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supabase \"Get many rows\" with Always Output Data ON can emit {} when no match.\n// If a match exists, the returned item will contain at least content_hash or id.\n// We produce a stable boolean flag.\n\nconst hasMatch =\n  !!$json && typeof $json === \"object\" && (\n    !!$json.id ||\n    !!$json.content_hash ||\n    !!$json.source_url\n  );\n\nreturn [{ json: { __is_duplicate: hasMatch } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2560,
+        -112
+      ],
+      "id": "0069ce5f-1aaa-464a-a91c-7a17d2783692",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.filter(item => {\n  // Drop items that only contain the duplicate flag\n  if (!item.json) return false;\n\n  const keys = Object.keys(item.json);\n\n  // If the item ONLY contains the duplicate flag, remove it\n  if (keys.length === 1 && keys[0] === '__is_duplicate') {\n    return false;\n  }\n\n  // Keep everything else\n  return true;\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        16
+      ],
+      "id": "283c8dfd-b8b8-40ac-a598-c768680343dc",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "binaryPropertyName": "={{ $json.data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        1216,
+        -192
+      ],
+      "id": "af3af5d8-2623-4b6d-9d83-6f1a5526a12c",
+      "name": "Extract from File",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": "meta[property=\"og:title\"]",
+              "returnValue": "attribute",
+              "returnArray": true
+            },
+            {
+              "key": "description",
+              "cssSelector": "meta[name=\"description\"]",
+              "returnValue": "attribute",
+              "attribute": "content"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1184,
+        16
+      ],
+      "id": "be2b5934-c164-43a0-9e61-dd5527b689a8",
+      "name": "HTML"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-12T16:43:54.191Z",
+      "createdAt": "2026-01-12T16:43:54.191Z",
+      "role": "workflow:owner",
+      "workflowId": "isfhThjrM95ViVVo",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        12
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-20T08:09:30.284Z",
+  "versionId": "862598c3-541d-44d9-812c-82198f9b9f89"
+}
