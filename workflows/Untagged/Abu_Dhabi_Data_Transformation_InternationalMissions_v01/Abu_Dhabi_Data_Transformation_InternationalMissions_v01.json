@@ -1,0 +1,412 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set | Import Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set | Import Config": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Debug Summary": {
+      "main": [
+        [
+          {
+            "node": "Code | Prepare Export Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code | Debug Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Prepare Export Files": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code | Create Clean CSV Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Create Clean CSV Binary": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        []
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "Code | Normalize Mission Memo to Canonical Records",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Normalize Mission Memo to Canonical Records": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-03T07:36:26.968Z",
+  "id": "cXhvcadWZPTIVJJh",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Abu_Dhabi_Data_Transformation_InternationalMissions_v01",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        544
+      ],
+      "id": "b5c9af17-6f10-4a61-86b5-de1991741e3e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.source_file_id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -144,
+        544
+      ],
+      "id": "e55ef161-cc1a-4546-9f98-79f8a3849075",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $node[\"Set | Import Config\"].json;\n\nreturn [\n  {\n    json: {\n      source_file_name: config.source_file_name,\n      source_file_id: config.source_file_id,\n      record_type: config.record_type,\n      schema_version: config.schema_version,\n      inferred_year: Number(config.inferred_year || 2026),\n      extracted_item_count: items.length,\n      first_item: items[0]?.json || null,\n      first_5_items: items.slice(0, 5).map(item => item.json)\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        368
+      ],
+      "id": "b588e93e-9375-4629-b1f9-228cb3fdc364",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c8701828-7bed-4fb2-b91c-578d5ce5c3f9",
+              "name": "source_file_id",
+              "value": "10Lw34Bmhz8n5sZrljK3ExB65-JmkzxaW",
+              "type": "string"
+            },
+            {
+              "id": "8d7782c9-a8bf-43c3-b145-5451429dde6a",
+              "name": "inferred_year",
+              "value": "2026",
+              "type": "string"
+            },
+            {
+              "id": "dd77f32f-a3cf-4360-85ba-27d96789bb66",
+              "name": "record_type",
+              "value": "international_mission",
+              "type": "string"
+            },
+            {
+              "id": "f49f10eb-6c80-410e-a142-4743af318b14",
+              "name": "source_file_name",
+              "value": "Approval Memo_secure_no_PII.pdf",
+              "type": "string"
+            },
+            {
+              "id": "b2670dc1-fa54-4e1c-927d-67d1f32193ba",
+              "name": "schema_version",
+              "value": "canonical-records-v1",
+              "type": "string"
+            },
+            {
+              "id": "3b46d5fb-737b-4779-82ed-21277da6078f",
+              "name": "document_classification",
+              "value": "confidential",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -352,
+        544
+      ],
+      "id": "f1704d55-f38c-4af3-9028-dd378dcea6bc",
+      "name": "Set | Import Config"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = items[0].json;\n\nif (!output.job) {\n  throw new Error(\n    'Debug Summary expected output.job. Make sure this node is connected directly after the mission memo normalization node.'\n  );\n}\n\nreturn [\n  {\n    json: {\n      ...output,\n      debug_summary: {\n        success: true,\n        import_job_id: output.job.import_job_id,\n        mission_id: output.job.mission_id,\n        status: output.job.status,\n        clean_record_count: output.job.clean_record_count,\n        rejected_row_count: output.job.rejected_row_count,\n        issue_count: output.job.issue_count,\n        warning_count: output.job.warning_count,\n        error_count: output.job.error_count,\n        processed_sections: output.job.processed_sections,\n        first_clean_record: output.records?.[0] || null,\n        rejected_rows_sample: output.rejected_rows?.slice(0, 5) || [],\n        issues_sample: output.issues?.slice(0, 10) || [],\n        message: 'Mission memo transformation completed. No database write performed yet.'\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        528
+      ],
+      "id": "7d5d62a1-0c29-46eb-863b-e4824c71a43d",
+      "name": "Code | Debug Summary"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = items[0].json;\n\nif (!output.job) {\n  throw new Error('Missing output.job. Connect this node after the mission memo normalization node or pass-through Debug Summary node.');\n}\n\nif (!Array.isArray(output.records)) {\n  throw new Error('Missing output.records array.');\n}\n\nconst cleanRecords = output.records.map(record => ({\n  record_id: record.record_id,\n  import_job_id: record.import_job_id,\n  schema_version: record.schema_version,\n\n  record_type: record.record_type,\n  record_category: record.record_category,\n  record_subcategory: record.record_subcategory,\n\n  title: record.title,\n  start_date: record.start_date,\n  end_date: record.end_date,\n  month: record.month,\n  location: record.location,\n  entity: record.entity,\n  status: record.status,\n\n  mission_id: record.normalized_payload?.mission_id ?? null,\n  document_type: record.normalized_payload?.document_type ?? null,\n  memo_date: record.normalized_payload?.memo_date ?? null,\n  business_unit: record.normalized_payload?.business_unit ?? null,\n  country: record.normalized_payload?.country ?? null,\n  classification: record.normalized_payload?.classification ?? null,\n  approval_status: record.normalized_payload?.approval_status ?? null,\n\n  participant_name: record.normalized_payload?.participant_name ?? null,\n  participant_role: record.normalized_payload?.participant_role ?? null,\n  stakeholder_name: record.normalized_payload?.stakeholder_name ?? null,\n\n  day_number: record.normalized_payload?.day_number ?? null,\n  agenda_date: record.normalized_payload?.agenda_date ?? null,\n  agenda_location: record.normalized_payload?.agenda_location ?? null,\n  agenda_description: record.normalized_payload?.agenda_description ?? null,\n\n  use_case_number: record.normalized_payload?.use_case_number ?? null,\n  use_case_title: record.normalized_payload?.use_case_title ?? null,\n  outcome_number: record.normalized_payload?.outcome_number ?? null,\n  outcome_text: record.normalized_payload?.outcome_text ?? null,\n\n  approval_step: record.normalized_payload?.approval_step ?? null,\n  signature_status: record.normalized_payload?.signature_status ?? null,\n\n  validation_status: record.validation_status,\n  validation_notes: record.validation_notes,\n\n  source_file_name: record.source_file_name,\n  source_sheet: record.source_sheet,\n  source_row_number: record.source_row_number,\n\n  normalized_payload: record.normalized_payload,\n  extra_fields: record.extra_fields\n}));\n\nconst baseName = String(output.job.source_file_name || 'mission_memo_import')\n  .replace(/\\.[^.]+$/, '')\n  .replace(/[^\\w.-]+/g, '_');\n\nreturn [\n  {\n    json: {\n      file_type: 'clean_records',\n      file_name: `${baseName}_clean_mission_records.json`,\n      data: cleanRecords\n    }\n  },\n  {\n    json: {\n      file_type: 'rejected_rows',\n      file_name: `${baseName}_rejected_rows.json`,\n      data: output.rejected_rows || []\n    }\n  },\n  {\n    json: {\n      file_type: 'issues',\n      file_name: `${baseName}_import_issues.json`,\n      data: output.issues || []\n    }\n  },\n  {\n    json: {\n      file_type: 'full_import_payload',\n      file_name: `${baseName}_full_import_payload.json`,\n      data: output\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        528
+      ],
+      "id": "35ea53bb-1970-40d6-ac39-8110c6c8128f",
+      "name": "Code | Prepare Export Files"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        528
+      ],
+      "id": "7bf6dc9d-b39a-44e7-8e7e-24529facba2f",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "33735f71-72e6-41c1-9215-7a2228f270e9",
+              "leftValue": "={{ $json.file_type }}",
+              "rightValue": "=clean_records",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1872,
+        528
+      ],
+      "id": "fac57877-7784-48fb-b375-8da32d67ee67",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = items[0].json;\n\nif (item.file_type !== 'clean_records') {\n  throw new Error(`Expected file_type \"clean_records\", received \"${item.file_type}\".`);\n}\n\nif (!Array.isArray(item.data)) {\n  throw new Error('Expected item.data to be an array of clean mission records.');\n}\n\nconst rows = item.data;\n\nconst preferredColumns = [\n  'record_id',\n  'import_job_id',\n  'schema_version',\n\n  'record_type',\n  'record_category',\n  'record_subcategory',\n\n  'title',\n  'start_date',\n  'end_date',\n  'month',\n  'location',\n  'entity',\n  'status',\n\n  'mission_id',\n  'document_type',\n  'memo_date',\n  'business_unit',\n  'country',\n  'classification',\n  'approval_status',\n\n  'participant_name',\n  'participant_role',\n  'stakeholder_name',\n\n  'day_number',\n  'agenda_date',\n  'agenda_location',\n  'agenda_description',\n\n  'use_case_number',\n  'use_case_title',\n  'outcome_number',\n  'outcome_text',\n\n  'approval_step',\n  'signature_status',\n\n  'validation_status',\n  'validation_notes',\n\n  'source_file_name',\n  'source_sheet',\n  'source_row_number',\n\n  'normalized_payload',\n  'extra_fields'\n];\n\nconst allColumns = Array.from(\n  new Set(rows.flatMap(row => Object.keys(row)))\n);\n\nconst columns = [\n  ...preferredColumns.filter(col => allColumns.includes(col)),\n  ...allColumns.filter(col => !preferredColumns.includes(col))\n];\n\nfunction csvEscape(value) {\n  if (value === null || value === undefined) return '';\n\n  const s = typeof value === 'object' ? JSON.stringify(value) : String(value);\n\n  if (/[\",\\n\\r]/.test(s)) {\n    return `\"${s.replace(/\"/g, '\"\"')}\"`;\n  }\n\n  return s;\n}\n\nconst lines = [];\n\nlines.push(columns.map(csvEscape).join(','));\n\nfor (const row of rows) {\n  lines.push(columns.map(col => csvEscape(row[col])).join(','));\n}\n\nconst csv = '\\uFEFF' + lines.join('\\r\\n');\n\nconst baseName = String(item.file_name || 'clean_mission_records.json')\n  .replace(/\\.json$/i, '')\n  .replace(/[^\\w.-]+/g, '_');\n\nconst fileName = `${baseName}.csv`;\n\nconst binaryData = await this.helpers.prepareBinaryData(\n  Buffer.from(csv, 'utf8'),\n  fileName,\n  'text/csv'\n);\n\nreturn [\n  {\n    json: {\n      file_type: 'clean_records_csv',\n      file_name: fileName,\n      row_count: rows.length,\n      column_count: columns.length,\n      columns\n    },\n    binary: {\n      data: binaryData\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        384
+      ],
+      "id": "912f0a57-58e4-41f1-8c1b-e8edfb087509",
+      "name": "Code | Create Clean CSV Binary"
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.file_name }}",
+        "driveId": {
+          "__rl": true,
+          "value": "0ACI-sZoajtL_Uk9PVA",
+          "mode": "list",
+          "cachedResultName": "07_Projects",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/0ACI-sZoajtL_Uk9PVA"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/folders/1l2VpYeiA7CX133QIv2h3GG5-X1eP-QtP",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2512,
+        384
+      ],
+      "id": "f88a85e1-03fb-4e0a-b717-f1ff111402c6",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        544
+      ],
+      "id": "98afd4cd-69a3-4f8d-ac01-50d7adeaf4e9",
+      "name": "Extract from File2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $node[\"Set | Import Config\"].json;\n\nconst schemaVersion = config.schema_version || 'canonical-records-v1';\nconst defaultRecordType = config.record_type || 'international_mission';\nconst sourceFileId = config.source_file_id || null;\nconst sourceFileName = config.source_file_name || 'unknown_mission_memo';\nconst year = Number(config.year || 2026);\nconst documentType = config.document_type || 'mission_approval_memo';\nconst classificationFromConfig = config.document_classification || null;\n\nconst importJobId = `mission_imp_${Date.now()}`;\n\nconst MONTHS = {\n  jan: 1, january: 1,\n  feb: 2, february: 2,\n  mar: 3, march: 3,\n  apr: 4, april: 4,\n  may: 5,\n  jun: 6, june: 6,\n  jul: 7, july: 7,\n  aug: 8, august: 8,\n  sep: 9, sept: 9, september: 9,\n  oct: 10, october: 10,\n  nov: 11, november: 11,\n  dec: 12, december: 12\n};\n\nconst MONTH_LABELS = {\n  1: 'January',\n  2: 'February',\n  3: 'March',\n  4: 'April',\n  5: 'May',\n  6: 'June',\n  7: 'July',\n  8: 'August',\n  9: 'September',\n  10: 'October',\n  11: 'November',\n  12: 'December'\n};\n\nfunction clean(value) {\n  if (value === null || value === undefined) return null;\n\n  const s = String(value)\n    .replace(/\\u00a0/g, ' ')\n    .replace(/[–—]/g, '-')\n    .replace(/\\r/g, '\\n')\n    .trim()\n    .replace(/[ \\t]+/g, ' ')\n    .replace(/\\n{3,}/g, '\\n\\n');\n\n  if (!s) return null;\n\n  const lower = s.toLowerCase();\n  if (['-', '—', 'n/a', 'na', 'null', 'undefined'].includes(lower)) return null;\n\n  return s;\n}\n\nfunction oneLine(value) {\n  return String(value || '')\n    .replace(/\\u00a0/g, ' ')\n    .replace(/[–—]/g, '-')\n    .replace(/\\r/g, '\\n')\n    .replace(/\\n+/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction norm(value) {\n  return String(value ?? '')\n    .replace(/\\u00a0/g, ' ')\n    .replace(/[–—]/g, '-')\n    .trim()\n    .toLowerCase()\n    .replace(/&/g, ' and ')\n    .replace(/[_\\-./:;()\\[\\]#]+/g, ' ')\n    .replace(/[^\\p{L}\\p{N}\\s]+/gu, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction hash(input, length = 16) {\n  let h = 2166136261;\n  const s = String(input ?? '');\n\n  for (let i = 0; i < s.length; i++) {\n    h ^= s.charCodeAt(i);\n    h = Math.imul(h, 16777619);\n  }\n\n  const hex = (h >>> 0).toString(16).padStart(8, '0');\n  return (hex + hex + hex + hex).slice(0, length);\n}\n\nfunction pad2(n) {\n  return String(n).padStart(2, '0');\n}\n\nfunction isoDate(y, m, d) {\n  const yearValue = Number(y);\n  const monthValue = Number(m);\n  const dayValue = Number(d);\n\n  if (!yearValue || !monthValue || !dayValue) return null;\n\n  const date = new Date(Date.UTC(yearValue, monthValue - 1, dayValue));\n\n  if (\n    date.getUTCFullYear() !== yearValue ||\n    date.getUTCMonth() !== monthValue - 1 ||\n    date.getUTCDate() !== dayValue\n  ) {\n    return null;\n  }\n\n  return `${yearValue}-${pad2(monthValue)}-${pad2(dayValue)}`;\n}\n\nfunction monthNumber(value) {\n  const key = norm(value);\n  return MONTHS[key] || null;\n}\n\nfunction monthNameFromIso(iso) {\n  if (!iso) return null;\n  const m = Number(String(iso).slice(5, 7));\n  return MONTH_LABELS[m] || null;\n}\n\nfunction parseTextDate(value, defaultYear = year) {\n  const s = oneLine(value);\n  if (!s) return null;\n\n  let m;\n\n  // 13 May 2026\n  m = s.match(/(\\d{1,2})\\s*(?:st|nd|rd|th)?\\s+([A-Za-z]+)\\s+(\\d{4})/i);\n  if (m) {\n    const mo = monthNumber(m[2]);\n    if (mo) return isoDate(Number(m[3]), mo, Number(m[1]));\n  }\n\n  // May 13, 2026\n  m = s.match(/([A-Za-z]+)\\s+(\\d{1,2})\\s*,?\\s+(\\d{4})/i);\n  if (m) {\n    const mo = monthNumber(m[1]);\n    if (mo) return isoDate(Number(m[3]), mo, Number(m[2]));\n  }\n\n  // 19th May, with default year\n  m = s.match(/(\\d{1,2})\\s*(?:st|nd|rd|th)?\\s+([A-Za-z]+)/i);\n  if (m) {\n    const mo = monthNumber(m[2]);\n    if (mo) return isoDate(defaultYear, mo, Number(m[1]));\n  }\n\n  return null;\n}\n\nfunction parseDateRangeFromSubject(subject) {\n  const s = oneLine(subject);\n\n  // (May 19-21, 2026)\n  const m = s.match(/\\(([A-Za-z]+)\\s+(\\d{1,2})\\s*-\\s*(\\d{1,2})\\s*,\\s*(\\d{4})\\)/i);\n\n  if (!m) {\n    return {\n      start_date: null,\n      end_date: null,\n      warning: 'Could not parse mission date range from subject.'\n    };\n  }\n\n  const mo = monthNumber(m[1]);\n  if (!mo) {\n    return {\n      start_date: null,\n      end_date: null,\n      warning: 'Could not parse mission month from subject.'\n    };\n  }\n\n  return {\n    start_date: isoDate(Number(m[4]), mo, Number(m[2])),\n    end_date: isoDate(Number(m[4]), mo, Number(m[3])),\n    warning: null\n  };\n}\n\nfunction collectStrings(value, output = []) {\n  if (value === null || value === undefined) return output;\n\n  if (typeof value === 'string') {\n    if (value.trim().length > 20) output.push(value);\n    return output;\n  }\n\n  if (Array.isArray(value)) {\n    for (const v of value) collectStrings(v, output);\n    return output;\n  }\n\n  if (typeof value === 'object') {\n    for (const v of Object.values(value)) collectStrings(v, output);\n    return output;\n  }\n\n  return output;\n}\n\nfunction captureBetween(text, startPattern, endPattern) {\n  const re = new RegExp(`${startPattern}\\\\s+([\\\\s\\\\S]*?)\\\\s+(?=${endPattern})`, 'i');\n  const m = text.match(re);\n  return clean(m?.[1]) || null;\n}\n\nfunction addIssue(issues, base, severity, issueCode, fieldName, message, originalValue = null, normalizedValue = null) {\n  issues.push({\n    import_job_id: importJobId,\n    severity,\n    issue_code: issueCode,\n    field_name: fieldName,\n    source_file_id: sourceFileId,\n    source_file_name: sourceFileName,\n    source_sheet: base.source_sheet || 'Approval Memo PDF',\n    source_row_number: base.source_row_number || null,\n    original_value: originalValue === null || originalValue === undefined ? null : String(originalValue),\n    normalized_value: normalizedValue === null || normalizedValue === undefined ? null : String(normalizedValue),\n    message\n  });\n}\n\nfunction makeRecord({\n  record_type,\n  record_category,\n  record_subcategory = null,\n  title,\n  start_date = null,\n  end_date = null,\n  month = null,\n  location = null,\n  entity = null,\n  status = 'Unknown',\n  source_row_number = null,\n  validation_status = 'valid',\n  validation_notes = null,\n  raw_row = {},\n  normalized_payload = {},\n  extra_fields = {}\n}) {\n  return {\n    record_id: `rec_${hash([\n      importJobId,\n      record_type,\n      record_category,\n      record_subcategory,\n      title,\n      start_date,\n      source_row_number\n    ].join('|'), 24)}`,\n    import_job_id: importJobId,\n    schema_version: schemaVersion,\n\n    record_type,\n    record_category,\n    record_subcategory,\n\n    title,\n    start_date,\n    end_date,\n    month,\n\n    location,\n    website: null,\n    entity,\n    ga: null,\n\n    attendance_format: null,\n    sponsoring_level: null,\n    contact_person: null,\n    project_owner: null,\n    status,\n\n    source_file_id: sourceFileId,\n    source_file_name: sourceFileName,\n    source_sheet: 'Approval Memo PDF',\n    source_row_number,\n\n    validation_status,\n    validation_notes,\n\n    raw_row,\n    normalized_payload,\n    extra_fields\n  };\n}\n\nfunction splitBullets(text) {\n  if (!text) return [];\n\n  return String(text)\n    .split(/[●•]\\s*/g)\n    .map(v => clean(v))\n    .filter(Boolean);\n}\n\nfunction extractParticipants(participantsText) {\n  const result = {\n    internal_participants: [],\n    external_stakeholders: []\n  };\n\n  const bullets = splitBullets(participantsText);\n\n  for (const bullet of bullets) {\n    if (/indonesia delegation/i.test(bullet)) continue;\n\n    const m = bullet.match(/^(.+?)\\s*-\\s*(.+)$/);\n\n    if (m) {\n      result.internal_participants.push({\n        name: clean(m[1]),\n        role: clean(m[2]),\n        delegation_group: 'Research Council / Nabat'\n      });\n    }\n  }\n\n  const indonesiaMatch = oneLine(participantsText).match(/Indonesia Delegation:\\s*(.*?)(?=\\s*3 Program|\\s*$)/i);\n\n  if (indonesiaMatch) {\n    const stakeholderText = indonesiaMatch[1];\n    const parts = stakeholderText\n      .split(/,\\s+|\\s+and\\s+/i)\n      .map(v => clean(v))\n      .filter(Boolean);\n\n    for (const p of parts) {\n      result.external_stakeholders.push({\n        name: p,\n        stakeholder_group: 'Indonesia Delegation'\n      });\n    }\n  }\n\n  return result;\n}\n\nfunction extractAgendaItems(text) {\n  const agendaText = captureBetween(text, 'Tentative Agenda:', 'Expected Outcomes|4 Budget|Budget') || '';\n  const result = [];\n\n  const re = /Day\\s+(\\d+),\\s*(\\d{1,2})\\s*(?:st|nd|rd|th)?\\s+([A-Za-z]+)\\s*,\\s*([^:]+):\\s*([\\s\\S]*?)(?=\\s*Day\\s+\\d+,|\\s*$)/gi;\n\n  for (const m of agendaText.matchAll(re)) {\n    const dayNumber = Number(m[1]);\n    const date = parseTextDate(`${m[2]} ${m[3]} ${year}`);\n    const location = clean(m[4]);\n    const description = clean(m[5]);\n\n    result.push({\n      day_number: dayNumber,\n      date,\n      location,\n      description,\n      title: `Day ${dayNumber}: ${location}`\n    });\n  }\n\n  return result;\n}\n\nfunction extractUseCases(programText) {\n  const result = [];\n  if (!programText) return result;\n\n  const re = /Use Case\\s+(\\d+)\\s*-\\s*([^:]+):\\s*([\\s\\S]*?)(?=\\s*Use Case\\s+\\d+\\s*-|\\s*Note:|\\s*Tentative Agenda:|\\s*$)/gi;\n\n  for (const m of programText.matchAll(re)) {\n    result.push({\n      use_case_number: Number(m[1]),\n      title: clean(m[2]),\n      description: clean(m[3])\n    });\n  }\n\n  return result;\n}\n\nfunction extractExpectedOutcomes(text) {\n  const expectedText = captureBetween(text, 'Expected Outcomes', '4 Budget|Budget') || '';\n  return splitBullets(expectedText);\n}\n\nfunction extractVerifiedSignatories(text) {\n  const verifiedText = captureBetween(text, 'Verified Signature', 'Approved by') || '';\n\n  const result = [];\n  const normalized = oneLine(verifiedText);\n\n  const re = /([A-ZÀ-ỿ][A-Za-zÀ-ỿ.'\\s]+?)\\s*-\\s*([\\s\\S]*?)(?=\\s+[A-ZÀ-ỿ][A-Za-zÀ-ỿ.'\\s]+?\\s*-|\\s*$)/g;\n\n  for (const m of normalized.matchAll(re)) {\n    const name = clean(m[1]);\n    const role = clean(m[2]);\n\n    if (name && role) {\n      result.push({\n        name,\n        role\n      });\n    }\n  }\n\n  return result;\n}\n\nconst extractedText = items\n  .flatMap(item => collectStrings(item.json))\n  .join('\\n');\n\nconst text = clean(extractedText);\nconst flatText = oneLine(text);\n\nconst records = [];\nconst rejected_rows = [];\nconst issues = [];\n\nif (!text || text.length < 50) {\n  addIssue(\n    issues,\n    { source_sheet: 'Approval Memo PDF' },\n    'error',\n    'pdf_text_not_extracted',\n    null,\n    'No usable text was extracted from the memo PDF. This may require OCR or a DOCX/source-file extraction path.'\n  );\n\n  return [\n    {\n      json: {\n        job: {\n          import_job_id: importJobId,\n          schema_version: schemaVersion,\n          status: 'failed_no_text',\n          source_system: 'google_drive_pdf_mission_memo',\n          source_file_id: sourceFileId,\n          source_file_name: sourceFileName,\n          record_type: defaultRecordType,\n          clean_record_count: 0,\n          rejected_row_count: 0,\n          issue_count: issues.length,\n          warning_count: issues.filter(i => i.severity === 'warning').length,\n          error_count: issues.filter(i => i.severity === 'error').length\n        },\n        records,\n        rejected_rows,\n        issues\n      }\n    }\n  ];\n}\n\nconst memoDateRaw = flatText.match(/Memo Date\\s+(\\d{1,2}\\s+[A-Za-z]+\\s+\\d{4})/i)?.[1] || null;\nconst memoDate = parseTextDate(memoDateRaw);\n\nconst entity = captureBetween(flatText, 'Entity', 'Business Unit') || null;\nconst businessUnit = captureBetween(flatText, 'Business Unit', 'Subject') || null;\nconst subject = captureBetween(flatText, 'Subject', 'Attachments') || null;\nconst attachments = captureBetween(flatText, 'Attachments', '# Terms|1 Overview') || null;\nconst overview = captureBetween(flatText, '1 Overview', '2 Participants') || null;\nconst participantsText = captureBetween(flatText, '2 Participants', '3 Program') || null;\nconst programText = captureBetween(flatText, '3 Program', '4 Budget|Budget') || null;\nconst budget = captureBetween(flatText, '4 Budget|Budget', 'Verified Signature|Approved by') || null;\n\nconst location = programText?.match(/Location:\\s*(.*?)\\s+Proposed/i)?.[1]\n  ? clean(programText.match(/Location:\\s*(.*?)\\s+Proposed/i)[1])\n  : null;\n\nconst dateRange = parseDateRangeFromSubject(subject || '');\nconst startDate = dateRange.start_date;\nconst endDate = dateRange.end_date;\n\nconst classification =\n  classificationFromConfig ||\n  (/confidential/i.test(flatText) ? 'Confidential' : null);\n\nconst country = /indonesia/i.test(flatText) ? 'Indonesia' : null;\nconst missionId = `MIS-${hash([subject, startDate, endDate, country].join('|'), 10).toUpperCase()}`;\n\nconst participants = extractParticipants(participantsText);\nconst agendaItems = extractAgendaItems(flatText);\nconst useCases = extractUseCases(programText);\nconst expectedOutcomes = extractExpectedOutcomes(flatText);\nconst verifiedSignatories = extractVerifiedSignatories(flatText);\n\nconst approvedSection = flatText.match(/Approved by\\s+_*\\s*(.*?)(?:Document Classified|$)/i)?.[1] || null;\nconst approvalName = approvedSection\n  ? clean(approvedSection.replace(/Director General/i, '').trim())\n  : null;\n\nif (classification) {\n  addIssue(\n    issues,\n    { source_row_number: 1 },\n    'warning',\n    'document_marked_confidential',\n    'classification',\n    `Document is marked or configured as ${classification}.`,\n    classification,\n    classification\n  );\n}\n\nif (dateRange.warning) {\n  addIssue(\n    issues,\n    { source_row_number: 1 },\n    'warning',\n    'mission_dates_not_parsed',\n    'subject',\n    dateRange.warning,\n    subject\n  );\n} else {\n  addIssue(\n    issues,\n    { source_row_number: 1 },\n    'info',\n    'mission_dates_inferred_from_subject',\n    'subject',\n    'Mission start and end dates were inferred from the memo subject.',\n    subject,\n    `${startDate} to ${endDate}`\n  );\n}\n\nif (/pending scope finalization|pending scope|effort estimation/i.test(budget || '')) {\n  addIssue(\n    issues,\n    { source_row_number: 2 },\n    'warning',\n    'budget_not_finalized',\n    'budget',\n    'Budget text indicates that demo budget is pending scope finalization or effort estimation.',\n    budget\n  );\n}\n\nif (/subject to workshop outputs/i.test(programText || '')) {\n  addIssue(\n    issues,\n    { source_row_number: 2 },\n    'warning',\n    'scope_subject_to_workshop_outputs',\n    'program',\n    'Final scope of work is subject to workshop outputs.',\n    'Final scope of work is subject to workshop outputs.'\n  );\n}\n\nif (participants.internal_participants.length || participants.external_stakeholders.length) {\n  addIssue(\n    issues,\n    { source_row_number: 1 },\n    'info',\n    'participants_extracted_from_free_text',\n    'participants',\n    'Participants and stakeholders were extracted from free-text memo content.',\n    participantsText,\n    `${participants.internal_participants.length} internal participants; ${participants.external_stakeholders.length} external stakeholders`\n  );\n}\n\naddIssue(\n  issues,\n  { source_row_number: 2 },\n  'warning',\n  'approval_signature_not_machine_verified',\n  'approval',\n  'Approval signature presence cannot be reliably verified from extracted PDF text. Manual confirmation is recommended.',\n  approvedSection\n);\n\nconst parentValidationNotes = [];\nif (!subject) parentValidationNotes.push('Missing memo subject.');\nif (!startDate || !endDate) parentValidationNotes.push('Mission dates could not be parsed.');\nif (!memoDate) parentValidationNotes.push('Memo date could not be parsed.');\nif (classification) parentValidationNotes.push(`Document classification: ${classification}.`);\nif (/pending/i.test(budget || '')) parentValidationNotes.push('Budget not finalized.');\nif (/subject to workshop outputs/i.test(programText || '')) parentValidationNotes.push('Scope subject to workshop outputs.');\nparentValidationNotes.push('Approval signature requires manual confirmation.');\n\nconst parentStatus = 'submitted_for_approval';\n\nconst parentRecord = makeRecord({\n  record_type: 'international_mission',\n  record_category: 'Mission Approval Memo',\n  record_subcategory: country,\n  title: subject || 'Untitled international mission',\n  start_date: startDate,\n  end_date: endDate,\n  month: monthNameFromIso(startDate),\n  location,\n  entity,\n  status: parentStatus,\n  source_row_number: 1,\n  validation_status: parentValidationNotes.length ? 'valid_with_warnings' : 'valid',\n  validation_notes: parentValidationNotes.join(' '),\n  raw_row: {\n    memo_text: text\n  },\n  normalized_payload: {\n    mission_id: missionId,\n    document_type: documentType,\n    memo_date: memoDate,\n    entity,\n    business_unit: businessUnit,\n    subject,\n    country,\n    location,\n    attachments,\n    overview,\n    budget,\n    approval_status: parentStatus,\n    classification,\n    participant_count: participants.internal_participants.length,\n    external_stakeholder_count: participants.external_stakeholders.length,\n    agenda_item_count: agendaItems.length,\n    use_case_count: useCases.length,\n    expected_outcome_count: expectedOutcomes.length\n  },\n  extra_fields: {\n    source_format: 'pdf',\n    approved_by_text: approvedSection,\n    approved_by_name: approvalName,\n    verified_signatories: verifiedSignatories\n  }\n});\n\nif (!parentRecord.title || !parentRecord.start_date) {\n  rejected_rows.push({\n    import_job_id: importJobId,\n    source_file_id: sourceFileId,\n    source_file_name: sourceFileName,\n    source_sheet: 'Approval Memo PDF',\n    source_row_number: 1,\n    rejection_reason: 'Mission title and start_date are required.',\n    errors: [\n      {\n        field: 'title/start_date',\n        code: 'required_field_missing',\n        message: 'Mission title and start_date are required.'\n      }\n    ],\n    raw_row: {\n      memo_text: text\n    }\n  });\n} else {\n  records.push(parentRecord);\n}\n\nlet rowNumber = 10;\n\nfor (const agenda of agendaItems) {\n  records.push(makeRecord({\n    record_type: 'mission_agenda_item',\n    record_category: missionId,\n    record_subcategory: `Day ${agenda.day_number}`,\n    title: agenda.title,\n    start_date: agenda.date,\n    end_date: agenda.date,\n    month: monthNameFromIso(agenda.date),\n    location: agenda.location,\n    entity,\n    status: 'planned',\n    source_row_number: rowNumber++,\n    validation_status: agenda.date ? 'valid' : 'valid_with_warnings',\n    validation_notes: agenda.date ? null : 'Agenda date could not be parsed.',\n    raw_row: agenda,\n    normalized_payload: {\n      mission_id: missionId,\n      day_number: agenda.day_number,\n      agenda_date: agenda.date,\n      agenda_location: agenda.location,\n      agenda_description: agenda.description\n    },\n    extra_fields: {}\n  }));\n}\n\nfor (const person of participants.internal_participants) {\n  records.push(makeRecord({\n    record_type: 'mission_participant',\n    record_category: missionId,\n    record_subcategory: person.delegation_group,\n    title: person.name,\n    start_date: startDate,\n    end_date: endDate,\n    month: monthNameFromIso(startDate),\n    location,\n    entity,\n    status: 'planned',\n    source_row_number: rowNumber++,\n    raw_row: person,\n    normalized_payload: {\n      mission_id: missionId,\n      participant_name: person.name,\n      participant_role: person.role,\n      delegation_group: person.delegation_group,\n      participant_type: 'internal'\n    },\n    extra_fields: {}\n  }));\n}\n\nfor (const stakeholder of participants.external_stakeholders) {\n  records.push(makeRecord({\n    record_type: 'mission_stakeholder',\n    record_category: missionId,\n    record_subcategory: stakeholder.stakeholder_group,\n    title: stakeholder.name,\n    start_date: startDate,\n    end_date: endDate,\n    month: monthNameFromIso(startDate),\n    location,\n    entity: stakeholder.name,\n    status: 'planned',\n    source_row_number: rowNumber++,\n    raw_row: stakeholder,\n    normalized_payload: {\n      mission_id: missionId,\n      stakeholder_name: stakeholder.name,\n      stakeholder_group: stakeholder.stakeholder_group,\n      stakeholder_type: 'external'\n    },\n    extra_fields: {}\n  }));\n}\n\nfor (const useCase of useCases) {\n  records.push(makeRecord({\n    record_type: 'mission_use_case',\n    record_category: missionId,\n    record_subcategory: `Use Case ${useCase.use_case_number}`,\n    title: useCase.title,\n    start_date: startDate,\n    end_date: endDate,\n    month: monthNameFromIso(startDate),\n    location,\n    entity,\n    status: 'proposed',\n    source_row_number: rowNumber++,\n    raw_row: useCase,\n    normalized_payload: {\n      mission_id: missionId,\n      use_case_number: useCase.use_case_number,\n      use_case_title: useCase.title,\n      use_case_description: useCase.description\n    },\n    extra_fields: {}\n  }));\n}\n\nfor (let i = 0; i < expectedOutcomes.length; i++) {\n  const outcome = expectedOutcomes[i];\n\n  records.push(makeRecord({\n    record_type: 'mission_expected_outcome',\n    record_category: missionId,\n    record_subcategory: `Outcome ${i + 1}`,\n    title: outcome.slice(0, 120),\n    start_date: startDate,\n    end_date: endDate,\n    month: monthNameFromIso(startDate),\n    location,\n    entity,\n    status: 'expected',\n    source_row_number: rowNumber++,\n    raw_row: {\n      outcome\n    },\n    normalized_payload: {\n      mission_id: missionId,\n      outcome_number: i + 1,\n      outcome_text: outcome\n    },\n    extra_fields: {}\n  }));\n}\n\nfor (const verifier of verifiedSignatories) {\n  records.push(makeRecord({\n    record_type: 'mission_approval_step',\n    record_category: missionId,\n    record_subcategory: 'Verified',\n    title: verifier.name,\n    start_date: memoDate,\n    end_date: memoDate,\n    month: monthNameFromIso(memoDate),\n    location: null,\n    entity,\n    status: 'verified_listed',\n    source_row_number: rowNumber++,\n    raw_row: verifier,\n    normalized_payload: {\n      mission_id: missionId,\n      approval_step: 'verified',\n      person_name: verifier.name,\n      person_role: verifier.role,\n      signature_status: 'listed_not_machine_verified'\n    },\n    extra_fields: {}\n  }));\n}\n\nif (approvalName || approvedSection) {\n  records.push(makeRecord({\n    record_type: 'mission_approval_step',\n    record_category: missionId,\n    record_subcategory: 'Approved by',\n    title: approvalName || 'Approver listed',\n    start_date: memoDate,\n    end_date: memoDate,\n    month: monthNameFromIso(memoDate),\n    location: null,\n    entity,\n    status: 'pending_signature_or_manual_confirmation',\n    source_row_number: rowNumber++,\n    validation_status: 'valid_with_warnings',\n    validation_notes: 'Approval signature not machine verified from PDF text.',\n    raw_row: {\n      approved_by_text: approvedSection\n    },\n    normalized_payload: {\n      mission_id: missionId,\n      approval_step: 'approved_by',\n      approved_by_name: approvalName,\n      approved_by_text: approvedSection,\n      signature_status: 'not_machine_verified'\n    },\n    extra_fields: {}\n  }));\n}\n\nconst warningCount = issues.filter(issue => issue.severity === 'warning').length;\nconst errorCount = issues.filter(issue => issue.severity === 'error').length;\n\nconst job = {\n  import_job_id: importJobId,\n  schema_version: schemaVersion,\n  status:\n    errorCount > 0 && records.length === 0\n      ? 'failed_no_clean_records'\n      : warningCount || errorCount\n        ? 'completed_with_issues'\n        : 'completed',\n  source_system: 'google_drive_pdf_mission_memo',\n  source_file_id: sourceFileId,\n  source_file_name: sourceFileName,\n  record_type: defaultRecordType,\n  document_type: documentType,\n  year,\n  total_records: records.length + rejected_rows.length,\n  clean_record_count: records.length,\n  rejected_row_count: rejected_rows.length,\n  issue_count: issues.length,\n  warning_count: warningCount,\n  error_count: errorCount,\n  processed_sections: [\n    'memo_metadata',\n    'overview',\n    'participants',\n    'program',\n    'agenda',\n    'expected_outcomes',\n    'budget',\n    'approval'\n  ],\n  mission_id: missionId\n};\n\nreturn [\n  {\n    json: {\n      job,\n      records,\n      rejected_rows,\n      issues\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        544
+      ],
+      "id": "c547e111-5322-49a3-a513-df92e3e1c771",
+      "name": "Code | Normalize Mission Memo to Canonical Records"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-03T07:36:26.971Z",
+      "createdAt": "2026-06-03T07:36:26.971Z",
+      "role": "workflow:owner",
+      "workflowId": "cXhvcadWZPTIVJJh",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-08T10:24:45.466Z",
+  "versionId": "dc98775a-7418-4ece-a1c3-8134f70bfabe"
+}
