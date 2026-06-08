@@ -1,0 +1,141 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-05T10:51:18.558Z",
+  "id": "HSs99Q9cRB1c9n7z",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -320,
+        -32
+      ],
+      "id": "ac8bcbff-e56c-4c13-9355-a7f078db9d9a",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You monitor official Ukrainian ministry websites for new posts.\nTask: find official posts from the Ministry for Development of Communities and Territories of Ukraine (mindev.gov.ua) published within the last 2 days and extract them into structured JSON for database ingestion.\nIMPORTANT: Keep ALL ministry posts even if they don’t contain the word “Ukraine”. Exclude non-content pages (cookie pages, navigation pages, tag indexes). Include press releases and news posts.\nOutput MUST be valid JSON only (no markdown).",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        48,
+        -32
+      ],
+      "id": "e9cbb30b-57c1-4097-b714-ef9efe02899e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "high"
+          }
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        176
+      ],
+      "id": "a825d9dd-b98f-4adf-9245-0fd119cdba93",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Input from AI Agent looks like:\n * {\n *   output: \"{\\\"news\\\": [ ... ]}\"\n * }\n *\n * We will:\n * - parse the JSON string\n * - take data.news (array)\n * - filter to last 2 days\n * - map to your Supabase articles schema\n * - return one n8n item per article\n */\n\nfunction safeJsonParse(s) {\n  if (!s) return null;\n  try { return JSON.parse(s); } catch (e) { return null; }\n}\n\nfunction toIsoOrNull(dateStr) {\n  if (!dateStr) return null;\n  // Accept YYYY-MM-DD or ISO\n  const d = new Date(dateStr);\n  if (isNaN(d.getTime())) return null;\n  return d.toISOString();\n}\n\nfunction normalizeUrl(u) {\n  if (!u) return null;\n  return String(u).trim().replace(/#.*$/, \"\");\n}\n\nconst raw = $json.output ?? $json.text ?? $json;\nconst parsed = typeof raw === \"string\" ? safeJsonParse(raw) : raw;\n\n// Your agent uses \"news\" key\nconst newsArr = parsed?.news ?? parsed?.items ?? [];\n\nconst now = new Date();\nconst cutoff = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000); // last 2 days\n\nconst sourceId = $env.MINDEV_SOURCE_ID || $json.source_id || n_\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        -32
+      ],
+      "id": "d98868a1-d450-40e3-96da-a1fefc7f3177",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-05T10:51:18.566Z",
+      "createdAt": "2026-01-05T10:51:18.566Z",
+      "role": "workflow:owner",
+      "workflowId": "HSs99Q9cRB1c9n7z",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-08T11:06:46.000Z",
+  "versionId": "e4f7518a-1e98-4b5c-ab41-a9eb333117de"
+}
