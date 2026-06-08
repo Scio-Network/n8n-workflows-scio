@@ -1,0 +1,1225 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse and Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create sheet": {
+      "main": [
+        [
+          {
+            "node": "Attach Sheet ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Add merge_key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse and Normalize": {
+      "main": [
+        [
+          {
+            "node": "Build AI Agent Input",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Sheet ID": {
+      "main": [
+        [
+          {
+            "node": "Build Header Row Item",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Header Row Item": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete rows or columns from sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build AI Agent Input": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Create sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Section Agent Output": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Add merge_key": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Parse Section Agent Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-16T14:42:07.331Z",
+  "id": "vZgedGb71UYeKlNh",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SCIO_Proposal_Generator_Workflow_1_0.9 copy_backup",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/u/0/folders/1UJ-PLWk9sE9JmRYPBMzwh2CHWsyJxLgW",
+          "mode": "url"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5678cada-ad92-4e1d-a61a-59b81ebfe462",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        240,
+        0
+      ],
+      "id": "a84e1f35-1bc9-4f2d-bef1-40f7a11b9d84",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        480,
+        0
+      ],
+      "id": "debb1b94-b6dd-46a7-9dfa-4959dc127275",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a proposal operations expert. You receive the text of an RFP/ToR/ITT document.\n\nYour task: extract the REQUIRED proposal response structure and compliance requirements.\n\nIMPORTANT RULES\n- Output MUST be a SINGLE valid JSON object.\n- No markdown. No commentary. No extra keys.\n- Use null when unknown.\n- Use arrays ([]) for lists when empty.\n- Be conservative: do not invent facts not present in the document.\n- If the document includes multiple instruction areas (e.g., \"Instructions to Offerors\", \"Submission Requirements\", \"Proposal Format\"), prioritize those as sources of truth.\n\nOUTPUT JSON SCHEMA (EXACT)\nReturn a single JSON object with exactly these keys:\n\n{\n  \"rfp_id\": string |{{ $('Download file').item.json.name }} ,\n  \"rfp_title\": string | null,\n  \"client_org\": string | null,\n  \"procurement_type\": \"RFP\" | \"RFQ\" | \"ToR\" | \"ITT\" | \"EOI\" | \"Other\" | null,\n  \"submission_deadline\": {\n    \"date\": string | null,\n    \"time_local\": string | null,\n    \"timezone\": string | null\n  },\n  \"submission_method\": {\n    \"channel\": \"Email\" | \"Portal\" | \"Physical\" | \"Other\" | null,\n    \"details\": string | null\n  },\n  \"formatting_requirements\": {\n    \"page_limit\": number | null,\n    \"font\": string | null,\n    \"font_size\": string | null,\n    \"file_format\": \"PDF\" | \"DOCX\" | \"Other\" | null,\n    \"language\": string | null,\n    \"other_constraints\": string[]\n  },\n  \"required_response_structure\": [\n    {\n      \"section_id\": string,\n      \"title\": string,\n      \"is_mandatory\": boolean,\n      \"order\": number,\n      \"required_content\": string[],\n      \"page_or_word_limit\": string | null,\n      \"evaluation_alignment\": string[],\n      \"source_quotes\": string[]\n    }\n  ],\n  \"compliance_checklist\": [\n    {\n      \"req_id\": string,\n      \"requirement\": string,\n      \"type\": \"Must\" | \"Should\" | \"Format\" | \"Eligibility\" | \"Submission\",\n      \"where_found\": string | null,\n      \"mapped_section_ids\": string[],\n      \"pass_fail\": boolean\n    }\n  ],\n  \"evaluation_criteria\": [\n    {\n      \"criterion\": string,\n      \"weight\": string | null,\n      \"notes\": string | null\n    }\n  ],\n  \"appendices_and_forms\": [\n    {\n      \"name\": string,\n      \"required\": boolean,\n      \"notes\": string | null\n    }\n  ],\n  \"open_questions\": string[]\n}\n\nFIELD EXTRACTION RULES\n- rfp_id: reference number, tender number, solicitation ID. Else null.\n- rfp_title: use the title on cover page or first occurrences. Else null.\n- client_org: issuing organization.\n- procurement_type: infer from document language (RFP/RFQ/ToR/ITT/EOI). If unclear, null.\n- submission_deadline:\n  - If multiple deadlines exist, use the FINAL submission deadline.\n  - date format: YYYY-MM-DD if possible; else null.\n  - time_local: HH:MM 24h if possible; else null.\n  - timezone: if stated (e.g. CET, UTC+1); else null.\n- submission_method:\n  - channel: Email/Portal/Physical/Other based on instructions.\n  - details: email address / portal name / physical address snippet.\n- formatting_requirements:\n  - page_limit: numeric only, else null.\n  - other_constraints: include things like \"separate technical and financial\", \"no pricing in technical\", \"signed forms\", \"CV max 2 pages\", \"use template\", etc.\n- required_response_structure:\n  - Create one entry per REQUIRED section in the order requested.\n  - If only a broad structure exists (e.g., Technical / Financial / Annexes), still create entries for those.\n  - is_mandatory: true if language indicates required; else true by default unless clearly optional.\n  - required_content: bullets of what must be covered in the section.\n  - source_quotes: up to 2 short verbatim snippets (<= 25 words each) that justify the section requirement.\n- compliance_checklist:\n  - Convert all \"shall/must/required\" items + submission rules into checklist entries.\n  - pass_fail: true for Must/Format/Eligibility/Submission; false for Should.\n  - where_found: short locator like \"Section 3.2 Submission Requirements\" or \"Page 7\" if present.\n  - mapped_section_ids: link to required_response_structure section_id(s) where this requirement should be addressed; if unclear, [].\n- evaluation_criteria:\n  - Extract evaluation/scoring criteria and weights if stated.\n- appendices_and_forms:\n  - Include required annexes, forms, templates, declarations, pricing sheets.\n- open_questions:\n  - Add any missing info the proposal team must clarify (e.g., “page limit unclear”, “submission portal not stated”, etc.)\n\nINPUT (verbatim)\nDOCUMENT_TEXT:\n{{ $json.text }}\n\nFILE_ID: {{ $('Download file').item.json.id }}\nFILE_NAME: {{ $('Download file').item.json.name }}\n\nOUTPUT REQUIREMENTS\n- Return ONLY the JSON object described above.\n- Ensure valid JSON (double quotes, no trailing commas).\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        0
+      ],
+      "id": "66cfa014-95d4-47c1-b1c3-f9945e2c3de5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        208
+      ],
+      "id": "68bacc92-885e-45cb-89ed-5ea69bffef15",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1F0jVoOX7Ap2BTAVWmutTtY1j6wm9kGa1ZBBcmKpv09w/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "title": "={{ $json.rfp_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2800,
+        16
+      ],
+      "id": "98b65053-3977-4305-8361-52a27e2caa7e",
+      "name": "Create sheet",
+      "executeOnce": true,
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1F0jVoOX7Ap2BTAVWmutTtY1j6wm9kGa1ZBBcmKpv09w/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create sheet').item.json.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "rfp_id": "={{ $json.rfp_id }}",
+            "rfp_title": "={{ $json.rfp_title }}",
+            "client_org": "={{ $json.client_org }}",
+            "procurement_type": "={{ $json.procurement_type }}",
+            "submission_deadline_date": "={{ $json.submission_deadline_date }}",
+            "submission_deadline_time": "={{ $json.submission_deadline_time }}",
+            "submission_deadline_timezone": "={{ $json.submission_deadline_timezone }}",
+            "submission_method_channel": "={{ $json.submission_method_channel }}",
+            "submission_method_details": "={{ $json.submission_method_details }}",
+            "section_id": "={{ $json.section_id }}",
+            "order": "={{ $json.order }}",
+            "title": "={{ $json.title }}",
+            "is_mandatory": "={{ $json.is_mandatory }}",
+            "page_or_word_limit": "={{ $json.page_or_word_limit }}",
+            "required_content": "={{ $json.required_content }}",
+            "evaluation_alignment": "={{ $json.evaluation_alignment }}",
+            "source_quotes": "={{ $json.source_quotes }}",
+            "section_summary": "={{ $json.section_summary }}",
+            "what_evaluators_want": "={{ $json.what_evaluators_want }}",
+            "human_inputs_needed": "={{ $json.human_inputs_needed }}",
+            "questions_for_humans": "={{ $json.questions_for_humans }}",
+            "evidence_to_pull": "={{ $json.evidence_to_pull }}",
+            "drafting_outline": "={{ $json.drafting_outline }}",
+            "executive_takeaways": "={{ $json.executive_takeaways }}",
+            "win_themes": "={{ $json.win_themes }}",
+            "risks": "={{ $json.risks }}",
+            "go_no_go_flags": "={{ $json.go_no_go_flags }}",
+            "clarification_questions": "={{ $json.clarification_questions }}",
+            "critical_human_contributions": "={{ $json.critical_human_contributions }}",
+            "tender_insights_json": "={{ $json.tender_insights_json }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "rfp_id",
+              "displayName": "rfp_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "rfp_title",
+              "displayName": "rfp_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_org",
+              "displayName": "client_org",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "procurement_type",
+              "displayName": "procurement_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "submission_deadline_date",
+              "displayName": "submission_deadline_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "submission_deadline_time",
+              "displayName": "submission_deadline_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "submission_deadline_timezone",
+              "displayName": "submission_deadline_timezone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "submission_method_channel",
+              "displayName": "submission_method_channel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "submission_method_details",
+              "displayName": "submission_method_details",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "section_id",
+              "displayName": "section_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "order",
+              "displayName": "order",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "is_mandatory",
+              "displayName": "is_mandatory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "page_or_word_limit",
+              "displayName": "page_or_word_limit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "required_content",
+              "displayName": "required_content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "evaluation_alignment",
+              "displayName": "evaluation_alignment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source_quotes",
+              "displayName": "source_quotes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "section_summary",
+              "displayName": "section_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "what_evaluators_want",
+              "displayName": "what_evaluators_want",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "human_inputs_needed",
+              "displayName": "human_inputs_needed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "questions_for_humans",
+              "displayName": "questions_for_humans",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "evidence_to_pull",
+              "displayName": "evidence_to_pull",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "drafting_outline",
+              "displayName": "drafting_outline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "executive_takeaways",
+              "displayName": "executive_takeaways",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "win_themes",
+              "displayName": "win_themes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "risks",
+              "displayName": "risks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "go_no_go_flags",
+              "displayName": "go_no_go_flags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "clarification_questions",
+              "displayName": "clarification_questions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "critical_human_contributions",
+              "displayName": "critical_human_contributions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tender_insights_json",
+              "displayName": "tender_insights_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sheetId",
+              "displayName": "sheetId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        7680,
+        48
+      ],
+      "id": "d7627bbd-8f72-4640-8649-f5549030f8e1",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "required_response_structure",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        4960,
+        32
+      ],
+      "id": "d8dbde2b-d87e-453b-860c-6c48576fffd2",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse + Normalize AI Agent output into ONE canonical item.\n// Works whether AI Agent returns JSON object OR JSON-as-string in output/text/content.\n\nfunction tryParseJson(s) {\n  if (typeof s !== 'string') return null;\n  try { return JSON.parse(s); } catch { return null; }\n}\n\nfunction extractJsonFromText(s) {\n  // If model returns extra text, try to grab the first JSON object.\n  if (typeof s !== 'string') return null;\n  const start = s.indexOf('{');\n  const end = s.lastIndexOf('}');\n  if (start >= 0 && end > start) {\n    const candidate = s.slice(start, end + 1);\n    return tryParseJson(candidate);\n  }\n  return null;\n}\n\nfunction getAgentPayload(j) {\n  // Common LangChain Agent output shapes\n  // - { output: \"...\" }\n  // - { text: \"...\" }\n  // - { ...actualObject }\n  // - { message: { content: \"...\" } } etc.\n  if (j && typeof j === 'object' && Array.isArray(j.required_response_structure)) return j;\n  if (j && typeof j === 'object' && j.required_response_structure) return j;\n\n  const candidates = [];\n\n  if (typeof j === 'string') candidates.push(j);\n  if (j?.output) candidates.push(j.output);\n  if (j?.text) candidates.push(j.text);\n  if (j?.message?.content) candidates.push(j.message.content);\n  if (j?.choices?.[0]?.message?.content) candidates.push(j.choices[0].message.content);\n\n  for (const c of candidates) {\n    const parsed = tryParseJson(c) || extractJsonFromText(c);\n    if (parsed && (parsed.required_response_structure || parsed.compliance_checklist)) return parsed;\n  }\n\n  // last resort: maybe the entire input item is the parsed object already\n  if (j && typeof j === 'object') return j;\n\n  throw new Error(\"Could not parse AI Agent output into JSON.\");\n}\n\nconst raw = $json;\nconst parsed = getAgentPayload(raw);\n\n// ---- Basic schema guard (fail early, fail clearly)\nconst requiredTopKeys = [\n  \"rfp_id\",\"rfp_title\",\"client_org\",\"procurement_type\",\n  \"submission_deadline\",\"submission_method\",\n  \"formatting_requirements\",\"required_response_structure\",\n  \"compliance_checklist\",\"evaluation_criteria\",\n  \"appendices_and_forms\",\"open_questions\"\n];\nfor (const k of requiredTopKeys) {\n  if (!(k in parsed)) throw new Error(`AI output missing required key: ${k}`);\n}\n\nconst all = [parsed]; // canonicalize as if it were a list\n\nconst isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);\nconst asArray = (v) => Array.isArray(v) ? v : (v == null ? [] : [v]);\n\nfunction pickFirst(key) {\n  for (const it of all) if (it?.[key] != null) return it[key];\n  return null;\n}\n\n// Header fields\nconst rfp_id = pickFirst(\"rfp_id\");\nconst rfp_title = pickFirst(\"rfp_title\");\nconst client_org = pickFirst(\"client_org\");\nconst procurement_type = pickFirst(\"procurement_type\");\nconst submission_deadline = pickFirst(\"submission_deadline\");\nconst submission_method = pickFirst(\"submission_method\");\n\n// 1) Sections (ensure array)\nlet sections = [];\nif (Array.isArray(parsed.required_response_structure)) sections = parsed.required_response_structure;\nelse if (isObj(parsed.required_response_structure)) sections = [parsed.required_response_structure];\n\nconst sectionMap = new Map();\nfor (const s of sections) {\n  if (!s?.title && !s?.section_id) continue;\n\n  const normalized = {\n    section_id: (s.section_id ? String(s.section_id) : \"\").trim(),\n    title: (s.title ?? \"\").toString().trim(),\n    is_mandatory: s.is_mandatory !== false,\n    order: Number.isFinite(Number(s.order)) ? Number(s.order) : null,\n    required_content: asArray(s.required_content).filter(Boolean).map(x => String(x).trim()),\n    page_or_word_limit: s.page_or_word_limit ?? null,\n    evaluation_alignment: asArray(s.evaluation_alignment).filter(Boolean).map(x => String(x).trim()),\n    source_quotes: asArray(s.source_quotes).filter(Boolean).map(x => String(x).trim()).slice(0, 2),\n  };\n\n  // Dedupe by title if section_id missing\n  const key = normalized.section_id || normalized.title || `idx_${sectionMap.size+1}`;\n  if (!sectionMap.has(key)) sectionMap.set(key, normalized);\n}\n\nlet required_response_structure = Array.from(sectionMap.values());\n\n// infer + sort + renumber\nrequired_response_structure.forEach(s => {\n  if (!s.order) {\n    const m = /^S(\\d+)$/.exec(s.section_id);\n    if (m) s.order = Number(m[1]);\n  }\n});\nrequired_response_structure.sort((a,b) => (a.order ?? 999) - (b.order ?? 999));\nrequired_response_structure = required_response_structure.map((s, idx) => ({\n  ...s,\n  order: idx + 1,\n  section_id: `S${idx + 1}`\n}));\n\n// 2) Formatting requirements normalize\nlet formatting = {\n  page_limit: null,\n  font: null,\n  font_size: null,\n  file_format: null,\n  language: null,\n  other_constraints: []\n};\n\nif (isObj(parsed.formatting_requirements)) {\n  formatting = {\n    page_limit: parsed.formatting_requirements.page_limit ?? null,\n    font: parsed.formatting_requirements.font ?? null,\n    font_size: parsed.formatting_requirements.font_size ?? null,\n    file_format: parsed.formatting_requirements.file_format ?? null,\n    language: parsed.formatting_requirements.language ?? null,\n    other_constraints: asArray(parsed.formatting_requirements.other_constraints).map(String).map(s => s.trim()).filter(Boolean)\n  };\n}\n\n// 3) Overall expectations (global rules)\nlet overall_expectations = [...formatting.other_constraints];\nfor (const s of required_response_structure) {\n  if (/format|submission|requirements on the format/i.test(s.title)) {\n    overall_expectations.push(...(s.required_content || []));\n  }\n}\noverall_expectations = Array.from(new Set(overall_expectations.map(s => String(s).trim()).filter(Boolean)));\n\nreturn [{\n  json: {\n    rfp_id,\n    rfp_title,\n    client_org,\n    procurement_type,\n    submission_deadline,\n    submission_method,\n    formatting_requirements: formatting,\n    required_response_structure,\n    overall_expectations,\n\n    // keep the full original extraction too (debug + traceability)\n    _raw_extraction: parsed\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        0
+      ],
+      "id": "0a8e0aff-537b-4438-b83d-54b45d5fdf87",
+      "name": "Parse and Normalize"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Attach Sheet ID to the canonical+insights object (NOT the pre-insights canonical)\nconst base = $items('Code in JavaScript1')[0]?.json;\nif (!base) throw new Error('Missing base item from Code in JavaScript1.');\n\nconst created = $('Create sheet').first().json;\nconst sheetId = created.sheetId;\n\nif (!sheetId) throw new Error('Create sheet did not return sheetId.');\n\nreturn [{\n  json: { ...base, sheetId }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3088,
+        16
+      ],
+      "id": "0584eaa0-8f4a-4009-9878-f878ad0bb1b2",
+      "name": "Attach Sheet ID"
+    },
+    {
+      "parameters": {
+        "jsCode": "const headers = [\n  \"rfp_id\",\"rfp_title\",\"client_org\",\"procurement_type\",\n  \"submission_deadline_date\",\"submission_deadline_time\",\"submission_deadline_timezone\",\n  \"submission_method_channel\",\"submission_method_details\",\n\n  \"section_id\",\"order\",\"title\",\"is_mandatory\",\"page_or_word_limit\",\n  \"required_content\",\"evaluation_alignment\",\"source_quotes\",\n\n  // section-targeted outputs (from section agent)\n  \"section_summary\",\"what_evaluators_want\",\"human_inputs_needed\",\n  \"questions_for_humans\",\"evidence_to_pull\",\"drafting_outline\",\n\n  // global outputs (from global agent)\n  \"executive_takeaways\",\"win_themes\",\"risks\",\"go_no_go_flags\",\n  \"clarification_questions\",\"critical_human_contributions\",\n\n  \"tender_insights_json\",\n  \"sheetId\"\n];\n\nconst row = {};\nfor (const h of headers) row[h] = h;\n\nreturn [{ json: row }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        16
+      ],
+      "id": "08ae7d9d-73d8-42a4-be6b-57ba072e9403",
+      "name": "Build Header Row Item",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1F0jVoOX7Ap2BTAVWmutTtY1j6wm9kGa1ZBBcmKpv09w",
+          "mode": "list",
+          "cachedResultName": "Proposal_Generation_Master",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1F0jVoOX7Ap2BTAVWmutTtY1j6wm9kGa1ZBBcmKpv09w/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Attach Sheet ID').item.json.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3760,
+        16
+      ],
+      "id": "b7116320-6e98-45cb-bc76-23bc55e278e1",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1F0jVoOX7Ap2BTAVWmutTtY1j6wm9kGa1ZBBcmKpv09w",
+          "mode": "list",
+          "cachedResultName": "Proposal_Generation_Master",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1F0jVoOX7Ap2BTAVWmutTtY1j6wm9kGa1ZBBcmKpv09w/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Attach Sheet ID').item.json.sheetId }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4128,
+        16
+      ],
+      "id": "148ec180-dd7d-4272-a6f4-b2a9d5d54184",
+      "name": "Delete rows or columns from sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4656,
+        32
+      ],
+      "id": "433639ab-fe78-4e1a-90a4-8cafa0d31b71",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a senior proposal strategist. Create a concise “Tender Insights Pack” to help humans draft quickly and comply.\n\nUse ONLY the provided CANONICAL_TENDER_JSON. Do not invent facts. If info is missing, create a clarification question.\n\nOutput MUST be a SINGLE valid JSON object with EXACTLY TWO top-level keys:\n1) \"insights_block\"\n2) \"section_insights\"\n\nSCHEMA:\n\n{\n  \"insights_block\": {\n    \"executive_takeaways\": string[],\n    \"win_themes\": [{ \"theme\": string, \"so_what\": string, \"proof_needed\": string[] }],\n    \"risks\": [{ \"risk\": string, \"impact\": string, \"mitigation\": string, \"owner\": string }],\n    \"go_no_go_flags\": string[],\n    \"clarification_questions_global\": [{ \"question\": string, \"why\": string, \"blocks\": string[] }],\n    \"critical_human_contributions\": [\n      { \"area\": string, \"who_to_ask\": string, \"questions_to_ask\": string[], \"artifacts_needed\": string[] }\n    ]\n  },\n  \"section_insights\": {\n    \"<SECTION_ID_FROM_CANONICAL>\": {\n      \"section_summary\": string,\n      \"what_evaluators_want\": string[],\n      \"human_inputs_needed\": string[],\n      \"questions_for_humans\": string[],\n      \"evidence_to_pull\": string[],\n      \"drafting_outline\": string[]\n    }\n  }\n}\n\nSECTION RULES:\n- The keys of section_insights MUST EXACTLY match tender.required_response_structure[].section_id (e.g., S1, S2, S3).\n- For each section, read its required_content and evaluation_alignment and turn them into:\n  - \"what_evaluators_want\" (max 6 bullets)\n  - \"drafting_outline\" (max 8 bullets; ordered)\n  - \"questions_for_humans\" that request ONLY human-only info (availability, proof points, client relationship, logistics, pricing).\n- Keep it short and usable tomorrow.\n\nTENDER CONTEXT TO APPLY:\n- Respect formatting constraints (page limit, font size, language, no external links) as “non-negotiables”.\n- For Concept/Technical section: must explicitly cover strategy, actors/cooperation, steering with partners, operational plan with milestones, knowledge management/scaling, coordination with GIZ, personnel assignment plan (dates/durations/locations/work steps), and backstopping concept.\n- For Personnel section: CV compliance (format + max pages + show role & duration) and clear link of qualifications and soft skills to ToR.\n- For Costing: follow quantitative parameters exactly; sustainability/CO2 offset; flexible remuneration requires prior approval; limits are maximums.\n\nSECTION IDS (MUST USE EXACTLY THESE KEYS):\n{{ $json.tender.required_response_structure.map(s => s.section_id).join(\", \") }}\n\nIn section_insights, the object keys MUST be exactly the list above, no other keys.\n\nFor each section key, you MUST produce exactly: section_summary, what_evaluators_want, human_inputs_needed, questions_for_humans, evidence_to_pull, drafting_outline.\n\nINPUT:\nCANONICAL_TENDER_JSON:\n{{ JSON.stringify($json.tender) }}\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1584,
+        112
+      ],
+      "id": "08bdfe55-01cf-4c0d-b8cf-e144b7896506",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1584,
+        288
+      ],
+      "id": "62394009-3508-4253-bdc2-e208ace742cb",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse AI Agent1 output into { tender_insights: { insights_block, section_insights } }\n// AND enforce section_insights keys to match canonical S1/S2/S3... from Build AI Agent Input.\n\n// ---------- helpers ----------\nfunction tryParseJson(s) {\n  if (typeof s !== \"string\") return null;\n  try { return JSON.parse(s); } catch { return null; }\n}\nfunction extractJsonFromText(s) {\n  if (typeof s !== \"string\") return null;\n  const start = s.indexOf(\"{\");\n  const end = s.lastIndexOf(\"}\");\n  if (start >= 0 && end > start) {\n    return tryParseJson(s.slice(start, end + 1));\n  }\n  return null;\n}\nfunction getAgentPayload(j) {\n  // If already parsed object\n  if (j && typeof j === \"object\" && (j.insights_block || j.section_insights)) return j;\n\n  const candidates = [];\n  if (typeof j === \"string\") candidates.push(j);\n  if (j?.output) candidates.push(j.output);\n  if (j?.text) candidates.push(j.text);\n  if (j?.message?.content) candidates.push(j.message.content);\n  if (j?.choices?.[0]?.message?.content) candidates.push(j.choices[0].message.content);\n\n  for (const c of candidates) {\n    const parsed = tryParseJson(c) || extractJsonFromText(c);\n    if (parsed && (parsed.insights_block || parsed.section_insights)) return parsed;\n  }\n\n  // last resort: return original if object\n  if (j && typeof j === \"object\") return j;\n\n  throw new Error(\"Could not parse AI Agent1 output into JSON.\");\n}\n\n// ---------- parse ----------\nconst raw = $json;\nconst parsed = getAgentPayload(raw);\n\n// ---------- schema guard ----------\nif (!parsed.insights_block) throw new Error(\"AI Agent1 output missing insights_block\");\nif (!parsed.section_insights) throw new Error(\"AI Agent1 output missing section_insights\");\n\n// ---------- key enforcement ----------\nconst canonical = $items(\"Build AI Agent Input\")[0]?.json?.tender;\nif (!canonical) throw new Error(\"Missing canonical tender from Build AI Agent Input\");\n\nconst canonIds = (canonical.required_response_structure || []).map(s => s.section_id);\nconst returnedIds = Object.keys(parsed.section_insights || {});\n\nconst sameSet =\n  returnedIds.length === canonIds.length &&\n  canonIds.every(id => returnedIds.includes(id));\n\nif (!sameSet) {\n  // Fail-safe remap by ORDER if lengths match\n  const canonSorted = [...(canonical.required_response_structure || [])]\n    .sort((a,b) => (a.order || 999) - (b.order || 999));\n\n  const returnedEntries = Object.entries(parsed.section_insights || {});\n\n  if (returnedEntries.length === canonSorted.length) {\n    const remapped = {};\n    for (let i = 0; i < canonSorted.length; i++) {\n      remapped[canonSorted[i].section_id] = returnedEntries[i][1];\n    }\n    parsed.section_insights = remapped;\n  } else {\n    throw new Error(\n      `section_insights keys mismatch. Expected ${canonIds.join(\", \")} but got ${returnedIds.join(\", \")}`\n    );\n  }\n}\n\n// ---------- output ----------\nreturn [{ json: { tender_insights: parsed } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1936,
+        112
+      ],
+      "id": "5bfb97a4-f6cb-4f02-9f7d-04eabb1f4174",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build Agent1 Input\n// Goal: give Agent1 the full canonical tender JSON + key ToR clauses (concise)\n// so it can produce a high-signal human brief.\n\nconst tender = $json; // output of Parse and Normalize (canonical)\n\n// Pull raw extracted PDF text (optional). Keep it short to avoid token bloat.\nconst torText = ($('Extract from File').item.json.text || '').toString();\nconst torTextShort = torText.length > 12000 ? torText.slice(0, 12000) : torText;\n\n// Build “key clauses” from canonical fields (most important for humans)\nconst clauses = [];\n\n// Formatting rules are explicit in ToR Ch.7 (10 pages excl CVs, font >=11, English, no links, etc.)\nif (tender?.formatting_requirements?.page_limit) clauses.push(`Page limit: ${tender.formatting_requirements.page_limit} pages (excl. CVs)`);\nif (tender?.formatting_requirements?.font_size) clauses.push(`Font size: ${tender.formatting_requirements.font_size}`);\nif (tender?.formatting_requirements?.language) clauses.push(`Language: ${tender.formatting_requirements.language}`);\nfor (const c of (tender?.formatting_requirements?.other_constraints || [])) clauses.push(c);\n\n// Overall expectations (deduped already in your normalize node)\nfor (const c of (tender?.overall_expectations || [])) clauses.push(c);\n\nconst keyClauses = Array.from(new Set(clauses.map(s => String(s).trim()).filter(Boolean))).slice(0, 30);\n\nreturn [{\n  json: {\n    tender,                 // canonical object (single source of truth)\n    key_clauses: keyClauses, // concise bullets\n    tor_text_excerpt: torTextShort, // optional; remove if you want stricter canonical-only\n    file: {\n      id: $('Download file').item.json.id,\n      name: $('Download file').item.json.name,\n    }\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        112
+      ],
+      "id": "e0f3448f-4029-4a19-b0f4-0ff45d578a50",
+      "name": "Build AI Agent Input"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2256,
+        16
+      ],
+      "id": "9157b0d7-8eee-4a7e-a68c-56139fe3df04",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().map(i => i.json);\n\nconst canonical = items.find(x => x.required_response_structure && x.formatting_requirements);\nconst insights = items.find(x => x.tender_insights)?.tender_insights;\n\nif (!canonical) throw new Error(\"Missing canonical item from merge.\");\nif (!insights) throw new Error(\"Missing tender_insights item from merge.\");\n\nreturn [{\n  json: {\n    ...canonical,\n    tender_insights: insights\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2528,
+        16
+      ],
+      "id": "48c260ee-904d-4a09-a5de-36a52033a242",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are preparing a \"Section Drafting Pack\" for ONE tender section.\nReturn VALID JSON ONLY. No markdown, no code fences, no extra text.\n\nUse ONLY the provided INPUT. Do not invent facts. If something is unknown, write \"UNKNOWN\" (string) and add a clarification question.\n\nOUTPUT JSON schema (exact keys, exact types):\n{\n\"merge_key\": \"{{ $json.merge_key }}\",  \n\"section_id\": \"string\",\n  \"section_summary\": \"string\",\n  \"what_evaluators_want\": [\"string\"],\n  \"human_inputs_needed\": [\"string\"],\n  \"questions_for_humans\": [\"string\"],\n  \"evidence_to_pull\": [\"string\"],\n  \"drafting_outline\": [\"string\"]\n}\n\nRules:\n- what_evaluators_want: max 6 bullets, each must be specific to THIS section.\n- human_inputs_needed: max 6 bullets, human-only inputs (availability, partner reality, pricing choices, proof points, local constraints).\n- questions_for_humans: EXACTLY 5 questions.\n  Each question MUST start with \"RC#<n>:\" where <n> references the nth item in section.required_content (1-based).\n  Each question must be actionable and answerable by a human (not an AI).\n- evidence_to_pull: max 6 bullets, internal artifacts or proof you would attach or cite (e.g., workplan, CVs, references, cost tables).\n- drafting_outline: max 8 bullets, ordered, using short headings.\n\nINPUT (tender context):\n{{ JSON.stringify($json.agent2_input.tender) }}\n\nINPUT (global non-negotiables / overall requirements / risks):\n{{ JSON.stringify($json.agent2_input.global) }}\n\nINPUT (this one section):\n{{ JSON.stringify($json.agent2_input.section) }}\n\nNow produce the JSON.\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        5792,
+        160
+      ],
+      "id": "52e08a21-54a6-4d29-b08d-696155a96f62",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        5792,
+        384
+      ],
+      "id": "3cea76c2-9b60-441e-931a-20d50f51c04b",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// JS5: Build Section Agent Input (Option B branch)\n// Mode: Run Once for Each Item\n\nconst sec = $json.required_response_structure;\n\n// Guard: must be AFTER Split Out\nif (!sec || typeof sec !== \"object\" || Array.isArray(sec)) {\n  throw new Error(\"JS5: required_response_structure must be an object. Place this node AFTER Split Out.\");\n}\n\n// Canonical tender context from the original item\nconst tender = {\n  rfp_id: $json.rfp_id ?? null,\n  rfp_title: $json.rfp_title ?? null,\n  client_org: $json.client_org ?? null,\n  procurement_type: $json.procurement_type ?? null,\n  submission_deadline: $json.submission_deadline ?? null,\n  submission_method: $json.submission_method ?? null,\n  formatting_requirements: $json.formatting_requirements ?? null,\n  overall_expectations: $json.overall_expectations ?? null,\n};\n\n// Global insights (robust fallback paths)\nconst global =\n  $json.tender_insights?.insights_block ??\n  $json.global ??\n  {}; // allow empty; merge will still work\n\nconst agent2_input = {\n  tender,\n  global,\n  section: sec\n};\n\n// IMPORTANT: preserve everything + merge_key for Merge-by-Key\nreturn {\n  json: {\n    ...$json,\n    merge_key: $json.merge_key ?? `${$json.sheetId ?? \"noSheet\"}::${sec.section_id ?? `idx_${$itemIndex}`}`,\n    agent2_input\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5520,
+        160
+      ],
+      "id": "aa520503-1ca6-43a7-829a-50d85d037896",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "function tryParseJson(s) {\n  if (typeof s !== \"string\") return null;\n  try { return JSON.parse(s); } catch { return null; }\n}\n\nfunction extractJson(s) {\n  if (typeof s !== \"string\") return null;\n\n  // remove fenced code blocks if present\n  const cleaned = s.replace(/```json|```/g, \"\").trim();\n\n  // first try direct parse\n  const direct = tryParseJson(cleaned);\n  if (direct) return direct;\n\n  // fallback: slice from first { to last }\n  const start = cleaned.indexOf(\"{\");\n  const end = cleaned.lastIndexOf(\"}\");\n  if (start >= 0 && end > start) return tryParseJson(cleaned.slice(start, end + 1));\n\n  return null;\n}\n\nfunction asArray(v) {\n  if (Array.isArray(v)) return v;\n  if (typeof v === \"string\") {\n    // handle bullet lists / newline lists\n    const parts = v\n      .split(/\\n|•|\\u2022|-\\s+/)\n      .map(s => String(s).trim())\n      .filter(Boolean);\n    return parts;\n  }\n  return [];\n}\n\n// n8n AI Agent often returns { output: \"...\" }\nconst raw =\n  $json.output ??\n  $json.text ??\n  $json.message?.content ??\n  $json.choices?.[0]?.message?.content ??\n  $json;\n\nconst parsed = (typeof raw === \"object\" && raw !== null)\n  ? raw\n  : (tryParseJson(raw) || extractJson(raw));\n\nif (!parsed || typeof parsed !== \"object\") {\n  throw new Error(\"Agent2 output not parseable JSON\");\n}\n\n// --- derive section_id + merge_key from incoming item if missing ---\nconst incomingSectionId =\n  $json.required_response_structure?.section_id ??\n  $json.section_id ??\n  ($json.merge_key ? String($json.merge_key).split(\"::\")[1] : null);\n\nconst sectionId = parsed.section_id ?? incomingSectionId;\nif (!sectionId) {\n  throw new Error(\"Missing section_id: not in Agent2 output and not in incoming item\");\n}\nparsed.section_id = sectionId;\n\nconst incomingSheetId =\n  $json.sheetId ??\n  ($json.merge_key ? String($json.merge_key).split(\"::\")[0] : null);\n\nconst sheetId = parsed.sheetId ?? incomingSheetId;\n\nconst mergeKey = parsed.merge_key ?? $json.merge_key ?? (sheetId ? `${sheetId}::${sectionId}` : null);\nparsed.merge_key = mergeKey;\n\n// --- normalize arrays + enforce exactly 5 questions (pad/truncate) ---\nconst questions = asArray(parsed.questions_for_humans);\nwhile (questions.length < 5) questions.push(\"\");\nparsed.questions_for_humans = questions.slice(0, 5);\n\nparsed.what_evaluators_want = asArray(parsed.what_evaluators_want);\nparsed.human_inputs_needed = asArray(parsed.human_inputs_needed);\nparsed.evidence_to_pull = asArray(parsed.evidence_to_pull);\nparsed.drafting_outline = asArray(parsed.drafting_outline);\n\n// ✅ output: preserve original fields + add the parsed section fields at top-level\nreturn {\n  json: {\n    ...$json,\n    merge_key: mergeKey,\n    section_id: sectionId,\n\n    section_summary: parsed.section_summary ?? null,\n    what_evaluators_want: parsed.what_evaluators_want,\n    human_inputs_needed: parsed.human_inputs_needed,\n    questions_for_humans: parsed.questions_for_humans,\n    evidence_to_pull: parsed.evidence_to_pull,\n    drafting_outline: parsed.drafting_outline,\n\n    // optional: keep raw parsed object for debugging\n    section_pack: parsed,\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6528,
+        160
+      ],
+      "id": "16a3c4a3-2bf5-409e-9871-53ef34798dac",
+      "name": "Parse Section Agent Output"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "function joinList(arr, sep = \" | \") {\n  if (!Array.isArray(arr)) return null;\n  const cleaned = arr.map(v => String(v ?? \"\").trim()).filter(Boolean);\n  return cleaned.length ? cleaned.join(sep) : null;\n}\nfunction bullets(arr) {\n  if (!Array.isArray(arr)) return null;\n  const cleaned = arr.map(v => String(v ?? \"\").trim()).filter(Boolean);\n  return cleaned.length ? cleaned.map(v => `• ${v}`).join(\"\\n\") : null;\n}\n\n// Prefer the pass-through objects, but ALWAYS fall back to original top-level.\nconst top = $json._top ?? $json;\n\nconst t = ($json.tender && typeof $json.tender === \"object\") ? $json.tender : top;\nconst sec = ($json.section && typeof $json.section === \"object\") ? $json.section\n         : (top.required_response_structure && typeof top.required_response_structure === \"object\") ? top.required_response_structure\n         : {};\n\nconst global = ($json.global && typeof $json.global === \"object\") ? $json.global\n            : top.tender_insights?.insights_block\n            ?? {};\n\nconst pack = $json.section_pack || {};\n\n// Build final row\nreturn {\n  json: {\n    sheetId: $json.sheetId ?? top.sheetId ?? null,\n\n    // canonical (robust fallbacks)\n    rfp_id: t.rfp_id ?? top.rfp_id ?? null,\n    rfp_title: t.rfp_title ?? top.rfp_title ?? null,\n    client_org: t.client_org ?? top.client_org ?? null,\n    procurement_type: t.procurement_type ?? top.procurement_type ?? null,\n\n    submission_deadline_date: t.submission_deadline?.date ?? top.submission_deadline?.date ?? null,\n    submission_deadline_time: t.submission_deadline?.time_local ?? top.submission_deadline?.time_local ?? null,\n    submission_deadline_timezone: t.submission_deadline?.timezone ?? top.submission_deadline?.timezone ?? null,\n\n    submission_method_channel: t.submission_method?.channel ?? top.submission_method?.channel ?? null,\n    submission_method_details: t.submission_method?.details ?? top.submission_method?.details ?? null,\n\n    // section meta\n    section_id: sec.section_id ?? pack.section_id ?? null,\n    order: sec.order ?? null,\n    title: sec.title ?? null,\n    is_mandatory: sec.is_mandatory ?? null,\n    page_or_word_limit: sec.page_or_word_limit ?? null,\n\n    required_content: joinList(sec.required_content),\n    evaluation_alignment: joinList(sec.evaluation_alignment),\n    source_quotes: joinList(sec.source_quotes, \" / \"),\n\n    // section pack\n    section_summary: pack.section_summary ?? null,\n    what_evaluators_want: bullets(pack.what_evaluators_want),\n    human_inputs_needed: bullets(pack.human_inputs_needed),\n    questions_for_humans: bullets(pack.questions_for_humans),\n    evidence_to_pull: bullets(pack.evidence_to_pull),\n    drafting_outline: bullets(pack.drafting_outline),\n\n    // global repeated\n    executive_takeaways: bullets(global.executive_takeaways),\n    win_themes: JSON.stringify(global.win_themes ?? []),\n    risks: JSON.stringify(global.risks ?? []),\n    go_no_go_flags: bullets(global.go_no_go_flags),\n    clarification_questions: JSON.stringify(global.clarification_questions_global ?? []),\n    critical_human_contributions: JSON.stringify(global.critical_human_contributions ?? []),\n\n    tender_insights_json: JSON.stringify({ insights_block: global }),\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6784,
+        160
+      ],
+      "id": "97be5be2-7ca1-4e29-b0d5-287bdc019d1e",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "merge_key",
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        7184,
+        48
+      ],
+      "id": "f1c71e3f-63b5-4bed-9a27-26d7793b3b08",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const sec = $json.required_response_structure;\n\n// Guard: Split Out must output one section object per item\nif (!sec || typeof sec !== \"object\" || Array.isArray(sec)) {\n  throw new Error(\"Add merge_key: required_response_structure must be an object. Place this node AFTER Split Out.\");\n}\n\nconst sheetId = $json.sheetId ?? \"noSheet\";\nconst sectionId = sec.section_id ?? `idx_${$itemIndex}`;\nconst merge_key = `${sheetId}::${sectionId}`;\n\nreturn {\n  json: {\n    ...$json,\n    merge_key,\n  },\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5216,
+        32
+      ],
+      "id": "44041fcf-9b16-42e2-aff5-c47d91cd9667",
+      "name": "Add merge_key"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "function joinList(arr, sep = \" | \") {\n  if (!Array.isArray(arr)) return null;\n  const cleaned = arr.map(v => String(v ?? \"\").trim()).filter(Boolean);\n  return cleaned.length ? cleaned.join(sep) : null;\n}\nfunction bullets(arr) {\n  if (!Array.isArray(arr)) return null;\n  const cleaned = arr.map(v => String(v ?? \"\").trim()).filter(Boolean);\n  return cleaned.length ? cleaned.map(v => `• ${v}`).join(\"\\n\") : null;\n}\n\nconst sec = $json.required_response_structure;\nif (!sec || typeof sec !== \"object\" || Array.isArray(sec)) {\n  throw new Error(\"Flatten: required_response_structure missing or not an object. Ensure this runs after Split Out/merge.\");\n}\n\nconst pack = $json.section_pack ?? {};\n\n// global insights optional\nconst global = $json.tender_insights?.insights_block ?? $json.global ?? {};\n\nreturn {\n  json: {\n    sheetId: $json.sheetId ?? null,\n\n    // canonical\n    rfp_id: $json.rfp_id ?? null,\n    rfp_title: $json.rfp_title ?? null,\n    client_org: $json.client_org ?? null,\n    procurement_type: $json.procurement_type ?? null,\n\n    submission_deadline_date: $json.submission_deadline?.date ?? null,\n    submission_deadline_time: $json.submission_deadline?.time_local ?? null,\n    submission_deadline_timezone: $json.submission_deadline?.timezone ?? null,\n\n    submission_method_channel: $json.submission_method?.channel ?? null,\n    submission_method_details: $json.submission_method?.details ?? null,\n\n    // section\n    section_id: sec.section_id ?? null,\n    order: sec.order ?? null,\n    title: sec.title ?? null,\n    is_mandatory: sec.is_mandatory ?? null,\n    page_or_word_limit: sec.page_or_word_limit ?? null,\n    required_content: joinList(sec.required_content),\n    evaluation_alignment: joinList(sec.evaluation_alignment),\n    source_quotes: joinList(sec.source_quotes, \" / \"),\n\n    // section insights\n    section_summary: pack.section_summary ?? null,\n    what_evaluators_want: bullets(pack.what_evaluators_want),\n    human_inputs_needed: bullets(pack.human_inputs_needed),\n    questions_for_humans: bullets(pack.questions_for_humans),\n    evidence_to_pull: bullets(pack.evidence_to_pull),\n    drafting_outline: bullets(pack.drafting_outline),\n\n    // global repeated (optional)\n    executive_takeaways: bullets(global.executive_takeaways),\n    win_themes: JSON.stringify(global.win_themes ?? []),\n    risks: JSON.stringify(global.risks ?? []),\n    go_no_go_flags: bullets(global.go_no_go_flags),\n    clarification_questions: JSON.stringify(global.clarification_questions_global ?? []),\n    critical_human_contributions: JSON.stringify(global.critical_human_contributions ?? []),\n\n    tender_insights_json: JSON.stringify({ insights_block: global }),\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7392,
+        48
+      ],
+      "id": "82ad8604-f1e0-4e92-8ce4-48908a6b528d",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const raw =\n  $json.output ?? $json.text ?? $json.message ?? \"\";\n\nconst cleaned = String(raw).replace(/```json|```/g, \"\").trim();\n\nlet parsed;\ntry {\n  parsed = JSON.parse(cleaned);\n} catch (e) {\n  throw new Error(\"Agent2 did not return valid JSON. Raw was: \" + cleaned.slice(0, 2000));\n}\n\n// Ensure merge_key exists (either returned by agent2 or rebuild it)\nconst sectionId =\n  parsed.section_id ??\n  $json.required_response_structure?.section_id ??\n  $json.section_id;\n\nconst sheetId = $json.sheetId ?? parsed.sheetId;\n\nconst merge_key =\n  parsed.merge_key ??\n  (sheetId && sectionId ? `${sheetId}::${sectionId}` : null);\n\nreturn {\n  json: {\n    merge_key,\n\n    // section payload\n    section_summary: parsed.section_summary ?? null,\n    what_evaluators_want: parsed.what_evaluators_want ?? [],\n    human_inputs_needed: parsed.human_inputs_needed ?? [],\n    questions_for_humans: parsed.questions_for_humans ?? [],\n    evidence_to_pull: parsed.evidence_to_pull ?? [],\n    drafting_outline: parsed.drafting_outline ?? [],\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6192,
+        160
+      ],
+      "id": "777e520e-31ae-47f1-8b5a-2a645fe4f265",
+      "name": "Code in JavaScript4"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-16T14:42:07.335Z",
+      "createdAt": "2026-02-16T14:42:07.335Z",
+      "role": "workflow:owner",
+      "workflowId": "vZgedGb71UYeKlNh",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Google Drive Trigger": {
+      "lastTimeChecked": "2026-02-16T13:54:31Z"
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-18T14:55:46.000Z",
+  "versionId": "dc306de5-ec43-402d-a913-dbbf7c36079a"
+}
