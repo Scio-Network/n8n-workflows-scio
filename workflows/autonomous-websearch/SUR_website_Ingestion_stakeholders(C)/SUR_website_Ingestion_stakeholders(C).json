@@ -1,0 +1,439 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "fetch urls(stakeholders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scraper": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "URL EXTRACTING AGENT": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetch urls(stakeholders": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Call Validation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "URL EXTRACTING AGENT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Validation": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-20T08:13:22.177Z",
+  "id": "y58WZ6dMnxmpDQ7p",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_website_Ingestion_stakeholders(C)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 3
+            }
+          ]
+        }
+      },
+      "id": "80aa411e-8cb7-4a41-bcbd-634ebfea8a54",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2048,
+        3312
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $json.website_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-With-Links-Summary",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1056,
+        3104
+      ],
+      "id": "77105efb-0573-45bd-a192-3e6d74d24377",
+      "name": "Scraper",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Here is the Noisy Markdown Content for you to analyze:{{ $json.cleaned_content }}"
+            },
+            {
+              "role": "system",
+              "content": "=# 🤖 ROLE: PRECISION DATA AUDITOR & LINK SCOUT\nYour objective is to audit noisy Markdown, strip away all site infrastructure, and extract every valid News/Project/Report URL into a structured JSON list.\n\n# 🎯 THE GOAL\nCreate an exhaustive inventory of all mission-critical links. By \"Mission-Critical,\" I mean anything related to News, Projects, Reports, or Updates.\n\n# 🛠️ AUDIT LOGIC\n1. **IGNORE/DELETE (Noise):** Mentally discard Navigation menus, Language switchers, Social Media links, Privacy/Terms, and the long list of countries in the footer.\n2. **IDENTIFY (Critical Content):** Locate every text cluster that represents a News Posting, a Current Project, or a Publication.\n3. **EXTRACT:** For every item identified, capture:\n   - headline: The original verbatim headline.\n   - url: The url pointing to that specific article. If there are multiple links in a block, **always choose the one that is unique to that specific headline.**\n   - The correct URL usually contains a \"slug\" (a long string of words) that matches the headline text.\n   - snippet: The original teaser text provided in the input.\n-date: if the url or article has a date extract otherwise default date to 0000-00-00\n-stakeholder_id : {{ $('Loop Over Items').item.json.id }}\n\n# 📜 CRITICAL RULES\n- **URL INTEGRITY:** The URL must point to the specific article page. \n- **ZERO LOSS:** You must not skip a single news article or project link found in the content.\n- **VERBATIM:** Headlines and snippets must be 100% identical to the input text.\n- **LIGHTWEIGHT OUTPUT:**  Return ONLY the JSON OBJECT.\n\n# 📥 INPUT\nYou will receive a raw Markdown dump from a website.\n\n# 📤 OUTPUT\nA JSON object containing an array called `news_list`. "
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"news_list\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"headline\": { \"type\": \"string\" },\n          \"url\": { \"type\": \"string\" },\n          \"snippet\": { \"type\": \"string\" },\n          \"published_date\": { \"type\": \"string\" },\n          \"stakeholder_id\": { \"type\": \"string\" }\n        },\n        \"required\": [\"headline\", \"url\", \"snippet\", \"published_date\", \"stakeholder_id\"],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\"news_list\"],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -176,
+        3120
+      ],
+      "id": "4d5dd907-2453-4877-bcb1-a8a11bad5d56",
+      "name": "URL EXTRACTING AGENT",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1344,
+        3072
+      ],
+      "id": "b44026ac-dde2-4d27-a649-e4863d15907b",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "stakeholder_valid_urls",
+        "returnAll": true,
+        "matchType": "allFilters"
+      },
+      "id": "448f568f-c269-4e12-8c4f-7c77cc53828c",
+      "name": "fetch urls(stakeholders",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1792,
+        3264
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "stakeholders",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "err_status",
+              "fieldValue": "={{ $json.error.code }}"
+            },
+            {
+              "fieldId": "error_code",
+              "fieldValue": "={{ $json.error.status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        304,
+        3632
+      ],
+      "id": "8b59ee9a-76d2-4f63-b919-9b68a4591d04",
+      "name": "Update a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4c821694-33b5-4abf-9b15-18ff275c18b8",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        3216
+      ],
+      "id": "8aa31ac5-684b-48da-971c-ed8019044e3a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nfunction universalClean(rawText) {\n    if (!rawText || typeof rawText !== 'string') return \"\";\n\n    const linkDumpMarkers = [/\\nLinks\\/Buttons:/i, /\\nReferences:/i, /\\nLinks List:/i];\n    let cleanedContent = rawText;\n    for (let marker of linkDumpMarkers) {\n        const split = cleanedContent.split(marker);\n        if (split.length > 1) {\n            cleanedContent = split[0]; // Throw away everything after the dump starts\n        }\n    }\n\n    const lines = cleanedContent.split('\\n');\n    const result = [];\n\n    // 2. UNIVERSAL NOISE PATTERNS\n    const globalBoilerplate = /privacy|terms|cookie|sitemap|copyright|rights reserved|contact us|follow us|subscribe|newsletter|skip to/i;\n    const socialMedia = /facebook\\.com|twitter\\.com|x\\.com|linkedin\\.com|instagram\\.com|youtube\\.com/i;\n\n    for (let line of lines) {\n        const trimmed = line.trim();\n        if (trimmed.length < 4) continue; // Skip tiny fragments\n\n        // 3. DATE PROTECTION (The \"News Anchor\")\n        // If a line looks like a date (contains a year 202X or a Month name), \n        // we are very careful about deleting it.\n        const hasYear = /\\b20\\d{2}\\b/.test(trimmed);\n        const hasMonth = /\\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\b/i.test(trimmed);\n        const isDate = hasYear || hasMonth;\n\n        // 4. LINK DENSITY CALCULATION\n        // We count how many characters in the line are inside a Markdown link [text](url)\n        const linkMatches = trimmed.match(/\\[.*?\\]\\(.*?\\)/g) || [];\n        const linkChars = linkMatches.reduce((acc, link) => acc + link.length, 0);\n        const density = linkChars / trimmed.length;\n\n        // --- FILTERING LOGIC ---\n\n        // A. Filter Social Media (Universal noise)\n        if (socialMedia.test(trimmed)) continue;\n\n        // B. Filter Boilerplate (Universal footer/header noise)\n        // Only filter if it's a short line (actual articles might mention \"Privacy\" in a long sentence)\n        if (globalBoilerplate.test(trimmed) && trimmed.length < 150) continue;\n\n        // C. Filter Menu Bars (Universal Pattern)\n        // If > 70% of the line is just links, and it's not a Date line, it's almost certainly a menu.\n        if (density > 0.70 && !isDate && trimmed.length < 300) {\n            continue;\n        }\n\n        // D. Filter Image-only lines (Unless they are part of news)\n        if (trimmed.startsWith('![') && !isDate && trimmed.length < 100) continue;\n\n        result.push(trimmed);\n    }\n\n    // Join and collapse excessive newlines\n    return result.join('\\n').replace(/\\n{3,}/g, '\\n\\n');\n}\n\n// n8n Input Mapping\nreturn $input.all().map(item => {\n    // This auto-detects if your field is \"data\", \"markdown\", or \"text\"\n    const rawContent = item.json.data || item.json.markdown || item.json.text || \"\"; \n    \n    return {\n        json: {\n            ...item.json, \n            cleaned_content: universalClean(rawContent)\n        }\n    };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -848,
+        3008
+      ],
+      "id": "bf808acd-6a5c-430b-b553-0d9b9f4b6989",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "SqOVuxK5s8hxfuyx",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/SqOVuxK5s8hxfuyx",
+          "cachedResultName": "Validation"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "output": "={{ $json.output }}",
+            "website_url": "={{ $('Loop Over Items').item.json.website_url }}",
+            "id": "={{ $('fetch urls(stakeholders').item.json.id }}"
+          },
+          "matchingColumns": [
+            "output",
+            "website_url",
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "website_url",
+              "displayName": "website_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        3200
+      ],
+      "name": "Call Validation",
+      "id": "3cf3a24b-a03a-4647-8b45-f1da27a5139c"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-20T08:13:22.180Z",
+      "createdAt": "2026-01-20T08:13:22.180Z",
+      "role": "workflow:owner",
+      "workflowId": "y58WZ6dMnxmpDQ7p",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        0
+      ]
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-06-05T11:19:18.165Z",
+      "createdAt": "2026-06-05T11:19:18.165Z",
+      "id": "TRriXHrjlW61zvt9",
+      "name": "autonomous-websearch"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-05T11:21:57.869Z",
+  "versionId": "b27c1f11-b90a-4045-a71e-ea3695578383"
+}
