@@ -1,0 +1,119 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search web",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-03T12:08:30.992Z",
+  "id": "aNqr7ewu2ktiu0Rh",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "My workflow 5",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8783bc2f-3c97-4232-b339-a8a8bb18bded",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.jinaAi",
+      "typeVersion": 1,
+      "position": [
+        208,
+        -32
+      ],
+      "id": "7cd4a2c8-76bd-4f1c-9534-ee25b3660cca",
+      "name": "Search web",
+      "credentials": {
+        "jinaAiApi": {
+          "id": "vO8eAsKc5rR8eQvz",
+          "name": "Jina Reader"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": \"(Ukraine OR Ukrainian) AND (reconstruction OR recovery OR rebuilding) AND (conference OR summit OR forum OR workshop OR seminar) AND (2026 OR upcoming OR schedule)\",\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        224,
+        160
+      ],
+      "id": "0d788f9c-1e1d-443d-869a-f494718b37c6",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-03T12:08:30.998Z",
+      "createdAt": "2026-03-03T12:08:30.998Z",
+      "role": "workflow:owner",
+      "workflowId": "aNqr7ewu2ktiu0Rh",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-03T12:31:10.000Z",
+  "versionId": "cbbf2e56-fddd-4c2a-a446-46d648fb6288"
+}
