@@ -1,0 +1,2020 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "MoDtr",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MoE",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MoF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MoJ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dev of Communities and Territories": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoDtr": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoE": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoF": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoJ": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Create a row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Create a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-15T18:57:47.016Z",
+  "id": "FoOa11A6mo4N1Uke",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_website_Ingestion_v1_UA_Min",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://mindev-scraper-85095088607.europe-west1.run.app/scrape-news",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start_date",
+              "value": "2025-12-31"
+            },
+            {
+              "name": "end_date",
+              "value": "2026-01-15"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": false,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1456,
+        1616
+      ],
+      "id": "ffb10471-a0a5-403a-8def-51d322c23892",
+      "name": "Dev of Communities and Territories"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        16,
+        1184
+      ],
+      "id": "a33e03e0-141d-41d0-b221-7ab159a80aaf",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HC1YbOY5bjxXWH2K",
+          "mode": "list",
+          "cachedResultName": "Ministry Websites",
+          "cachedResultUrl": "/projects/cFPhnNmamSW061Vq/datatables/HC1YbOY5bjxXWH2K"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Digital Transformation"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Economy"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Finance"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Energy"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Justice"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        240,
+        896
+      ],
+      "id": "dec2ff0d-8078-4dea-97ee-a91f1f9fd625",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Digital Transformation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c576bfb2-d416-4180-875f-a5128ccf767e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Digital Transformation"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "15a2c1c2-11a0-4045-ac41-d8c770783837",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Economy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Economy"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4344ca4c-deab-4a2a-8c31-9570d3256971",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Finance",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Finance"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6eed03eb-6bfd-4e38-928c-6f9bd73e5856",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Energy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Energy"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c9040c6d-bee5-4f2f-b4e1-c5847cfb8aff",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Justice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Justice"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        464,
+        848
+      ],
+      "id": "a9f372ad-963f-400e-9fec-f8d534ed55dc",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        16,
+        64
+      ],
+      "id": "ffeb6236-dff4-44ac-861a-e683e94b403c",
+      "name": "HTTP Request2",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        1088
+      ],
+      "id": "e9e6f876-38d2-443f-9ff8-3f3aef2f9af4",
+      "name": "HTTP Request6",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        16,
+        -176
+      ],
+      "id": "b07b8963-3c9f-428e-8af2-b601db757f42",
+      "name": "HTTP Request7",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "articles",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        1616
+      ],
+      "id": "808063f4-d9f8-476d-8bc1-1bffa47f84db",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=# Role\nYou are a multilingual policy and infrastructure analysis assistant with expertise in public-sector news, disaster risk management, infrastructure, housing, and urban resilience.\n\n# Task\nGiven a news article **title** and **content**, perform the following tasks using ONLY the provided input text:\n\n---\n\n## 1. Title Translation\n- Translate the article title into **German**\n- Preserve the original meaning and professional tone\n- Do NOT add interpretation\n\n---\n\n## 2. Context Summarization\nGenerate **two short summaries**, each **1–2 sentences**, capturing the main context of the article:\n- One summary in **English**\n- One summary in **German**\n\nRules:\n- Be concise, factual, and neutral\n- Do not speculate or introduce external information\n- Use only the provided content\n\n---\n\n## 3. Sector Classification\nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors (STRICT LIST — no other values allowed)\n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- If unclear or ambiguous, **default to \"Basic Infrastructure\"**\n- Do NOT invent categories or infer beyond the text\n\n---\n\n## Input\n- **Article Title:** {{ $json.articles.title }}\n- **Article Content:** {{ $json.articles.content }}\n\n---\n\n## Output Format (STRICT)\nReturn a JSON object with the following fields\n\n{\n  \"title_de\": \"\",\n  \"title_en\": \"\",\n  \"summary_en\": \"\",\n  \"summary_de\": \"\",\n  \"source_url\": {{ $json.articles.url }},\n   \"published_date\": {{ $json.articles.date }}\n  \"sector_classification\": []\n}\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        1904,
+        1616
+      ],
+      "id": "d81082e6-9d20-4d58-adf8-e39b44fb8993",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.output[0].content[0].text.published_date }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_de }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_de }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "news"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2656,
+        1632
+      ],
+      "id": "632358b9-46e1-49f4-ba02-c5932ca01082",
+      "name": "Create a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        896
+      ],
+      "id": "3e179dc1-3b13-484c-95f1-aec9a0084422",
+      "name": "MoF",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        704
+      ],
+      "id": "7f048dab-d278-47ef-b0b4-276f7abada9a",
+      "name": "MoE",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        512
+      ],
+      "id": "0c0b26bb-2d1a-42d6-b42f-1af2b764f070",
+      "name": "MoDtr",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        1280
+      ],
+      "id": "75d25add-a280-4ec0-91c5-73c4737aedcc",
+      "name": "MoJ",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=# Role\nYou are a multilingual policy and infrastructure analysis assistant with expertise in public-sector news, disaster risk management, infrastructure, housing, and urban resilience.\n\nYou can read and translate Ukrainian, English, and other European languages accurately.\n\n---\n\n# Task\nGiven a news article **title** and **content**, perform the following tasks using ONLY the provided input text.\n\nIf the title or content is **not in English**, first translate it internally to English before performing summarization and classification.\n\n---\n\n## 1. Title Translation\n- Translate the article title into **German**\n- If the original title is in **Ukrainian or any non-English language**, accurately translate it\n- Preserve original meaning and professional tone\n- Do NOT add interpretation\n\n---\n\n## 2. Context Summarization\nGenerate **two short summaries**, each **1–2 sentences**, capturing the main context of the article:\n- One summary in **English**\n- One summary in **German**\n\nRules:\n- If the source content is Ukrainian or another language, translate it internally before summarizing\n- Summaries must reflect the **true meaning** of the original content\n- Be concise, factual, and neutral\n- Do not speculate or introduce external information\n\n---\n\n## 3. Sector Classification\nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors (STRICT LIST — no other values allowed)\n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- Classification must be based on the **translated meaning**, not surface keywords\n- If unclear or ambiguous, **default to \"Basic Infrastructure\"**\n- Do NOT invent categories or infer beyond the text\n\n---\n\n## Input\n- **Article Title:** {{ $json.title }}\n- **Article Content:**{{ $json.content }}\n\n---\n\n## Output Format (STRICT)\nReturn a JSON object with the following fields\n\n{\n  \"title_de\": \"\",\n  \"title_uk\": \"{{ $json.title }}\",\n  \"title_en\": \"\",\n  \"summary_en\": \"\",\n  \"summary_de\": \"\",\n  \"source_url\": {{ $json.url }},\n   \"published_date\": {{ $json.date }},\n\"n8n_contenthash\": {{ $json.content_hash }},\n  \"sector_classification\": []\n}\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        1264,
+        864
+      ],
+      "id": "c5351c80-b042-45e3-844a-0e0ff3abd924",
+      "name": "Message a model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.output[0].content[0].text.published_date }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_de }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_de }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "news"
+            },
+            {
+              "fieldId": "summary_uk",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_uk }}"
+            },
+            {
+              "fieldId": "n8n_content_hash",
+              "fieldValue": "={{ $('Code in JavaScript5').item.json.n8n_content_hash }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1616,
+        864
+      ],
+      "id": "cdf944a3-d0e7-4733-bdbe-85fa1ac3bdbe",
+      "name": "Create a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "stakeholders",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name_en",
+              "keyValue": "Ministry for Development of Communities and Territories of Ukraine"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        16,
+        288
+      ],
+      "id": "c767f8ad-466f-4084-a3f7-18cae49e73ea",
+      "name": "Get a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require(\"crypto\");\n\n/* =========================\n   PLACEHOLDER INPUTS (for testing)\n   ========================= */\nconst PLACEHOLDER_URL = \"$input.first().json.url\";\nconst PLACEHOLDER_TITLE = \"$input.first().json.title\";\nconst PLACEHOLDER_SUMMARY = \"$input.first().json.content\";\n\n/* =========================\n   HELPERS\n   ========================= */\nfunction normalizeWhitespace(input) {\n  return String(input || \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction canonicalUrl(url) {\n  try {\n    const u = new URL(String(url || \"\").trim());\n    const DROP_PARAMS = new Set([\n      \"utm_source\", \"utm_medium\", \"utm_campaign\", \"utm_term\", \"utm_content\",\n      \"fbclid\", \"gclid\", \"igshid\",\n      \"mc_cid\", \"mc_eid\",\n      \"at_medium\", \"at_campaign\", \"at_custom1\", \"at_custom2\", \"at_custom3\"\n    ]);\n    [...u.searchParams.keys()].forEach(key => {\n      if (DROP_PARAMS.has(key.toLowerCase())) u.searchParams.delete(key);\n    });\n    const sortedParams = [...u.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b));\n    u.search = \"\";\n    for (const [k, v] of sortedParams) u.searchParams.append(k, v);\n    u.pathname = u.pathname.replace(/\\/+$/, \"\");\n    return u.toString();\n  } catch {\n    return String(url || \"\").trim();\n  }\n}\n\nfunction sha256Hex(input) {\n  return crypto.createHash(\"sha256\").update(input, \"utf8\").digest(\"hex\");\n}\n\n/* =========================\n   MAIN PROCESSING\n   ========================= */\nreturn $input.all().map(item => {\n  const json = item.json;\n\n  // If placeholders are filled, use them; else use actual item data\n  const url = PLACEHOLDER_URL !== \"$input.first().json.url\" ? PLACEHOLDER_URL : (json.url || json.link || json.source_url || \"\");\n  const title = PLACEHOLDER_TITLE !== \"$input.first().json.title\" ? PLACEHOLDER_TITLE : (json.title || json.headline || \"\");\n  const summary = PLACEHOLDER_SUMMARY !== \"$input.first().json.content\" ? PLACEHOLDER_SUMMARY : (json.summary || json.contentSnippet || json.description || \"\");\n\n  const canonical_url = canonicalUrl(url);\n  const normalized_title = normalizeWhitespace(title).toLowerCase();\n  const normalized_summary = normalizeWhitespace(summary).toLowerCase();\n\n  const hash_material = [\"v1\", canonical_url, normalized_title, normalized_summary].join(\"|\");\n  const content_hash = sha256Hex(hash_material);\n\n  return {\n    json: {\n      ...json,\n      url,\n      title,\n      summary,\n      content_hash,\n      n8n_content_hash: content_hash\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        864
+      ],
+      "id": "c9d49bcf-e18a-4ecd-bf4a-6b94c014d445",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "stakeholders",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name_en",
+              "keyValue": "Ministry for Development of Communities and Territories of Ukraine"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2096,
+        1904
+      ],
+      "id": "7c2916dc-233f-4426-bc24-9df6c5e87925",
+      "name": "Get a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2320,
+        1632
+      ],
+      "id": "c220c829-2524-479e-baac-1bdf844598a8",
+      "name": "Merge"
+    }
+  ],
+  "pinData": {
+    "MoE": [
+      {
+        "json": {
+          "url": "https://me.gov.ua/News/Detail/97f81ab9-53cf-43ca-8eed-c00a275d989a?lang=en-GB&title=OnlinePortal",
+          "date": "07.01.2026",
+          "title": "Ministry of Economy,\nEnvironment and Agriculture of Ukraine",
+          "content": "Today, the Ministry of Economy, Environment and Agriculture of Ukraine, in cooperation with the U.S. International Development Finance Corporation (DFC), announced the launch of an online portal for businesses to submit investment projects to the U.S.–Ukraine Reconstruction Investment Fund (URIF).\n\nThe launch of the portal is the first practical step toward deploying investments in 2026, following the confirmation in December that the Fund is fully operational.\n\n“Today, we are officially opening the call for project submissions to the Fund. Our goal for this year is to sign the first three investment agreements. These should be strong, well-structured projects in priority sectors that deliver tangible results for recovery and are attractive to international investors. The Fund is ready to deploy capital into initiatives that deepen the Ukraine–U.S. partnership and strengthen the resilience of our economy. We expect high-quality applications and the first investments in the coming months,” said Oleksii Sobolev, Minister of Economy, Environment and Agriculture of Ukraine.\n\nCompanies and investors that have projects in the Fund's target sectors and are ready to attract financing can submit project proposals via the online portal. \n\nURIF will consider project proposals in its target sectors, including critical minerals (upstream and midstream), energy (including generation, transmission, and extraction of hydrocarbons), transport and logistics, information and communication technologies, and emerging technologies. During its initial years, the Fund plans to prioritize equity investments and equity-like instruments.\n\nAfter an application is submitted, the Fund’s team conducts a preliminary review of the proposal. If there is interest, the applicant is contacted to clarify details and to request additional materials (including the financial model, project structure, confirmation of readiness for implementation, information on partners, etc.). Project evaluation also includes an analysis of key risks and risk-mitigation approaches; requirements and instruments may vary depending on the sector, project stage, and financing structure.\n\nBackground:\n\nThe U.S.–Ukraine Reconstruction Investment Fund was established under an agreement between Ukraine and the United States. The Fund’s initial capital has been formed through equal contributions from both parties – $75 mln from the United States via DFC and $75 mln from Ukraine – totalling $150 mln in seed capital. The Fund’s governance structure includes a Board of Directors and four specialized committees: Investment, Audit, Administrative, and Project Origination. The Fund has also appointed its key operating partner, Alvarez & Marsal (A&M), which serves as the Fund’s investment advisor."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://me.gov.ua/News/Detail/ab7ae64f-8840-4be2-afc9-b387f3ad340e?lang=en-GB&title=1-1-BillionForSkillsDevelopment-SkillsAlliancePresentsResultsAndEuropeanPracticesForUkraine",
+          "date": "30.12.2025",
+          "title": "Ministry of Economy,\nEnvironment and Agriculture of Ukraine",
+          "content": "A dedicated Skills Alliance session took place in December 2025 during the German Platform for the Reconstruction in Ukraine in Berlin, bringing together 88 partners from governments, international organisations, civil society and the private sector. The session focused on addressing skills shortages and advancing the Dual Intent approach — combining the integration of Ukrainians in host countries with practical pathways for return and engagement in Ukraine’s economic recovery.\n\nDuring the session, the Skills Alliance presented the latest results of the partnership:\n\n€1.1 billion in total commitments from Alliance members\n535,000 people have already upgraded their skills through these investments\nA further 585,000 people are expected to benefit by 2027\nPolicy solutions and long-term approaches\n\nThe first Skills Alliance panel focused on policy responses and long-term strategies to address labour shortages. Discussions covered:\n\nthe current state of Ukraine’s labour market and short-term forecasts;\nthe most in-demand skills across key sectors;\ngovernment policy priorities to mitigate workforce shortages;\nthe role of Ukrainians abroad as a labour potential for recovery and growth;\nhow the Dual Intent approach can serve both Ukraine’s needs and European labour markets.\nFrom policy to practice: implementing Dual Intent\n\nThe second panel explored the practical implementation of the Dual Intent approach and concrete cooperation tools between the government, employment services, businesses and civil society initiatives. Participants discussed measures already in place or under preparation in Ukraine to support economic development, programmes addressing employers’ skills needs, and opportunities for returning Ukrainians to contribute to recovery through employment and reskilling.\n\n“Ukraine’s economic recovery depends on people and skills. That is why we are focusing on expanding labour-market participation, developing digital services for employers and workers, and strengthening modern competencies. The Dual Intent approach allows us to support the integration of Ukrainians abroad while also creating clear pathways for return and meaningful engagement in Ukraine’s recovery,”\nsaid Dariia Marchak, Deputy Minister of Economy, Environment and Agriculture of Ukraine.\n\nThe Ministry of Economy, Environment and Agriculture of Ukraine emphasises that the shortage of skilled workers remains one of the key constraints for businesses and a major barrier to recovery. Priority areas include broader labour-market inclusion, digitalisation of employment services, and skills development aligned with emerging jobs and economic needs.\n\nThe Skills Alliance for Ukraine is a multi-stakeholder partnership launched at the Ukraine Recovery Conference 2024 in Berlin in response to Ukraine’s acute skills shortage caused by war-related displacement, demographic change, military conscription and damage to education and training infrastructure. Initiated by Germany’s Federal Ministry for Economic Cooperation and Development (BMZ) and the Ministry of Economy of Ukraine, the Alliance brings together 88 partners and has mobilised €1.1 billion in commitments to support vocational education and training, re- and upskilling in Ukraine and for Ukrainians abroad. To date, 535,000 people have already improved their skills through Alliance-supported initiatives, with a further 585,000 expected by 2027, contributing to labour-market inclusion, public–private cooperation and alignment with EU standards in line with the EU-Ukraine Facility and Ukraine’s EU accession pathway."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://me.gov.ua/News/Detail/01886cc9-b19d-4c9b-87a6-ccd1bb1f9165?lang=en-GB&title=HowToObtainCustomsIncentivesForAnIndustrialParkParticipant-detailedGuide-",
+          "date": "19.12.2025",
+          "title": "Ministry of Economy,\nEnvironment and Agriculture of Ukraine",
+          "content": "The Ministry of Economy, Environment and Agriculture of Ukraine has prepared a detailed guide on the application of customs incentives for industrial park participants. The document is designed as a practical handbook for manufacturers, enabling them to significantly reduce working capital costs at the stage of launching or modernizing production. The guide compiles explanations based on the Customs Code and the Tax Code of Ukraine, as well as relevant Government resolutions.\n\n“The guide provides a detailed explanation of how to benefit from exemptions from import duties and import VAT when importing new production equipment. An important part of the document is a step-by-step algorithm of actions — from completing a customs declaration with a special code to the rules for accounting and subsequent reporting. Strict compliance with these procedures and with the requirements for the intended use of the equipment for five years is a mandatory condition for retaining the incentives. We have also separately highlighted common mistakes, such as missed reporting deadlines or leasing the equipment, so that businesses can avoid financial sanctions,” said Vitalii Kindrativ, Deputy Minister of Economy, Environment and Agriculture of Ukraine.\n\nWithin the framework of the “Made in Ukraine” policy, the Government is consistently introducing instruments aimed at reducing investors’ capital expenditures and accelerating the payback of investment projects. Customs incentives for industrial parks are one of the key mechanisms for stimulating the development of the real sector of the economy.\n\nCustoms incentives are available to industrial park participants that are included in the Register and operate in the following areas:\n\nmanufacturing industry (NACE codes 10-33);\nwaste recovery (NACE code 38);\nresearch and development activities (NACE code 72).\n\nThe incentives apply to new production equipment and components manufactured no earlier than three years prior to the date of importation.\n\nDetailed guide available at the link\nEnglish version of the guide available at the link\n\nFor reference:\n\nThe development of industrial parks is one of the priorities of the state industrial policy and an integral part of the “Made in Ukraine” policy aimed at supporting Ukrainian manufacturers. Industrial park participants may receive tax and customs incentives, while initiators and managing companies may obtain co-financing for infrastructure development. This contributes to the establishment of new production facilities, attraction of investments, and strengthening of the economic potential of regions."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://me.gov.ua/News/Detail/31432ea5-9f9b-486d-adfd-4f2991b716ce?lang=en-GB&title=U-s-ukraineReconstructionInvestmentFundPoisedForFirstInvestmentsIn2026",
+          "date": "18.12.2025",
+          "title": "Ministry of Economy,\nEnvironment and Agriculture of Ukraine",
+          "content": "The Ministry of Economy, Environment and Agriculture of Ukraine, together with the U.S. International Development Finance Corporation (DFC), announced that the U.S.-Ukraine Reconstruction Investment Fund is now poised for its first investments in 2026.\n\nThe Fund’s board of directors today reached final consensus necessary to bring the Fund to full operational status in early 2026. This includes the approval of investment and fund policies and the review of the Fund’s investment strategy.\n\n “Today’s decision represents a major milestone in the Fund’s operational readiness. With the Fund Advisor in place, core policies and procedures approved, and $150 million in initial capital committed, the Fund is ready to begin investing in Ukraine’s reconstruction. Since the agreement entered into force on May 23, Ukraine’s Ministry of Economy and PPP Agency have worked in close, near-daily coordination with the U.S. International Development Finance Corporation and the U.S. Treasury to establish the Fund in line with leading international standards. We are now moving from paperwork to reconstruction, developing a high-quality pipeline to deploy capital into projects that support Ukraine’s long-term growth and supply chain resilience.” said Oleksii Sobolev, Minister of Economy, Environment and Agriculture of Ukraine.\n\nThe Fund’s investment strategy focuses on projects and companies in five key sectors—including critical minerals, energy, transport and logistics, ICT, and emerging technology—to support Ukraine’s recovery, long-term economic resilience, and integration into allied supply chains.\n\nIn January 2026, the Fund plans to launch a public website through which project sponsors will be able to submit proposals for consideration. The indicative timeline envisages the preparation and launch of the first investment decisions, including for the first three projects, by the end of 2026.\n\nBackground:\n\nOn 14 November, the Ministry of Economy, Environment and Agriculture of Ukraine and DFC also announced the appointment of a key operational partner for the Fund. The Fund has appointed Alvarez & Marsal (A&M) as its investment advisor.\n\nThe United States–Ukraine Reconstruction Investment Fund was established through an intergovernmental agreement between Ukraine and the United States. The Fund’s initial capital has been formed from equal contributions – $75 million from the United States via DFC and $75 million from Ukraine, totaling $150 million in seed capital. These funds are expected to be invested in three projects by the end of 2026. The Fund’s governance structure includes a Board of Managers and four dedicated committees: Investment, Audit, Administrative, and Prospecting. The Fund will invest in five priority sectors: critical minerals, energy, infrastructure, ICT and emerging technology."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://me.gov.ua/News/Detail/2407beda-98b1-41cb-8e8b-426ec52058c2?lang=en-GB&title=PostCop30-GovernmentOfficialsAndExpertsDiscussedTheNextStepsInUkraine-sClimatePolicy",
+          "date": "18.12.2025",
+          "title": "Ministry of Economy,\nEnvironment and Agriculture of Ukraine",
+          "content": "On December 17, 2025, the event “Post COP30: Results, Achievements, Next Steps in Ukraine’s Climate Policy” was held in Kyiv. It brought together Ukrainian and foreign government officials, experts, business and civil society representatives, Ukrainian negotiators, and leaders of international organisations. \n\nThe event’s primary focus was on the development and implementation of Ukraine's climate policy in 2026, which is one of the key elements of Ukraine's green recovery.\n\n\"Three strategic pillars — climate governance, adaptation and transparency, and international integration — are our priorities for the coming year. And the main task we set for ourselves is to turn plans and commitments to international partners into practical tools for Ukraine's economic development and sustainability,\" noted Oleksiy Sobolev, Minister of Economy, Environment, and Agriculture of Ukraine. \n\nThe Minister added that  implementing an effective climate policy requires the collaboration of the state, business, academia, civil society, and the public.\n\nPavlo Kartashov, the Deputy Minister of Economy, Environment, and Agriculture of Ukraine,  outlined the Government's key plans  for 2026 to participants.\n\nIn terms of climate governance, the plans include:\n\nthe official submission of a draft law on the Emissions Trading System to the Verkhovna Rada,\npractical launch of the Long-Term Low-Carbon Development Strategy,\nexpansion of sectors and updating of the technical functionality of the monitoring, reporting, and verification system,\nestablishment of the Secretariat of the Scientific and Expert Council, and implementation of climate education. \n\nThe Adaptation and Transparency Block provides for:\n\napproval of the Climate Change Adaptation Strategy and sectoral and regional adaptation programs,\nsubmission of the Biennial Transparency Report to the UNFCCC,\nsubmission of the annual Emissions Inventory for 1990-2024,\nlaunching transparent climate finance mechanisms as a basis for investment in green reconstruction. \n\nInternational integration efforts will focus on:\n\naccelerating the implementation of EU legislation (Chapter 27),\npromoting mechanisms to compensate for climate damage caused by russian aggression,\nimplementing measures to reduce emissions under the Global Methane Pledge,\nimplementing the Kigali Amendment to the Montreal Protocol.\n\n\"We have taken a legal commitment to become a carbon-neutral country by 2050. However we see that these issues are subject to debate. We must explain and prove the need to implement these standards. In particular, to business and communities. And this is the only correct path. If we do not demonstrate that this is a necessary component of the country's recovery after the war ends, then all the documents adopted by Verkhovna Rada and the Government will be shelved for a long time,” said Oleg Bondarenko, Chairman of the Verkhovna Rada Committee on Environmental Policy and Nature Management. \n\nHe also expressed his high appreciation of Ukraine's participation in COP30 and thanked the Ministry's team on behalf of the people's deputies. \n\nThe diplomatic, political, and image-building results of our country's participation in the conference were also discussed during the Post COP30 panel discussions, where speakers summarised the results of the conference:\n\nmore than 30 events at the Ukrainian pavilion with the participation of world leaders and experts,\n about 30 bilateral meetings with partners,\n about 700 mentions of Ukraine published in leading global media outlets and social networks (total coverage — over 2 billion views),\nUkrainian negotiators blocked russia's reports, where it presented data on emissions from the temporarily occupied territories of Ukraine. \n\nThe event “Post COP30: Results, Achievements, Next Steps in Ukraine's Climate Policy” was organised on the initiative of the Ministry of Economy, Environment and Agriculture of Ukraine with the support of the UN Global Compact in Ukraine and the Architecture for Recovery and Reforms in Ukraine (URA).\n\nFor reference: \n\nCOP30: Ukraine presented a “Time Capsule.” \n\nCOP30: Ukraine emphasizes the priorities of energy sustainability and green reconstruction during the war.\n\nCOP30: Ukraine will demand compensation from Russia for climate damage. \n\nCOP30: details of the panel discussion on Ukrainian forests. \n\nCOP30: Ukraine to establish Scientific and Expert Council on Climate Change and Ozone Layer Preservation.\n\nCOP30: How did Ukraine present itself at the UN Climate Conference? Two weeks in Brazil in five minutes."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "MoDtr": [
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/postanovy-uriadu/tsyfrovizuyemo-rozrakhunok-adminzboru-uriad-skhvalyv-rozrobku-novoyi-metodyky",
+          "title": "Цифровізуємо розрахунок адмінзбору — Уряд схвалив розробку нової методики",
+          "date": "2026-01-15T09:30:00+02:00",
+          "content": "Уряд підтримав запуск пілотного проєкту, який допоможе розрахувати собівартість надання публічних послуг та створити єдину систему розрахунку.\n\nПілотний проєкт, який ми запускаємо на виконання Державної антикорупційної програми, охопить 18 популярних платних послуг. Серед них — реєстрація шлюбу, оформлення паспортів, посвідчень водія, реєстрація місця проживання та інші.\n\nМи проаналізуємо зібрані дані та підготуємо звіт для Уряду. Це дозволить запропонувати зміни до законодавства для визначення єдиної методики розрахунку адмінзбору, спираючись на реальні дані."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/technologies/kontrol-hralnoho-rynku-247-uriad-zrobyv-ostanniy-krok-do-zapusku-derzavnoyi-systemy-onlayn-monitorynhu-azartnykh-ihor",
+          "title": "Контроль грального ринку 24/7 — уряд зробив останній крок до запуску Державної системи онлайн-моніторингу азартних ігор",
+          "date": "2026-01-14T14:30:00+02:00",
+          "content": "Кабмін ухвалив постанову, необхідну для запуску Державної системи онлайн-моніторингу. Вперше держава бачитиме, як працює легальний гральний бізнес, у режимі реального часу. Це важливий крок до прозорого ринку азартних ігор в Україні.\n\nСистему запускатимуть поступово. Перший етап ДСОМ фіксуватиме ставки і виплати, повернення коштів та поповнення балансу гравця. Саме це дозволить державі бачити операційну діяльність грального бізнесу та відповідно розуміти, скільки податків має бути сплачено. Зараз держава вводить цей етап у роботу.\n\nБез якісних, верифікованих і регулярних даних неможливі ані ефективне регулювання, ані прогнозування бюджетних надходжень, ані оцінка політик відповідальної гри. Саме тому ми переходимо до data-driven підходу, де рішення ухвалюються не інтуїтивно і не «вручну», а на основі реальної картини ринку\n\nЛіцензовані організатори матимуть пів року, щоб приєднатися до Системи. Уже з літа 2026-го держава отримає повноцінний інструмент для подальшого регулювання гральної сфери і боротьби з тіньовим бізнесом.\n\nРозробка другого етапу ДСОМ запланована на цей рік. Другий етап розширить функціонал Системи: облік результатів гри, контроль роботи гральних автоматів, дотримання принципів відповідальної гри та облік операцій з ігровими замінниками гривні.\n\nДСОМ — це надскладний ІТ-продукт, що має збирати та обробляти мільйони даних у реальному часі, бути захищеним від кібератак і забезпечувати прозорість для ринку. Її поетапне впровадження дає змогу максимально швидко розпочати збір й обробку інформації від ринку\n\nТакі цифрові системи вже працюють у низці європейських країн, зокрема в Німеччині та Румунії. Україна впроваджує цей підхід як основу прозорого та ефективного регулювання сфери азартних ігор."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/progress/vid-startapu-do-it-kompaniyi-iak-mintsyfra-buduvala-nayzruchnishu-tsyfrovu-derzavu",
+          "title": "Від стартапу до IT-компанії: як Мінцифра побудувала найзручнішу цифрову державу",
+          "date": "2026-01-13T15:00:28+02:00",
+          "content": "Шість років тому цифрова держава була лише сміливою ідеєю, а Україна посідала 102-ге місце у світі за рівнем цифровізації. Сьогодні ми входимо до п’ятірки цифрових лідерів. Мінцифра перетворилася зі стартапу на стратегічне серце країни, що працює для людей, бізнесу та фронту.\n\nУ 2019 році Михайло Федоров був призначений на посаду Міністра цифрової трансформації України. Саме це стало стартом масштабної цифровізації в країні. Розповідаємо, як технології змінили Україну за цей час: від першого паспорта в смартфоні до новітніх дронів на полі бою.\n\nМи змінили філософію держсервісу: прибрали черги та папери, замінивши їх на кліки у смартфоні. Сьогодні 23,7 млн українців користуються Дією, де доступні 33 цифрові документи та 242 послуги.\n\nУкраїна першою у світі прирівняла цифровий паспорт до паперового, запустила найшвидшу реєстрацію ФОП та революційний Шлюб онлайн, який потрапив до списку найкращих винаходів за версією TIME.\n\nМережа Центрів надання адмінпослуг сьогодні налічує 5 326 точок, де можна отримати понад 350 послуг. За 6 років українці отримали тут понад 100 млн послуг, а рівень задоволеності сервісом сягає 98%. Окремий стандарт якості — це 88 модернізованих Дія.Центрів.\n\nЗ перших днів повномасштабного вторгнення цифрова інфраструктура стала на воєнні рейки.\n\nМи забезпечили стійкість зв’язку під час війни та продовжуємо впроваджувати інновації. Україна посіла 1-ше місце у світі за стабільністю фіксованого інтернету, а на початку 2026 року — офіційно приєдналася до єдиної роумінгової зони ЄС.\n\nМи будуємо країну, де зручно створювати стартапи та вести бізнес.\n\nІнвестуємо в людський капітал, щоб Україна залишалася конкурентною у світі.\n\nЦифровізація змінює найскладніші сфери. Ми комплексно реформуємо митницю, освіту, будівництво та Держстат. Впроваджуємо е-Нотаріат, еАкциз та е-Суд, щоб зробити процеси прозорими. Економічний ефект від цифровізації вже сягнув 184 млрд грн, а 58% українців прямо кажуть: цифровізація — найефективніша спосіб боротьби з корупцією.\n\nМінцифра — це цифрова держава без черг, хабарів і паперів. Шість років тому це була ідея. Сьогодні — це фундамент стійкості та розвитку України. Працюємо далі, щоб зробити сервіси ще зручнішими, а захист — технологічнішим."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/progress/iak-prokhodyt-stazuvannia-v-mintsyfri-vidhuky-vypusknyts-ta-studentok",
+          "title": "Як проходить стажування в Мінцифрі — відгуки випускниць та студенток",
+          "date": "2026-01-12T19:00:00+02:00",
+          "content": "Понад два місяці 15 студенток та випускниць працюють пліч-о-пліч із командами Мінцифри, Дії та Фонду розвитку й мають реальний вплив на цифрові зміни в країні. Розповідаємо, як минув екватор програми, та які скіли прокачують майбутні лідерки.\n\nСтажування в Мінцифрі — це можливість побачити зсередини, як створюються послуги, якими користуються мільйони. Учасниці інтегровані в робочі групи, працюють над реальними кейсами та щотижня переймають досвід топфахівців на вебінарах.\n\nСучасна цифрова дипломатія вимагає гнучкості. Тому половину програми відзначили інтенсивним тренінгом із міжкультурної комунікації. Учасниці розбирали практичні кейси та вчилися ефективно взаємодіяти в глобальному світі:\n\nНа власному досвіді пізнавала особливості міжнародної взаємодії, але інколи це було довго і через непорозуміння. Тренінг допоміг усе розкласти по поличках, і багато чого про культурні особливості стало зрозумілим\n\nГоловна цінність програми — поєднання теорії з практикою державного управління нового зразка.\n\nСтажування відкрило для мене абсолютно новий вимір цифровізації через призму реінжинірингу публічних послуг. Як для спеціаліста з економічною освітою та навичками бізнес-аналізу, для мене стало відкриттям те, наскільки глибоко технологічні зміни залежать від нормативно-правового фундаменту\n\nПрограма стажування — це частина нашої стратегії з розвитку людського капіталу. Ми показуємо молоді, що держслужба може бути драйвовою, інноваційною та ефективною. Попереду — ще два місяці роботи над проєктами, які змінюють країну.\n\nПрограма стажування впроваджується Міністерство цифрової трансформації України в межах «Проєкту підтримки Дія», що Програма розвитку ООН (ПРООН) в Україні реалізує за фінансової підтримки Швеції."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/how-tos/mayze-60-000-zablokovanykh-nomeriv-iak-pratsiuye-zakhyst-vid-spam-dzvinkiv",
+          "title": "Майже 60 000 заблокованих номерів: як працює захист від спам-дзвінків",
+          "date": "2026-01-12T15:15:15+02:00",
+          "content": "З 2 жовтня оператори мобільного зв’язку отримали можливість блокувати спам-номери. За три місяці вони заблокували 59 071 номер.\n\nСпам-дзвінки — це дзвінки рекламного характеру, коли компанія телефонує без попередньої згоди користувача та рекламує товар або послугу.\n\nЯкщо ви продовжуєте отримувати спам, повідомте про це. Є три способи подати скаргу.\n\n№ 1. Повідомте про спам-номер своєму оператору:\n\n№ 2. Надсилайте скарги на спам-дзвінки на гарячу лінію Уряду — 1545.\n\n№ 3. Зверніться до НКЕК через форму на сайті.\n\nОператор перевірить номер, на який надійшла скарга, і заблокує, якщо він відповідає щонайменше двом критеріям:\n\nДетальніше про нові Правила — за посиланням.\n\nЗахищаємо українців від спаму."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/technologies/5g-vze-v-ukrayini-vse-pro-shvydkist-taryfy-ta-robotu-bez-svitla",
+          "title": "5G вже в Україні — все про швидкість, тарифи та роботу без світла",
+          "date": "2026-01-12T12:06:07+02:00",
+          "content": "У Львові стартував пілотний проєкт із запуску технології 5G. Це перший крок до масштабного впровадження технології п’ятого покоління. Ми поставили 7 запитань CEO Київстар, Vodafone та lifecell про запуск 5G, інвестиції та енергонезалежність технології.\n\nОлександр Комаров, Київстар: Перед запуском пілотної зони у Львові ми реалізували масштабну підготовку. Перші тести 5G пройшли ще в лютому 2024 року в нашому головному офісі в Києві, а у квітні-жовтні 2025 року — у Львові. На постачання обладнання та будівництво базових станцій знадобилось орієнтовно пів року.\n\nНайбільший виклик — наявність частот. Повноцінний запуск 5G в Україні можливий одночасно у двох діапазонах — 700 МГц і 3500 МГц. Це стане реальністю після завершення воєнного стану. Але завдяки активній позиції Мінцифри ми вже зараз можемо перевіряти роботу технології в реальних міських умовах.\n\nОльга Устинова, Vodafone Україна: Найскладніше — інтегрувати 5G у наявну мережу, де 4G залишається основою для мільйонів людей. Технології мають працювати паралельно, без конфліктів. Критично важливою є енергонезалежність. Ми від початку закладали в архітектуру автономне живлення, особливо для критичних точок (лікарень, транспортних вузлів тощо).\n\nДля нас це не експеримент, а модель, перевірена досвідом Vodafone в Європі. Ми тестуємо технологію в Україні з 2021 року, а ці прикладні тести дають розуміння, як мережа поводиться на практиці.\n\nМихайло Шелемба, lifecell: Ми вивчаємо технологію понад 6 років, а перший тест провели ще у 2019-му. Сьогодні головні виклики пов’язані з війною: обмеження доступу до частот та необхідність ідеально налаштувати 5G паралельно з 4G, щоб зберегти високу якість наявних сервісів для всіх абонентів.\n\nТакож 5G значно підвищує енергоспоживання, що потребує стабільного живлення. Ще один нюанс — не всі абоненти мають відповідні гаджети: у нашій мережі частка користувачів з 5G-смартфонами становить 29%.\n\nОлександр Комаров, Київстар: Для абонентів Київстар, які користуються 5G, зберігаються умови їхнього теперішнього тарифного плану.\n\nОльга Устинова, Vodafone Україна: Запуск 5G не означає автоматичного зростання цін. Наші клієнти користуватимуться новою технологією в межах своїх 4G-тарифів без доплат. Ми розглядаємо 5G як еволюцію, а не як «преміум»-послугу. У перспективі спеціальні пропозиції можуть з’явитися для бізнесу чи специфічних потреб, де потрібна надвисока швидкість.\n\nМихайло Шелемба, lifecell: На етапі тестування ми не плануємо змінювати тарифи.\n\nОлександр Комаров, Київстар: Одна із ключових переваг 5G — вища швидкість передачі даних. Якщо 4G можна порівняти зі звичайною дорогою, то 5G — це як багатосмугова швидкісна магістраль, по якій можуть одночасно їздити набагато більше авто, без заторів і з вищою швидкістю.\n\nЗа результатами тестувань, що передували запуску у Львові, максимальний показник швидкості завантаження у 5G-мережі Київстар перевищив 2,4 Гбіт/с. Водночас хочу наголосити: така швидкість була зафіксована під час тестування в умовах мінімального навантаження на мережу. У реальних міських умовах показники можуть відрізнятись.\n\nОльга Устинова, Vodafone Україна: Перш за все, це менша затримка (пінг). Це відчутно у відеодзвінках, онлайн-іграх та хмарних застосунках. Плюс вища пропускна здатність. Але для нас стабільність не менш важлива за швидкість, особливо для служб екстреного реагування та критичної інфраструктури.\n\nМихайло Шелемба, lifecell: Пікові швидкості можуть перевищувати 1 Гбіт/с, а середні становитимуть 600–800 Мбіт/с. Це дозволить без затримок користуватися хмарними сервісами, VR/AR, завантажувати великі файли. Для бізнесу це можливість розвивати IoT-екосистеми та рішення, що потребують миттєвої передачі даних.\n\nОлександр Комаров, Київстар: Так, запровадження 5G потребує суттєвих інвестицій з боку мобільних операторів.\n\nОльга Устинова, Vodafone Україна: Так, це не просто оновлення софту. Потрібні нові антени, зміна архітектури базових станцій, потужніші датацентри. Ми інвестуємо поетапно, враховуючи європейський досвід групи. Це не гонка за покриттям заради покриття, а розумні інвестиції туди, де це потрібно: міста, бізнес-райони, промзони.\n\nМихайло Шелемба, lifecell: На етапі тестування масштабні інвестиції не потрібні, але ми готуємося до повноцінного запуску: розбудовуємо оптичну й транспортну мережу та підключаємо базові станції до оптики.\n\nВажливий нюанс: для якісного покриття потрібна комбінація частот 700 МГц і 3500 МГц. В Україні в діапазоні 700 МГц зараз вільно лише 20 МГц. Цього недостатньо для трьох операторів. Державі необхідно вивільнити ще щонайменше 10 МГц у цьому діапазоні.\n\nОлександр Комаров, Київстар: Базові станції 5G у Львові забезпечені резервним живленням від акумуляторів (до 10 годин автономної роботи). Також частина станцій має стаціонарні генератори, до інших у разі потреби під’єднуватимемо мобільні.\n\nОльга Устинова, Vodafone Україна: Так. Це ключовий параметр. Критичні вузли обладнані автономним живленням. Пріоритет — лікарні та служби порятунку. Наприклад, у Німеччині Vodafone забезпечив 5G-покриттям університетський госпіталь Франкфурта саме як критично важливу систему.\n\nМихайло Шелемба, lifecell: Усе залежатиме від запасу резервного живлення, тривалості й природи відключень (аварійні чи планові), завантаженості мережі тощо. Оскільки 5G споживає більше енергії, пріоритетом залишатиметься стабільна робота базової мережі зв’язку. Рішення ухвалюватимуться ситуативно.\n\nОлександр Комаров, Київстар: 5G швидко розвивається у світі, і Україна стає частиною цієї трансформації. Ми вітаємо ініціативу Мінцифри розгорнути пілотні проєкти в інших містах — Львові, Харкові, Бородянці, Києві та Одесі. Це сигнал світові: попри війну, ми будуємо технологічне майбутнє.\n\nОльга Устинова, Vodafone Україна: 5G — це інфраструктура для нових бізнес-моделей, а не просто хайп. У Європі це вже працює: наприклад, у Португалії на цементному заводі 10 тисяч датчиків контролюють виробництво, а в Чехії на заводі Škoda 5G керує роботами. Ми очікуємо, що в Україні 5G стане інструментом цифровізації промисловості та публічних сервісів.\n\nМихайло Шелемба, lifecell: Масштабування буде поступовим після війни. Насамперед це можливості для B2B: автоматизація виробництва, смартрішення, IoT. Для масового користувача різниця між якісним 4G та 5G у повсякденних сценаріях може бути малопомітною, але цінність з’явиться з розвитком нових сервісів.\n\nОлександр Комаров, Київстар: Ми впроваджуємо широкий спектр технологій. Хочу виділити три проєкти, які заслуговують особливої уваги:\n\nОльга Устинова, Vodafone Україна: Звісно. 5G — це доповнення, а не заміна. 4G залишається основою покриття. Наша стратегія — будувати багаторівневу мережу, яка задовольняє потреби всіх: від масового споживача до промислових гігантів.\n\nМихайло Шелемба, lifecell: В умовах війни пріоритет — енергостійкість. Ми інвестували в це понад 2 млрд грн: закупили 48 тис. літієвих батарей та постійно поповнюємо парк генераторів. Паралельно розвиваємо VoLTE, VoWiFi, IoT та хмарні продукти. Станом на грудень 2025 року 94% наших базових станцій можуть працювати 10 годин без світла за умови повного заряду батарей."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/technologies/zapuskayemo-tekhnolohiiu-5g-u-lvovi",
+          "title": "Запускаємо технологію 5G у Львові",
+          "date": "2026-01-12T12:04:49+02:00",
+          "content": "Наша команда працювала над впровадженням 5G ще з 2019 року. Повноцінний старт технології планували на 2022 рік, але через повномасштабну війну пріоритети змінилися. Проте робота над інноваціями не зупинилася — і сьогодні запускаємо пілот технології 5G у Львові.\n\nЛьвів — перше місто в Україні, де запроваджено 5G, але вже незабаром пілотний запуск масштабується у Бородянці та Харкові, а далі на інші міста. Поки ворог намагається зруйнувати нашу інфраструктуру, ми її модернізуємо й робимо крок у майбутнє, будуючи Україну на основі найсучасніших технологій\n\nГоловна умова запуску 5G під час воєнного стану — це відсутність перешкод для роботи військових. Пілотний запуск став можливим завдяки злагодженій роботі держави, мобільних операторів та Сил оборони. Станом на сьогодні по всій країні вже встановлено понад 30 базових станцій, які підтримують технологію 5G.\n\nУ країні, яка щодня бореться за свою свободу, запуск інноваційних технологій був би неможливим без підтримки та участі військових. Саме тому висловлюю вдячність Управлінню РЕБ і Повітряним Силам Збройних Сил України за фахову й конструктивну співпрацю, а Львівській ОВА та міській раді Львова за допомогу з розбудовою мереж\n\nПілотний проєкт триватиме до кінця 2026 року, і за потреби буде продовжений. За цей час ми протестуємо сумісність обладнання 5G з військовим обладнанням, щоб після завершення воєнного стану масштабувати технологію на всю країну."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/business/uah346-miliarda-podatkiv-splatyly-rezydenty-diiacity-za-2025-rik-khto-naybilshe",
+          "title": "₴34,6 млрд податків сплатили резиденти Дія.City за 2025 рік. Хто найбільше?",
+          "date": "2026-01-10T11:00:00+02:00",
+          "content": "Резиденти Дія.City продовжують наповнювати бюджет та посилювати економіку країни. За 2025 рік вони сплатили ₴34,6 млрд податків. Це майже вдвічі більше, ніж за 2024 рік — тоді компанії сплатили ₴18+ млрд.\n\nУ 2025 році до топу найбільших платників податків у Дія.City увійшли:\n\nМи запускали Дія.City для підтримки технологічних бізнесів, які працюють легально, без сірих схем і тіньових правил. В архітектуру простору ми заклали збалансовану податкову модель, яка дає змогу компаніям працювати за сприятливими умовами і нарощувати свою конкурентоспроможність\n\nНагадаємо, на сьогодні до унікального правового простору Дія.City приєдналося понад 3 400 компаній. Вони працюють за спеціальними податковими умовами та можуть обирати між податком на виведений капітал (9%) або класичним податком на прибуток (18%).\n\nДля працівників і GIG-контрактерів діє пільгове оподаткування:"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/technologies/koly-bez-sudu-niiak-dyvitsia-novyy-epizod-podkastu-khroniky-vidkrytykh-danykh",
+          "title": "Коли без суду — ніяк: дивіться новий епізод подкасту «Хроніки відкритих даних»",
+          "date": "2026-01-08T18:01:21+02:00",
+          "content": "Доступ до відкритих даних гарантований законом, але на практиці можуть виникати розбіжності щодо їх оприлюднення. У таких випадках ефективним інструментом захисту права на інформацію та врегулювання спорів стає судовий позов.\n\nЯк судовий захист права на доступ до відкритих даних став ключовим інструментом боротьби за прозорість та як війна змінила баланс між відкритістю і безпекою — обговорили в дев’ятому епізоді подкасту «Хроніки відкритих даних».\n\nЕкспертка з відкритих даних Надія Бабинська-Вірна, юристка Фундації DEJURE Марта Береза та ведуча Марина Остренська (представниця експертної групи з питань відкритих даних Мінцифри) розповідають:\n\nЯкі нормативні рішення створюють загрозу згортання доступу до відкритих даних\n\nПроєкт реалізується Texty.org.ua у партнерстві з Міністерством цифрової трансформації України."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/business/trendy-v-biznesi-2026-tsyfrovi-dani-zamist-intuyitsiyi-ta-systemnyy-rist",
+          "title": "Тренди в бізнесі 2026 — цифрові дані замість інтуїції та системний ріст",
+          "date": "2026-01-08T17:00:00+02:00",
+          "content": "Після років турбулентності, криз та війни бізнес змінює стратегію: від «виживання» переходить до системності. Артем Платонов, директор директорату розвитку цифрових інновацій, штучного інтелекту, робототехніки та роботизації й напівпровідникових технологій, проаналізував запити тисяч користувачів Дія.Бізнес та виділив головні тренди, які визначатимуть успіх підприємців у 2026 році.\n\nДані — новий фундамент. Раніше малий бізнес часто покладався на «чуття» власника. Сьогодні це ризик. Головний тренд — перехід до data-driven управління.\n\nАналітика продажів, фінансів та поведінки клієнтів перестала бути привілеєм корпорацій. Це база для виживання кав’ярні, СТО чи онлайн-магазину. Наші дослідження показують: середній рівень цифрової зрілості українського МСБ — 2,49 з 5. Це означає, що більшість все ще працює з даними фрагментарно. Але ті, хто впроваджує системну аналітику, стають значно стійкішими до криз.\n\nГоловний розрив між ефективними та менш ефективними бізнесами сьогодні проходить не за рівнем доступу до фінансування, а за здатністю системно використовувати цифрові інструменти. Саме вони стають основою керованості, продуктивності та стійких результатів бізнесу.\n\nКомпанії з однаковим продуктом показують кардинально різні результати. Ті, хто має CRM, хмарні сервіси та автоматизований облік, виграють. Ті, хто веде справи «в блокноті», — втрачають ринок. Цифрова зрілість стає головним конкурентним фактором.\n\nМи звикли, що український підприємець робить усе сам: він і директор, і вантажник, і маркетолог. У 2026 році такий підхід поступово втрачає ефективність.\n\nУспішний підприємець стає інтегратором. Його завдання — не робити всі функції самостійно, а ефективно поєднувати готові рішення: фінансові сервіси, логістичні платформи, технологічних партнерів. Це економить час і дозволяє фокусуватися на стратегії, а не на «операційці».\n\nСвіт змінює правила гри: бізнес більше не женеться за масштабуванням «за будь-яку ціну», а робить ставку на стабільність. У 2026 році головне — мати фінансову подушку, надійну команду та порядок у процесах.\n\nВ Україні це особливо помітно. Досвід Дія.Бізнес показує: краще впоралися з кризою ті, хто мав цифрові інструменти. Компанії з налаштованим онлайн-продажем та автоматизацією змогли швидко відновити роботу навіть після релокації. Натомість бізнеси, які росли хаотично і без системи, часто втрачали контроль і були змушені зупинятися.\n\nРозуміти тренди важливо, але для бізнесу цього недостатньо — ключове значення має практичне впровадження. Саме тому Дія.Бізнес із самого початку розвивається як екосистема підтримки МСБ, що поєднує аналітику, інструменти, експертизу та доступ до рішень.\n\nУ відповідь на запит бізнесу на системність і керованість ми запустили рамку цифрової зрілості — комплекс онлайн-інструментів, які допомагають підприємцям оцінити поточний стан бізнесу та вибудувати логіку подальшого розвитку.\n\nЩоб перейти від інтуїтивних рішень до системного управління, раджу почати з діагностики:\n\nМайбутнє — за тими, хто будує бізнес на даних, а не на здогадках. Час ставати системними."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/technologies/reyestruytes-na-tekhaton-teens-in-ai-2026-stvoriuyte-ai-rishennia-iaki-zminiat-svit",
+          "title": "Реєструйтесь на техатон Teens in AI 2026 — створюйте AI-рішення, які змінять світ",
+          "date": "2026-01-08T14:02:46+02:00",
+          "content": "Штучний інтелект уже став звичним інструментом для української молоді — його використовують у навчанні, створенні проєктів і розвитку власних ідей. Щоб об’єднувати молоді таланти навколо ШІ й давати практичний досвід, Україна втретє приєднується до глобального руху Teens in AI.\n\nМи змагатимемося з учасниками зі 101 країни. Це ваш шанс розробити власний стартап, прокачати англійську, знайти менторів і представити Україну на Global Demo Day.\n\nЗапрошуємо школярів та студентів віком 12–18 років (державних, комунальних та приватних закладів).\n\nНемає команди? Не проблема. Реєструйтеся самостійно, і якщо пройдете відбір — вас додадуть до зведеної групи.\n\nКожен учасник реєструється окремо та має заповнити дві форми: українську та міжнародну (посилання на міжнародну — всередині української).\n\nЩо далі? Відбір проводить оргкомітет на основі мотивації, знань та володіння мовою. 10 найкращих українських команд потраплять на національний техатон, а переможці отримають шанс поборотися за першість на світовій арені.\n\nРеєструйтеся, щоб про українських розробників дізнався весь світ.\n\nЗахід реалізовує Teens in AI за підтримки Мінцифри, Міністерства освіти і науки України та Львівського ІТ Кластера."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/business/iak-shi-zminiuye-ukrayinskyy-biznes-rezultaty-opytuvannia",
+          "title": "Як ШІ змінює роботу українського бізнесу: результати опитування",
+          "date": "2026-01-08T12:00:00+02:00",
+          "content": "ШІ — новий мінімум для бізнесу. Разом з Top Lead опитали понад 200 українських компаній про те, як вони використовують ШІ та який ефект це має для бізнесу.\n\n93% опитаних компаній вже використовують ШІ. Найактивніше планують впроваджувати ШІ у торгівлі, маркетингу та PR, фінансовому секторі, освіті та сфері послуг.\n\nНайчастіше компанії використовують ШІ для аналізу даних і ринку та прогнозування. На другому місці — маркетинг і продажі, у цьому напрямі ШІ використовують близько 64% опитаних компаній. Натомість безпека та кіберзахист залишаються на останніх позиціях (18,4%).\n\n62% бізнесів фіксують позитивний вплив ШІ на продуктивність та економічні показники, що свідчить про перехід від тестування до реальної бізнес-цінності.\n\nГоловний мотив впровадження ШІ — автоматизація рутинних завдань та інші операційні задачі, що говорить про те, що ШІ поки частіше оптимізує, ніж трансформує бізнес.\n\nОпитування проведене Top Lead за підтримки Мінцифри.\n\nУ дослідженні взяли участь компанії з різних індустрій та різного розміру, при цьому розподіл респондентів за галузями не є рівномірним. Кожна компанія враховувалась рівноцінно. Галузеві показники не зважувалися на розмір індустрій в економіці, відображають практики компаній, що взяли участь в опитуванні, а не всієї сукупності бізнесів в Україні."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "MoF": [
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/ukraines_state_budget_financing_since_the_beginning_of_the_full-scale_war-3435",
+          "title": "Фінансування державного бюджету України з початку повномасштабної війни",
+          "date": "31 Грудня 2025",
+          "content": "Головна Пресцентр Новини та Анонси Фінансування державного бюджету України з початку повномасштабної війни\nФінансування державного бюджету України з початку повномасштабної війни\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 31 Грудня 2025\n\nДжерелами фінансування державного бюджету є військові облігації, кредити від Міжнародних фінансових організацій, а також двосторонні кредити та гранти. \n\nДжерела фінансування державного бюджету за період з 24 лютого 2022 року по 31 грудня 2024 року\n\n \n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/minfin_ta_dps_zapuskaiut_komunikatsiinu_kampaniiu_podatki_zakhishchaiut-5419",
+          "title": "Чи платити податки з популярного блогу - пояснюють Мінфін та ДПС у кампанії «Податки захищають»",
+          "date": "17 Листопада 2025",
+          "content": "Головна Пресцентр Новини та Анонси Чи платити податки з популярного блогу - пояснюють Мінфін та ДПС у кампанії «Податки захищають»\nЧи платити податки з популярного блогу - пояснюють Мінфін та ДПС у кампанії «Податки захищають»\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 17 Листопада 2025\n\n17 листопада Міністерство фінансів України спільно з Державною податковою службою розпочинають комунікаційну кампанію «Податки захищають». Впродовж  трьох місяців у серії інфографік і відео різних життєвих ситуацій ви дізнаєтеся про:\n\nнайбільш поширені податкові ситуації для громадян України і відповідні податки,\n\nпорядок їх сплати та розподіл між державним і місцевими бюджетами,\n\nте, куди держава витрачає сплачені громадянами податки,\n\nнаслідки несплати податків.\n\nДалі читайте про першу життєву ситуацію – як блогерка Марія сплачує податки з доходу від реклами у TikTok.\n\n№1. Блогерка Марія та податки з реклами в ТікТоку\n\nУявіть Марію. Їй 22 роки й вона веде популярний блог у TikTok. Рекламуючи українські та іноземні бренди, Марія щомісяця заробляє близько 60 тис. грн (180 тис. грн/квартал, 720 тис. грн/рік). Щоб легалізувати доходи, вона зареєструвала свою діяльність як ФОП (фізична особа-підприємець) 3-ї групи. Це дозволяє їй офіційно надавати рекламні послуги та отримувати оплату – як від українських, так і від закордонних компаній.\n\nЩоквартально Марія подає податкову декларацію через додаток “Моя податкова” та сплачує податки і обов’язковий страховий внесок.\n\nЗа рік підсумок виглядає так:\n\nЯкщо Марія ухиляється від сплати податків із доходу та отримує оплату за свої рекламні послуги на особисту банківську картку, криптовалютою або готівкою, тоді:\n\nукраїнські військові можуть залишитися без якісних турнікетів, щоб оперативно зупинити кровотечу та врятувати життя своїм побратимам,\n\nу дитячому садку не буде можливості замінити старий радянський холодильник, і продукти швидко псуватимуться,\n\nдержавні фонди соціального страхування не отримають достатнього фінансування, тому, за потреби, Марія може залишитися без необхідних соціальних гарантій та виплат.\n\nПодатки захищають. Допомагай своїм внеском!\n\nНаступні повідомлення читайте в окремій рубриці Кампанія \"Податки захищають\"\n\nКомунікаційна кампанія реалізується Міністерством фінансів України разом із Державною податковою службою та фінансується Урядом Великої Британії через Міністерство закордонних справ та міжнародного розвитку. Інформація, представлена в цьому матеріалі, не обов'язково відображає погляди Уряду Великої Британії.\n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/minfin_proviv_roziasniuvalni_zustrichi_shchodo_podannia_richnoi_zvitnosti_subiektami_pervinnogo_finmonitoringu-5548",
+          "title": "Мінфін провів роз’яснювальні зустрічі щодо подання річної звітності суб’єктами первинного фінмоніторингу",
+          "date": "15 Січня 2026",
+          "content": "Головна Пресцентр Новини та Анонси Мінфін провів роз’яснювальні зустрічі щодо подання річної звітності суб’єктами первинного фінмоніторингу\nМінфін провів роз’яснювальні зустрічі щодо подання річної звітності суб’єктами первинного фінмоніторингу\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 15 Січня 2026\n\nПротягом тижня Мінфін провів серію онлайн-зустрічей, присвячених запровадженню механізму подання річної адміністративної звітності суб’єктами первинного фінмоніторингу (СПФМ) за формою № 2-фінмон через вебпортал Міністерства фінансів України.\n\nЗвертаємо увагу, що кінцевий термін подання звітності – 25 січня 2026 року включно.\n\nІнформаційні заходи були організовані для членів Аудиторської палати України, Спілки фахівців з нерухомого майна України, а також для всіх суб’єктів первинного фінансового моніторингу, що належать до сфери відповідальності Мінфіну.\n\n«Ми постійно працюємо над удосконаленням процедур фінмоніторингу, щоб процес звітування був зручним і доступним для користувачів. Зокрема, нещодавно Мінфін спростив і подовжив термін подання річної адміністративної звітності. Проведення роз’яснювальних заходів є частиною послідовної роботи з цифровізації та сервісного підходу у взаємодії з суб’єктами фінансового моніторингу. Такі зустрічі сприяють зменшенню кількості помилок і полегшенню процесу звітування», – зазначив директор Департаменту забезпечення координаційно-моніторингової роботи Міністерства фінансів України Юрій Конюшенко.\n\nПід час зустрічей учасникам детально роз’яснили ключові аспекти нового порядку подання звітності. Передусім йшлося про нормативно-правове регулювання складання та подання Звіту з урахуванням змін до наказу Мінфіну від 9 грудня 2022 року № 422, а також про оновлені строки подання річної адміністративної звітності.\n\nОкрему увагу приділили практичним питанням онлайн-подання Звіту через вебпортал spending.gov.ua/aml. Фахівці Мінфіну наголосили, що форма № 2-фінмон не зазнала змін, а зміни стосуються виключно оцифрування та спрощення механізму її подання через вебпортал.\n\nВони також пояснили принципи роботи вебсистеми, особливості автоматичних логічних та арифметичних перевірок, звернули увагу на типові помилки, що можуть виникати під час заповнення звітності, та надали рекомендації щодо їх уникнення.\n\nКрім того, учасники отримали роз’яснення щодо порядку дій у разі технічної неможливості подання звітності через вебпортал, механізмів виправлення помилок у Звіті та подання пояснень до нього.\n\nВажливо зазначити, що за результатами проведених інформаційно-роз’яснювальних заходів міністерство опрацьовує найбільш типові запитання, що виникають під час заповнення та подання річної адміністративної звітності за формою №2-фінмон. Відповіді на узагальнені питання щодо заповнення звітності поетапно оприлюднюються в тематичній рубриці «Звітність» на офіційному вебсайті Мінфіну.\n\nНагадаємо, що адміністративна звітність суб’єктів первинного фінансового моніторингу подається у межах реалізації державної антилегалізаційної політики (AML), координацію якої здійснює Міністерство фінансів України. Така звітність є одним з ключових інструментів фінансового моніторингу та сприяє оцінці ризиків, підвищенню прозорості ринку і ефективності запобігання легалізації доходів, фінансуванню тероризму та розповсюдженню зброї масового знищення. Мінфін послідовно впроваджує цифрові та сервісні рішення у цій сфері, поєднуючи зручність для користувачів з належним рівнем державного контролю.\n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/maizhe_3_mlrd_grn_dodatkovoi_dotatsii_dlia_mistsevikh_biudzhetiv_uriad_pogodiv_rozpodil_finansuvannia_zakladiv_osviti_ta_okhoroni_zdorovia_u_2026_rotsi-5547",
+          "title": "Майже 3 млрд грн додаткової дотації для місцевих бюджетів: Уряд погодив розподіл фінансування закладів освіти та охорони здоров’я у 2026 році",
+          "date": "15 Січня 2026",
+          "content": "Головна Пресцентр Новини та Анонси Майже 3 млрд грн додаткової дотації для місцевих бюджетів: Уряд погодив розподіл фінансування закладів освіти та охорони здоров’я у 2026 році\nМайже 3 млрд грн додаткової дотації для місцевих бюджетів: Уряд погодив розподіл фінансування закладів освіти та охорони здоров’я у 2026 році\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 15 Січня 2026\n\nКабінет Міністрів України ухвалив розпорядження, розроблене Мінфіном, яким погодив розподіл додаткової дотації з державного бюджету місцевим бюджетам в сумі 2,95 млрд грн у 2026 році. Кошти передбачені на фінансування видатків для закладів освіти та охорони здоров’я, які здійснюються органами місцевого самоврядування. Це рішення дозволяє громадам і областям своєчасно отримати необхідний ресурс для стабільної роботи шкіл, лікарень та інших соціально важливих установ.\n\nРозподіл додаткової дотації підготовлений обласними державними адміністраціями та погоджений Урядом відповідно до вимог бюджетного законодавства. Згідно з поданими пропозиціями, кошти розподіляються між обласними бюджетами та бюджетами територіальних громад.\n\nРішення ухвалене на виконання норм Бюджетного кодексу України та Закону України «Про Державний бюджет України на 2026 рік» і не передбачає збільшення видатків, оскільки всі кошти вже закладені в державному бюджеті на 2026 рік. Загалом у бюджеті-2026 на програму додаткових дотацій місцевим бюджетам передбачено 8,94 млрд грн, з яких 2,95 млрд грн спрямовано саме на покриття видатків для закладів освіти та охорони здоров’я України.\n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/minfin_proviv_uspishnii_auktsion_z_obminu_ovdp_zadovoleno_zaiavki_na_1736_mlrd_grn-5546",
+          "title": "Мінфін провів успішний аукціон з обміну ОВДП: задоволено заявки на 17,36 млрд грн",
+          "date": "14 Січня 2026",
+          "content": "Головна Пресцентр Новини та Анонси Мінфін провів успішний аукціон з обміну ОВДП: задоволено заявки на 17,36 млрд грн\nМінфін провів успішний аукціон з обміну ОВДП: задоволено заявки на 17,36 млрд грн\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 14 Січня 2026\n\nМіністерство фінансів України 14 січня 2026 року провело аукціон з обміну (switch-аукціон) облігацій внутрішньої державної позики. Попит з боку учасників ринку склав  17,36 млрд гривень.\n\nІнвесторам було запропоновано обміняти облігації внутрішньої державної позики одного випуску з терміном погашення 18 лютого 2026 року на облігації іншого випуску з терміном погашення 26 вересня 2029 року (термін обігу складає 3,7 року).\n\nЗа підсумками аукціону середньозважений рівень дохідності розміщених облігацій становить - 14,96%, граничний рівень дохідності становить - 15%.\n\nУ межах проведеного обміну до Міністерства фінансів України буде зараховано для погашення та анулювання облігації з терміном погашення 18 лютого 2026 року на загальну суму 17,84 млрд грн, що відповідає 16,43 млн облігацій.\n\nПроведення switch-аукціонів є важливим інструментом ефективного управління державним боргом. Такі операції дають змогу зменшити боргове навантаження на бюджет та дають можливість підвищити ліквідність ринку та якість управління ліквідністю. Також вони сприяють розвитку внутрішнього ринку державних запозичень і зміцнюють довіру інвесторів до державних цінних паперів України.\n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/european_commission_has_presented_a_proposal_for_a_new_financial_instrument_for_ukraine_of_up_to_90_billion-5545",
+          "title": "Мінфін: Європейська Комісія представила пропозицію щодо нового фінансового інструменту для України у розмірі до 90 млрд євро",
+          "date": "14 Січня 2026",
+          "content": "Головна Пресцентр Новини та Анонси Мінфін: Європейська Комісія представила пропозицію щодо нового фінансового інструменту для України у розмірі до 90 млрд євро\nМінфін: Європейська Комісія представила пропозицію щодо нового фінансового інструменту для України у розмірі до 90 млрд євро\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 14 Січня 2026\n\nЄвропейська Комісія офіційно представила пропозицію започаткування нового фінансового інструменту для України на наступний період. \n\nЗапропонована позика передбачає надання Україні до 90 млрд євро у 2026–2027 роках. Фінансування здійснюватиметься шляхом запозичень ЄС на міжнародних ринках капіталу, а зобов’язання за ними будуть забезпечені бюджетним резервом Європейського Союзу. \n\nКошти мають забезпечити:\n\nбезперервність функціонування українського бюджету;\nфінансування оборонних і безпекових потреб;\nмакрофінансову стабільність держави;\nстійкість економіки в умовах війни.\n\nНадання позики ЄС також має вирішальне значення для забезпеченні макроекономічної стабільності, а також подальшої співпраці України з міжнародними партнерами, зокрема Міжнародним валютним фондом. У вересні 2025 року Україна звернулася до МВФ із запитом на нову програму фінансування на 2026–2029 роки. Її реалізація залежить від наявності достатніх фінансових гарантій з боку міжнародних партнерів, зокрема Європейського Союзу.\n\nФінансова допомога від ЄС також підтримує шлях України як країни-кандидата на вступ до ЄС, сприяє реформам у сфері верховенства права та державного управління, зміцнює європейську оборонно-промислову базу та співпрацю у сфері оборонних технологій.\n\nНаступні кроки: консультації між державами-членами в межах Ради Європейського Союзу, а також розгляд у Європейському Парламенті з метою подальшого узгодження та затвердження остаточних параметрів інструменту. \n\n“З початку повномасштабного вторгнення 24 лютого 2022 року Європейський Союз та його держави-члени мобілізували безпрецедентну фінансову, економічну, гуманітарну та військову допомогу для України. Підтримка України – це не лише прояв солідарності, а й стратегічна інвестиція в безпеку та стабільність Європи. Поразка України значно підвищила б ризики подальшої агресії Росії проти держав-членів ЄС. Вдячний Європейській Комісії та всім інституціям і державам ЄС. Ми продовжуємо активну співпрацю, щоб Україна змогла отримати кошти вже з другого кварталу 2026 року”, – зазначив Міністр фінансів України Сергій Марченко.\n\nНагадаємо, що 18-19 грудня, за результатами засідання Ради ЄС, лідери держав-членів Європейського Союзу підтвердили готовність допомогти Україні у забезпеченні фінансової стійкості у 2026–2027 роках. Сторони погодили надання Україні 90 млрд євро. \n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/ogliadi_vitrat_derzhbiudzhetu_u_2025_rotsi_zviti_podali_9_iz_17_rozporiadnikiv_koshtiv-5544",
+          "title": "Огляди витрат держбюджету у 2025 році: звіти подали 9 із 17 розпорядників коштів",
+          "date": "14 Січня 2026",
+          "content": "Головна Пресцентр Новини та Анонси Огляди витрат держбюджету у 2025 році: звіти подали 9 із 17 розпорядників коштів\nОгляди витрат держбюджету у 2025 році: звіти подали 9 із 17 розпорядників коштів\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 14 Січня 2026\n\nОгляд витрат є інструментом, який застосовується Урядом для підвищення ефективності та результативності використання бюджетних коштів, покращення якості публічних послуг, посилення прозорості та відкритості бюджетного процесу. У 2025 році 17 головних розпорядників коштів державного бюджету мали здійснити огляди витрат та сформувати звіти у 31 сфері, відповідно до розпорядження Кабінету Міністрів України від 15.04.2025 № 348-р «Про проведення у 2025 році оглядів витрат державного бюджету в окремих сферах».\n\nЗвіти про огляд витрат мали сформувати такі відомства: Мінекономіки (4 сфери), МЗС, Мінветеранів, МОЗ, МОН (5 сфер), Міненерго (3 сфери), Мінрозвитку, Мінмолодьспорту (2 сфери), Мін’юст (2 сфери), Мінкульт (3 сфери), Мінсоцполітики, ДУС (2 сфери), Держатомрегулювання, НАНУ, АРМА, НАПрН та СКМУ.\n\nСтаном на 31 грудня 2025 року звіти про результати оглядів подали 9 головних розпорядників — у 15 сферах:\n\nМіністерство освіти і науки України\n\nДержавний нагляд (контроль) за діяльністю закладів освіти — переглянути звіт\nПочаткова та базова середня освіта — переглянути звіт\nВища освіта — переглянути звіт\nПідготовка фахівців, наукових та науково-педагогічних кадрів — переглянути звіт\nПрофесійна (професійно-технічна) освіта — переглянути звіт\n\nМіністерство економіки, довкілля та сільського господарства України (1 із 4 сфер)\n\nПублічні закупівлі — переглянути звіт\n\nМіністерство розвитку громад і територій України\n\nЗабезпечення житлом окремих пільгових категорій громадян — переглянути звіт\n\nМіністерство юстиції України\n\nЗахист інтересів України у Європейському суді з прав людини\nВиконання рішень закордонних юрисдикційних органів у справах проти України — переглянути звіт\n\nДержавне управління справами\n\nВиготовлення державних нагород — переглянути звіт\nВиплата державних премій України — переглянути звіт\n\nДержавна інспекція ядерного регулювання України\n\nБезпека використання ядерної енергії — переглянути звіт\n\nНаціональна академія правових наук України\n\nНаукова, науково-технічна та організаційна діяльність — переглянути звіт\n\nМіністерство охорони здоров’я України\n\nВикористання кредитних коштів Міжнародного банку реконструкції та розвитку для реалізації проєктів у сфері охорони здоров’я — переглянути звіт\n\nМіністерство енергетики України (1 із 3 сфер)\n\nПаливно-енергетичний комплекс (передача електроенергії).\nЗвіт підготовлено, але не оприлюднено через наявність інформації з обмеженим доступом у період дії воєнного стану.\n\nНагадаємо, проведення оглядів витрат передбачено Бюджетним кодексом України, Планом заходів з реалізації Стратегії реформування управління публічними фінансами на 2022–2025 роки, Планом України для реалізації інструменту Ukraine Facility, а також рекомендаціями Європейської Комісії в межах Пакета розширення ЄС 2024 року.\n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/minfin_u_2025_rotsi_na_sotsviplati_spriamovano_ponad_400_mlrd_griven-5542",
+          "title": "Мінфін: У 2025 році на соцвиплати спрямовано понад 400 млрд гривень",
+          "date": "13 Січня 2026",
+          "content": "Головна Пресцентр Новини та Анонси Мінфін: У 2025 році на соцвиплати спрямовано понад 400 млрд гривень\nМінфін: У 2025 році на соцвиплати спрямовано понад 400 млрд гривень\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 13 Січня 2026\n\nМинулого року на соціальні виплати та пенсійні зобов’язання, які забезпечує Мінсоцполітики, з держбюджету було спрямовано 406,4 млрд гривень. \n\nЦі кошти було розподілено на:\n\nфінансове забезпечення виплати пенсій, надбавок і підвищень до пенсій, призначених за пенсійними програмами Пенсійного фонду, – 241,8 млрд грн;\nсоціальний захист громадян, які потрапили у складні життєві обставини, – 83,8 млрд грн, із яких понад 17,8 млрд грн – на «Зимову підтримку 2025», а 66 млрд грн – на підтримку громадян, зокрема майже 1,1 млн внутрішньо переміщених осіб;\nнадання пільг і житлових субсидій громадянам (2,8 млн домогосподарств) – 35,9 млрд грн;\nсоціальний захист дітей та сім’ї, які спрямовано на виплату соціальних допомог майже 623 тис. отримувачам, – 22,6 млрд грн;\nпідтримку понад 166,2 тис. малозабезпечених сімей – 14,9 млрд грн;\nсоціальний захист осіб з інвалідністю – 7,4 млрд гривень.\n\n«У 2025 році завдяки співпраці з міжнародними партнерами забезпечено стабільне фінансування ключових соціальних видатків державного бюджету. Наші громадяни отримали вчасно й у  призначених їм обсягах соціальні виплати і пенсії. Заборгованість із таких виплат відсутня. Забезпечення соціального захисту громадян і надалі залишається одним із пріоритетних напрямів державної політики. Цього року продовжується фінансування пенсій, пільг і житлових субсидій, допомоги внутрішньо переміщеним особам, а також заходів із соціального захисту осіб з інвалідністю та підтримки громадян, які перебувають у складних життєвих обставинах, відповідно до бюджету-2026», – зазначив перший заступник Міністра фінансів Роман Єрмоличев.\n\nДетально з інформацією щодо видатків на окремі види допомог, а також стосовно чисельності осіб, які ними користуються, можна ознайомитись на інтерактивному дашборді.\n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/minfin_za_2025_rik_do_zagalnogo_fondu_mistsevikh_biudzhetiv_nadiishlo_514_mlrd_grn_63_mlrd_grn_do_2024_roku-5541",
+          "title": "Мінфін: за 2025 рік до загального фонду місцевих бюджетів надійшло 514 млрд грн (+63 млрд грн до 2024 року)",
+          "date": "12 Січня 2026",
+          "content": "Головна Пресцентр Новини та Анонси Мінфін: за 2025 рік до загального фонду місцевих бюджетів надійшло 514 млрд грн (+63 млрд грн до 2024 року)\nМінфін: за 2025 рік до загального фонду місцевих бюджетів надійшло 514 млрд грн (+63 млрд грн до 2024 року)\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 12 Січня 2026\n\nПротягом 2025 року до загального фонду місцевих бюджетів надійшло 514 млрд грн, що на 63 млрд грн більше ніж за 2024 рік.\n\nОсновними доходами загального фонду місцевих бюджетів (без урахування міжбюджетних трансфертів) за 2025 рік були:\n\n300,3 млрд грн – податок на доходи фізичних осіб (ПДФО);\n\n76,4 млрд грн – єдиний податок;\n\n45,3 млрд грн – плата за землю;\n\n37,1 млрд грн – акцизний податок; \n\n20,4 млрд грн – податок на прибуток підприємств приватного сектору економіки;\n\n12,7 млрд грн – податок на нерухоме майно.\n\nНайвищий приріст доходів загального фонду місцевих бюджетів до 2024 року зафіксовано у таких областях: Київська (+22,8%), Волинська (+22,2%) і Закарпатська (+21,0%).\n\nЗбільшення доходів у цих регіонах пов’язано, зокрема, з тим, що у ці регіони перемістилися здебільшого внутрішньо переміщені особи та бізнес із територій, де ведуться або велися бойові дії, або з територій, які були чи є тимчасово окупованими рф.\n\nВідповідно, найменший показник доходів був в областях, де проходять активні бойові дії або території яких були чи є тимчасово окупованими рф, зокрема в Донецькій, Луганській, Херсонській та Запорізькій областях.\n\nЗавдяки швидкій адаптації до воєнного стану підприємств, органів державної влади та місцевого самоврядування за 2025 рік вдалося забезпечити збільшення доходів загального фонду місцевих бюджетів на 14 % у порівнянні з 2024 роком.\n\nЗа рахунок цих ресурсів органи місцевого самоврядування і надалі мають можливість здійснювати фінансування першочергових потреб на місцевому рівні.\n\nНагадаємо, Мінфін у 2025 році забезпечив перерахування з держбюджету 195,4 млрд грн трансфертів до загального фонду місцевих бюджетів.\n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/minfin_za_chas_povnomasshtabnoi_viini_pidpriiemtsi_otrimali_1002_tis_dostupnikh_kreditiv_na_3725_mlrd_griven_u_mezhakh_5-7-9-5540",
+          "title": "Мінфін: за час повномасштабної війни підприємці отримали 100,2 тис. доступних кредитів на 372,5 млрд гривень у межах «5-7-9%»",
+          "date": "12 Січня 2026",
+          "content": "Головна Пресцентр Новини та Анонси Мінфін: за час повномасштабної війни підприємці отримали 100,2 тис. доступних кредитів на 372,5 млрд гривень у межах «5-7-9%»\nМінфін: за час повномасштабної війни підприємці отримали 100,2 тис. доступних кредитів на 372,5 млрд гривень у межах «5-7-9%»\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 12 Січня 2026\n\nЗа минулий тиждень у межах Державної програми «Доступні кредити 5-7-9%» представники мікро-, малого та середнього бізнесу отримали від уповноважених банків 474 пільгові кредити на загальну суму 2,1 млрд грн, зокрема, від банків державного сектору економіки – 371 кредитів на 0,9 млрд гривень.\n\nЗа час дії воєнного стану в Україні видано 100 162 кредити на 372,5 млрд грн (у тому числі банками державного сектору – 72 638 кредитів на 186,1 млрд грн), з яких станом на 12 січня поточного року:\n\n- 56,33 млрд грн – на інвестиційні цілі;\n\n- 80,89 млрд грн – на фінансування оборотного капіталу;\n\n- 50,12 млрд грн – кредити для сільськогосподарських товаровиробників;\n\n- 56,31 млрд грн – на переробку сільськогосподарської продукції;\n\n- 3,98 млрд грн – на фінансування енергосервісу;\n\n- 56,84 млрд грн – на антивоєнні цілі;\n\n- 55,86 млрд грн – кредитування в зоні високого воєнного ризику.\n\nУсього з моменту старту Програми підписано 134 954 кредитні договори на 462,1 млрд грн, з них банками державного сектору економіки – 93 114 договорів на 212,8 млрд гривень.\n\nДержавну програму «Доступні кредити 5-7-9%» реалізує Фонд розвитку підприємництва (ФРП), єдиним учасником якого є Уряд України в особі Мінфіну, що координує усі ключові аспекти діяльності Фонду.\n\nФРП уклав угоди про співробітництво з 48 уповноваженими банками Програми. Держава продовжує здійснювати всі необхідні компенсаційні виплати на користь бізнесу за укладеними кредитними договорами у межах Програми.\n\nДержпрограма спрямована на розвиток підприємництва завдяки можливості отримувати доступне фінансування, а також сприяє створенню робочих місць, економічній безбар’єрності та підтримці бізнесу під час війни.\n\nНагадаємо, що минулого року Уряд підтримав запропоновані Мінфіном зміни для удосконалення процесів надання фінансової державної підтримки мікро- , малого та середнього підприємництва (ММСП), що особливо важливо в умовах повномасштабної війни. Насамперед йдеться про розвиток Державних програм «Доступні кредити 5-7-9%», «Доступний фінансовий лізинг 5-7-9%», «Доступний факторинг».\n\nЗ умовами участі в програмах та переліком уповноважених банків можна ознайомитись за посиланням.\n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/ponad_tretinu_zavdan_reformi_upravlinnia_publichnimi_investitsiiami_vikonano_pidsumki_2025_roku-5539",
+          "title": "Понад третину завдань реформи управління публічними інвестиціями виконано: підсумки 2025 року",
+          "date": "09 Січня 2026",
+          "content": "Головна Пресцентр Новини та Анонси Понад третину завдань реформи управління публічними інвестиціями виконано: підсумки 2025 року\nПонад третину завдань реформи управління публічними інвестиціями виконано: підсумки 2025 року\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 09 Січня 2026\n\nУ 2025 році в Україні завершено ключовий етап реформи управління публічними інвестиціями та закладено єдині правила планування, відбору й фінансування інвестиційних проєктів на державному, регіональному та місцевому рівнях. Цьогоріч Уряд сформував і затвердив методологічну основу управління публічними інвестиціями, яка охоплює середньострокове планування і пріоритезацію, підготовку та оцінку проєктів, формування секторальних портфелів і Єдиного проєктного портфеля, а також механізми реалізації та моніторингу.\n\n“Попри виклики повномасштабної війни реформа управління публічними інвестиціями триває. Розроблена й затверджена нормативна база створює необхідне підґрунтя та правила для практичної реалізації публічних інвестицій і переходу від планування до виконання. Це вже дає конкретний результат: у державному бюджеті на 2026 рік публічні інвестиції сформовано за новими правилами. Найбільший обсяг коштів закладено на енергетику. Стабільна її робота є критичною умовою функціонування економіки та забезпечення базових потреб українців”, — зазначив заступник Міністра фінансів України Дмитро Самоненко.\n\n\n\nСтаном на кінець 2025 року виконання завдань реформи управління публічними інвестиціями має такий вигляд: із 72 заходів 25 виконано (35%), 28 — у процесі реалізації (39%), для 19 строк виконання ще не настав (26%). Зокрема:\n\nзатверджено методологію управління публічними інвестиціями на державному, регіональному та місцевому рівнях, що охоплює планування, підготовку, оцінку, відбір, реалізацію та моніторинг інвестиційних проєктів;\nухвалено зміни до Бюджетного кодексу України, які заклали правові засади середньострокового бюджетного планування публічних інвестицій;\nзатверджено план заходів з реалізації Дорожньої карти реформи управління публічними інвестиціями на 2024–2028 роки;\nсформовано інституційну рамку реформи, зокрема створено Стратегічну інвестиційну раду та міжвідомчі координаційні органи.\n\nУ 2025 році схвалено Середньостроковий план пріоритетних публічних інвестицій на 2026–2028 роки, який став основою для формування єдиного проєктного портфеля публічних інвестицій держави (ЄПП) та державного бюджету на 2026 рік у частині публічних інвестицій.\n\nУ вересні 2025 року вперше за новими правилами проведено відбір проєктів і програм та сформовано Єдиний проєктний портфель публічних інвестицій. Він охоплює 195 проєктів і програм загальною вартістю 12,6 трлн грн, що відповідає сукупній кошторисній вартості їх реалізації протягом усього інвестиційного періоду, та включає ключові напрями відновлення і розвитку — енергетику, транспорт, муніципальну інфраструктуру, житло, освіту, охорону здоров’я, соціальну сферу, довкілля й цифровізацію.\n\nУ Державному бюджеті України на 2026 рік передбачено 116,9 млрд грн на фінансування публічних інвестиційних проєктів і програм ЄПП. Фінансування здійснюється за рахунок загального та спеціального фондів державного бюджету, а також державних гарантій. Більша частина цього ресурсу — пільгові кредити та гранти міжнародних фінансових організацій і урядів іноземних держав.\n\nУ 2025 році окрему увагу було приділено підвищенню обізнаності та спроможності регіонів і територіальних громад: спільно з ЮНІСЕФ проведено навчання для 240 фінансистів територіальних громад та обласних державних адміністрацій з питань середньострокового бюджетного планування і управління публічними інвестиціями.\n\nУ 2026 році реформа управління публічними інвестиціями переходить до етапу повномасштабного впровадження. Основний фокус зосереджено на:\n\nпрактичному застосуванні нової методології всіма головними розпорядниками коштів, регіонами та територіальними громадами;\nподальшому вдосконаленні нормативно-правової бази, зокрема щодо довгострокових бюджетних зобов’язань;\nпосиленні управління фіскальними ризиками та системи моніторингу реалізації проєктів;\nрозбудові інституційної спроможності органів влади на всіх рівнях;\nстворенні єдиної цифрової екосистеми управління публічними інвестиціями.\n\nНагадаємо, реформу управління публічними інвестиціями в Україні ініційовано Міністерством фінансів у 2024 році, а план реалізації її розрахований до 2028 року. Її мета — створення прозорої та передбачуваної системи планування й реалізації публічних інвестицій, спрямування ресурсів на найбільш пріоритетні для держави проєкти, підвищення ефективності використання публічних коштів і зниження фіскальних ризиків у процесі відновлення та розвитку України.\n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://www.mof.gov.ua/uk/news/minfin_u_2025_rotsi_zabezpechiv_pererakhuvannia_z_derzhbiudzhetu_1954_mlrd_grn_transfertiv_do_zagalnogo_fondu_mistsevikh_biudzhetiv-5538",
+          "title": "Мінфін у 2025 році забезпечив перерахування з держбюджету 195,4 млрд грн трансфертів до загального фонду місцевих бюджетів",
+          "date": "09 Січня 2026",
+          "content": "Головна Пресцентр Новини та Анонси Мінфін у 2025 році забезпечив перерахування з держбюджету 195,4 млрд грн трансфертів до загального фонду місцевих бюджетів\nМінфін у 2025 році забезпечив перерахування з держбюджету 195,4 млрд грн трансфертів до загального фонду місцевих бюджетів\nПРО МІНІСТЕРСТВО \nДІЯЛЬНІСТЬ \nЗАКОНОДАВСТВО \nДАНІ ТА АНАЛІТИКА \nДЛЯ ГРОМАДСЬКОСТІ \nПРЕСЦЕНТР \nНовини та Анонси\nСтатті та інтерв'ю\nКампанія \"Податки Захищають\"\nКонтакти пресслужби\n 09 Січня 2026\n\nУ грудні 2025 року Мінфін згідно з бюджетним законодавством забезпечив перерахування міжбюджетних трансфертів до загального фонду місцевих бюджетів в обсязі 22,4 млрд  грн, що становить 100 % до передбачених із державного бюджету коштів на грудень, зокрема:\n\nбазову дотацію перераховано в сумі 2,1 млрд грн (100 %);\n\nдодаткові дотації перераховано в сумі 3,2 млрд грн (100 %).\n\nЗалишки коштів на рахунках місцевих бюджетів та бюджетних установ за загальним і спеціальним фондами станом на 1 січня 2026 року становлять 97,1 млрд гривень.\n\nЗа рахунок цих ресурсів органи місцевого самоврядування і надалі мають можливість забезпечувати фінансування першочергових потреб на місцевому рівні.\n\nЗагалом у 2025 році Мінфін забезпечив перерахування міжбюджетних трансфертів до загального фонду місцевих бюджетів у сумі 195,4 млрд грн (97,3 % від розпису). Зокрема, перераховано:\n\nбазову дотацію – 25,5 млрд грн (100 % від плану);\n\nдодаткові дотації – 24,1 млрд грн (100 % від розподіленого обсягу).\n\nПерерахування міжбюджетних трансфертів зміцнює спроможність громад щодо фінансування ключових послуг (зокрема освіти, охорони здоров’я), соціальних програм, підтримки економіки, а також відновлення пошкодженої інфраструктури. Це дозволяє вирівнювати фінансові можливості регіонів, які зазнали значних втрат через збройну агресію рф та обмеження воєнного стану.\n\nВсі новини\nПоділитись:  \nОтримуйте останні новини\nПідписатись"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "HTTP Request6": [
+      {
+        "json": {
+          "url": "https://mev.gov.ua/novyna/operatyvna-sytuatsiya-v-enerhosystemi-ukrayiny-stanom-na-ranok-15-sichnya",
+          "title": "Оперативна ситуація в енергосистемі України станом на ранок 15 січня",
+          "date": "15 січня 2026\nчетвер",
+          "time": "10:18",
+          "content": "Вночі ворог вкотре завдавав ударів по енергетичній інфраструктурі країни. Внаслідок чого знеструмлено споживачів на Житомирщині та Харківщині. Аварійно-відновлювальні роботи тривають скрізь, де це дозволяє безпекова ситуація.\n\nНайскладнішою нині є ситуація у Києві та Київській області. У столичному регіоні діють мережеві обмеження, через що раніше запроваджені графіки погодинних відключень тимчасово не застосовуються. Повернення до прогнозованих графіків відбудеться після стабілізації ситуації в енергосистемі. Відновлювальні роботи у столиці та на Київщині тривають цілодобово, незважаючи на складні погодні умови.\n\nМережеві обмеження, як і в попередні тижні, зберігаються на Одещині. У регіоні продовжуються аварійно-відновлювальні роботи після попередніх атак ворога.\n\nЧерез негоду залишаються знеструмленими 7 населених пунктів на Київщині та Чернігівщині. Ремонтні бригади обленерго працюють над відновленням пошкоджених ліній.\n\nДовгостроково знеструмленими внаслідок бойових дій по країні залишаються споживачі у прифронтових на прикордонних регіонах. Тут ситуація найважча, адже відновлення електропостачання ускладнене постійними бойовими діями.\n\nУ більшості регіонів України діють графіки погодинних відключень для всіх категорій споживачів, а також графіки обмеження потужності для промисловості. У кількох областях вимушено застосовуються аварійні відключення через перевантаження обладнання в умовах високого рівня споживання під час морозів.\n\nЗакликаємо споживачів раціонально використовувати електроенергію протягом усього дня, особливо у пікові години споживання вранці і ввечері. Це допомагає знизити навантаження на систему.\n\nТелефони для звернень громадян:\n\nПовідомити про корупцію\n\nУвесь вміст доступний за ліцензією Creative Commons Attribution 4.0 International, якщо не зазначено інше"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://mev.gov.ua/novyna/vidnovlennya-stiykist-modernizatsiya-denys-shmyhal-ozvuchyv-priorytety-na-choli-minenerho",
+          "title": "Відновлення, стійкість, модернізація — Денис Шмигаль озвучив пріоритети на чолі Міненерго",
+          "date": "14 січня 2026\nсереда",
+          "time": "14:54",
+          "content": "Пріоритетне завдання для Міністерства енергетики — це відновлення генерації, підстанцій, розподільчих мереж, формування резерву потужностей та обладнання. На цьому наголосив новий очільник Міністерства енергетики Денис Шмигаль.\n\n14 січня Верховна Рада України підтримала призначення Дениса Шмигаля на посаду Першого віцепрем’єр-міністра — Міністра енергетики України.\n\n«Треба посилити координацію всіх відповідальних. Зібрати єдиний план дій для всіх. Пришвидшувати розподіл дефіцитних ресурсів», — зазначив Денис Шмигаль.\n\nНа посаді Міністра енергетики він назвав три основні пріоритети.\n\n•    Відновлення\n\nЗокрема, відновлення генерації, підстанцій, розподільчих мереж. Формування резерву потужностей та обладнання.\n\n«Необхідно створити на прифронтових територіях так звані “енергетичні батальйони”, укомплектовані фахівцями, забезпечені технікою та надійним захистом. Впровадити доплати енергетикам і ремонтним бригадам», — зазначив після призначення Денис Шмигаль.\n\nКрім того, потрібно відновити газовидобуток, відбудувати пошкоджені газорозподільні станції та газопроводи, резервні схеми газопостачання для критичних споживачів, підвищити надійність газосховищ.\n\nЗа словами Дениса Шмигаля, Міненерго може залучати більше енергетичної допомоги та фінансування, а також допомагати містам і громадам, які самі не здатні витягнути ці завдання.\n\n•    Стійкість\n\nДенис Шмигаль підкреслив, що на посаді Міністра енергетики буде працювати над посиленням активного та пасивного захисту енергообʼєктів.\n\nЗокрема, розширенням проєкту зі встановлення РЕБ та систем ППО за участі енергетичних підприємств. А також будівництвом захисту енергетичних об’єктів і розбудовою децентралізованої генерації.\n\n•    Модернізація\n\n«Енергетика буде однією з основ для економічного зростання та нашої інтеграції в ЄС. Потенціал дуже великий. Треба його грамотно використати», — наголосив Денис Шмигаль.\n\nЗа його словами, потрібно завершити інтеграцію до європейського енергетичного простору й продовжити модернізацію ліній електропередачі на кордоні з ЄС, збільшити трансформаторні потужності, розбудовувати нові інтерконектори.\n\nДо завдань у цій сфері також входитиме розробка нових родовищ нафти й газу, інвестиції, державно-приватне партнерство.\n\nСеред іншого, планується запуск цифрового додатку «Єдина платіжка» для покращення послуг, інформування та зворотного звʼязку.\n\n«Ситуація складна, але система працює. Дякую енергетикам, комунальникам, інженерам, усім ремонтним бригадам. Кожному та кожній, хто щодня повертає світло та тепло», — резюмував Перший віцепрем’єр-міністр.\n\nТелефони для звернень громадян:\n\nПовідомити про корупцію\n\nУвесь вміст доступний за ліцензією Creative Commons Attribution 4.0 International, якщо не зазначено інше"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://mev.gov.ua/novyna/roman-andarak-vidmova-vid-rosiyskykh-enerhonosiyiv-i-posylennya-sanktsiy-shchodo-rf",
+          "title": "Роман Андарак: відмова від російських енергоносіїв і посилення санкцій щодо рф - невід’ємні складові посилення енергетичної безпеки Європи",
+          "date": "14 січня 2026\nсереда",
+          "time": "11:50",
+          "content": "Заступник Міністра енергетики України Роман Андарак в онлайн-форматі взяв участь в організованому Європейським парламентом діалозі високого рівня «Приборкання російської військової машини: як припинити закупівлю російської енергії Європейським Союзом та захистити постачання в держави-члени?».\n\nРоман Андарак підкреслив, що з початку повномасштабного російського вторгнення в Україну енергетична інфраструктура стала метою систематичних атак агресора.\n\n«Атаки на критично важливі енергетичні об'єкти залишаються невід'ємною частиною військової стратегії росії. російська федерація вже давно використовує енергетику як зброю для досягнення політичних цілей — раніше шляхом маніпуляцій з постачанням та залежністю, а сьогодні — шляхом прямого фізичного знищення інфраструктури», - зазначив він.\n\nЗаступник міністра наголосив, що останні масовані ворожі атаки завдали значної шкоди об’єктам генерації, розподілу і передачі електроенергії, що спричинило аварійні відключення від електропостачання сотень тисяч споживачів в Україні. Підтримувати енергетичну стійкість в умовах постійного тиску з боку агресора допомагають міжнародні партнери, за що наша держава дуже вдячна.\n\nУкраїна визнає та рішуче вітає значний прогрес, якого ЄС вже досягає у зменшенні своєї залежності від російських енергетичних ресурсів. Завдяки дорожній карті REPowerEU, новому законодавству та наступним пакетам санкцій, ЄС перейшов від політичних зобов’язань до конкретних, юридично обов’язкових заходів, спрямованих на повну поступову відмову від російської нафти, газу та ядерної енергії на ринках ЄС. Було встановлено чіткий графік припинення імпорту російського газу — як трубопровідного, так і СПГ — та нафти до кінця 2027 року, одночасно зміцнюючи диверсифікацію, інфраструктуру та стійкість ринку.\n\n«Ми повністю усвідомлюємо економічні та політичні виклики, які цей перехід тягне за собою для деяких держав-членів, які історично залежать від російських поставок через існуючу інфраструктуру. Однак середньострокові та довгострокові переваги — посилена енергетична безпека, зменшення впливу геополітичного шантажу та прискорене інвестування в чисті та диверсифіковані енергетичні системи — явно переважають короткострокові витрати. Ці заходи зменшують можливості росії фінансувати свою війну та зміцнюють стратегічну автономію Європи», - підкреслив заступник Міністра.\n\nУ цьому контексті важливе значення набувають трансатлантичне співробітництво та посилення санкцій проти агресора, додав він. Україна виступає за додаткові кроки, включаючи розширення санкцій проти найбільших російських виробників нафти і газу, які вже перебувають під санкціями США.\n\nОкремим та нагальним пріоритетом є посилення санкцій проти так званого тіньового флоту росії, а також розширення механізмів для уникнення чи обходу санкцій агресором.\n\n«Припинення закупівель російських енергоносіїв, які ще мають місце, – це не лише питання енергетичної політики. Це питання безпеки, довіри та колективної відповідальності. Україна готова продовжувати тісну співпрацю з нашими партнерами, щоб забезпечити виконання санкцій, стабільність енергетичних ринків та незворотність переходу Європи від залежності від російських енергоносіїв», -  наголосив Роман Андарак.\n\nНовим виміром енергетичної безпеки в умовах воєнних викликів стає посилення фізичного захисту енергетичних об’єктів і Україна готова ділитися з партнерами унікальним досвідом у цьому напрямку, який набула протягом останніх років. Насамперед це стосується зміцнення фізичного захисту таких об’єктів як підстанції та іншого критичного обладнання. Необхідно також працювати над напрямком стандартизації обладнання і формуванням його аварійних запасів, які можуть знадобитися країнами у випадку масових пошкоджень встановленого устаткування.\n \nКрім цього, заступник Міністра наголосив на важливості створення мінімальних (стратегічних) запасів газу за тим же принципом, за яким в ЄС вже створюються мінімальні запаси нафти і нафтопродуктів, що дозволить у перспективі стабілізувати ринки і запобігти ціновим викривленням.\n\nТелефони для звернень громадян:\n\nПовідомити про корупцію\n\nУвесь вміст доступний за ліцензією Creative Commons Attribution 4.0 International, якщо не зазначено інше"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://mev.gov.ua/novyna/bryfinh-vo-ministra-enerhetyky-ukrayiny-artema-nekrasova-shchodo-sytuatsiyi-v-1",
+          "title": "Брифінг в.о. Міністра енергетики України Артема Некрасова щодо ситуації в енергосистемі станом на 14 січня",
+          "date": "14 січня 2026\nсереда",
+          "time": "10:08",
+          "content": "- Ситуація в енергосистемі України залишається складною. Постійні атаки росії на енергетичні об’єкти та складні погодні умови зумовлюють вимушене застосування обмежень на всій території країни.\n\n- Найскладнішою залишається ситуація у столичному регіоні. У Києві та Київській області операторами систем розподілу застосовуються мережеві обмеження. Раніше оприлюднені графіки погодинних відключень тимчасово не діють. Повернення до прогнозованих графіків відбудеться одразу після стабілізації ситуації в енергосистемі. Аварійно-відновлювальні роботи у столиці та на Київщині тривають цілодобово, попри складні погодні умови.\n\n- Певні обмеження, як і в попередні тижні, зберігаються на Одещині. У регіоні тривають аварійно-відновлювальні роботи після попередніх атак ворога. На Дніпропетровщині внаслідок нічних атак було знеструмлено 74 тисячі споживачів. Станом на ранок без електропостачання залишалися понад 40 тисяч абонентів. Відновлювальні роботи тривають.\n\n- Через несприятливі погодні умови знеструмлені 12 населених пунктів у Чернігівській та Київській областях.\n\n- У більшості регіонів України діють графіки погодинних відключень для всіх категорій споживачів, а також графіки обмеження потужності для промисловості. У кількох областях вимушено застосовуються аварійні відключення через перевантаження обладнання в умовах високого рівня споживання під час морозів.\n\n- В.о. Міністра енергетики закликав українців максимально зменшити навантаження на енергосистему та за можливості обмежити користування потужними електроприладами. Ощадливе споживання електроенергії допоможе скоротити тривалість вимушених знеструмлень.\n\nБільше про ситуацію в енергосистемі — у брифінгу виконувача обов'язків Міністра енергетики України Артема Некрасова.\n\nТелефони для звернень громадян:\n\nПовідомити про корупцію\n\nУвесь вміст доступний за ліцензією Creative Commons Attribution 4.0 International, якщо не зазначено інше"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://mev.gov.ua/novyna/bryfinh-zastupnyka-ministra-enerhetyky-ukrayiny-oleksandra-vyazovchenka-shchodo-sytuatsiyi-1",
+          "title": "Брифінг заступника Міністра енергетики України Олександра Вʼязовченка щодо ситуації в енергосистемі станом на 13 січня",
+          "date": "13 січня 2026\nвівторок",
+          "time": "10:14",
+          "content": "- Вночі росія здійснила чергову масовану ракетно-дронову атаку на енергетичну інфраструктуру низки регіонів України. Внаслідок обстрілів на ранок знеструмлені споживачі у місті Києві, Київській, Одеській, Харківській, Дніпропетровській, Донецькій, Чернігівській та Запорізькій областях. Аварійно-відновлювальні роботи тривають скрізь, де це дозволяє безпекова ситуація. Відновлення електропостачання потребує часу.\n\n- Через несприятливі погодні умови знеструмлені 17 населених пунктів у Чернігівській та Закарпатській областях. Ремонтні бригади працюють над відновленням пошкоджених мереж.\n\n- Наразі в усіх регіонах України діють графіки погодинних відключень. У Києві та Київській області застосовуються аварійні знеструмлення. На їхню тривалість може впливати суттєве зниження температури повітря.\n\n- Через складну ситуацію в енергосистемі, спричинену обстрілами, оператори систем розподілу у Києві та Київській області, в Одеській області та у місті Дніпро вимушено застосовують мережеві обмеження. Раніше опубліковані графіки погодинних відключень у цих регіонах тимчасово не діють. Системні обмеження будуть скасовані одразу після стабілізації ситуації.\n\n- Довгостроково знеструмленими внаслідок бойових дій залишаються споживачі у прифронтових та прикордонних регіонах. Саме там ситуація є найскладнішою через постійні обстріли.\n\n- Заступник Міністра наголосив, що Україна переживає одну з найскладніших зим за часи незалежності, та закликав українців у ці важкі дні підтримувати одне одного, ділитися теплом і світлом з тими, кому складніше, допомагати літнім людям, дітям, сусідам і тваринам, а також ощадливо споживати електроенергію у години, коли вона є.\n\nБільше про ситуацію в енергосистемі — у брифінгу заступника Міністра енергетики України Олександра Вʼязовченка.\n\nТелефони для звернень громадян:\n\nПовідомити про корупцію\n\nУвесь вміст доступний за ліцензією Creative Commons Attribution 4.0 International, якщо не зазначено інше"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://mev.gov.ua/novyna/u-mezhakh-prohramy-create-ukraine-minenerho-posylyuye-yevrointehratsiynyy-napryam-v",
+          "title": "У межах програми Create Ukraine Міненерго посилює євроінтеграційний напрям в енергетиці",
+          "date": "12 січня 2026\nпонеділок",
+          "time": "11:35",
+          "content": "В Україні за ініціативи урядів Литви і України розпочався другий етап програми Create Ukraine, у межах якої українці з міжнародним досвідом повертаються до роботи в державному секторі та долучаються до реалізації ключових реформ.\n\nУчасники програми працюють безпосередньо в командах центральних органів виконавчої влади та долучаються до напрацювання рішень у пріоритетних для держави напрямах.\n\nЦьогоріч учасниця Create Ukraine працюватиме і в Міністерстві енергетики України. До команди Міненерго долучилася Юлія Чорна - фахівчиня з кліматичної політики та енергетичного переходу, яка повернулася в Україну з Флоренції (Італія). Вона працюватиме над напрямом європейської інтеграції та імплементації євроінтеграційних підходів у сфері енергетики.\n\nЗалучення фахівців із міжнародним досвідом є важливим елементом посилення інституційної спроможності держави та реалізації реформ, зокрема у сфері енергетики - в частині гармонізації українського законодавства з правом Європейського Союзу та виконання зобов’язань у межах євроінтеграційного процесу.\n\nДовідково: Create Ukraine - ініціатива із залучення українських фахівців із міжнародним досвідом до роботи в державному секторі, започаткована у 2024 році за спільної ініціативи Литви та України за підтримки ЄС. Програма створює механізм повернення талановитої молоді на Батьківщину та застосування їхніх професійних компетенцій у реалізації євроінтеграційних реформ. Create Ukraine реалізує литовське Central Project Management Agency у партнерстві з KSE Foundation та Урядом України, за підтримки Міністерства закордонних справ Литви. Другий етап програми фінансується Литовським фондом розвитку співробітництва та гуманітарної допомоги.\n\nТелефони для звернень громадян:\n\nПовідомити про корупцію\n\nУвесь вміст доступний за ліцензією Creative Commons Attribution 4.0 International, якщо не зазначено інше"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "MoJ": [
+      {
+        "json": {
+          "title": "15-01-202611:28\n14 січня 2026 року Вищим антикорупційним судом задоволено позовні вимоги Мін’юсту до Гамзалова Станіслава Джахпаровича про застосування до нього санкції",
+          "url": "https://minjust.gov.ua/news/ministry/14-sichnya-2026-roku-vischim-antikoruptsiynim-sudom-zadovoleno-pozovni-vimogi-minyustu-do-gamzalova-stanislava-djahparovicha-pro-zastosuvannya-do-nogo-sanktsii",
+          "date": "15-01-2026",
+          "content": "14 січня 2026 року Вищим антикорупційним судом задоволено позовні вимоги Мін’юсту до Гамзалова Станіслава Джахпаровича про застосування до нього санкції, передбаченої пунктом 11 частини першої статті 4 ЗУ «Про санкції».\n\nГамзалов С.Д. є власником низки російських підприємств, що здійснюють матеріально-технічне забезпечення російської федерації у її збройній агресії проти України. Зокрема, ними здійснюється постачання товарів для підприємств, задіяних у військово-промисловому комплексі рф.\n\nНа підставі рішення ВАКС, в дохід держави стягнуто 25% від загальної кількості акцій публічного акціонерного товариства «Крюківський вагонобудівний завод» (код згідно з ЄДРПОУ: 05763814), що перебували в опосередкованому володінні Гамзалова С.Д.\n\nНаразі триває строк для подання апеляційної скарги на рішення суду.\n\nМін’юст висловлює подяку Головному управлінню розвідки Міністерства оборони України за сприяння та співпрацю в підготовці доказової бази.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "15-01-202611:23\nУ Мін’юсті провели інформаційно-консультативний семінар по проблемам запобігання виникненню конфлікту інтересів у зв’язку з роботою близьких осіб",
+          "url": "https://minjust.gov.ua/news/ministry/u-minyusti-proveli-informatsiyno-konsultativniy-seminar-po-problemam-zapobigannya-viniknennyu-konfliktu-interesiv-u-zvyazku-z-robotoyu-blizkih-osib",
+          "date": "15-01-2026",
+          "content": "В Міністерстві юстиції України було проведено інформаційно-консультативний семінар по питанням запобігання та врегулювання конфлікту інтересів пов’язаного із спільною роботою близьких осіб.\n\nУ заході взяло участь 54 працівника апарату. Захід організовано з метою підвищення рівня обізнаності працівників апарату в царині існуючих обмежень пов’язаних із спільною роботою близьких осіб.\n\nПід час навчань було обговорено особливості дій працівників з метою запобігання конфлікту інтересів. Окрему увагу приділили питанням врегулювання конфлікту інтересів.\n\nЗа результатами проведеного семінару учасникам були доведені обов’язкові кроки, які необхідно виконати для запобігання виникненню конфлікту інтересів.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "15-01-202610:44\nЩодо проведення тестування на знання законодавства у сфері державної реєстрації у період з 16 по 20 березня 2026 року",
+          "url": "https://minjust.gov.ua/news/ministry/schodo-provedennya-testuvannya-na-znannya-zakonodavstva-u-sferi-derjavnoi-reestratsii-u-period-z-16-po-20-bereznya-2026-roku",
+          "date": "15-01-2026",
+          "content": "Проведення тестування на знання законодавства у сфері державної реєстрації осіб, які мають намір виконувати функції державного реєстратора та претендують на посаду державного реєстратора або на іншу посаду, що передбачає виконання функцій державного реєстратора у суб’єкта державної реєстрації, крім Мін’юсту чи його територіального органу (далі – тестування) відбудеться у період з 16 по 20 березня 2026 року в приміщенні Міністерства юстиції України за адресою: вул. Січових Стрільців, буд. 73, м. Київ.\n\nЗапити для проходження тестування від суб’єктів державної реєстрації прийматимуться Міністерством юстиції України до 13 лютого 2026 року (включно).\n\nЗапити для проходження тестування від суб’єктів державної реєстрації, що надходили у період з 08 листопада 2025 року по 13 січня 2026 року, опрацьовуються Міністерством юстиції України. У зв’язку з цим необхідність їх повторного направлення відсутня.\n\nДнем подання запиту для проходження тестування, вважається день фактичного отримання (реєстрації) його Мін’юстом.\n\nАдреса для листування (01001, м. Київ, вул. Архітектора Городецького, 13).\n\nПовідомлення про дату, час та місце проведення тестування на знання законодавства у сфері державної реєстрації, а також прізвище, ім’я та по батькові осіб, які запрошуються на таке тестування, розміщуються на офіційному вебсайті Мін’юсту (зокрема, за посиланням:\n\nhttps://minjust.gov.ua/m/grafik-provedennya-testuvannya-u-sferi-derjavnoi-reestratsii ) не пізніше ніж за сім календарних днів до дня його проведення.\n\nЗ актуальною інформацією стосовно тестування, можна ознайомитись на вебсайті Міністерства юстиції України у розділі «Напрями діяльності» в рубриці «Визначення професійної компетентності осіб, які мають намір виконувати функції державного реєстратора» за посиланням:\n\nhttps://minjust.gov.ua/ndd/dergreestr/dergreestr_vuzn .\n\nДовідкова інформація за номером телефону: (044) 330 02 74.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "15-01-202610:00\nНДЦНСЕ розпочав експертні дослідження для виробників безпілотних систем і засобів РЕБ",
+          "url": "https://minjust.gov.ua/news/ministry/ndtsnse-rozpochav-ekspertni-doslidjennya-dlya-virobnikiv-bezpilotnih-sistem-i-zasobiv-reb",
+          "date": "15-01-2026",
+          "content": "Науково-дослідний центр незалежних судових експертиз Міністерства юстиції України розпочав проведення експертних товарознавчих досліджень щодо безпілотних систем, засобів радіоелектронної боротьби та їх складових частин українського виробництва.\n\nНовий вид експертних досліджень орієнтований на виробників і постачальників, які беруть участь у процедурах закупівель, укладають державні контракти або проходять етапи погодження ціноутворення.\n\nМета проведення досліджень — підтвердити економічну доцільність ціни, визначити обґрунтовану орієнтовну (очікувану) вартість виробу, мінімізувати ризики зауважень з боку контролюючих органів, а також забезпечити виробників і постачальників незалежним експертним документом для використання у взаємодії з державними замовниками.\n\nДослідження проводяться щодо безпілотних літальних апаратів (БПЛА), безпілотних авіаційних комплексів (БПАК), засобів радіоелектронної боротьби тактичного рівня, а також окремих компонентів і складових частин таких виробів.\n\nЕкспертне товарознавче дослідження здійснюється на підставі наданих замовником документів, зокрема затверджених технічних умов, тактико-технічних характеристик, комплектації та розрахунку ціни виробу.\n\nЗа результатами проведення дослідження замовник отримує висновок експерта.\n\nМінімальний строк виконання дослідження становить 7 робочих днів за умови надання повного пакета документів та оперативного оформлення в місті Києві.\n\nДодаткова інформація — за посиланням: https://srcif.com.ua/ai-choose.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "14-01-202617:30\nДо відома осіб, які виявили намір здійснювати діяльність приватного виконавця",
+          "url": "https://minjust.gov.ua/news/ministry/do-vidoma-osib-yaki-viyavili-namir-zdiysnyuvati-diyalnist-privatnogo-vikonavtsya-35253",
+          "date": "14-01-2026",
+          "content": "Кваліфікаційна комісія приватних виконавців (далі – Комісія) повідомляє, що згідно протоколу засідання Комісії від 12.01.2026 № 172 за результатами розгляду заяв осіб, які виявили намір отримати право на здійснення діяльності приватного виконавця, про допуск до складання кваліфікаційного іспиту Комісією прийнято відповідне рішення (список осіб, яким надано допуск, додається).\n\nОсоби, яким надано допуск"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "14-01-202616:00\nПрава дитини під захистом держави: у 2025 році органи ДВС стягнули на 32,1% більше аліментів, ніж у попередньому",
+          "url": "https://minjust.gov.ua/news/ministry/prava-ditini-pid-zahistom-derjavi-u-2025-rotsi-organi-dvs-styagnuli-na-321-bilshe-alimentiv-nij-u-poperednomu",
+          "date": "14-01-2026",
+          "content": "Забезпечення належного виконання рішень судів щодо стягнення аліментів залишається одним із ключових пріоритетів у діяльності органів державної виконавчої служби, які перебувають у сфері управління Міністерства юстиції України. Системна робота державних виконавців та застосування передбачених законом заходів дозволяють забезпечувати належне виконання обов’язків громадян зі сплати аліментів.\n\nЗа 2025 рік органи державної виконавчої служби стягнули 16 243 100 408 грн аліментів. Ця сума на 3 947 836 736 грн (або на 32,1%) більша, ніж аналогічний показник за 2024 рік.\n\nСтаном на 31 грудня 2025 року на виконанні ДВС перебувало понад 511 тисяч виконавчих документів про стягнення аліментів. Понад третина справ стосувалась заборгованості зі сплати аліментів більше ніж за три місяці — і з такими боргами держава працює особливо наполегливо.\n\nЮридичні механізми впливу на боржників\n\nНагадаємо, відповідно до Закону України «Про виконавче провадження» за наявності заборгованості зі сплати аліментів, сукупний розмір якої перевищує суму платежів за три місяці:\n- стягнення може бути звернено на майно боржника. При цьому звернення стягнення на заробітну плату не виключає можливості одночасного звернення стягнення на інше майно боржника;\n- боржника вносять до Єдиного реєстру боржників;\n- виконавець роз’яснює стягувачу право звернення до органів досудового розслідування із заявою (повідомленням) про вчинене кримінальне правопорушення — ухилення від сплати аліментів.\n\nУ разі, якщо заборгованість перевищує суму відповідних платежів за чотири місяці, державний виконавець має право винести постанови про тимчасове обмеження боржника у таких правах:\n- виїзд за межі України;\n- керування транспортними засобами;\n- користування вогнепальною мисливською, пневматичною та охолощеною зброєю;\n- право на полювання.\n\nЯкщо сукупний розмір заборгованості перевищує суму відповідних платежів за шість місяців з моменту пред’явлення виконавчого документа до примусового виконання, державний виконавець складає протокол про адміністративне правопорушення за статтею 183-1 Кодексу України про адміністративні правопорушення та надсилає його до суду.\n\nУ випадках, коли заборгованість зі сплати аліментів перевищує:\n- один рік — накладається штраф у розмірі 20% суми заборгованості;\n- два роки — 30%;\n- три роки — 50%.\n\nСуми таких штрафів стягуються з боржника в установленому порядку та перераховуються стягувачу. Заходи примусового виконання передбачені Законом не застосовуються у разі відсутності заборгованості понад три місяці.\n\nМін’юст і надалі послідовно забезпечуватиме виконання судових рішень, адже аліменти — це не формальність, а реальна підтримка дитини.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "14-01-202610:00\nБез юридичних бар’єрів: як працює міжнародна правова допомога у сфері нотаріату",
+          "url": "https://minjust.gov.ua/news/ministry/bez-yuridichnih-bareriv-yak-pratsyue-mijnarodna-pravova-dopomoga-u-sferi-notariatu",
+          "date": "14-01-2026",
+          "content": "Міжнародна правова допомога у сфері нотаріату усуває юридичні бар’єри між державами, дозволяючи безперешкодно використовувати документи по обидва боки кордону. Вона необхідна для людей, які живуть, навчаються, працюють або ведуть бізнес за межами України і не втрачають при цьому зв’язку з домом. Міністерство юстиції розповідає про цю систему взаємодії між державами, яка забезпечує правову визначеність і можливість громадянам реалізовувати свої права незалежно від країни перебування.\n\nНа чому ґрунтується міжнародна правова допомога у сфері нотаріату?\n\nВона здійснюється на підставі двосторонніх і багатосторонніх міжнародних договорів України, а також принципу взаємності. Порядок виконання нотаріальних дій визначається положеннями відповідного міжнародного договору.\n\nЗаяви та застереження, зроблені державами під час ратифікації або приєднання до договору, є його невід’ємною частиною.\n\nУ разі якщо міжнародним договором України встановлено інші правила вчинення нотаріальних дій, ніж передбачені національним законодавством, застосовуються положення міжнародного договору. Якщо договір покладає на нотаріусів виконання дій, не передбачених національним законодавством, вони здійснюються у порядку, встановленому Міністерством юстиції України.\n\nДе можна ознайомитися з міжнародними договорами України?\n\nВони розміщені на офіційному сайті Міністерства юстиції України у розділі «Перелік двосторонніх та багатосторонніх міжнародних договорів у сфері правової допомоги та правового співробітництва у цивільних та кримінальних справах»: https://is.gd/Y1NTVO\n\nЧи приймаються в Україні документи, видані за кордоном?\n\nТак, за умови їхньої легалізації Міністерством закордонних справ України. Без легалізації такі документи можуть прийматися у випадках, передбачених законодавством України або міжнародними договорами. Легалізація підтверджує дійсність документа для його використання в іншій державі. Вона може здійснюватися у формі консульської легалізації або шляхом проставлення апостиля.\n\nУ чому різниця між консульською легалізацією та апостилем?\n\nКонсульська легалізація застосовується до документів держав, які не є учасниками Гаазької конвенції 1961 року, та передбачає кілька етапів засвідчення.\n\nАпостиль — це спрощена процедура між державами — учасницями Конвенції, яка підтверджує справжність підпису та печатки і визнається без додаткових підтверджень.\n\nЧи потрібен переклад документа та хто засвідчує підпис?\n\nУ більшості випадків — так. Після легалізації або апостилювання документ перекладається мовою держави подання. Переклад має бути нотаріально посвідчений, а в окремих країнах — додатково апостильований або засвідчений.\n\nСправжність підпису на документах, які подаються до іноземних органів, може засвідчити або нотаріус, або консульська установа за кордоном.\n\nЯк посвідчуються довіреності для використання за кордоном?\n\nДовіреність посвідчується відповідно до законодавства держави, у якій вона видана, та використовується за кордоном після легалізації або апостилювання, якщо це передбачено міжнародними договорами.\n\nНотаріуси можуть звертатися із запитами до іноземних компетентних органів, зокрема щодо наявності спадкової справи, факту реєстрації шлюбу або наявності заповіту.\n\nЧому міжнародне нотаріальне співробітництво важливе?\n\nВоно сприяє спрощенню процедур, цифровізації взаємодії та створенню доступних і зрозумілих сервісів відповідно до принципів безбар’єрності — для осіб в Україні та за кордоном.\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "13-01-202615:00\nСудові експерти Мін’юсту у 2025 році провели майже 3,7 тис. експертиз щодо злочинів рф: встановлено збитки на понад 73,6 млрд грн",
+          "url": "https://minjust.gov.ua/news/ministry/sudovi-eksperti-minyustu-u-2025-rotsi-proveli-mayje-37-tis-ekspertiz-schodo-zlochiniv-rf-vstanovleno-zbitki-na-ponad-736-mlrd-grn",
+          "date": "13-01-2026",
+          "content": "У 2025 році працівники науково-дослідних установ судових експертиз Міністерства юстиції України провели 3689 експертиз, пов’язаних зі збройною агресією російської федерації проти України. Дослідження здійснювалися в межах кримінальних проваджень, а також за зверненнями фізичних і юридичних осіб.\n\nЕкспертизи стосувалися, зокрема, встановлення причин і масштабів руйнувань або пошкоджень рухомого й нерухомого майна, об’єктів навколишнього природного середовища, а також визначення розмірів матеріальної та моральної шкоди, завданої громадянам і юридичним особам.\n\nОкремим напрямом роботи є участь судових експертів у процесах ідентифікації тіл загиблих воїнів та розслідуваннях щодо осіб, зниклих безвісти за особливих обставин — як серед військових, так і серед цивільного населення.\n\nЗагальна сума збитків, встановлених за результатами експертиз проведених у 2025 році, — 73 623 277 499 гривень. Із цієї суми:\n\n- 58 351 059 106 гривень — за експертизами, призначеними органами досудового розслідування та судами;\n\n- 15 272 218 393 гривні — за зверненнями фізичних і юридичних осіб.\n\nЗа словами заступника Міністра юстиції України Андрія Гайченка, науково-дослідні установи судових експертиз Мін'юсту мають найбільший в країні досвід у сфері експертного забезпечення розслідування воєнних злочинів: «Наші експертні інститути проводять близько 100 видів різних експертиз. Саме фахівці Мін’юсту спеціалізуються на проведенні унікальних судових експертиз наслідків ракетних та дронових ударів по Україні. І саме вони оцінюють обсяги завданих збитків та вартість майбутньої відбудови. Це дуже важливо в контексті роботи міжнародного компенсаційного механізму для нашої держави».\n\nНагадаємо, науково-дослідні установи судових експертиз Міністерства юстиції України та їхні регіональні відділення проводять широкий спектр судових експертиз: криміналістичні (почеркознавча, балістична), інженерно-технічні (будівельно-технічна, оціночна), економічні та інші. Також вони забезпечують експертну підтримку правосуддя та допомагають у визначенні збитків, завданих збройною агресією рф.\n\nЕкспертні послуги надаються на підставі постанов слідчих, суддів, прокурорів, а також за договорами з юридичними та фізичними особами.\n\nПерелік та контакти науково-дослідних установи судових експертиз, які проводять експертизи щодо визначення розмірів збитків, завданих збройною агресією рф, тут: https://is.gd/7u07ec .\n\nЧитайте також:\n\nВ Інституті судових експертиз Мін’юсту запропонували механізм, що прискорить ідентифікацію тіл загиблих\n\nУ Мін’юсті відбулась VII Міжнародна науково-практична конференція з актуальних питань судової експертології\n\nМін’юст працює над розвитком сучасних судових експертиз, зокрема — для виявлення підроблених документів та фальшивих банкнот\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "13-01-202612:00\nІмена новонароджених в Україні: тенденції ІІ півріччя 2025 року",
+          "url": "https://minjust.gov.ua/news/ministry/imena-novonarodjenih-v-ukraini-tendentsii-ii-pivrichchya-2025-roku",
+          "date": "13-01-2026",
+          "content": "У другому півріччі 2025 року батьки в Україні продовжували поєднувати класичні українські імена з міжнародними та рідковживаними варіантами. Про це свідчать дані, надані відділами державної реєстрації актів цивільного стану Міністерства юстиції України.\n\nНайпоширеніші жіночі імена\n\nУ більшості регіонів серед лідерів залишаються: Софія, Єва, Емілія, Соломія, Марія, Злата, Мілана.\n\nНайпоширеніші чоловічі імена\n\nНайчастіше хлопчиків називали: Артем, Матвій, Максим, Марк, Тимофій, Олександр, Давид.\n\nРегіональні особливості\n\nУ різних частинах країни спостерігаються власні іменні тенденції. Так, у західних областях частіше обирають імена Соломія, Юстина, Уляна, Софія, а серед чоловічих — Марко, Дем’ян, Матвій.\n\nУ центральних та південних регіонах популярними залишаються Мілана, Єва, Софія, Марія, Злата, серед хлопчиків — Артем, Владислав, Богдан, Дмитро.\n\nУ східних областях батьки частіше надають перевагу іменам Софія, Поліна, Єва, Злата, а також Артем, Марк, Матвій, Тимофій, що свідчить про збереження загальнонаціональних іменних трендів.\n\nУ великих містах дедалі частіше обирають короткі та міжнародні імена — Мія, Емма, Лія, Ніколь, Тео, Леон, Лукас, Марк, які легко вимовляються різними мовами.\n\nРідковживані імена\n\nПоряд із популярними іменами батьки дедалі частіше надають дітям унікальні імена. Серед рідковживаних у ІІ півріччі 2025 року зафіксовано, зокрема:\n\nжіночі: Авіелла, Теона, Сапфіра, Ренесмі, Ноема, Ясміна, Кіара;\nчоловічі: Еней, Тео, Одін, Рагнар, Авенір, Силас, Златан. Такі імена траплялися поодиноко, однак саме вони формують яскраву картину сучасних іменних уподобань в Україні.\n\nІнформацію підготовлено на основі даних, наданих відділами державної реєстрації актів цивільного стану Міністерства юстиції України.\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "12-01-202617:08\nРезультати засідання дисциплінарної палати ЦЕКК при Міністерстві юстиції України",
+          "url": "https://minjust.gov.ua/news/ministry/rezultati-zasidannya-distsiplinarnoi-palati-tsekk-pri-ministerstvi-yustitsii-ukraini-35241",
+          "date": "12-01-2026",
+          "content": "Засідання дисциплінарної палати Центральної експертно-кваліфікаційної комісії при Міністерстві юстиції України відбулося 08.01.2026. За результатами розгляду питань щодо дисциплінарної відповідальності:\n\nпритягнуто до дисциплінарної відповідальності 1 судового експерта, до якого застосовано дисциплінарне стягнення у виді попередження;\n\nвирішено відкрити дисциплінарне провадження щодо 1 судового експерта;\n\nвирішено не відкривати дисциплінарне провадження щодо 4 судових експертів."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "12-01-202616:45\nНові судово-експертні послуги та технології: плани ННЦ ІСЕ на 2026 рік",
+          "url": "https://minjust.gov.ua/news/ministry/novi-sudovo-ekspertni-poslugi-ta-tehnologii-plani-nnts-ise-na-2026-rik",
+          "date": "12-01-2026",
+          "content": "У 2026 році Національний науковий центр Інститут судових експертиз ім. Засл. проф. М. С. Бокаріуса» планує розширити перелік судово-експертних послуг і впровадити сучасні технологічні рішення у проведенні експертиз.\n\nПро це повідомила директорка ННЦ ІСЕ Анастасія Купріянова під час зустрічі з представниками органів виконавчої влади та правоохоронних органів Харківської області.\n\nЗа її словами, у 2026 році Центр запропонує правоохоронним органам, органам державної влади та місцевого самоврядування, а також фізичним особам — нові, більш технологічні можливості у сфері судової експертизи.\n\nОдним із ключових напрямів стане розвиток експертиз відео- та звукозаписів. У співпраці зі Службою безпеки України ННЦ ІСЕ підготував фахівців для роботи з програмним продуктом SIVE BASE, який забезпечує високоточну ідентифікацію диктора за голосом і мовленням.\n\nСеред нових послуг, які заклад надаватиме у 2026 році, — технічний нагляд за відновленням і будівництвом об’єктів цивільної інфраструктури, автомобільних доріг, мостів, шляхопроводів та інших інженерних споруд. Для цього ННЦ ІСЕ придбав мобільну дорожньо-технічну лабораторію та сучасне інженерно-технічне обладнання.\n\nВодночас у 2025 році Центр, завдяки оновленню управлінських підходів, суттєво наростив показники своєї діяльності. Зокрема, наповнення спеціального фонду Державного бюджету за чотири місяці 2025 року майже на 30 % перевищило показники аналогічного періоду минулого року.\n\nНаціональний науковий центр «Інститут судових експертиз ім. Засл. проф. М. С. Бокаріуса» продовжує розширювати експертні можливості та посилювати роль установи як ключового партнера у сфері судово-експертного забезпечення.\n\nРаніше повідомлялось про те, що у 2025 році працівники науково-дослідних установ судових експертиз Міністерства юстиції України провели 3689 експертиз, пов’язаних зі збройною агресією російської федерації проти України. Загальна сума збитків, встановлених за результатами цих експертиз, — понад 73,6 млрд гривень.\n\nЧитайте також:\n\nВ Інституті судових експертиз Мін’юсту запропонували механізм, що прискорить ідентифікацію тіл загиблих\n\nУ Мін’юсті відбулась VII Міжнародна науково-практична конференція з актуальних питань судової експертології\n\nМін’юст працює над розвитком сучасних судових експертиз, зокрема — для виявлення підроблених документів та фальшивих банкнот\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "12-01-202614:00\nЯк діяти у разі травмування через сніг та ожеледицю і хто відповідає за неприбрані вулиці",
+          "url": "https://minjust.gov.ua/news/ministry/yak-diyati-u-razi-travmuvannya-cherez-snig-ta-ojeleditsyu-i-hto-vidpovidae-za-nepribrani-vulitsi",
+          "date": "12-01-2026",
+          "content": "Зимовий період традиційно пов’язаний із підвищеним ризиком травмування пішоходів. Ожеледиця, сніг на тротуарах і неналежне утримання прибудинкових територій можуть призвести до серйозних ушкоджень. У таких ситуаціях важливо знати алгоритм дій і розуміти, хто несе відповідальність. Міністерство юстиції разом з Координаційним центром з надання безоплатної правничої допомоги надає роз’яснення щодо цього.\n\nПерші дії у разі травмування\n\nПередусім необхідно викликати екстрену медичну допомогу. Це дозволить не лише отримати допомогу, а й офіційно зафіксувати факт травми. Слід звернути увагу, щоб у медичних документах були зазначені обставини її отримання.\n\nТакож слід зберігати усі довідки, висновки лікарів та платіжні документи, пов’язані з лікуванням, адже вони можуть знадобитися для відшкодування шкоди.\n\nФіксація обставин події\n\nДля підтвердження неналежного утримання території важливо зібрати докази, зокрема:\n\n- зібрати контакти свідків;\n\n- зробити фото місця падіння з орієнтирами (вивіски, назви установ, адресні таблички);\n\n- зафіксувати на фото чи відео стан території — лід, сніг, відсутність протиожеледних засобів, необгороджені небезпечні ділянки, бурульки на карнизах тощо;\n\n- з’ясувати наявність камер відеоспостереження поблизу та за можливості отримати записи.\n\nХто відповідає за утримання територій\n\nОбов’язок з прибирання снігу та льоду покладається на власника або балансоутримувача:\n\n- дороги й тротуари — на шляхово-експлуатаційні служби;\n\n- прибудинкові території — на керуючі компанії або ОСББ;\n\n- приватні ділянки та будівлі — на їхніх власників.\n\nЗа порушення правил утримання територій передбачена адміністративна відповідальність:\n\n- для громадян — штраф від 340 до 1360 грн;\n\n- для посадових осіб та підприємців — від 850 до 1700 грн.\n\nПодальші дії\n\nПісля збору доказів постраждала особа має право звернутися до власника або балансоутримувача з вимогою про відшкодування матеріальної та/або моральної шкоди. У разі відмови спір може бути вирішений у судовому порядку.\n\nЯк встановити власника території\n\nЩоб визначити, хто саме відповідає за утримання конкретної ділянки, можна подати інформаційний запит до органів місцевого самоврядування.\n\nБільш докладну консультацію можна отримати у фахівців системи безоплатної правничої допомоги: телефонуйте за єдиним безкоштовним номером 0 800 213 103 (пн-пт, 8:00-18:00), пишіть у месенджери (Telegram, Viber, Facebook), звертайтеся онлайн через форму на сайті legalaid.gov.ua/kliyentam/yak-otrymaty-bpd/ чи особисто до найближчого бюро правничої допомоги.\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "12-01-202610:00\nМін’юст затвердив новий порядок проставлення апостиля на документах, призначених для використання за кордоном",
+          "url": "https://minjust.gov.ua/news/ministry/minyust-zatverdiv-noviy-poryadok-prostavlennya-apostilya-na-dokumentah-priznachenih-dlya-vikoristannya-za-kordonom",
+          "date": "12-01-2026",
+          "content": "Міністерство юстиції України затвердило новий порядок проставлення апостиля на офіційних документах, призначених для використання на території інших держав. Відповідний наказ Мін’юсту від 20 листопада 2025 року № 3177/5 набере чинності з 1 лютого 2026 року, але не раніше, ніж він буде офіційно опублікований.\n\nЗ дня набрання чинності новим порядком втрачає чинність Порядок проставлення Міністерством юстиції України апостиля на офіційних документах, призначених для використання на території інших держав, затверджений наказом Мін’юсту від 11 листопада 2015 року № 2268/5, а також наказ Міністерства юстиції України від 30 листопада 2015 року № 2452/5 «Про затвердження Порядку та форм подання відомостей про зразки підписів, відбитків печаток та/або штампів».\n\nНовий порядок визначає, що проставлення апостиля здійснюється з використанням програмних засобів Електронного реєстру апостилів. Крім того, він регламентує наповнення Електронного реєстру апостилів зразками підписів посадових осіб, відбитків печаток та/або штампів, а також відомостями про сертифікати відкритих ключів.\n\nВнесення таких відомостей до реєстру здійснюється:\n- Міністерством юстиції України — щодо посадових осіб Мін’юсту;\n- територіальними органами Мін’юсту — щодо посадових осіб відділів державної реєстрації актів цивільного стану, державних реєстраторів юридичних осіб, фізичних осіб — підприємців та громадських формувань, а також нотаріусів;\n- Державною архівною службою України — щодо посадових осіб архівних установ і Державної архівної служби України;\n- судами — щодо суддів.\n\nВстановлено, що проставлення апостиля або відмова в його проставленні здійснюються у строк до трьох робочих днів, перебіг якого починається з наступного дня після реєстрації заяви в Електронному реєстрі апостилів.\n\nНовим порядком також врегульовані процедури:\n- прийняття документів для проставлення апостиля;\n- розгляду документів;\n- видачі результатів розгляду;\n- отримання відомостей з Електронного реєстру апостилів про проставлений апостиль.\n\nПлата за надання послуг з проставлення апостиля справляється у відповідному розмірі від прожиткового мінімуму для працездатних осіб, установленого законом на 1 січня календарного року, в якому подаються відповідні документи для проставлення апостиля, та округлюється до найближчих 10 гривень. Оскільки Законом України «Про Державний бюджет України на 2026 рік» встановлено прожитковий мінімум для працездатних осіб у розмірі 3328 грн, з 1 січня 2026 року плата за проставлення апостиля становить:\n- для фізичних осіб (0,2 прожиткового мінімуму) — 670 грн;\n- для юридичних осіб (0,35 прожиткового мінімуму) — 1160 грн.\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "11-01-202614:00\nГоловні новини тижня 5 - 11 січня 2026 року",
+          "url": "https://minjust.gov.ua/news/ministry/golovni-novini-tijnya-5-11-sichnya-2026-roku",
+          "date": "11-01-2026",
+          "content": "Під час зустрічі Людмили Сугак із помічником державного секретаря США з питань демократії, прав людини і праці Райлі Барнсом ключовою темою обговорення стало повернення депортованих дітей. Докладніше: https://is.gd/tYo9Lo\n\nВерховний суд Швеції підтвердив остаточну перемогу України у справі «Укрнафти», акціонери якої вимагали $6 млрд компенсації. Докладніше: https://is.gd/H1CFQX\n\nЗ нового року запрацювали Одеське та Харківське МРУ: Мін’юст завершив реформу територіальної структури, спрямовану на покращення доступу громадян до правничих послуг. Докладніше: https://is.gd/ItAqZS\n\nМін’юст у взаємодії із Міноборони забезпечив у Швейцарському арбітражі стягнення $18 млн з компанії, яка порушила контракт на поставку боєприпасів. Докладніше: https://is.gd/fGubGZ\n\nЗахист держреєстрів, розвиток електронних сервісів і цифрова інтеграція з ЄС: результати цифровізації сфери юстиції за 2025 рік. Докладніше: https://is.gd/nR0Fut\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "09-01-202614:30\nЗустріч по функціональному аудиту аналізу ефективності РП та КДКП",
+          "url": "https://minjust.gov.ua/news/ministry/zustrich-po-funktsionalnomu-auditu-analizu-efektivnosti-rp-ta-kdkp",
+          "date": "09-01-2026",
+          "content": "08.01.2025 року в Міністерстві юстиції України відбулася зустріч з представниками проєкту ЄС «Підтримка реформ у сфері юстиції в Україні (ПРАВО-JUSTICE III)» та проєкту Ради Європи «Зміцнення прав людини в системі кримінальної юстиції України – Фаза II», а також залученими експертами аудиторської групи з функціонального аудиту Ради прокурорів України та Кваліфікаційно-дисциплінарної комісії прокурорів.\n\nЗустріч з представниками Міністерства юстиції України була однією із зустрічей та інтерв’ю, які здійснюються в рамках підготовки до функціонального аудиту Ради прокурорів України та Кваліфікаційно-дисциплінарної комісії прокурорів. Проведення цього аудиту передбачено Дорожньою картою з питань верховенства права та спрямовано на зміцнення інституційної спроможності й ефективності органів прокурорського самоврядування як ключових механізмів захисту незалежності прокурорів і прокуратури в цілому.\n\nНа зустрічі обговорювалися такі питання як роль Міністерства юстиції України у виконанні Дорожньої карти з питань верховенства права, а також взаємодія Міністерства юстиції України з Офісом Генерального прокурора, Радою прокурорів України та Кваліфікаційно-дисциплінарною комісією прокурорів при її виконанні.\n\nОкрему увагу учасники зустрічі приділили стану розробки законопроєкту про внесення змін до Закону України «Про прокуратуру» (щодо виконання рекомендацій Групи держав проти корупції та вимог Антикорупційної стратегії на 2021–2025 роки в частині удосконалення дисциплінарної процедури стосовно прокурорів).\n\nНаприкінці генеральний директор Директорату стратегічного планування та європейської інтеграції подякувала представникам проєкту ЄС «Підтримка реформ у сфері юстиції в Україні (ПРАВО-JUSTICE III)» та проєкту Ради Європи «Зміцнення прав людини в системі кримінальної юстиції України – Фаза II» за постійну підтримку Міністерства юстиції України у проведенні євроінтеграційних реформ та висловила впевненість у продовженні плідної співпраці щодо виконання заходів Дорожньої карти з питань верховенства права.\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Message a model1": [
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0995e540515b55ca006968d2a128e88193a2f90b86ae611b92",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Wir digitalisieren die Berechnung der Verwaltungsgebühr — Regierung hat die Entwicklung einer neuen Methodik genehmigt",
+                    "title_uk": "Цифровізуємо розрахунок адмінзбору — Уряд схвалив розробку нової методики",
+                    "title_en": "Digitizing the calculation of administrative fees — Government approved development of a new methodology",
+                    "summary_en": "The government approved a pilot project to digitize the calculation of administrative fees and create a unified costing system for public services, covering 18 common paid services such as marriage registration, passports, driving licences, and residence registration. Collected data will be analysed and a report prepared for the government to propose legislative changes establishing a single fee-calculation methodology based on real data.",
+                    "summary_de": "Die Regierung genehmigte ein Pilotprojekt zur Digitalisierung der Berechnung von Verwaltungsgebühren und zur Schaffung eines einheitlichen Kostenberechnungssystems für öffentliche Dienstleistungen; es umfasst 18 häufig nachgefragte kostenpflichtige Leistungen wie Heiratsregistrierung, Reisepässe, Führerscheine und Wohnsitzregistrierung. Die gesammelten Daten werden analysiert und in einem Bericht für die Regierung aufbereitet, um gesetzliche Änderungen zur Festlegung einer einheitlichen Berechnungsmethodik auf Basis realer Daten vorzuschlagen.",
+                    "source_url": "https://thedigital.gov.ua/news/postanovy-uriadu/tsyfrovizuyemo-rozrakhunok-adminzboru-uriad-skhvalyv-rozrobku-novoyi-metodyky",
+                    "published_date": "2026-01-15T09:30:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_00baef43ae251848006968d2c3623881938ffcf491e31d9441",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "24/7-Kontrolle des Glücksspielmarktes — die Regierung hat den letzten Schritt zur Einführung des staatlichen Online-Überwachungssystems für Glücksspiele unternommen",
+                    "title_uk": "Контроль грального ринку 24/7 — уряд зробив останній крок до запуску Державної системи онлайн-моніторингу азартних ігор",
+                    "title_en": "24/7 control of the gambling market — the government has taken the final step toward launching the State Online Monitoring System for gambling",
+                    "summary_en": "The Cabinet approved a resolution to launch the State Online Monitoring System (DSOM) for gambling, enabling real-time tracking of licensed operators' bets, payouts, refunds and balance top-ups to improve tax oversight and market transparency. The system will be rolled out in phases, with licensed organizers given six months to connect and a full tool expected by summer 2026 while a second phase will add gameplay tracking, machine control and responsible gaming features.",
+                    "summary_de": "Das Kabinett verabschiedete eine Verordnung zur Einführung des Staatlichen Online-Monitoring-Systems (DSOM) für Glücksspiele, das in Echtzeit Einsicht in Wetten, Auszahlungen, Rückerstattungen und Aufladungen erlauben soll, um Steueraufsicht und Markttransparenz zu verbessern. Die Einführung erfolgt schrittweise: Lizenzierte Anbieter haben sechs Monate zur Anbindung, bis Sommer 2026 soll ein vollständiges Instrument verfügbar sein, und eine zweite Phase erweitert Funktionen wie Spielergebnis-Erfassung, Automatenkontrolle und Maßnahmen für verantwortungsvolles Spielen.",
+                    "source_url": "https://thedigital.gov.ua/news/technologies/kontrol-hralnoho-rynku-247-uriad-zrobyv-ostanniy-krok-do-zapusku-derzavnoyi-systemy-onlayn-monitorynhu-azartnykh-ihor",
+                    "published_date": "2026-01-14T14:30:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 1
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0d17395be948180a006968d2e1f5e48197a03943b5ec9be073",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Vom Start-up zum IT-Unternehmen: wie MinCifra den benutzerfreundlichsten digitalen Staat aufgebaut hat",
+                    "title_uk": "Від стартапу до IT-компанії: як Мінцифра побудувала найзручнішу цифрову державу",
+                    "title_en": "From a startup to an IT company: how MinCifra built the most user-friendly digital state",
+                    "summary_en": "Over six years Ukraine's Ministry of Digital Transformation (MinCifra) led a large-scale digitalisation that delivered services such as the Diia app with digital passports, online business registration, and 5,326 service centres, while achieving major user uptake and economic benefits. The article also highlights the resilience of digital infrastructure during the full-scale invasion and ongoing reforms across public sectors to increase transparency and efficiency.",
+                    "summary_de": "Innerhalb von sechs Jahren führte das Ministerium für digitale Transformation (MinCifra) eine umfassende Digitalisierung durch, darunter die Diia-App mit digitalen Pässen, schnelle Geschäftsregistrierung und 5.326 Servicestellen, mit hoher Nutzerakzeptanz und wirtschaftlichem Nutzen. Der Artikel betont zudem die Widerstandsfähigkeit der digitalen Infrastruktur während der Invasion und fortlaufende Reformen zur Steigerung von Transparenz und Effizienz.",
+                    "source_url": "https://thedigital.gov.ua/news/progress/vid-startapu-do-it-kompaniyi-iak-mintsyfra-buduvala-nayzruchnishu-tsyfrovu-derzavu",
+                    "published_date": "2026-01-13T15:00:28+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure",
+                      "Disaster Risk Management"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 2
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_00238eeb95c9a421006968d2f6be5c819380b90861bc6f5c07",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Wie das Praktikum im Ministerium für digitale Transformation verläuft — Erfahrungsberichte von Absolventinnen und Studentinnen",
+                    "title_uk": "Як проходить стажування в Мінцифрі — відгуки випускниць та студенток",
+                    "title_en": "How the internship at the Ministry of Digital Transformation runs — feedback from female graduates and students",
+                    "summary_en": "Fifteen female students and graduates have spent over two months working alongside teams at the Ministry of Digital Transformation, Diia and the Development Fund, contributing to real digital-service projects and receiving weekly webinars from senior specialists. The internship pairs practical public-service reengineering experience with intensive intercultural communication training and forms part of a UNDP-implemented capacity-development project funded by Sweden.",
+                    "summary_de": "Fünfzehn Absolventinnen und Studentinnen arbeiten seit über zwei Monaten Seite an Seite mit den Teams des Ministeriums für digitale Transformation, Diia und dem Entwicklungsfonds an realen Digitalprojekten und erhalten wöchentliche Webinare von Fachleuten. Das Praktikum verbindet praktische Erfahrungen in der Reorganisation öffentlicher Dienste mit intensivem Training zur interkulturellen Kommunikation und ist Teil eines von UNDP umgesetzten Kapazitätsaufbauprojekts mit Unterstützung durch Schweden.",
+                    "source_url": "https://thedigital.gov.ua/news/progress/iak-prokhodyt-stazuvannia-v-mintsyfri-vidhuky-vypusknyts-ta-studentok",
+                    "published_date": "2026-01-12T19:00:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 3
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_08cdaa6e9dba803e006968d30989608197bc3a537dd43a80a9",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Fast 60.000 gesperrte Nummern: Wie der Schutz vor Spam-Anrufen funktioniert",
+                    "title_uk": "Майже 60 000 заблокованих номерів: як працює захист від спам-дзвінків",
+                    "title_en": "Almost 60,000 blocked numbers: how protection against spam calls works",
+                    "summary_en": "Since October 2 mobile operators can block spam numbers and in three months have blocked 59,071 numbers; users are advised to report spam via their operator, the government hotline 1545, or the regulator's online form, and operators will block numbers that meet at least two criteria under the new rules.",
+                    "summary_de": "Seit dem 2. Oktober können Mobilfunkanbieter Spam‑Nummern sperren; in drei Monaten wurden 59.071 Nummern blockiert. Nutzer können Spam an ihren Betreiber, die Regierungs‑Hotline 1545 oder über ein Formular der Regulierungsbehörde melden, und Anbieter sperren Nummern, die mindestens zwei Kriterien erfüllen.",
+                    "source_url": "https://thedigital.gov.ua/news/how-tos/mayze-60-000-zablokovanykh-nomeriv-iak-pratsiuye-zakhyst-vid-spam-dzvinkiv",
+                    "published_date": "2026-01-12T15:15:15+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 4
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0999ad81d5a90877006968d3283e448195a27a5df91a1fc00e",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "5G ist bereits in der Ukraine — alles zur Geschwindigkeit, zu Tarifen und zur Funktionsfähigkeit bei Stromausfall",
+                    "title_uk": "5G вже в Україні — все про швидкість, тарифи та роботу без світла",
+                    "title_en": "5G is already in Ukraine — everything about speed, tariffs and operation without power",
+                    "summary_en": "A pilot 5G project launched in Lviv with Kyivstar, Vodafone and lifecell testing speeds, tariffs, investments and the technology's energy independence. Operators report peak test speeds (Kyivstar >2.4 Gbit/s), stress the need for backup power at base stations, and note frequency constraints and parallel operation with 4G.",
+                    "summary_de": "In Lwiw wurde ein Pilotprojekt für 5G gestartet, bei dem Kyivstar, Vodafone und lifecell Geschwindigkeit, Tarife, Investitionen und die Energieunabhängigkeit der Technologie testen. Die Betreiber nennen Testergebnisse (Kyivstar >2,4 Gbit/s), betonen die Notwendigkeit von Notstrom/Reserveenergie für Basisstationen sowie Frequenzbeschränkungen und die parallele Nutzung von 4G.",
+                    "source_url": "https://thedigital.gov.ua/news/technologies/5g-vze-v-ukrayini-vse-pro-shvydkist-taryfy-ta-robotu-bez-svitla",
+                    "published_date": "2026-01-12T12:06:07+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure",
+                      "Disaster Risk Management",
+                      "Urban Resilience"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 5
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0b635b69dea05313006968d33f72488197a119d3f70683d898",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Wir starten die 5G‑Technologie in Lwiw",
+                    "title_uk": "Запускаємо технологію 5G у Львові",
+                    "title_en": "Launching 5G technology in Lviv",
+                    "summary_en": "A pilot 5G rollout has been launched in Lviv after work on the technology since 2019 and delays caused by the full-scale war; the pilot will be expanded to Borodianka, Kharkiv and other cities and already includes over 30 base stations nationwide. The deployment was enabled by coordination between the state, mobile operators and the Armed Forces, will run through the end of 2026, and aims to test 5G equipment compatibility with military systems while avoiding interference during martial law.",
+                    "summary_de": "In Lwiw wurde ein 5G‑Pilotprojekt gestartet, nachdem seit 2019 an der Technologie gearbeitet wurde und der vollständige Start durch den Krieg verschoben werden musste; der Pilot soll auf Borodjanka, Charkiw und weitere Städte ausgeweitet werden und umfasst bereits über 30 Basisstationen landesweit. Der Start erfolgte in Abstimmung mit Staat, Mobilfunkanbietern und den Streitkräften, läuft bis Ende 2026 und dient dazu, die Kompatibilität der 5G‑Ausrüstung mit militärischer Technik zu prüfen und während des Kriegsrechts Störungen zu vermeiden.",
+                    "source_url": "https://thedigital.gov.ua/news/technologies/zapuskayemo-tekhnolohiiu-5g-u-lvovi",
+                    "published_date": "2026-01-12T12:04:49+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 6
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_07f6e5fc8894eb93006968d3525ab08197bed9054a0e6b59d2",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "₴34,6 Mrd. Steuern zahlten Diia.City-Residenten für 2025. Wer am meisten?",
+                    "title_uk": "₴34,6 млрд податків сплатили резиденти Дія.City за 2025 рік. Хто найбільше?",
+                    "title_en": "₴34.6 billion in taxes paid by Diia.City residents for 2025. Who paid the most?",
+                    "summary_en": "Residents of Diia.City paid ₴34.6 billion in taxes in 2025, nearly double the ₴18+ billion paid in 2024; the article lists the top taxpayers. Over 3,400 companies have joined Diia.City and operate under a balanced tax model offering a choice between a 9% tax on withdrawn capital or the 18% profit tax, with preferential taxation for employees and gig contractors.",
+                    "summary_de": "Diia.City-Residenten zahlten 2025 ₴34,6 Mrd. an Steuern, fast doppelt so viel wie die ₴18+ Mrd. im Jahr 2024; der Artikel nennt die größten Zahler. Mehr als 3.400 Unternehmen sind in Diia.City und können zwischen einer 9%-Besteuerung des entnommenen Kapitals oder der 18%-Gewinnsteuer wählen; für Beschäftigte und GIG‑Vertragspartner gilt eine Vergünstigung bei der Besteuerung.",
+                    "source_url": "https://thedigital.gov.ua/news/business/uah346-miliarda-podatkiv-splatyly-rezydenty-diiacity-za-2025-rik-khto-naybilshe",
+                    "published_date": "2026-01-10T11:00:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 7
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0841c9a9aa471a19006968d36d593481958049302ca23019d6",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Ohne Gericht geht es nicht: Sehen Sie die neue Folge des Podcasts 'Chroniken offener Daten'",
+                    "title_uk": "Коли без суду — ніяк: дивіться новий епізод подкасту «Хроніки відкритих даних»",
+                    "title_en": "No Way Without a Court: Watch the New Episode of the 'Chronicles of Open Data' Podcast",
+                    "summary_en": "The article announces a new episode of the podcast 'Chronicles of Open Data' discussing how court action has become a key tool to protect the right to access open data and how the war changed the balance between openness and security. Experts from DEJURE, Texty.org.ua and the Ministry of Digital Transformation discuss regulatory decisions that may threaten open data access.",
+                    "summary_de": "Der Artikel kündigt eine neue Folge des Podcasts 'Chroniken offener Daten' an, in der erörtert wird, wie gerichtliche Klagen zum zentralen Mittel zum Schutz des Rechts auf Zugang zu offenen Daten wurden und wie der Krieg das Verhältnis von Offenheit und Sicherheit verändert hat. Expertinnen und Experten diskutieren zudem, welche regulatorischen Entscheidungen den Zugang zu offenen Daten gefährden können.",
+                    "source_url": "https://thedigital.gov.ua/news/technologies/koly-bez-sudu-niiak-dyvitsia-novyy-epizod-podkastu-khroniky-vidkrytykh-danykh",
+                    "published_date": "2026-01-08T18:01:21+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 8
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_08d905b03e15a783006968d3906974819095464d2dc21c030f",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Geschäftstrends 2026 — digitale Daten statt Intuition und systematisches Wachstum",
+                    "title_uk": "Тренди в бізнесі 2026 — цифрові дані замість інтуїції та системний ріст",
+                    "title_en": "Business Trends 2026 — Digital Data Instead of Intuition and Systematic Growth",
+                    "summary_en": "After years of turbulence and war, businesses are shifting from survival to systematic, data-driven management; Diia.Business finds the average digital maturity of Ukrainian SMEs is 2.49/5 and shows that firms using CRM, cloud services and automation are more resilient. Diia.Business has launched a digital maturity framework and recommends diagnostics and practical implementation to move from intuition to system-level management.",
+                    "summary_de": "Nach Jahren der Turbulenzen und des Krieges wechseln Unternehmen vom Überlebenskampf zu systematischem, datenbasiertem Management; Diia.Business stellt fest, dass die durchschnittliche digitale Reife ukrainischer KMU bei 2,49 von 5 liegt und Unternehmen mit CRM, Cloud-Services und Automatisierung widerstandsfähiger sind. Diia.Business hat einen Rahmen zur digitalen Reife gestartet und empfiehlt Diagnosen sowie praktische Umsetzung, um von Intuition zu systematischem Management zu gelangen.",
+                    "source_url": "https://thedigital.gov.ua/news/business/trendy-v-biznesi-2026-tsyfrovi-dani-zamist-intuyitsiyi-ta-systemnyy-rist",
+                    "published_date": "2026-01-08T17:00:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 9
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_00d1fcdc77ccdbd5006968d3aa9fa081949cae1980dc6ebd29",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Meldet euch zum Techathon Teens in AI 2026 an — entwickelt KI‑Lösungen, die die Welt verändern",
+                    "title_uk": "Реєструйтесь на техатон Teens in AI 2026 — створюйте AI-рішення, які змінять світ",
+                    "title_en": "Register for the Teens in AI 2026 techathon — create AI solutions that will change the world",
+                    "summary_en": "Ukraine is joining the global Teens in AI movement for the third time, inviting students aged 12–18 to register for the Teens in AI 2026 techathon to develop AI projects, compete with participants from 101 countries, and potentially advance to a Global Demo Day. Selection is based on motivation, knowledge and language skills, with the top ten Ukrainian teams entering a national techathon.",
+                    "summary_de": "Die Ukraine nimmt zum dritten Mal an der globalen Bewegung Teens in AI teil und lädt Schüler und Studierende im Alter von 12–18 Jahren ein, sich für den Techathon Teens in AI 2026 anzumelden, um KI‑Projekte zu entwickeln und sich mit Teilnehmenden aus 101 Ländern zu messen. Die Auswahl erfolgt nach Motivation, Kenntnissen und Sprachbeherrschung; die zehn besten ukrainischen Teams treten beim nationalen Techathon an und können sich für das Global Demo Day qualifizieren.",
+                    "source_url": "https://thedigital.gov.ua/news/technologies/reyestruytes-na-tekhaton-teens-in-ai-2026-stvoriuyte-ai-rishennia-iaki-zminiat-svit",
+                    "published_date": "2026-01-08T14:02:46+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 10
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_01434ce843f17f0e006968d3be97108197acce018fdb6473cc",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Wie KI die Arbeit ukrainischer Unternehmen verändert: Ergebnisse einer Umfrage",
+                    "title_uk": "Як ШІ змінює роботу українського бізнесу: результати опитування",
+                    "title_en": "How AI is changing the work of Ukrainian businesses: survey results",
+                    "summary_en": "A Top Lead survey of over 200 Ukrainian companies found that 93% already use AI—mostly for data and market analysis, forecasting, marketing and sales—with 62% reporting positive impacts on productivity and financial performance, while security and cyberdefense remain low priorities.",
+                    "summary_de": "Eine Umfrage von Top Lead unter mehr als 200 ukrainischen Unternehmen zeigt, dass 93 % bereits KI einsetzen—vor allem für Daten- und Marktanalyse, Prognosen sowie Marketing und Vertrieb; 62 % berichten von positiven Auswirkungen auf Produktivität und wirtschaftliche Kennzahlen, während Sicherheits- und Cyberschutzmaßnahmen wenig genutzt werden.",
+                    "source_url": "https://thedigital.gov.ua/news/business/iak-shi-zminiuye-ukrayinskyy-biznes-rezultaty-opytuvannia",
+                    "published_date": "2026-01-08T12:00:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 11
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-15T18:57:47.018Z",
+      "createdAt": "2026-01-15T18:57:47.018Z",
+      "role": "workflow:owner",
+      "workflowId": "FoOa11A6mo4N1Uke",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        12
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-09T12:11:09.000Z",
+  "versionId": "6813d4c8-db26-41c4-ba0c-a18397062de0"
+}
