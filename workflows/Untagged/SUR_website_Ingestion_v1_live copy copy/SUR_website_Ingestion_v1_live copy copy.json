@@ -1,0 +1,1334 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "MoDtr",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MoE",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MoF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MoJ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoDtr": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoE": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoF": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoJ": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Create a row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-14T18:00:12.486Z",
+  "id": "ZmX4r6sdkrVow1aI",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_website_Ingestion_v1_live copy copy",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        880
+      ],
+      "id": "eb876a7a-da47-4a6b-9a4c-77437538d45e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HC1YbOY5bjxXWH2K",
+          "mode": "list",
+          "cachedResultName": "Ministry Websites",
+          "cachedResultUrl": "/projects/cFPhnNmamSW061Vq/datatables/HC1YbOY5bjxXWH2K"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Digital Transformation"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Economy"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Finance"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Energy"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Justice"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        32,
+        880
+      ],
+      "id": "7c672cb5-a9ca-470a-aea0-ae96838ff6e2",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Digital Transformation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c576bfb2-d416-4180-875f-a5128ccf767e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Digital Transformation"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "15a2c1c2-11a0-4045-ac41-d8c770783837",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Economy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Economy"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4344ca4c-deab-4a2a-8c31-9570d3256971",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Finance",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Finance"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6eed03eb-6bfd-4e38-928c-6f9bd73e5856",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Energy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Energy"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c9040c6d-bee5-4f2f-b4e1-c5847cfb8aff",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Justice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Justice"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        832
+      ],
+      "id": "2f93e2cc-06eb-4966-ba27-949b7c41a717",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -192,
+        48
+      ],
+      "id": "5ef74f44-2512-4fd4-bf05-d79fee72b7b1",
+      "name": "HTTP Request2",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        480,
+        1072
+      ],
+      "id": "eeb35002-7e4e-4b5c-a4df-6a29b325de53",
+      "name": "HTTP Request6",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"https://mvs.gov.ua/press-center/news\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        96
+      ],
+      "id": "5c600943-d05d-4091-aab0-1a1362c85da6",
+      "name": "HTTP Request7",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        480,
+        880
+      ],
+      "id": "a95c5c08-6c43-4385-b79b-104a7276a238",
+      "name": "MoF",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        480,
+        688
+      ],
+      "id": "241a4e32-3339-42c8-b9d9-caf0834fcd86",
+      "name": "MoE",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        480,
+        496
+      ],
+      "id": "e3596522-5a92-4bb4-83cc-8fcf168332f0",
+      "name": "MoDtr",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        480,
+        1264
+      ],
+      "id": "8f5c1345-f6a8-49e9-8e27-a1576612856b",
+      "name": "MoJ",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=# Role\nYou are a multilingual policy and infrastructure analysis assistant with expertise in public-sector news, disaster risk management, infrastructure, housing, and urban resilience.\n\nYou can read and translate Ukrainian, English, and other European languages accurately.\n\n---\n\n# Task\nGiven a news article **title** and **content**, perform the following tasks using ONLY the provided input text.\n\nIf the title or content is **not in English**, first translate it internally to English before performing summarization and classification.\n\n---\n\n## 1. Title Translation\n- Translate the article title into **German**\n- If the original title is in **Ukrainian or any non-English language**, accurately translate it\n- Preserve original meaning and professional tone\n- Do NOT add interpretation\n\n---\n\n## 2. Context Summarization\nGenerate **two short summaries**, each **1–2 sentences**, capturing the main context of the article:\n- One summary in **English**\n- One summary in **German**\n\nRules:\n- If the source content is Ukrainian or another language, translate it internally before summarizing\n- Summaries must reflect the **true meaning** of the original content\n- Be concise, factual, and neutral\n- Do not speculate or introduce external information\n\n---\n\n## 3. Sector Classification\nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors (STRICT LIST — no other values allowed)\n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- Classification must be based on the **translated meaning**, not surface keywords\n- If unclear or ambiguous, **default to \"Basic Infrastructure\"**\n- Do NOT invent categories or infer beyond the text\n\n---\n\n## Input\n- **Article Title:** {{ $json.title }}\n- **Article Content:**{{ $json.content }}\n\n---\n\n## Output Format (STRICT)\nReturn a JSON object with the following fields\n\n{\n  \"title_de\": \"\",\n  \"title_uk\": \"{{ $json.title }}\",\n  \"title_en\": \"\",\n  \"summary_en\": \"\",\n  \"summary_de\": \"\",\n  \"source_url\": {{ $json.url }},\n   \"published_date\": {{ $json.date }},\n\"n8n_contenthash\": {{ $json.content_hash }},\n  \"sector_classification\": []\n}\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        1504,
+        672
+      ],
+      "id": "0e6fc0bc-40c8-4980-bb05-a0f6d792954d",
+      "name": "Message a model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.output[0].content[0].text.published_date }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_de }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_de }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "news"
+            },
+            {
+              "fieldId": "summary_uk",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_uk }}"
+            },
+            {
+              "fieldId": "n8n_content_hash",
+              "fieldValue": "={{ $('Code in JavaScript5').item.json.n8n_content_hash }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1984,
+        672
+      ],
+      "id": "ceecd9b4-722d-445d-bf1f-ebda5f762ee7",
+      "name": "Create a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "stakeholders",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name_en",
+              "keyValue": "Ministry for Development of Communities and Territories of Ukraine"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        272
+      ],
+      "id": "d0d15a04-2f30-4572-b298-f1837fd2cecf",
+      "name": "Get a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{ $json.title }}",
+        "options": {
+          "scope": "node"
+        }
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        704
+      ],
+      "id": "050bef41-633b-4d59-b31c-4eb715a3aedf",
+      "name": "Remove Duplicates"
+    }
+  ],
+  "pinData": {
+    "Message a model1": [
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0995e540515b55ca006968d2a128e88193a2f90b86ae611b92",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Wir digitalisieren die Berechnung der Verwaltungsgebühr — Regierung hat die Entwicklung einer neuen Methodik genehmigt",
+                    "title_uk": "Цифровізуємо розрахунок адмінзбору — Уряд схвалив розробку нової методики",
+                    "title_en": "Digitizing the calculation of administrative fees — Government approved development of a new methodology",
+                    "summary_en": "The government approved a pilot project to digitize the calculation of administrative fees and create a unified costing system for public services, covering 18 common paid services such as marriage registration, passports, driving licences, and residence registration. Collected data will be analysed and a report prepared for the government to propose legislative changes establishing a single fee-calculation methodology based on real data.",
+                    "summary_de": "Die Regierung genehmigte ein Pilotprojekt zur Digitalisierung der Berechnung von Verwaltungsgebühren und zur Schaffung eines einheitlichen Kostenberechnungssystems für öffentliche Dienstleistungen; es umfasst 18 häufig nachgefragte kostenpflichtige Leistungen wie Heiratsregistrierung, Reisepässe, Führerscheine und Wohnsitzregistrierung. Die gesammelten Daten werden analysiert und in einem Bericht für die Regierung aufbereitet, um gesetzliche Änderungen zur Festlegung einer einheitlichen Berechnungsmethodik auf Basis realer Daten vorzuschlagen.",
+                    "source_url": "https://thedigital.gov.ua/news/postanovy-uriadu/tsyfrovizuyemo-rozrakhunok-adminzboru-uriad-skhvalyv-rozrobku-novoyi-metodyky",
+                    "published_date": "2026-01-15T09:30:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_00baef43ae251848006968d2c3623881938ffcf491e31d9441",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "24/7-Kontrolle des Glücksspielmarktes — die Regierung hat den letzten Schritt zur Einführung des staatlichen Online-Überwachungssystems für Glücksspiele unternommen",
+                    "title_uk": "Контроль грального ринку 24/7 — уряд зробив останній крок до запуску Державної системи онлайн-моніторингу азартних ігор",
+                    "title_en": "24/7 control of the gambling market — the government has taken the final step toward launching the State Online Monitoring System for gambling",
+                    "summary_en": "The Cabinet approved a resolution to launch the State Online Monitoring System (DSOM) for gambling, enabling real-time tracking of licensed operators' bets, payouts, refunds and balance top-ups to improve tax oversight and market transparency. The system will be rolled out in phases, with licensed organizers given six months to connect and a full tool expected by summer 2026 while a second phase will add gameplay tracking, machine control and responsible gaming features.",
+                    "summary_de": "Das Kabinett verabschiedete eine Verordnung zur Einführung des Staatlichen Online-Monitoring-Systems (DSOM) für Glücksspiele, das in Echtzeit Einsicht in Wetten, Auszahlungen, Rückerstattungen und Aufladungen erlauben soll, um Steueraufsicht und Markttransparenz zu verbessern. Die Einführung erfolgt schrittweise: Lizenzierte Anbieter haben sechs Monate zur Anbindung, bis Sommer 2026 soll ein vollständiges Instrument verfügbar sein, und eine zweite Phase erweitert Funktionen wie Spielergebnis-Erfassung, Automatenkontrolle und Maßnahmen für verantwortungsvolles Spielen.",
+                    "source_url": "https://thedigital.gov.ua/news/technologies/kontrol-hralnoho-rynku-247-uriad-zrobyv-ostanniy-krok-do-zapusku-derzavnoyi-systemy-onlayn-monitorynhu-azartnykh-ihor",
+                    "published_date": "2026-01-14T14:30:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 1
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0d17395be948180a006968d2e1f5e48197a03943b5ec9be073",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Vom Start-up zum IT-Unternehmen: wie MinCifra den benutzerfreundlichsten digitalen Staat aufgebaut hat",
+                    "title_uk": "Від стартапу до IT-компанії: як Мінцифра побудувала найзручнішу цифрову державу",
+                    "title_en": "From a startup to an IT company: how MinCifra built the most user-friendly digital state",
+                    "summary_en": "Over six years Ukraine's Ministry of Digital Transformation (MinCifra) led a large-scale digitalisation that delivered services such as the Diia app with digital passports, online business registration, and 5,326 service centres, while achieving major user uptake and economic benefits. The article also highlights the resilience of digital infrastructure during the full-scale invasion and ongoing reforms across public sectors to increase transparency and efficiency.",
+                    "summary_de": "Innerhalb von sechs Jahren führte das Ministerium für digitale Transformation (MinCifra) eine umfassende Digitalisierung durch, darunter die Diia-App mit digitalen Pässen, schnelle Geschäftsregistrierung und 5.326 Servicestellen, mit hoher Nutzerakzeptanz und wirtschaftlichem Nutzen. Der Artikel betont zudem die Widerstandsfähigkeit der digitalen Infrastruktur während der Invasion und fortlaufende Reformen zur Steigerung von Transparenz und Effizienz.",
+                    "source_url": "https://thedigital.gov.ua/news/progress/vid-startapu-do-it-kompaniyi-iak-mintsyfra-buduvala-nayzruchnishu-tsyfrovu-derzavu",
+                    "published_date": "2026-01-13T15:00:28+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure",
+                      "Disaster Risk Management"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 2
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_00238eeb95c9a421006968d2f6be5c819380b90861bc6f5c07",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Wie das Praktikum im Ministerium für digitale Transformation verläuft — Erfahrungsberichte von Absolventinnen und Studentinnen",
+                    "title_uk": "Як проходить стажування в Мінцифрі — відгуки випускниць та студенток",
+                    "title_en": "How the internship at the Ministry of Digital Transformation runs — feedback from female graduates and students",
+                    "summary_en": "Fifteen female students and graduates have spent over two months working alongside teams at the Ministry of Digital Transformation, Diia and the Development Fund, contributing to real digital-service projects and receiving weekly webinars from senior specialists. The internship pairs practical public-service reengineering experience with intensive intercultural communication training and forms part of a UNDP-implemented capacity-development project funded by Sweden.",
+                    "summary_de": "Fünfzehn Absolventinnen und Studentinnen arbeiten seit über zwei Monaten Seite an Seite mit den Teams des Ministeriums für digitale Transformation, Diia und dem Entwicklungsfonds an realen Digitalprojekten und erhalten wöchentliche Webinare von Fachleuten. Das Praktikum verbindet praktische Erfahrungen in der Reorganisation öffentlicher Dienste mit intensivem Training zur interkulturellen Kommunikation und ist Teil eines von UNDP umgesetzten Kapazitätsaufbauprojekts mit Unterstützung durch Schweden.",
+                    "source_url": "https://thedigital.gov.ua/news/progress/iak-prokhodyt-stazuvannia-v-mintsyfri-vidhuky-vypusknyts-ta-studentok",
+                    "published_date": "2026-01-12T19:00:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 3
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_08cdaa6e9dba803e006968d30989608197bc3a537dd43a80a9",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Fast 60.000 gesperrte Nummern: Wie der Schutz vor Spam-Anrufen funktioniert",
+                    "title_uk": "Майже 60 000 заблокованих номерів: як працює захист від спам-дзвінків",
+                    "title_en": "Almost 60,000 blocked numbers: how protection against spam calls works",
+                    "summary_en": "Since October 2 mobile operators can block spam numbers and in three months have blocked 59,071 numbers; users are advised to report spam via their operator, the government hotline 1545, or the regulator's online form, and operators will block numbers that meet at least two criteria under the new rules.",
+                    "summary_de": "Seit dem 2. Oktober können Mobilfunkanbieter Spam‑Nummern sperren; in drei Monaten wurden 59.071 Nummern blockiert. Nutzer können Spam an ihren Betreiber, die Regierungs‑Hotline 1545 oder über ein Formular der Regulierungsbehörde melden, und Anbieter sperren Nummern, die mindestens zwei Kriterien erfüllen.",
+                    "source_url": "https://thedigital.gov.ua/news/how-tos/mayze-60-000-zablokovanykh-nomeriv-iak-pratsiuye-zakhyst-vid-spam-dzvinkiv",
+                    "published_date": "2026-01-12T15:15:15+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 4
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0999ad81d5a90877006968d3283e448195a27a5df91a1fc00e",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "5G ist bereits in der Ukraine — alles zur Geschwindigkeit, zu Tarifen und zur Funktionsfähigkeit bei Stromausfall",
+                    "title_uk": "5G вже в Україні — все про швидкість, тарифи та роботу без світла",
+                    "title_en": "5G is already in Ukraine — everything about speed, tariffs and operation without power",
+                    "summary_en": "A pilot 5G project launched in Lviv with Kyivstar, Vodafone and lifecell testing speeds, tariffs, investments and the technology's energy independence. Operators report peak test speeds (Kyivstar >2.4 Gbit/s), stress the need for backup power at base stations, and note frequency constraints and parallel operation with 4G.",
+                    "summary_de": "In Lwiw wurde ein Pilotprojekt für 5G gestartet, bei dem Kyivstar, Vodafone und lifecell Geschwindigkeit, Tarife, Investitionen und die Energieunabhängigkeit der Technologie testen. Die Betreiber nennen Testergebnisse (Kyivstar >2,4 Gbit/s), betonen die Notwendigkeit von Notstrom/Reserveenergie für Basisstationen sowie Frequenzbeschränkungen und die parallele Nutzung von 4G.",
+                    "source_url": "https://thedigital.gov.ua/news/technologies/5g-vze-v-ukrayini-vse-pro-shvydkist-taryfy-ta-robotu-bez-svitla",
+                    "published_date": "2026-01-12T12:06:07+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure",
+                      "Disaster Risk Management",
+                      "Urban Resilience"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 5
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0b635b69dea05313006968d33f72488197a119d3f70683d898",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Wir starten die 5G‑Technologie in Lwiw",
+                    "title_uk": "Запускаємо технологію 5G у Львові",
+                    "title_en": "Launching 5G technology in Lviv",
+                    "summary_en": "A pilot 5G rollout has been launched in Lviv after work on the technology since 2019 and delays caused by the full-scale war; the pilot will be expanded to Borodianka, Kharkiv and other cities and already includes over 30 base stations nationwide. The deployment was enabled by coordination between the state, mobile operators and the Armed Forces, will run through the end of 2026, and aims to test 5G equipment compatibility with military systems while avoiding interference during martial law.",
+                    "summary_de": "In Lwiw wurde ein 5G‑Pilotprojekt gestartet, nachdem seit 2019 an der Technologie gearbeitet wurde und der vollständige Start durch den Krieg verschoben werden musste; der Pilot soll auf Borodjanka, Charkiw und weitere Städte ausgeweitet werden und umfasst bereits über 30 Basisstationen landesweit. Der Start erfolgte in Abstimmung mit Staat, Mobilfunkanbietern und den Streitkräften, läuft bis Ende 2026 und dient dazu, die Kompatibilität der 5G‑Ausrüstung mit militärischer Technik zu prüfen und während des Kriegsrechts Störungen zu vermeiden.",
+                    "source_url": "https://thedigital.gov.ua/news/technologies/zapuskayemo-tekhnolohiiu-5g-u-lvovi",
+                    "published_date": "2026-01-12T12:04:49+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 6
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_07f6e5fc8894eb93006968d3525ab08197bed9054a0e6b59d2",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "₴34,6 Mrd. Steuern zahlten Diia.City-Residenten für 2025. Wer am meisten?",
+                    "title_uk": "₴34,6 млрд податків сплатили резиденти Дія.City за 2025 рік. Хто найбільше?",
+                    "title_en": "₴34.6 billion in taxes paid by Diia.City residents for 2025. Who paid the most?",
+                    "summary_en": "Residents of Diia.City paid ₴34.6 billion in taxes in 2025, nearly double the ₴18+ billion paid in 2024; the article lists the top taxpayers. Over 3,400 companies have joined Diia.City and operate under a balanced tax model offering a choice between a 9% tax on withdrawn capital or the 18% profit tax, with preferential taxation for employees and gig contractors.",
+                    "summary_de": "Diia.City-Residenten zahlten 2025 ₴34,6 Mrd. an Steuern, fast doppelt so viel wie die ₴18+ Mrd. im Jahr 2024; der Artikel nennt die größten Zahler. Mehr als 3.400 Unternehmen sind in Diia.City und können zwischen einer 9%-Besteuerung des entnommenen Kapitals oder der 18%-Gewinnsteuer wählen; für Beschäftigte und GIG‑Vertragspartner gilt eine Vergünstigung bei der Besteuerung.",
+                    "source_url": "https://thedigital.gov.ua/news/business/uah346-miliarda-podatkiv-splatyly-rezydenty-diiacity-za-2025-rik-khto-naybilshe",
+                    "published_date": "2026-01-10T11:00:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 7
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0841c9a9aa471a19006968d36d593481958049302ca23019d6",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Ohne Gericht geht es nicht: Sehen Sie die neue Folge des Podcasts 'Chroniken offener Daten'",
+                    "title_uk": "Коли без суду — ніяк: дивіться новий епізод подкасту «Хроніки відкритих даних»",
+                    "title_en": "No Way Without a Court: Watch the New Episode of the 'Chronicles of Open Data' Podcast",
+                    "summary_en": "The article announces a new episode of the podcast 'Chronicles of Open Data' discussing how court action has become a key tool to protect the right to access open data and how the war changed the balance between openness and security. Experts from DEJURE, Texty.org.ua and the Ministry of Digital Transformation discuss regulatory decisions that may threaten open data access.",
+                    "summary_de": "Der Artikel kündigt eine neue Folge des Podcasts 'Chroniken offener Daten' an, in der erörtert wird, wie gerichtliche Klagen zum zentralen Mittel zum Schutz des Rechts auf Zugang zu offenen Daten wurden und wie der Krieg das Verhältnis von Offenheit und Sicherheit verändert hat. Expertinnen und Experten diskutieren zudem, welche regulatorischen Entscheidungen den Zugang zu offenen Daten gefährden können.",
+                    "source_url": "https://thedigital.gov.ua/news/technologies/koly-bez-sudu-niiak-dyvitsia-novyy-epizod-podkastu-khroniky-vidkrytykh-danykh",
+                    "published_date": "2026-01-08T18:01:21+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 8
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_08d905b03e15a783006968d3906974819095464d2dc21c030f",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Geschäftstrends 2026 — digitale Daten statt Intuition und systematisches Wachstum",
+                    "title_uk": "Тренди в бізнесі 2026 — цифрові дані замість інтуїції та системний ріст",
+                    "title_en": "Business Trends 2026 — Digital Data Instead of Intuition and Systematic Growth",
+                    "summary_en": "After years of turbulence and war, businesses are shifting from survival to systematic, data-driven management; Diia.Business finds the average digital maturity of Ukrainian SMEs is 2.49/5 and shows that firms using CRM, cloud services and automation are more resilient. Diia.Business has launched a digital maturity framework and recommends diagnostics and practical implementation to move from intuition to system-level management.",
+                    "summary_de": "Nach Jahren der Turbulenzen und des Krieges wechseln Unternehmen vom Überlebenskampf zu systematischem, datenbasiertem Management; Diia.Business stellt fest, dass die durchschnittliche digitale Reife ukrainischer KMU bei 2,49 von 5 liegt und Unternehmen mit CRM, Cloud-Services und Automatisierung widerstandsfähiger sind. Diia.Business hat einen Rahmen zur digitalen Reife gestartet und empfiehlt Diagnosen sowie praktische Umsetzung, um von Intuition zu systematischem Management zu gelangen.",
+                    "source_url": "https://thedigital.gov.ua/news/business/trendy-v-biznesi-2026-tsyfrovi-dani-zamist-intuyitsiyi-ta-systemnyy-rist",
+                    "published_date": "2026-01-08T17:00:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 9
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_00d1fcdc77ccdbd5006968d3aa9fa081949cae1980dc6ebd29",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Meldet euch zum Techathon Teens in AI 2026 an — entwickelt KI‑Lösungen, die die Welt verändern",
+                    "title_uk": "Реєструйтесь на техатон Teens in AI 2026 — створюйте AI-рішення, які змінять світ",
+                    "title_en": "Register for the Teens in AI 2026 techathon — create AI solutions that will change the world",
+                    "summary_en": "Ukraine is joining the global Teens in AI movement for the third time, inviting students aged 12–18 to register for the Teens in AI 2026 techathon to develop AI projects, compete with participants from 101 countries, and potentially advance to a Global Demo Day. Selection is based on motivation, knowledge and language skills, with the top ten Ukrainian teams entering a national techathon.",
+                    "summary_de": "Die Ukraine nimmt zum dritten Mal an der globalen Bewegung Teens in AI teil und lädt Schüler und Studierende im Alter von 12–18 Jahren ein, sich für den Techathon Teens in AI 2026 anzumelden, um KI‑Projekte zu entwickeln und sich mit Teilnehmenden aus 101 Ländern zu messen. Die Auswahl erfolgt nach Motivation, Kenntnissen und Sprachbeherrschung; die zehn besten ukrainischen Teams treten beim nationalen Techathon an und können sich für das Global Demo Day qualifizieren.",
+                    "source_url": "https://thedigital.gov.ua/news/technologies/reyestruytes-na-tekhaton-teens-in-ai-2026-stvoriuyte-ai-rishennia-iaki-zminiat-svit",
+                    "published_date": "2026-01-08T14:02:46+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 10
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_01434ce843f17f0e006968d3be97108197acce018fdb6473cc",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "title_de": "Wie KI die Arbeit ukrainischer Unternehmen verändert: Ergebnisse einer Umfrage",
+                    "title_uk": "Як ШІ змінює роботу українського бізнесу: результати опитування",
+                    "title_en": "How AI is changing the work of Ukrainian businesses: survey results",
+                    "summary_en": "A Top Lead survey of over 200 Ukrainian companies found that 93% already use AI—mostly for data and market analysis, forecasting, marketing and sales—with 62% reporting positive impacts on productivity and financial performance, while security and cyberdefense remain low priorities.",
+                    "summary_de": "Eine Umfrage von Top Lead unter mehr als 200 ukrainischen Unternehmen zeigt, dass 93 % bereits KI einsetzen—vor allem für Daten- und Marktanalyse, Prognosen sowie Marketing und Vertrieb; 62 % berichten von positiven Auswirkungen auf Produktivität und wirtschaftliche Kennzahlen, während Sicherheits- und Cyberschutzmaßnahmen wenig genutzt werden.",
+                    "source_url": "https://thedigital.gov.ua/news/business/iak-shi-zminiuye-ukrayinskyy-biznes-rezultaty-opytuvannia",
+                    "published_date": "2026-01-08T12:00:00+02:00",
+                    "sector_classification": [
+                      "Basic Infrastructure"
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 11
+        }
+      }
+    ],
+    "MoDtr": [
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/army/stvoriuyemo-nove-pokolinnia-zbroyi-brave1-ta-palantir-zapuskaiut-dataroom",
+          "title": "Створюємо нове покоління зброї: Brave1 та Palantir запускають Dataroom",
+          "date": "2026-01-20T16:25:00+02:00",
+          "content": "Україна запускає Brave1 Dataroom — захищене середовище для тестування та тренування штучного інтелекту на основі реальних даних з фронту. Це дозволить пришвидшити розробку автономних систем, які зможуть виявляти та перехоплювати ворожі цілі без участі людини.\n\nШтучний інтелект стає вирішальним фактором у сучасній війні. Щоб українські дрони та системи захисту були ефективними, їх потрібно навчати на якісних і актуальних даних. Dataroom — це спільний проєкт кластера Brave1, Міноборони, ЗСУ, Науково-дослідного інституту воєнної розвідки та американського технологічного гіганта Palantir.\n\nПлатформа побудована на програмних рішеннях Palantir. Вона вже містить візуальні та теплові бази даних повітряних цілей, зокрема ворожих «шахедів». Перелік даних постійно розширюватиметься.\n\nУкраїнські розробники отримають доступ до цих масивів інформації після проходження безпекової комплаєнс-процедури.\n\nПодавайте заявку на доступ за посиланням та створюйте технологічні рішення, що змінюють правила гри на полі бою."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/technologies/bilshe-prozorosti-dlia-biznesu-yedynyy-derzavnyy-reyestr-znovu-na-portali-vidkrytykh-danykh",
+          "title": "Більше прозорості для бізнесу — Єдиний державний реєстр знову на Порталі відкритих даних",
+          "date": "2026-01-20T09:00:00+02:00",
+          "content": "Разом з Мін’юстом повертаємо прозорість там, де це безпечно. Найпопулярніший набір даних — Єдиний державний реєстр — знову доступний на Порталі відкритих даних.\n\nЗ 2022 року реєстр у формі відкритих даних був закритий з міркувань безпеки. Тепер він доступний у відфільтрованому форматі: бізнес отримує прозорість, держава зберігає контроль над чутливою інформацією.\n\nВідкриті дані — це фундамент прозорої держави. Коли інформація доступна публічно, зникає простір для корупції, а журналісти та громадськість можуть контролювати дії влади. Крім того, це «паливо» для IT-економіки: на основі державних даних українські компанії створюють продукти, якими користуються мільйони людей.\n\nВідкриття реєстру — це сигнал, що ми працюємо за європейськими правилами навіть під час війни. Ми знайшли баланс: бізнес та громадяни отримують доступ до інформації, а дані про оборонні підприємства залишаються під захистом.\n\nЩотижня — апдейт даних на порталі. Завантажуйте вільно за посиланням."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/business/do-5-mln-investytsiy-dlia-startapiv-startuvav-pryyom-zaiavok-na-it-arena-warsaw-startup-competition",
+          "title": "До $5 млн інвестицій для стартапів: стартував прийом заявок на IT Arena Warsaw Startup Competition",
+          "date": "2026-01-19T16:55:00+02:00",
+          "content": "Українські та міжнародні стартапи можуть залучити до $5 000 000 інвестицій на IT Arena Warsaw Startup Competition. Змагання відбудеться 15-16 травня у Варшаві.\n\nIT Arena щороку об’єднує підприємців, фаундерів, ІТ-фахівців, бізнес-аналітиків та всіх, хто працює з інноваціями. У 2026 році участь в Startup Competition можуть взяти стартапи, які:\n\nУчасники зможуть презентувати свої продукти 150+ іноземним інвесторам та позмагатися за призовий фонд конкурсу, який вже становить $20 000 і продовжує збільшуватися. Окрім цього, українські стартапи та команди з усього світу змагатимуться за інвестиційний фонд, який зараз становить $5 000 000.\n\nВстигніть податися до 1 квітня за посиланням."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/business/14-mln-investytsiy-dlia-ukrayinskykh-startapiv-rezultaty-uk-ukraine-techbridge",
+          "title": "$14+ млн інвестицій для українських стартапів: результати UK-Ukraine TechBridge",
+          "date": "2026-01-16T15:00:00+02:00",
+          "content": "Підсумували два роки роботи проєкту UK–Ukraine TechBridge. Це потужна ініціатива, що об’єднує потенціал tech-секторів України та Великої Британії і відкриває win-win можливості для екосистем обох країн. Результат — нові ринки, менторська підтримка та мільйонні інвестиції для наших розробників.\n\nУкраїнський технологічний сектор залишається точкою зростання для економіки навіть у найскладніші воєнні часи. UK–Ukraine TechBridge доводить, що підтримка партнерів може перетворюватися на реальні гроші, реальні проєкти й реальні ринки для українських компаній. Такі сильні міжнародні партнерства дуже потрібні, щоб закладати фундамент сильної, конкурентної економіки України після війни\n\nЧерез акселератор пройшли 39 українських стартапів. Вони отримали доступ до 20+ міжнародних венчурних фондів, 400 годин менторської підтримки та сумарно залучили понад $14 млн.\n\nНаші фаундери вже двічі презентували продукти на London Tech Week у 2024 та 2025 роках, налагодивши прямий контакт із британським бізнесом та інвесторами. А ще кілька стартапів вже вийшли на британський ринок завдяки проєкту — Cases, Deus Robotics, Aspichi, Spendbase тощо.\n\nСпільно з Sikorsky Challenge провели конкурс інновацій для гуманітарного розмінування. Найкращі рішення отримали фінансування на розвиток.\n\nПроєкт працює і як освітній хаб — понад 1 200 українців уже пройшли безоплатні курси з цифрових та підприємницьких навичок. Це навчальні програми від топових світових технологічних компаній, таких як Cisco, Salesforce, Oracle, AWS.\n\nУперше делегація британських підприємців з TechUK відвідала Україну в межах Lviv IT Arena. Це дало змогу зміцнити прямі зв’язки між двома екосистемами та перетворити спільні амбіції на практичні кейси співпраці. У планах на 2026 рік — нові партнерства й нові можливості для українських компаній, зокрема проведення roadshow Великою Британією."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/progress/zberihayemo-temp-oleksandr-borniakov-ocholyv-mintsyfry",
+          "title": "Зберігаємо темп: Олександр Борняков очолив Мінцифру",
+          "date": "2026-01-15T18:00:00+02:00",
+          "content": "Олександр Борняков став т.в.о. Міністра цифрової трансформації — і для команди Мінцифри це не зміна курсу, а продовження шляху, який уже привів Україну до світового лідерства в цифрових сервісах.\n\nОлександр Борняков прийшов у Мінцифру у 2019 році — ще тоді, коли цифрова держава була радше амбіцією, ніж реальністю. За ці роки він став одним із тих, хто перетворив ідею на систему.\n\nНа чолі Мінцифри Олександр Борняков продовжить курс на побудову інноваційної країни та поглиблення співпраці з Європейським Союзом.\n\nКлючові вектори роботи:\n\nПродовжуємо курс на інновації, передбачувані правила для бізнесу та цифрову Європу для України."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/postanovy-uriadu/prozora-derzava-uriad-pidtrymav-stvorennia-tsyfrovoho-dashborda-krayiny",
+          "title": "Прозора держава: Уряд підтримав створення «цифрового дашборда» країни",
+          "date": "2026-01-15T15:13:26+02:00",
+          "content": "Змінюємо підхід до управління державою: замість стосів паперових звітів — відкриті дані. Уряд ухвалив постанову для запуску системи, яка показуватиме реальний стан справ у країні. Це дозволить владі швидко помічати проблеми та реагувати на них, а людям — легко контролювати ефективність роботи держорганів.\n\nДані мають допомагати ухвалювати рішення, а не просто зберігатися в таблицях. Раніше інформація була розкидана по різних системах, тому побачити повну картину розвитку країни було складно. Тепер дані об’єднають, щоб держава могла працювати ефективніше.\n\nНова система працюватиме як «цифровий дашборд» із двома інтерфейсами:\n\nДля держслужбовців: Система збиратиме та оброблятиме дані з різних реєстрів у реальному часі. Це дозволить посадовцям бачити динаміку змін, планувати заходи на основі фактів, а не припущень, та оперативно реагувати на виклики, особливо в умовах воєнного стану.\n\nДля громадян: У майбутньому українці зможуть переглядати аналітику про стан справ у державі. Інформація буде доступна на зрозумілих графіках та дашбордах. Це дозволить кожному бачити реальні результати роботи влади та ефективність державних рішень.\n\nЗапускатимемо систему поетапно. Спершу сфокусуємося на внутрішній частині для держслужбовців, щоб налагодити якісну оцінку ефективності державних політик. А згодом відкриємо публічні дашборди для громадян.\n\nЦифровізація — це не лише про послуги в смартфоні, а й про якісно новий рівень управління державою."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/education/16-mln-otsinok-avtomatychno-iak-mriia-sprostyla-vchyteliam-zakryttia-semestru",
+          "title": "16 млн оцінок автоматично: як Мрія спростила вчителям закриття семестру",
+          "date": "2026-01-15T14:15:00+02:00",
+          "content": "Кінець семестру — це завжди пікове навантаження для освітян. Проте з Мрією цей процес став значно простішим: державна освітня екосистема автоматизувала рутинні підрахунки та прибрала години паперової роботи.\n\nРучний підрахунок однієї підсумкової оцінки триває близько 30 секунд. Для вчителя, який має 7 класів по 25 учнів, це перетворюється на понад 1,5 години безперервної калькуляції.\n\nУ Мрії цей процес автоматизований. Кілька кліків — і система підсумовує результати й пропонує підсумковий бал. Учитель лише переглядає, підтверджує або, за потреби, редагує оцінку.\n\nЦе особливо корисно для Нової української школи (НУШ), де система оцінювання складніша й вимагає зведення кількох груп результатів. Мрія бере всі розрахунки на себе, мінімізуючи ризик механічних помилок.\n\nКласні керівники тепер формують і надсилають свідоцтва досягнень та табелі за лічені хвилини. Жодних паперів: батьки відкривають вкладку «Портфоліо» в застосунку та одразу бачать результати навчання дитини.\n\nМрія безоплатна для всіх шкіл, учителів, учнів і батьків. Це екосистема, яка надихає вчитися та допомагає знайти себе в сучасному світі.\n\nКоманда супроводжує школу на всіх етапах і допомагає налаштувати профіль закладу, оновити дані в освітньому реєстрі й навчити адміністрацію та вчителів. Підтримка доступна по телефону чи в чатах, а для обміну досвідом ми створили Facebook-спільноту освітян.\n\nВирішили під’єднати свою школу до Мрії? Дізнавайтеся більше про екосистему за посиланням: mriia.gov.ua/app"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/postanovy-uriadu/tsyfrovizuyemo-rozrakhunok-adminzboru-uriad-skhvalyv-rozrobku-novoyi-metodyky",
+          "title": "Цифровізуємо розрахунок адмінзбору — Уряд схвалив розробку нової методики",
+          "date": "2026-01-15T09:30:00+02:00",
+          "content": "Уряд підтримав запуск пілотного проєкту, який допоможе розрахувати собівартість надання публічних послуг та створити єдину систему розрахунку.\n\nПілотний проєкт, який ми запускаємо на виконання Державної антикорупційної програми, охопить 18 популярних платних послуг. Серед них — реєстрація шлюбу, оформлення паспортів, посвідчень водія, реєстрація місця проживання та інші.\n\nМи проаналізуємо зібрані дані та підготуємо звіт для Уряду. Це дозволить запропонувати зміни до законодавства для визначення єдиної методики розрахунку адмінзбору, спираючись на реальні дані."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/technologies/kontrol-hralnoho-rynku-247-uriad-zrobyv-ostanniy-krok-do-zapusku-derzavnoyi-systemy-onlayn-monitorynhu-azartnykh-ihor",
+          "title": "Контроль грального ринку 24/7 — уряд зробив останній крок до запуску Державної системи онлайн-моніторингу азартних ігор",
+          "date": "2026-01-14T14:30:00+02:00",
+          "content": "Кабмін ухвалив постанову, необхідну для запуску Державної системи онлайн-моніторингу. Вперше держава бачитиме, як працює легальний гральний бізнес, у режимі реального часу. Це важливий крок до прозорого ринку азартних ігор в Україні.\n\nСистему запускатимуть поступово. Перший етап ДСОМ фіксуватиме ставки і виплати, повернення коштів та поповнення балансу гравця. Саме це дозволить державі бачити операційну діяльність грального бізнесу та відповідно розуміти, скільки податків має бути сплачено. Зараз держава вводить цей етап у роботу.\n\nБез якісних, верифікованих і регулярних даних неможливі ані ефективне регулювання, ані прогнозування бюджетних надходжень, ані оцінка політик відповідальної гри. Саме тому ми переходимо до data-driven підходу, де рішення ухвалюються не інтуїтивно і не «вручну», а на основі реальної картини ринку\n\nЛіцензовані організатори матимуть пів року, щоб приєднатися до Системи. Уже з літа 2026-го держава отримає повноцінний інструмент для подальшого регулювання гральної сфери і боротьби з тіньовим бізнесом.\n\nРозробка другого етапу ДСОМ запланована на цей рік. Другий етап розширить функціонал Системи: облік результатів гри, контроль роботи гральних автоматів, дотримання принципів відповідальної гри та облік операцій з ігровими замінниками гривні.\n\nДСОМ — це надскладний ІТ-продукт, що має збирати та обробляти мільйони даних у реальному часі, бути захищеним від кібератак і забезпечувати прозорість для ринку. Її поетапне впровадження дає змогу максимально швидко розпочати збір й обробку інформації від ринку\n\nТакі цифрові системи вже працюють у низці європейських країн, зокрема в Німеччині та Румунії. Україна впроваджує цей підхід як основу прозорого та ефективного регулювання сфери азартних ігор."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/progress/vid-startapu-do-it-kompaniyi-iak-mintsyfra-buduvala-nayzruchnishu-tsyfrovu-derzavu",
+          "title": "Від стартапу до IT-компанії: як Мінцифра побудувала найзручнішу цифрову державу",
+          "date": "2026-01-13T15:00:28+02:00",
+          "content": "Шість років тому цифрова держава була лише сміливою ідеєю, а Україна посідала 102-ге місце у світі за рівнем цифровізації. Сьогодні ми входимо до п’ятірки цифрових лідерів. Мінцифра перетворилася зі стартапу на стратегічне серце країни, що працює для людей, бізнесу та фронту.\n\nУ 2019 році Михайло Федоров був призначений на посаду Міністра цифрової трансформації України. Саме це стало стартом масштабної цифровізації в країні. Розповідаємо, як технології змінили Україну за цей час: від першого паспорта в смартфоні до новітніх дронів на полі бою.\n\nМи змінили філософію держсервісу: прибрали черги та папери, замінивши їх на кліки у смартфоні. Сьогодні 23,7 млн українців користуються Дією, де доступні 33 цифрові документи та 242 послуги.\n\nУкраїна першою у світі прирівняла цифровий паспорт до паперового, запустила найшвидшу реєстрацію ФОП та революційний Шлюб онлайн, який потрапив до списку найкращих винаходів за версією TIME.\n\nМережа Центрів надання адмінпослуг сьогодні налічує 5 326 точок, де можна отримати понад 350 послуг. За 6 років українці отримали тут понад 100 млн послуг, а рівень задоволеності сервісом сягає 98%. Окремий стандарт якості — це 88 модернізованих Дія.Центрів.\n\nЗ перших днів повномасштабного вторгнення цифрова інфраструктура стала на воєнні рейки.\n\nМи забезпечили стійкість зв’язку під час війни та продовжуємо впроваджувати інновації. Україна посіла 1-ше місце у світі за стабільністю фіксованого інтернету, а на початку 2026 року — офіційно приєдналася до єдиної роумінгової зони ЄС.\n\nМи будуємо країну, де зручно створювати стартапи та вести бізнес.\n\nІнвестуємо в людський капітал, щоб Україна залишалася конкурентною у світі.\n\nЦифровізація змінює найскладніші сфери. Ми комплексно реформуємо митницю, освіту, будівництво та Держстат. Впроваджуємо е-Нотаріат, еАкциз та е-Суд, щоб зробити процеси прозорими. Економічний ефект від цифровізації вже сягнув 184 млрд грн, а 58% українців прямо кажуть: цифровізація — найефективніша спосіб боротьби з корупцією.\n\nМінцифра — це цифрова держава без черг, хабарів і паперів. Шість років тому це була ідея. Сьогодні — це фундамент стійкості та розвитку України. Працюємо далі, щоб зробити сервіси ще зручнішими, а захист — технологічнішим."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/progress/iak-prokhodyt-stazuvannia-v-mintsyfri-vidhuky-vypusknyts-ta-studentok",
+          "title": "Як проходить стажування в Мінцифрі — відгуки випускниць та студенток",
+          "date": "2026-01-12T19:00:00+02:00",
+          "content": "Понад два місяці 15 студенток та випускниць працюють пліч-о-пліч із командами Мінцифри, Дії та Фонду розвитку й мають реальний вплив на цифрові зміни в країні. Розповідаємо, як минув екватор програми, та які скіли прокачують майбутні лідерки.\n\nСтажування в Мінцифрі — це можливість побачити зсередини, як створюються послуги, якими користуються мільйони. Учасниці інтегровані в робочі групи, працюють над реальними кейсами та щотижня переймають досвід топфахівців на вебінарах.\n\nСучасна цифрова дипломатія вимагає гнучкості. Тому половину програми відзначили інтенсивним тренінгом із міжкультурної комунікації. Учасниці розбирали практичні кейси та вчилися ефективно взаємодіяти в глобальному світі:\n\nНа власному досвіді пізнавала особливості міжнародної взаємодії, але інколи це було довго і через непорозуміння. Тренінг допоміг усе розкласти по поличках, і багато чого про культурні особливості стало зрозумілим\n\nГоловна цінність програми — поєднання теорії з практикою державного управління нового зразка.\n\nСтажування відкрило для мене абсолютно новий вимір цифровізації через призму реінжинірингу публічних послуг. Як для спеціаліста з економічною освітою та навичками бізнес-аналізу, для мене стало відкриттям те, наскільки глибоко технологічні зміни залежать від нормативно-правового фундаменту\n\nПрограма стажування — це частина нашої стратегії з розвитку людського капіталу. Ми показуємо молоді, що держслужба може бути драйвовою, інноваційною та ефективною. Попереду — ще два місяці роботи над проєктами, які змінюють країну.\n\nПрограма стажування впроваджується Міністерство цифрової трансформації України в межах «Проєкту підтримки Дія», що Програма розвитку ООН (ПРООН) в Україні реалізує за фінансової підтримки Швеції."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://thedigital.gov.ua/news/how-tos/mayze-60-000-zablokovanykh-nomeriv-iak-pratsiuye-zakhyst-vid-spam-dzvinkiv",
+          "title": "Майже 60 000 заблокованих номерів: як працює захист від спам-дзвінків",
+          "date": "2026-01-12T15:15:15+02:00",
+          "content": "З 2 жовтня оператори мобільного зв’язку отримали можливість блокувати спам-номери. За три місяці вони заблокували 59 071 номер.\n\nСпам-дзвінки — це дзвінки рекламного характеру, коли компанія телефонує без попередньої згоди користувача та рекламує товар або послугу.\n\nЯкщо ви продовжуєте отримувати спам, повідомте про це. Є три способи подати скаргу.\n\n№ 1. Повідомте про спам-номер своєму оператору:\n\n№ 2. Надсилайте скарги на спам-дзвінки на гарячу лінію Уряду — 1545.\n\n№ 3. Зверніться до НКЕК через форму на сайті.\n\nОператор перевірить номер, на який надійшла скарга, і заблокує, якщо він відповідає щонайменше двом критеріям:\n\nДетальніше про нові Правила — за посиланням.\n\nЗахищаємо українців від спаму."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-14T18:00:12.489Z",
+      "createdAt": "2026-01-14T18:00:12.489Z",
+      "role": "workflow:owner",
+      "workflowId": "ZmX4r6sdkrVow1aI",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        12
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-09T12:11:17.000Z",
+  "versionId": "5d4839a1-f38d-4bb3-af41-dc97fa9a491a"
+}
