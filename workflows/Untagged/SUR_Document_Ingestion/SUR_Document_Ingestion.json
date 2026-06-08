@@ -1,0 +1,1198 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-15T10:48:49.149Z",
+    "createdAt": "2026-01-15T10:48:49.149Z",
+    "versionId": "c8d0f656-9633-4c84-b7cf-5a294f61f7d3",
+    "workflowId": "URipcPknjrqZFvab",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 12
+              }
+            ]
+          }
+        },
+        "id": "73c15f59-e134-4f91-abd4-135f7ad9f8a2",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -304,
+          192
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Compute \"today\" and \"horizon\" for the prompt and filtering.\nconst horizonDays = 180;\nconst now = new Date();\nconst todayISO = now.toISOString().slice(0, 10);\nconst horizon = new Date(now.getTime() + horizonDays * 24 * 3600 * 1000).toISOString().slice(0, 10);\n\n// Centralized sector definitions for the agent prompt\nconst sector_definitions = [\n  \"Disaster Risk Management: Activities, systems, and governance whose primary purpose is to anticipate, reduce, manage, and recover from hazards by strengthening risk assessment, preparedness, emergency response capacity, and disaster recovery coordination.\",\n  \"Basic Infrastructure: Reconstruction or provision of essential public utilities and everyday service infrastructure that keeps settlements functioning, including lifeline networks (energy, water, wastewater, heating, waste, transport, communications) and critical public facilities such as hospitals and other health infrastructure.\",\n  \"Housing: Repair, reconstruction, or development of permanent residential dwellings and residential buildings, focused on restoring safe, adequate, long-term living conditions for households.\",\n  \"Urban Resilience: Integrated city- or neighborhood-level planning, governance, and multi-sector interventions that increase a city’s ability to withstand and adapt to shocks and long-term stresses while improving recovery capacity and overall urban livability.\"\n].join(\"\\n\");\n\nreturn [{\n  json: {\n    todayISO,\n    horizon,\n    horizonDays,\n    sector_definitions\n  }\n}];\n"
+        },
+        "id": "b5e29cfb-1766-4924-b406-e815b43b0d86",
+        "name": "Set Date Window",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          608,
+          192
+        ]
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=You are a web research agent discovering NEW policy and research documents about the urban reconstruction in Ukraine. Focus on laws,policies and research papers. Look for the english or german version.\n\nYou MUST return a single valid JSON object and nothing else. No markdown. No code fences.\n\nThe JSON must have this shape:\n{\n  \"documents\": [\n    {\n      \"title_uk\": \"string (required)\",\n      \"source_url\": \"string URL (required)\",\n      \"title_en\": \"string|null\",\n      \"title_de\": \"string|null\",\n      \"description_uk\": \"string|null\",\n      \"description_en\": \"string|null\",\n      \"description_de\": \"string|null\",\n      \"original_language\": \"uk|en|de (default uk)\",\n      \"document_type\": \"report|policy-brief|research-paper|white-paper|strategy|guideline|presentation|dataset|other|null\",\n      \"primary_sector\": \"basic-infrastructure|housing|urban-resilience|disaster-risk-management\",\n      \"author_stakeholder_id\": \"uuid|null\",\n      \"credibility_tier\": 1|2|3|null\n    }\n  ]\n}\n\nHard rules:\n- Each item MUST include title_uk and source_url.\n- source_url must be the page where the document is found (not a generic homepage if possible).\n- primary_sector MUST be exactly one of:\n  basic-infrastructure, housing, urban-resilience, disaster-risk-management\n- Prefer documents published recently or still relevant, but focus on quality and relevance.\n- Avoid duplicates: if the title matches any \"existing titles\" you are given, skip it.\n- Return at least 5 documents if possible.\n- If a field is unknown, set it to null (except required fields).\n",
+          "options": {}
+        },
+        "id": "e18be204-da78-4e61-bde1-5520f4d9f149",
+        "name": "AI Agent (web search)",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3,
+        "position": [
+          1120,
+          192
+        ]
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "gpt-5.1",
+            "mode": "list",
+            "cachedResultName": "gpt-5.1"
+          },
+          "builtInTools": {
+            "webSearch": {
+              "searchContextSize": "high"
+            }
+          },
+          "options": {}
+        },
+        "id": "018d250d-618c-4f7e-b265-8e5d971c9875",
+        "name": "OpenAI Chat Model",
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.3,
+        "position": [
+          1120,
+          448
+        ],
+        "credentials": {
+          "openAiApi": {
+            "id": "a4ja82V4nnlunpii",
+            "name": "openai"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "tableId": "documents",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "title_uk",
+                "fieldValue": "={{ $json.title_uk }}"
+              },
+              {
+                "fieldId": "title_en",
+                "fieldValue": "={{ $json.title_en }}"
+              },
+              {
+                "fieldId": "description_en",
+                "fieldValue": "={{ $json.source_url }}"
+              },
+              {
+                "fieldId": "original_language",
+                "fieldValue": "={{ $json.original_language }}"
+              },
+              {
+                "fieldId": "file_url",
+                "fieldValue": "={{ $json.source_url }}"
+              },
+              {
+                "fieldId": "file_type",
+                "fieldValue": "pdf"
+              },
+              {
+                "fieldId": "document_type",
+                "fieldValue": "policy"
+              },
+              {
+                "fieldId": "source_id",
+                "fieldValue": "10b2f74e-c121-44f1-9fe5-dd8c2e961de8"
+              },
+              {
+                "fieldId": "is_web_suggestion",
+                "fieldValue": "true"
+              }
+            ]
+          }
+        },
+        "id": "18f12aaa-8af3-4f21-9128-7cffea11391b",
+        "name": "Supabase - Insert Event",
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          3968,
+          192
+        ],
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "jsCode": "function stripCodeFences(s) {\n  return s.replace(/```(?:json)?\\s*([\\s\\S]*?)\\s*```/gi, \"$1\").trim();\n}\n\nfunction tryParseJson(s) {\n  const cleaned = stripCodeFences(String(s || \"\")).trim();\n  if (!cleaned) return null;\n  try { return JSON.parse(cleaned); } catch (e) {}\n  // Sometimes model returns JSON as a quoted string\n  try { return JSON.parse(JSON.parse(cleaned)); } catch (e) {}\n  return null;\n}\n\n// In AI Agent nodes, the text may be in different places depending on configuration.\n// Try a few common ones.\nconst candidates = [\n  $json?.text,\n  $json?.output,\n  $json?.message,\n  $json?.data,\n  $json?.result,\n  $json,\n];\n\nlet parsed = null;\nfor (const c of candidates) {\n  if (parsed) break;\n  if (typeof c === \"string\") parsed = tryParseJson(c);\n  else if (c && typeof c === \"object\" && Array.isArray(c.documents)) parsed = c;\n}\n\n// If the agent output is already structured (some AI nodes do this)\nif (!parsed && Array.isArray($json?.documents)) parsed = $json;\n\nif (!parsed || !Array.isArray(parsed.documents)) {\n  throw new Error(\"Could not parse agent output into { documents: [...] }\");\n}\n\nreturn [{ json: { documents: parsed.documents } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1488,
+          192
+        ],
+        "id": "d2f9df2b-7ce8-4fad-8a67-9dbdcbe18647",
+        "name": "Parse Events JSON"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "documents",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1696,
+          192
+        ],
+        "id": "184465c3-dc62-429c-bcee-522e85359378",
+        "name": "Split Out Events"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "documents",
+          "matchType": "allFilters",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "n8n_doc_hash",
+                "condition": "eq",
+                "keyValue": "={{ $json.n8n_doc_hash }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          2720,
+          32
+        ],
+        "id": "521358b4-ac8e-4f54-b522-3886ba5d5b0d",
+        "name": "Get many rows",
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "fieldsToMatchString": "n8n_title_hash",
+          "joinMode": "enrichInput2",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          3136,
+          176
+        ],
+        "id": "b0698f92-a5ee-4bde-ab0f-ff85439a6abf",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "jsCode": "const crypto = require(\"crypto\");\n\nfunction normTitle(t) {\n  return (t || \"\")\n    .toString()\n    .toLowerCase()\n    .trim()\n    .replace(/\\s+/g, \" \")\n    .replace(/[“”„\"]/g, '\"')\n    .replace(/[’‘]/g, \"'\")\n    .replace(/[‐-‒–—―]/g, \"-\");\n}\n\nfunction normUrl(u) {\n  return (u || \"\").toString().trim().replace(/\\/$/, \"\");\n}\n\nreturn $input.all().map(item => {\n  const j = item.json || {};\n  const titleNorm = normTitle(j.title_uk);\n  const urlNorm = normUrl(j.source_url);\n\n  const key = `${titleNorm}|${urlNorm}`;\n  const hash = crypto.createHash(\"sha256\").update(key, \"utf8\").digest(\"hex\");\n\n  return {\n    json: {\n      ...j,\n      n8n_doc_title_norm: titleNorm,\n      n8n_doc_hash: hash,\n      n8n_doc_dedupe_key: key,\n    }\n  };\n});\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2080,
+          192
+        ],
+        "id": "7f992c77-8c02-46c5-b086-0a0f44f5dbaa",
+        "name": "Compute Title Hash"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          864,
+          192
+        ],
+        "id": "2eb35747-bb58-4a5a-a0be-ac0a7048aeca",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "jsCode": "function cleanStr(x) {\n  const s = (x ?? \"\").toString().trim();\n  return s.length ? s : null;\n}\n\nfunction normalizeUrl(u) {\n  const s = cleanStr(u);\n  if (!s) return null;\n\n  try {\n    const url = new URL(s);\n    // strip common tracking params\n    const drop = new Set([\n      \"utm_source\",\"utm_medium\",\"utm_campaign\",\"utm_term\",\"utm_content\",\n      \"fbclid\",\"gclid\",\"mc_cid\",\"mc_eid\"\n    ]);\n    for (const k of Array.from(url.searchParams.keys())) {\n      if (drop.has(k.toLowerCase())) url.searchParams.delete(k);\n    }\n    // normalize trailing slash\n    url.hash = \"\";\n    return url.toString().replace(/\\/$/, \"\");\n  } catch (e) {\n    return s; // keep raw if URL parsing fails, but still allow flow\n  }\n}\n\nfunction normalizeLanguage(x) {\n  const s = (cleanStr(x) || \"uk\").toLowerCase();\n  if ([\"uk\",\"en\",\"de\"].includes(s)) return s;\n  return \"uk\";\n}\n\nfunction normalizeTier(x) {\n  const n = Number(x);\n  if ([1,2,3].includes(n)) return n;\n  return 2;\n}\n\nfunction normalizeDocType(x) {\n  const s = (cleanStr(x) || \"\").toLowerCase();\n  const allowed = new Set([\n    \"report\",\"policy-brief\",\"research-paper\",\"white-paper\",\n    \"strategy\",\"guideline\",\"presentation\",\"dataset\",\"other\"\n  ]);\n  if (!s) return null;\n  return allowed.has(s) ? s : \"other\";\n}\n\nfunction normalizeSector(x) {\n  const s = (cleanStr(x) || \"\").toLowerCase();\n\n  // Accept a few common variants from LLMs\n  const map = new Map([\n    [\"basic infrastructure\",\"basic-infrastructure\"],\n    [\"infrastructure\",\"basic-infrastructure\"],\n    [\"basic-infrastructure\",\"basic-infrastructure\"],\n\n    [\"housing\",\"housing\"],\n\n    [\"urban resilience\",\"urban-resilience\"],\n    [\"urban-resilience\",\"urban-resilience\"],\n    [\"resilience\",\"urban-resilience\"],\n\n    [\"disaster risk\",\"disaster-risk-management\"],\n    [\"disaster-risk\",\"disaster-risk-management\"],\n    [\"disaster-risk-management\",\"disaster-risk-management\"],\n    [\"disaster risk management\",\"disaster-risk-management\"],\n  ]);\n\n  if (map.has(s)) return map.get(s);\n\n  // If unknown, choose a safe default rather than dropping\n  return \"housing\";\n}\n\nconst out = [];\nfor (const item of $input.all()) {\n  const j = item.json || {};\n\n  const title_uk = cleanStr(j.title_uk);\n  const source_url = normalizeUrl(j.source_url);\n\n  // Required fields check\n  if (!title_uk || !source_url) {\n    // Drop invalid items; alternatively route to a \"needs manual\" branch\n    continue;\n  }\n\n  out.push({\n    json: {\n      title_uk,\n      source_url,\n\n      title_en: cleanStr(j.title_en),\n      title_de: cleanStr(j.title_de),\n\n      description_uk: cleanStr(j.description_uk),\n      description_en: cleanStr(j.description_en),\n      description_de: cleanStr(j.description_de),\n\n      original_language: normalizeLanguage(j.original_language),\n      document_type: normalizeDocType(j.document_type),\n\n      // keep as string here; we'll wrap to array at POST time\n      primary_sector: normalizeSector(j.primary_sector),\n\n      author_stakeholder_id: cleanStr(j.author_stakeholder_id),\n      credibility_tier: normalizeTier(j.credibility_tier),\n    }\n  });\n}\n\nreturn out;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1888,
+          192
+        ],
+        "id": "79074c64-e0f5-492d-947c-d44262a76e13",
+        "name": "Code in JavaScript2"
+      },
+      {
+        "parameters": {
+          "messages": {
+            "message": [
+              {
+                "content": "Find 5 upcoming events regarding the reconstruction of Ukraine"
+              }
+            ]
+          },
+          "options": {},
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.perplexity",
+        "typeVersion": 1,
+        "position": [
+          448,
+          464
+        ],
+        "id": "8e0cb9c8-3579-4da6-9b65-05fc1e3af0b9",
+        "name": "Message a model",
+        "credentials": {
+          "perplexityApi": {
+            "id": "tuqtaFOroht6JjEE",
+            "name": "Perplexity account"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "bcddee9b-e7a1-4517-a262-bc3e0c4f81b7",
+                "leftValue": "={{ $json.__is_duplicate.toBoolean() }}",
+                "rightValue": false,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          3632,
+          176
+        ],
+        "id": "edd67a0b-b901-492b-86ff-6522554969a3",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "jsCode": "return $input.all().map(i => ({\n  json: {\n    ...i.json,\n    // join key must exist before the Supabase lookup\n    dedupe_key: i.json.n8n_title_hash,\n  }\n}));\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2288,
+          192
+        ],
+        "id": "e1e89329-7b89-41b1-b3a7-c263fac8fb5c",
+        "name": "Code in JavaScript4"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "documents",
+          "matchType": "allFilters"
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          48,
+          192
+        ],
+        "id": "40fde127-9b2b-48ca-b27f-a15d3ebb0cee",
+        "name": "Get many rows1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Input: many rows from Supabase, each row has title_uk/title_en/title_de\n// Output: single item with all_doc_titles: [ ...unique strings... ]\n\nconst titles = new Set();\n\nfor (const item of $input.all()) {\n  const j = item.json || {};\n  for (const k of [\"title_uk\", \"title_en\", \"title_de\"]) {\n    const v = (j[k] || \"\").toString().trim();\n    if (v) titles.add(v);\n  }\n}\n\nreturn [\n  {\n    json: {\n      all_doc_titles: Array.from(titles),\n      existing_title_count: titles.size,\n    },\n  },\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          320,
+          192
+        ],
+        "id": "8d3c2b11-ff6c-47cf-992b-831a8a985e4b",
+        "name": "Code in JavaScript5"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "02e21e98-684a-47dd-9827-c68cbb07875e",
+                "name": "__is_duplicate",
+                "value": "={{ !!$json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "includeOtherFields": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          3360,
+          176
+        ],
+        "id": "b2f67607-69b7-43bb-ab73-41ded43afd54",
+        "name": "Edit Fields",
+        "executeOnce": false
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Get many rows1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Date Window": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent (web search)": {
+        "main": [
+          [
+            {
+              "node": "Parse Events JSON",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent (web search)",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse Events JSON": {
+        "main": [
+          [
+            {
+              "node": "Split Out Events",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out Events": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many rows": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Compute Title Hash": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "AI Agent (web search)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript2": {
+        "main": [
+          [
+            {
+              "node": "Compute Title Hash",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Message a model": {
+        "main": [
+          []
+        ]
+      },
+      "If": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Supabase - Insert Event",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript4": {
+        "main": [
+          [
+            {
+              "node": "Get many rows",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Get many rows1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript5",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript5": {
+        "main": [
+          [
+            {
+              "node": "Set Date Window",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": " Scio Network ",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "c8d0f656-9633-4c84-b7cf-5a294f61f7d3",
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Date Window": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent (web search)": {
+      "main": [
+        [
+          {
+            "node": "Parse Events JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent (web search)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Events JSON": {
+      "main": [
+        [
+          {
+            "node": "Split Out Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Events": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Title Hash": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent (web search)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Compute Title Hash",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        []
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Supabase - Insert Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Set Date Window",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-11T09:43:49.663Z",
+  "id": "URipcPknjrqZFvab",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_Document_Ingestion",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "id": "73c15f59-e134-4f91-abd4-135f7ad9f8a2",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -304,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compute \"today\" and \"horizon\" for the prompt and filtering.\nconst horizonDays = 180;\nconst now = new Date();\nconst todayISO = now.toISOString().slice(0, 10);\nconst horizon = new Date(now.getTime() + horizonDays * 24 * 3600 * 1000).toISOString().slice(0, 10);\n\n// Centralized sector definitions for the agent prompt\nconst sector_definitions = [\n  \"Disaster Risk Management: Activities, systems, and governance whose primary purpose is to anticipate, reduce, manage, and recover from hazards by strengthening risk assessment, preparedness, emergency response capacity, and disaster recovery coordination.\",\n  \"Basic Infrastructure: Reconstruction or provision of essential public utilities and everyday service infrastructure that keeps settlements functioning, including lifeline networks (energy, water, wastewater, heating, waste, transport, communications) and critical public facilities such as hospitals and other health infrastructure.\",\n  \"Housing: Repair, reconstruction, or development of permanent residential dwellings and residential buildings, focused on restoring safe, adequate, long-term living conditions for households.\",\n  \"Urban Resilience: Integrated city- or neighborhood-level planning, governance, and multi-sector interventions that increase a city’s ability to withstand and adapt to shocks and long-term stresses while improving recovery capacity and overall urban livability.\"\n].join(\"\\n\");\n\nreturn [{\n  json: {\n    todayISO,\n    horizon,\n    horizonDays,\n    sector_definitions\n  }\n}];\n"
+      },
+      "id": "b5e29cfb-1766-4924-b406-e815b43b0d86",
+      "name": "Set Date Window",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a web research agent discovering NEW policy and research documents about the urban reconstruction in Ukraine. Focus on laws,policies and research papers. Look for the english or german version.\n\nYou MUST return a single valid JSON object and nothing else. No markdown. No code fences.\n\nThe JSON must have this shape:\n{\n  \"documents\": [\n    {\n      \"title_uk\": \"string (required)\",\n      \"source_url\": \"string URL (required)\",\n      \"title_en\": \"string|null\",\n      \"title_de\": \"string|null\",\n      \"description_uk\": \"string|null\",\n      \"description_en\": \"string|null\",\n      \"description_de\": \"string|null\",\n      \"original_language\": \"uk|en|de (default uk)\",\n      \"document_type\": \"report|policy-brief|research-paper|white-paper|strategy|guideline|presentation|dataset|other|null\",\n      \"primary_sector\": \"basic-infrastructure|housing|urban-resilience|disaster-risk-management\",\n      \"author_stakeholder_id\": \"uuid|null\",\n      \"credibility_tier\": 1|2|3|null\n    }\n  ]\n}\n\nHard rules:\n- Each item MUST include title_uk and source_url.\n- source_url must be the page where the document is found (not a generic homepage if possible).\n- primary_sector MUST be exactly one of:\n  basic-infrastructure, housing, urban-resilience, disaster-risk-management\n- Prefer documents published recently or still relevant, but focus on quality and relevance.\n- Avoid duplicates: if the title matches any \"existing titles\" you are given, skip it.\n- Return at least 5 documents if possible.\n- If a field is unknown, set it to null (except required fields).\n",
+        "options": {}
+      },
+      "id": "e18be204-da78-4e61-bde1-5520f4d9f149",
+      "name": "AI Agent (web search)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.1",
+          "mode": "list",
+          "cachedResultName": "gpt-5.1"
+        },
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "high"
+          }
+        },
+        "options": {}
+      },
+      "id": "018d250d-618c-4f7e-b265-8e5d971c9875",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        448
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "documents",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.title_uk }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.title_en }}"
+            },
+            {
+              "fieldId": "description_en",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "original_language",
+              "fieldValue": "={{ $json.original_language }}"
+            },
+            {
+              "fieldId": "file_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "file_type",
+              "fieldValue": "pdf"
+            },
+            {
+              "fieldId": "document_type",
+              "fieldValue": "policy"
+            },
+            {
+              "fieldId": "source_id",
+              "fieldValue": "10b2f74e-c121-44f1-9fe5-dd8c2e961de8"
+            },
+            {
+              "fieldId": "is_web_suggestion",
+              "fieldValue": "true"
+            }
+          ]
+        }
+      },
+      "id": "18f12aaa-8af3-4f21-9128-7cffea11391b",
+      "name": "Supabase - Insert Event",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3968,
+        192
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "function stripCodeFences(s) {\n  return s.replace(/```(?:json)?\\s*([\\s\\S]*?)\\s*```/gi, \"$1\").trim();\n}\n\nfunction tryParseJson(s) {\n  const cleaned = stripCodeFences(String(s || \"\")).trim();\n  if (!cleaned) return null;\n  try { return JSON.parse(cleaned); } catch (e) {}\n  // Sometimes model returns JSON as a quoted string\n  try { return JSON.parse(JSON.parse(cleaned)); } catch (e) {}\n  return null;\n}\n\n// In AI Agent nodes, the text may be in different places depending on configuration.\n// Try a few common ones.\nconst candidates = [\n  $json?.text,\n  $json?.output,\n  $json?.message,\n  $json?.data,\n  $json?.result,\n  $json,\n];\n\nlet parsed = null;\nfor (const c of candidates) {\n  if (parsed) break;\n  if (typeof c === \"string\") parsed = tryParseJson(c);\n  else if (c && typeof c === \"object\" && Array.isArray(c.documents)) parsed = c;\n}\n\n// If the agent output is already structured (some AI nodes do this)\nif (!parsed && Array.isArray($json?.documents)) parsed = $json;\n\nif (!parsed || !Array.isArray(parsed.documents)) {\n  throw new Error(\"Could not parse agent output into { documents: [...] }\");\n}\n\nreturn [{ json: { documents: parsed.documents } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        192
+      ],
+      "id": "d2f9df2b-7ce8-4fad-8a67-9dbdcbe18647",
+      "name": "Parse Events JSON"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "documents",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        192
+      ],
+      "id": "184465c3-dc62-429c-bcee-522e85359378",
+      "name": "Split Out Events"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "documents",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "n8n_doc_hash",
+              "condition": "eq",
+              "keyValue": "={{ $json.n8n_doc_hash }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2720,
+        32
+      ],
+      "id": "521358b4-ac8e-4f54-b522-3886ba5d5b0d",
+      "name": "Get many rows",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "n8n_title_hash",
+        "joinMode": "enrichInput2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3136,
+        176
+      ],
+      "id": "b0698f92-a5ee-4bde-ab0f-ff85439a6abf",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require(\"crypto\");\n\nfunction normTitle(t) {\n  return (t || \"\")\n    .toString()\n    .toLowerCase()\n    .trim()\n    .replace(/\\s+/g, \" \")\n    .replace(/[“”„\"]/g, '\"')\n    .replace(/[’‘]/g, \"'\")\n    .replace(/[‐-‒–—―]/g, \"-\");\n}\n\nfunction normUrl(u) {\n  return (u || \"\").toString().trim().replace(/\\/$/, \"\");\n}\n\nreturn $input.all().map(item => {\n  const j = item.json || {};\n  const titleNorm = normTitle(j.title_uk);\n  const urlNorm = normUrl(j.source_url);\n\n  const key = `${titleNorm}|${urlNorm}`;\n  const hash = crypto.createHash(\"sha256\").update(key, \"utf8\").digest(\"hex\");\n\n  return {\n    json: {\n      ...j,\n      n8n_doc_title_norm: titleNorm,\n      n8n_doc_hash: hash,\n      n8n_doc_dedupe_key: key,\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2080,
+        192
+      ],
+      "id": "7f992c77-8c02-46c5-b086-0a0f44f5dbaa",
+      "name": "Compute Title Hash"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        192
+      ],
+      "id": "2eb35747-bb58-4a5a-a0be-ac0a7048aeca",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "function cleanStr(x) {\n  const s = (x ?? \"\").toString().trim();\n  return s.length ? s : null;\n}\n\nfunction normalizeUrl(u) {\n  const s = cleanStr(u);\n  if (!s) return null;\n\n  try {\n    const url = new URL(s);\n    // strip common tracking params\n    const drop = new Set([\n      \"utm_source\",\"utm_medium\",\"utm_campaign\",\"utm_term\",\"utm_content\",\n      \"fbclid\",\"gclid\",\"mc_cid\",\"mc_eid\"\n    ]);\n    for (const k of Array.from(url.searchParams.keys())) {\n      if (drop.has(k.toLowerCase())) url.searchParams.delete(k);\n    }\n    // normalize trailing slash\n    url.hash = \"\";\n    return url.toString().replace(/\\/$/, \"\");\n  } catch (e) {\n    return s; // keep raw if URL parsing fails, but still allow flow\n  }\n}\n\nfunction normalizeLanguage(x) {\n  const s = (cleanStr(x) || \"uk\").toLowerCase();\n  if ([\"uk\",\"en\",\"de\"].includes(s)) return s;\n  return \"uk\";\n}\n\nfunction normalizeTier(x) {\n  const n = Number(x);\n  if ([1,2,3].includes(n)) return n;\n  return 2;\n}\n\nfunction normalizeDocType(x) {\n  const s = (cleanStr(x) || \"\").toLowerCase();\n  const allowed = new Set([\n    \"report\",\"policy-brief\",\"research-paper\",\"white-paper\",\n    \"strategy\",\"guideline\",\"presentation\",\"dataset\",\"other\"\n  ]);\n  if (!s) return null;\n  return allowed.has(s) ? s : \"other\";\n}\n\nfunction normalizeSector(x) {\n  const s = (cleanStr(x) || \"\").toLowerCase();\n\n  // Accept a few common variants from LLMs\n  const map = new Map([\n    [\"basic infrastructure\",\"basic-infrastructure\"],\n    [\"infrastructure\",\"basic-infrastructure\"],\n    [\"basic-infrastructure\",\"basic-infrastructure\"],\n\n    [\"housing\",\"housing\"],\n\n    [\"urban resilience\",\"urban-resilience\"],\n    [\"urban-resilience\",\"urban-resilience\"],\n    [\"resilience\",\"urban-resilience\"],\n\n    [\"disaster risk\",\"disaster-risk-management\"],\n    [\"disaster-risk\",\"disaster-risk-management\"],\n    [\"disaster-risk-management\",\"disaster-risk-management\"],\n    [\"disaster risk management\",\"disaster-risk-management\"],\n  ]);\n\n  if (map.has(s)) return map.get(s);\n\n  // If unknown, choose a safe default rather than dropping\n  return \"housing\";\n}\n\nconst out = [];\nfor (const item of $input.all()) {\n  const j = item.json || {};\n\n  const title_uk = cleanStr(j.title_uk);\n  const source_url = normalizeUrl(j.source_url);\n\n  // Required fields check\n  if (!title_uk || !source_url) {\n    // Drop invalid items; alternatively route to a \"needs manual\" branch\n    continue;\n  }\n\n  out.push({\n    json: {\n      title_uk,\n      source_url,\n\n      title_en: cleanStr(j.title_en),\n      title_de: cleanStr(j.title_de),\n\n      description_uk: cleanStr(j.description_uk),\n      description_en: cleanStr(j.description_en),\n      description_de: cleanStr(j.description_de),\n\n      original_language: normalizeLanguage(j.original_language),\n      document_type: normalizeDocType(j.document_type),\n\n      // keep as string here; we'll wrap to array at POST time\n      primary_sector: normalizeSector(j.primary_sector),\n\n      author_stakeholder_id: cleanStr(j.author_stakeholder_id),\n      credibility_tier: normalizeTier(j.credibility_tier),\n    }\n  });\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1888,
+        192
+      ],
+      "id": "79074c64-e0f5-492d-947c-d44262a76e13",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "messages": {
+          "message": [
+            {
+              "content": "Find 5 upcoming events regarding the reconstruction of Ukraine"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexity",
+      "typeVersion": 1,
+      "position": [
+        448,
+        464
+      ],
+      "id": "8e0cb9c8-3579-4da6-9b65-05fc1e3af0b9",
+      "name": "Message a model",
+      "credentials": {
+        "perplexityApi": {
+          "id": "tuqtaFOroht6JjEE",
+          "name": "Perplexity account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bcddee9b-e7a1-4517-a262-bc3e0c4f81b7",
+              "leftValue": "={{ $json.__is_duplicate.toBoolean() }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3632,
+        176
+      ],
+      "id": "edd67a0b-b901-492b-86ff-6522554969a3",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(i => ({\n  json: {\n    ...i.json,\n    // join key must exist before the Supabase lookup\n    dedupe_key: i.json.n8n_title_hash,\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2288,
+        192
+      ],
+      "id": "e1e89329-7b89-41b1-b3a7-c263fac8fb5c",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "documents",
+        "matchType": "allFilters"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        48,
+        192
+      ],
+      "id": "40fde127-9b2b-48ca-b27f-a15d3ebb0cee",
+      "name": "Get many rows1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Input: many rows from Supabase, each row has title_uk/title_en/title_de\n// Output: single item with all_doc_titles: [ ...unique strings... ]\n\nconst titles = new Set();\n\nfor (const item of $input.all()) {\n  const j = item.json || {};\n  for (const k of [\"title_uk\", \"title_en\", \"title_de\"]) {\n    const v = (j[k] || \"\").toString().trim();\n    if (v) titles.add(v);\n  }\n}\n\nreturn [\n  {\n    json: {\n      all_doc_titles: Array.from(titles),\n      existing_title_count: titles.size,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        192
+      ],
+      "id": "8d3c2b11-ff6c-47cf-992b-831a8a985e4b",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "02e21e98-684a-47dd-9827-c68cbb07875e",
+              "name": "__is_duplicate",
+              "value": "={{ !!$json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3360,
+        176
+      ],
+      "id": "b2f67607-69b7-43bb-ab73-41ded43afd54",
+      "name": "Edit Fields",
+      "executeOnce": false
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-11T09:43:49.668Z",
+      "createdAt": "2026-01-11T09:43:49.668Z",
+      "role": "workflow:owner",
+      "workflowId": "URipcPknjrqZFvab",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        12
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-15T10:48:49.147Z",
+  "versionId": "c8d0f656-9633-4c84-b7cf-5a294f61f7d3"
+}
