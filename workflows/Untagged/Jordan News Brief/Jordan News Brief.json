@@ -1,0 +1,951 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-25T18:51:42.764Z",
+    "createdAt": "2026-01-25T18:51:42.764Z",
+    "versionId": "7364bce7-a050-489b-8ac5-0499e0cc77ab",
+    "workflowId": "fikltV8qTZppjogv",
+    "nodes": [
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.perplexity.ai/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer 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"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": \"Recent news, official releases, global events, statement, initiative, reports or partnerships on Jordan's water or energy sectors, covering government, donors, private sector and civil society\",\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -624,
+          -432
+        ],
+        "id": "9aeb87ad-a6fb-4cbe-83bf-7e89c0b3b16b",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "jsCode": "let raw =   $input.first().json.content.parts[0].text;\n\nraw = raw.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n\nlet data;\ntry {\n  data = JSON.parse(raw);\n} catch (err) {\n  throw new Error(\"Invalid JSON after cleanup: \" + err + \"\\nRaw:\\n\" + raw);\n}\n\n// Return cleaned object\nreturn {\n  json: data\n};\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1184,
+          -240
+        ],
+        "id": "da4b7f9c-7780-4f86-9158-d9aaacfdddf2",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://script.google.com/macros/s/AKfycbxzTQ6qtEDruCprnHKH0PyaN9fbyr5YmgZfzZ1_2YS0jyNA2kBhZl04DxnJFCQzQBY/exec",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "text",
+          "body": "={{ JSON.stringify({\n  date: $json.date,\n  coverage: $json.coverage,\n  executiveSummary: $json.executiveSummary,\n  stakeholderDevelopments: $json.stakeholderDevelopments,\n  generalDevelopments: $json.generalDevelopments\n}) }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1456,
+          -240
+        ],
+        "id": "a796a9dc-d40b-4eda-b821-cb40212e0c64",
+        "name": "HTTP Request2"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.perplexity.ai/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer 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"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": \"New studies, reports, studies or research projects on Jordan’s Water & Energy sector. Technological or research innovations, on Jordan’s Water & Energy sector.\",\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -624,
+          -240
+        ],
+        "id": "5145dc80-ba40-4270-a386-f66edac0dbce",
+        "name": "HTTP Request3"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.perplexity.ai/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer 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"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": \"recent strategies, laws, MoUs, projects, tenders or funding involving Jordan water and energy sectors. Agreements,  partnership, investment, initiative or policy update involving Jordan water or enrgy sectors\",\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -624,
+          -48
+        ],
+        "id": "b84e24d0-ac1b-4a3d-b27c-fd014e7022ff",
+        "name": "HTTP Request4"
+      },
+      {
+        "parameters": {
+          "numberInputs": 3
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -400,
+          -256
+        ],
+        "id": "15c4c879-67fd-415a-9b70-0c7f155a8373",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "weeks",
+                "triggerAtDay": [
+                  1
+                ],
+                "triggerAtHour": 7
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -848,
+          -240
+        ],
+        "id": "27c50bb4-b6af-4ea7-b494-3b67789a6aac",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-pro",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-pro"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=You are a Specialized Research Analyst focused exclusively on Jordan’s Water & Energy sectors news and updates. Your mission is to transform incoming search-result snippets into a clean, factual, weekly intelligence brief\n\n\n\nYour Guiding Mission & Context \nYour entire focus is Jordan's water and energy sectors. You will be provided with raw search results (snippets) that are already on this topic. However, these snippets contain a mix of valuable information and irrelevant \"noise.\" \n\n**CRITICAL WARNING:** Some results are \"Aggregators\" (e.g., tender lists). These snippets often mix irrelevant text (furniture, ads, other countries) with valid Jordan news.\n**You must surgically extract the Jordan-specific sentence and IGNORE the surrounding noise.**\n\n\nYour critical task is to act as an expert filter. You must ITERATIVELY scan each snippet to identify and extract only the most relevant, impactful, and newsworthy developments pertinent to your mission.\n\nINCLUDE items involving:\n\nStrategies, laws, MoUs, tenders, funding\nGovernment, donors, private sector, civil society\nReports or studies on Water/Energy\nProjects launched, inaugurated, inspected, awarded\nPartnerships, initiatives, investments\nGlobal updates with direct relevance to Jordan\nYour Analytical Workflow (How to Find the News) \n\nFor every single article provided, you must perform the following expert analysis:\nA. Identify and Extract Relevant Developments SCAN: Read the snippet and actively hunt for concrete, verifiable events.  \n\nFILTER: Apply strict inclusion/exclusion criteria: \n\nINCLUDE: Factual news about policy updates, project launches/inspections, MoUs, tenders, funding announcements, and major research findings. If a tender is listed, extract the tender list and due application date. Even if the snippet is messy or contains other countries, if a Jordan tender or Jordan issues is mentioned, extract the headline\n\nEXCLUDE: Duplicate stories and articles older than 7 days (unless it is a critical update to a major, ongoing development). \n\nTime Filter (CRITICAL): Today's date is {{ $now }}. You MUST only include articles whose publishedDate and content falls within the last seven days from this date. Discard all articles published outside this time frame, unless you judge it to be a critical update to a major, ongoing development. \n\nCLUSTER: If multiple sources describe the same event, synthesize them into a single, more comprehensive entry. Choose the most authoritative source for the sourceUrl. \n\nB. Categorize for Strategic Importance (CRITICAL LOGIC) \nEvery development you extract MUST be categorized to:\n\ni) \"stakeholderDevelopments\": Place an entry here ONLY IF its summary explicitly names a specific institutional partner or stakeholder involved in the action. The key is a named partnership. \n\nii) \"generalDevelopments\": If a development concerns broader trends, government policy updates, or research without naming a specific partner, it belongs here. \n\nC. Format for the Briefing Language: All summaries must be in professional English. If a source is in Arabic, you MUST add the label (Arabic source) to the publisher field (e.g., \"publisher\": \"Petra News (Arabic source)\"). \n\nFields: Accurately extract title, summary, whyItMatters, publisher, publishedDate (formatted as \"DD Mon YYYY\"), and sourceUrl. \n\nFinal Briefing Assembly \n\nAfter analyzing all inputs, construct the final JSON object. Core Info: Set date to today's date (\"YYYY-MM-DD\") and coverage to \"last 7 days\". \n\nWord limits (strict):\n\nExecutive summary: max 100 words\nArticle summary: max 75 words\nWhy it matters: max 20 words\n\nExecutive Summary (Generate Last): Write one lead paragraph (max 100 words) in an active, news-reporting style synthesizing the week's most critical developments.\n\nStrict JSON Output: \nYour final output MUST be ONLY a valid JSON object. Do not include any text or explanations outside the JSON structure.\n\nFinal Output Schema \n\njson\n\n{\n  \"date\": \"YYYY-MM-DD\",\n  \"coverage\": \"last 7 days\",\n  \"executiveSummary\": \"string (max 100 words)\",\n  \"stakeholderDevelopments\": [\n    {\n      \"title\": \"string\",\n      \"summary\": \"string (max 75 words)\",\n      \"whyItMatters\": \"string (max 20 words)\",\n      \"publisher\": \"string\",\n      \"publishedDate\": \"string (e.g., '29 Nov 2025')\",\n      \"sourceUrl\": \"string\"\n    }\n  ],\n  \"generalDevelopments\": [\n    {\n      \"title\": \"string\",\n      \"summary\": \"string (max 75 words)\",\n      \"whyItMatters\": \"string (max 20 words)\",\n      \"publisher\": \"string\",\n      \"publishedDate\": \"string\",\n      \"sourceUrl\": \"string\"\n    }\n  ]\n}\n\nInput: {{ JSON.stringify($json.data) }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          832,
+          -240
+        ],
+        "id": "94d1e01a-b65c-4cde-8873-ba3f38f41edf",
+        "name": "Message a model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.results }}",
+          "options": {
+            "systemMessage": "=## Role\nYou are a news screening agent responsible for validating whether an article’s content is truly recent, based on what the article is actually about — not when it was published.\n\n---\n## Instructions\nYou will receive a list of json object with the following fields: title, url, snippet, date and last_updated.\n\n\nFrom each object, analyze the snippet to determine if the article meets ANY of the following \"Pass\" criteria:\n\n1. **Fresh News:** The event occurred within the last **24–48 hours**. (PASS)\n2. **New Developments:** The event is an older topic, but the article reports **new, meaningful developments** or updates that happened within the last **7 days**. (PASS)\n3. **Outdated News:** The content describes an event that happened more than 7 days ago with NO new information or recent updates. (REJECT)\n\n## Decision Logic\n- If the article passes criteria #1 or #2: Output the original article JSON object exactly as received.\n- If the article falls under criteria #3 (Clearly > 7 days old with no update, do not include it in your final\n\n## Constraints\n- Base your decision on the **article content/event timeframe**, not the publication date.\n.\nRejected articles must **not** be passed to the next node.\n\n---\n\n## Input\nEach input represents **one article** and includes:\n- title = {{ $json.results.title }}\n- url = {{ $json.results.url }}\n- content snippet = {{ $json.results.snippet }}\n- Todays date = {{ $now }}\n"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3,
+        "position": [
+          320,
+          -240
+        ],
+        "id": "f5a4abbe-aa8a-4f01-a1a9-d2b4a2770614",
+        "name": "AI Agent1"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4.1-mini"
+          },
+          "builtInTools": {},
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.3,
+        "position": [
+          336,
+          -16
+        ],
+        "id": "849db955-93cb-4348-8710-c2a67e81624f",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "a4ja82V4nnlunpii",
+            "name": "openai"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "results",
+          "include": "allOtherFields",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -192,
+          -272
+        ],
+        "id": "3954e629-fc29-4fa9-9101-a4c392a73b6e",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          608,
+          -240
+        ],
+        "id": "f5cceba0-4fd2-4948-b6d4-ccf41ef361a4",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "f5d01d50-3cce-4517-9263-51ba7e7782a9",
+                "leftValue": "={{ $json.results.url }}",
+                "rightValue": "www.mop.gov.jo",
+                "operator": {
+                  "type": "string",
+                  "operation": "notContains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          48,
+          -256
+        ],
+        "id": "197539b4-112e-41bc-a05a-923d2751f47c",
+        "name": "Filter"
+      }
+    ],
+    "connections": {
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request3": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "HTTP Request4": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "HTTP Request3",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "HTTP Request4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Message a model": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent1": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Message a model",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": " Scio Network ",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "7364bce7-a050-489b-8ac5-0499e0cc77ab",
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-10T11:18:53.356Z",
+  "id": "fikltV8qTZppjogv",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Jordan News Brief",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": \"Recent news, official releases, global events, statement, initiative, reports or partnerships on Jordan's water or energy sectors, covering government, donors, private sector and civil society\",\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -624,
+        -432
+      ],
+      "id": "9aeb87ad-a6fb-4cbe-83bf-7e89c0b3b16b",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "let raw =   $input.first().json.content.parts[0].text;\n\nraw = raw.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n\nlet data;\ntry {\n  data = JSON.parse(raw);\n} catch (err) {\n  throw new Error(\"Invalid JSON after cleanup: \" + err + \"\\nRaw:\\n\" + raw);\n}\n\n// Return cleaned object\nreturn {\n  json: data\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        -240
+      ],
+      "id": "da4b7f9c-7780-4f86-9158-d9aaacfdddf2",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbxzTQ6qtEDruCprnHKH0PyaN9fbyr5YmgZfzZ1_2YS0jyNA2kBhZl04DxnJFCQzQBY/exec",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text",
+        "body": "={{ JSON.stringify({\n  date: $json.date,\n  coverage: $json.coverage,\n  executiveSummary: $json.executiveSummary,\n  stakeholderDevelopments: $json.stakeholderDevelopments,\n  generalDevelopments: $json.generalDevelopments\n}) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1456,
+        -240
+      ],
+      "id": "a796a9dc-d40b-4eda-b821-cb40212e0c64",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": \"New studies, reports, studies or research projects on Jordan’s Water & Energy sector. Technological or research innovations, on Jordan’s Water & Energy sector.\",\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -624,
+        -240
+      ],
+      "id": "5145dc80-ba40-4270-a386-f66edac0dbce",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": \"recent strategies, laws, MoUs, projects, tenders or funding involving Jordan water and energy sectors. Agreements,  partnership, investment, initiative or policy update involving Jordan water or enrgy sectors\",\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -624,
+        -48
+      ],
+      "id": "b84e24d0-ac1b-4a3d-b27c-fd014e7022ff",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -400,
+        -256
+      ],
+      "id": "15c4c879-67fd-415a-9b70-0c7f155a8373",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -848,
+        -240
+      ],
+      "id": "27c50bb4-b6af-4ea7-b494-3b67789a6aac",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a Specialized Research Analyst focused exclusively on Jordan’s Water & Energy sectors news and updates. Your mission is to transform incoming search-result snippets into a clean, factual, weekly intelligence brief\n\n\n\nYour Guiding Mission & Context \nYour entire focus is Jordan's water and energy sectors. You will be provided with raw search results (snippets) that are already on this topic. However, these snippets contain a mix of valuable information and irrelevant \"noise.\" \n\n**CRITICAL WARNING:** Some results are \"Aggregators\" (e.g., tender lists). These snippets often mix irrelevant text (furniture, ads, other countries) with valid Jordan news.\n**You must surgically extract the Jordan-specific sentence and IGNORE the surrounding noise.**\n\n\nYour critical task is to act as an expert filter. You must ITERATIVELY scan each snippet to identify and extract only the most relevant, impactful, and newsworthy developments pertinent to your mission.\n\nINCLUDE items involving:\n\nStrategies, laws, MoUs, tenders, funding\nGovernment, donors, private sector, civil society\nReports or studies on Water/Energy\nProjects launched, inaugurated, inspected, awarded\nPartnerships, initiatives, investments\nGlobal updates with direct relevance to Jordan\nYour Analytical Workflow (How to Find the News) \n\nFor every single article provided, you must perform the following expert analysis:\nA. Identify and Extract Relevant Developments SCAN: Read the snippet and actively hunt for concrete, verifiable events.  \n\nFILTER: Apply strict inclusion/exclusion criteria: \n\nINCLUDE: Factual news about policy updates, project launches/inspections, MoUs, tenders, funding announcements, and major research findings. If a tender is listed, extract the tender list and due application date. Even if the snippet is messy or contains other countries, if a Jordan tender or Jordan issues is mentioned, extract the headline\n\nEXCLUDE: Duplicate stories and articles older than 7 days (unless it is a critical update to a major, ongoing development). \n\nTime Filter (CRITICAL): Today's date is {{ $now }}. You MUST only include articles whose publishedDate and content falls within the last seven days from this date. Discard all articles published outside this time frame, unless you judge it to be a critical update to a major, ongoing development. \n\nCLUSTER: If multiple sources describe the same event, synthesize them into a single, more comprehensive entry. Choose the most authoritative source for the sourceUrl. \n\nB. Categorize for Strategic Importance (CRITICAL LOGIC) \nEvery development you extract MUST be categorized to:\n\ni) \"stakeholderDevelopments\": Place an entry here ONLY IF its summary explicitly names a specific institutional partner or stakeholder involved in the action. The key is a named partnership. \n\nii) \"generalDevelopments\": If a development concerns broader trends, government policy updates, or research without naming a specific partner, it belongs here. \n\nC. Format for the Briefing Language: All summaries must be in professional English. If a source is in Arabic, you MUST add the label (Arabic source) to the publisher field (e.g., \"publisher\": \"Petra News (Arabic source)\"). \n\nFields: Accurately extract title, summary, whyItMatters, publisher, publishedDate (formatted as \"DD Mon YYYY\"), and sourceUrl. \n\nFinal Briefing Assembly \n\nAfter analyzing all inputs, construct the final JSON object. Core Info: Set date to today's date (\"YYYY-MM-DD\") and coverage to \"last 7 days\". \n\nWord limits (strict):\n\nExecutive summary: max 100 words\nArticle summary: max 75 words\nWhy it matters: max 20 words\n\nExecutive Summary (Generate Last): Write one lead paragraph (max 100 words) in an active, news-reporting style synthesizing the week's most critical developments.\n\nStrict JSON Output: \nYour final output MUST be ONLY a valid JSON object. Do not include any text or explanations outside the JSON structure.\n\nFinal Output Schema \n\njson\n\n{\n  \"date\": \"YYYY-MM-DD\",\n  \"coverage\": \"last 7 days\",\n  \"executiveSummary\": \"string (max 100 words)\",\n  \"stakeholderDevelopments\": [\n    {\n      \"title\": \"string\",\n      \"summary\": \"string (max 75 words)\",\n      \"whyItMatters\": \"string (max 20 words)\",\n      \"publisher\": \"string\",\n      \"publishedDate\": \"string (e.g., '29 Nov 2025')\",\n      \"sourceUrl\": \"string\"\n    }\n  ],\n  \"generalDevelopments\": [\n    {\n      \"title\": \"string\",\n      \"summary\": \"string (max 75 words)\",\n      \"whyItMatters\": \"string (max 20 words)\",\n      \"publisher\": \"string\",\n      \"publishedDate\": \"string\",\n      \"sourceUrl\": \"string\"\n    }\n  ]\n}\n\nInput: {{ JSON.stringify($json.data) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        832,
+        -240
+      ],
+      "id": "94d1e01a-b65c-4cde-8873-ba3f38f41edf",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.results }}",
+        "options": {
+          "systemMessage": "=## Role\nYou are a news screening agent responsible for validating whether an article’s content is truly recent, based on what the article is actually about — not when it was published.\n\n---\n## Instructions\nYou will receive a list of json object with the following fields: title, url, snippet, date and last_updated.\n\n\nFrom each object, analyze the snippet to determine if the article meets ANY of the following \"Pass\" criteria:\n\n1. **Fresh News:** The event occurred within the last **24–48 hours**. (PASS)\n2. **New Developments:** The event is an older topic, but the article reports **new, meaningful developments** or updates that happened within the last **7 days**. (PASS)\n3. **Outdated News:** The content describes an event that happened more than 7 days ago with NO new information or recent updates. (REJECT)\n\n## Decision Logic\n- If the article passes criteria #1 or #2: Output the original article JSON object exactly as received.\n- If the article falls under criteria #3 (Clearly > 7 days old with no update, do not include it in your final\n\n## Constraints\n- Base your decision on the **article content/event timeframe**, not the publication date.\n.\nRejected articles must **not** be passed to the next node.\n\n---\n\n## Input\nEach input represents **one article** and includes:\n- title = {{ $json.results.title }}\n- url = {{ $json.results.url }}\n- content snippet = {{ $json.results.snippet }}\n- Todays date = {{ $now }}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        320,
+        -240
+      ],
+      "id": "f5a4abbe-aa8a-4f01-a1a9-d2b4a2770614",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        336,
+        -16
+      ],
+      "id": "849db955-93cb-4348-8710-c2a67e81624f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "results",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        -272
+      ],
+      "id": "3954e629-fc29-4fa9-9101-a4c392a73b6e",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -240
+      ],
+      "id": "f5cceba0-4fd2-4948-b6d4-ccf41ef361a4",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f5d01d50-3cce-4517-9263-51ba7e7782a9",
+              "leftValue": "={{ $json.results.url }}",
+              "rightValue": "www.mop.gov.jo",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        48,
+        -256
+      ],
+      "id": "197539b4-112e-41bc-a05a-923d2751f47c",
+      "name": "Filter"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Rome",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-10T11:18:53.358Z",
+      "createdAt": "2025-11-10T11:18:53.358Z",
+      "role": "workflow:owner",
+      "workflowId": "fikltV8qTZppjogv",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        331
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-25T18:51:42.763Z",
+  "versionId": "7364bce7-a050-489b-8ac5-0499e0cc77ab"
+}
