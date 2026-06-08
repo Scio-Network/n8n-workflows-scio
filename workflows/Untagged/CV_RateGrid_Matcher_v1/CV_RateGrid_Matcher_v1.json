@@ -1,0 +1,198 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "Google Drive - Download CV": {
+      "main": [
+        [
+          {
+            "node": "Extract from File (PDF->Text)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File (PDF->Text)": {
+      "main": [
+        [
+          {
+            "node": "Code - Prepare CV Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Map to Rate Grid": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Append Profile (RateGrid)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-16T09:58:40.789Z",
+  "id": "dyR48iHhGGHgmQM3",
+  "isArchived": true,
+  "meta": null,
+  "name": "CV_RateGrid_Matcher_v1",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "09feaa45-4973-4d1c-9c46-200d6bad88cc",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        832,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "=1W1WplfqXGzRgbyUaUy8fNSgY4dhvWaKh",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "b8db722b-6ce8-4a8c-bfad-a5f570cd4e09",
+      "name": "Google Drive - Download CV",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        1184,
+        -272
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "extractText"
+      },
+      "id": "b504e3c6-262a-40ab-a0e0-5aa17d8dd84e",
+      "name": "Extract from File (PDF->Text)",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Code node: Prepare CV Payload\n * - Ensures the same item carries: cv_text + file_id + file_name\n * - Trims/normalizes text to keep the classifier stable\n */\n\nlet text = $json.text || \"\";\ntext = String(text).replace(/\\r/g, \"\\n\");\ntext = text.replace(/\\n{3,}/g, \"\\n\\n\").trim();\n\nconst maxChars = 30000;\nif (text.length > maxChars) text = text.slice(0, maxChars);\n\n// metadata from Drive download node (n8n usually provides these on the same item)\nconst file_id = $json.id ?? $json.fileId ?? $json.file_id ?? null;\nconst file_name = $json.name ?? $json.fileName ?? $json.file_name ?? null;\n\nreturn [\n  {\n    json: {\n      file_id,\n      file_name,\n      cv_text: text\n    }\n  }\n];\n"
+      },
+      "id": "3a52c975-6a69-43bd-bbd4-3d6e232cdc2e",
+      "name": "Code - Prepare CV Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1632,
+        -272
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c2b69d1d-0d69-4517-92a4-03ae11a34b95",
+      "name": "OpenAI - Classify CV",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 4,
+      "position": [
+        1840,
+        -272
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Code node: Map classification -> rate grid\n *\n * Output:\n * - role_family\n * - level\n * - buy_min, buy_mid, buy_max\n * - margin_min, margin_max\n * - sell_min, sell_mid, sell_max\n * - plus derived point estimates (buy_est, margin_est, sell_est)\n *\n * Notes:\n * - This is intentionally SIMPLE and deterministic.\n * - Uses your provided grid exactly.\n */\n\nfunction asNum(x) {\n  const n = Number(x);\n  return Number.isFinite(n) ? n : null;\n}\n\nfunction clamp(n, lo, hi) {\n  if (n == null) return null;\n  if (n < lo) return lo;\n  if (n > hi) return hi;\n  return n;\n}\n\n// Parse the model response (OpenAI node returns content in different shapes depending on n8n version)\nlet raw = $json;\nlet content = raw.message?.content ?? raw.choices?.[0]?.message?.content ?? raw.text ?? raw.content ?? null;\n\nif (content == null) {\n  // Sometimes n8n places response directly on json\n  content = raw.data ?? null;\n}\n\nlet parsed;\ntry {\n  parsed = typeof content === 'string' ? JSON.parse(content) : content;\n} catch (e) {\n  throw new Error('Classifier did not return valid JSON. Raw: ' + String(content).slice(0, 400));\n}\n\nconst role_family = String(parsed.role_family || '').trim();\nconst level = clamp(asNum(parsed.level), 1, 5);\n\nconst GRID = [\n  {\n    role_family: 'Team Lead',\n    level_band: '4-5',\n    buy_min: 629, buy_mid: 732, buy_max: 1143,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 1143, sell_mid: 1200, sell_max: 1314,\n    extra_a: 1086, extra_b: 972\n  },\n  {\n    role_family: 'Co-Team Lead / Deputy TL',\n    level_band: '3-4',\n    buy_min: 432, buy_mid: 503, buy_max: 786,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 786, sell_mid: 825, sell_max: 904,\n    extra_a: 747, extra_b: 668\n  },\n  {\n    role_family: 'Key Expert',\n    level_band: '3-4',\n    buy_min: 432, buy_mid: 503, buy_max: 786,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 786, sell_mid: 825, sell_max: 904,\n    extra_a: 747, extra_b: 668\n  },\n  {\n    role_family: 'Thematic Expert',\n    level_band: '3',\n    buy_min: 413, buy_mid: 480, buy_max: 750,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 750, sell_mid: 788, sell_max: 862,\n    extra_a: 712, extra_b: 638\n  },\n  {\n    role_family: 'Country Expert',\n    level_band: '2-3',\n    buy_min: 315, buy_mid: 366, buy_max: 572,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 572, sell_mid: 601, sell_max: 658,\n    extra_a: 543, extra_b: 486\n  },\n  {\n    role_family: 'Data / Research Analyst',\n    level_band: '1-2',\n    buy_min: 315, buy_mid: 366, buy_max: 572,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 572, sell_mid: 601, sell_max: 658,\n    extra_a: 543, extra_b: 486\n  },\n  {\n    role_family: 'Short-term Expert / Pool',\n    level_band: '2-3',\n    buy_min: 432, buy_mid: 503, buy_max: 786,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 786, sell_mid: 825, sell_max: 904,\n    extra_a: 747, extra_b: 668\n  },\n  {\n    role_family: 'Technical Backstopping',\n    level_band: '2-3',\n    buy_min: 393, buy_mid: 458, buy_max: 715,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 715, sell_mid: 751, sell_max: 822,\n    extra_a: 679, extra_b: 608\n  },\n  {\n    role_family: 'Regional Focal Point',\n    level_band: '3',\n    buy_min: 354, buy_mid: 412, buy_max: 643,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 643, sell_mid: 675, sell_max: 739,\n    extra_a: 611, extra_b: 547\n  },\n  {\n    role_family: 'MEL Lead / Project Manager',\n    level_band: '3-4',\n    buy_min: 551, buy_mid: 641, buy_max: 1001,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 1001, sell_mid: 1051, sell_max: 1151,\n    extra_a: 951, extra_b: 851\n  },\n  {\n    role_family: 'Other Senior Expert',\n    level_band: '3-4',\n    buy_min: 472, buy_mid: 549, buy_max: 858,\n    margin_min: 0.36, margin_max: 0.45,\n    sell_min: 858, sell_mid: 901, sell_max: 987,\n    extra_a: 815, extra_b: 729\n  }\n];\n\nlet row = GRID.find(r => r.role_family.toLowerCase() === role_family.toLowerCase());\nif (!row && role_family) {\n  const rf = role_family.toLowerCase();\n  row = GRID.find(r => rf.includes(r.role_family.toLowerCase()) || r.role_family.toLowerCase().includes(rf));\n}\n\nif (!row) {\n  throw new Error('Role family not recognized: \"' + role_family + '\".');\n}\n\nconst buy_est = row.buy_mid;\nconst margin_est = (row.margin_min + row.margin_max) / 2;\nconst sell_est = row.sell_mid;\n\nreturn [\n  {\n    json: {\n      file_id: $node['Code - Prepare CV Payload']?.json?.file_id ?? null,\n      file_name: $node['Code - Prepare CV Payload']?.json?.file_name ?? null,\n      cv_full_name: parsed.full_name ?? null,\n      cv_email: parsed.email ?? null,\n      role_family: row.role_family,\n      level: level,\n      confidence: asNum(parsed.confidence) ?? null,\n      rationale_short: parsed.rationale_short ?? null,\n\n      buy_min: row.buy_min,\n      buy_mid: row.buy_mid,\n      buy_max: row.buy_max,\n\n      margin_min: row.margin_min,\n      margin_max: row.margin_max,\n\n      sell_min: row.sell_min,\n      sell_mid: row.sell_mid,\n      sell_max: row.sell_max,\n\n      buy_est,\n      margin_est,\n      sell_est,\n\n      extra_a: row.extra_a,\n      extra_b: row.extra_b\n    }\n  }\n];\n"
+      },
+      "id": "41a847b1-7f3d-40e6-8415-7c3af960c44f",
+      "name": "Code - Map to Rate Grid",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2064,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": "REPLACE_WITH_YOUR_MASTER_SPREADSHEET_ID",
+        "sheetName": "Consultant_Profile_Plus",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "File_ID": "={{$json.file_id}}",
+            "File_Name": "={{$json.file_name}}",
+            "Name": "={{$json.cv_full_name}}",
+            "Email": "={{$json.cv_email}}",
+            "Role_Family_RateGrid": "={{$json.role_family}}",
+            "Level_RateGrid": "={{$json.level}}",
+            "Confidence_RateGrid": "={{$json.confidence}}",
+            "Rationale_RateGrid": "={{$json.rationale_short}}",
+            "Buy_Min": "={{$json.buy_min}}",
+            "Buy_Mid": "={{$json.buy_mid}}",
+            "Buy_Max": "={{$json.buy_max}}",
+            "Margin_Min": "={{$json.margin_min}}",
+            "Margin_Max": "={{$json.margin_max}}",
+            "Sell_Min": "={{$json.sell_min}}",
+            "Sell_Mid": "={{$json.sell_mid}}",
+            "Sell_Max": "={{$json.sell_max}}",
+            "Buy_Est": "={{$json.buy_est}}",
+            "Margin_Est": "={{$json.margin_est}}",
+            "Sell_Est": "={{$json.sell_est}}"
+          }
+        },
+        "options": {}
+      },
+      "id": "4b21e40c-2fce-43b9-9ed0-136b50d82c2d",
+      "name": "Google Sheets - Append Profile (RateGrid)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        2288,
+        -272
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-16T09:58:40.792Z",
+      "createdAt": "2025-12-16T09:58:40.792Z",
+      "role": "workflow:owner",
+      "workflowId": "dyR48iHhGGHgmQM3",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-17T14:24:44.000Z",
+  "versionId": "694badd9-c8df-4deb-aac8-c39babe1e937"
+}
