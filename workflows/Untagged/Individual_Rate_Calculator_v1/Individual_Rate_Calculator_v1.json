@@ -1,0 +1,908 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-09T08:40:29.364Z",
+  "id": "WGnNldDiVN6D7ccG",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Individual_Rate_Calculator_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/folders/1Of9IHd1Kls2NyQEf1o48NfO8rRyoCHOU",
+          "mode": "url"
+        },
+        "event": "fileUpdated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -144
+      ],
+      "id": "fafdcd7a-17bd-4d85-80d3-898dc33bf319",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -192,
+        -144
+      ],
+      "id": "971d3810-1013-433e-af55-0f1ad8b7f3a7",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        112,
+        -144
+      ],
+      "id": "b6041dee-8666-44b4-be02-61082ce37010",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get raw text from \"Extract from File\"\nlet text = $json.text || \"\";\n\n// Normalise whitespace\ntext = text.replace(/\\r/g, \"\\n\");\ntext = text.replace(/\\n{3,}/g, \"\\n\\n\").trim();\n\n// Optional: hard limit to prevent insane token counts\nconst maxChars = 25000;\nif (text.length > maxChars) {\n  text = text.slice(0, maxChars);\n}\n\n// We only care about the CV text here.\n// File metadata is handled in Code in JavaScript2.\nreturn {\n  data: {\n    cv_text: text\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        384,
+        -144
+      ],
+      "id": "533a099d-031b-4eab-81c7-8bde2506af46",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "responseFormat": "json_object"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        64
+      ],
+      "id": "00ea3684-f5ec-4343-af24-9f4b029aedf9",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert HR data parser for international development consulting CVs.\n\nYou have access to:\n- The full CV text (as plain text).\n- Google Drive file metadata (file ID and file name).\n- A Google Sheets tool that returns the dynamic profile schema from the \"Profile_Schema\" tab.\n\nYour job:\n1. Use the Google Sheets tool to retrieve ALL rows from the Profile_Schema sheet.\n   - Each row defines one output field:\n     - field_key          (string; the JSON key you MUST use)\n     - type               (string; one of: string, number, boolean, array_string, array_object)\n     - default_value      (string literal like \"null\", \"[]\", \"false\", or a numeric string)\n     - extraction_hint    (text instruction for how to extract/derive the field)\n     - allowed_values     (optional; comma-separated allowed values for enums)\n   - Treat this schema as the single source of truth for which fields to produce.\n\n2. Carefully read the CV text and apply the domain rules:\n   - \"International development\" experience means work with or for:\n     - bilateral/multilateral donors (GIZ, KfW, BMZ, EU, FCDO, SDC, USAID, SIDA, etc.),\n     - UN agencies, IFIs (UNDP, UNICEF, WFP, WB, ADB, etc.),\n     - international NGOs (Oxfam, Save the Children, CARE, etc.),\n     - development-focused consultancies.\n   - If you are unsure whether a role counts as international development, be conservative and DO NOT count it.\n   - Estimate years to one decimal if needed.\n\nOnly include a scarcity_id if the CV gives strong evidence that the consultant clearly meets its description. Be conservative.\n\n3. Internally (in your own reasoning, NOT in the output), create a timeline of roles:\n   - Start year, end year, employer, role,\n   - Mark whether each role is international development or not,\n   - Use that to compute:\n     - total_years_experience,\n     - years_intl_dev,\n     - years_in_skill_area.\n   This reasoning is only internal; do NOT output the timeline.\n\n4. For every row of the schema:\n   - Create a JSON key exactly equal to field_key.\n   - Determine the value as follows:\n\n     If type == \"string\":\n       - Use a JSON string or null.\n     If type == \"number\":\n       - Use a JSON number or null.\n     If type == \"boolean\":\n       - Use true or false.\n     If type == \"array_string\":\n       - Use a JSON array of strings (e.g. [\"A\", \"B\"]). If no values, use [].\n     If type == \"array_object\":\n       - Use a JSON array of objects, following the extraction_hint for the substructure.\n         Example: for languages, each object has { \"language\": string, \"cefr\": string or null }.\n       - If no values, use [].\n\n   - If you cannot confidently infer a value:\n       - Use default_value if it is specified and valid for that type\n       - Otherwise:\n           - string  -> null\n           - number  -> null\n           - boolean -> false\n           - array_* -> []\n\n   - If allowed_values is non-empty for this field:\n       - Ensure the value (or each element, for arrays) is one of those allowed values.\n       - If not, fall back to default_value or null/[].\n\n5. Consistency checks BEFORE you output:\n   - If both total_years_experience and years_intl_dev are not null:\n       - Ensure total_years_experience >= years_intl_dev.\n   - If both total_years_experience and years_in_skill_area are not null:\n       - Ensure years_in_skill_area <= total_years_experience.\n   - If necessary, adjust the numbers conservatively to satisfy these constraints.\n\n6. Metadata constraints:\n   - For the field_key \"cv_source_file_id\", copy exactly the FILE_ID provided to you (or null if there is none).\n   - For the field_key \"cv_source_file_name\", copy exactly the FILE_NAME provided to you (or null if there is none).\n\nINPUT:\n- CV TEXT (verbatim):\n{{ $json.data.cv_text }}\n\n- FILE_ID: {{ $json.file_id }}\n- FILE_NAME: {{ $json.file_name }}\n\nOUTPUT:\n- Return a SINGLE JSON object, with exactly one key per schema row (plus no extra keys).\n- Do NOT return an array.\n- Do NOT return any explanation, comments, markdown, or prose. JSON only.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        -160
+      ],
+      "id": "d3c55f26-8e3d-4fde-94da-053ba2090832",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get what the AI Agent produced.\n// For the AI Agent node, the main output is usually in `output`.\nlet out = $json.output;\n\n// If the model is in JSON mode (responseFormat: json_object), `out` will already be an object.\nif (out && typeof out === 'object') {\n  // Just wrap it as a single n8n item\n  return [{ json: out }];\n}\n\n// If we get a string (e.g. JSON text), parse it.\nif (typeof out === 'string') {\n  let raw = out.trim();\n\n  // Strip accidental ```json fences if they appear\n  raw = raw\n    .replace(/^```json/i, '')\n    .replace(/^```/i, '')\n    .replace(/```$/i, '')\n    .trim();\n\n  let profile;\n  try {\n    profile = JSON.parse(raw);\n  } catch (e) {\n    throw new Error(\n      'Failed to parse JSON from AI Agent output: ' +\n        e.message +\n        '\\nFirst 500 chars:\\n' +\n        raw.slice(0, 500)\n    );\n  }\n\n  return [{ json: profile }];\n}\n\n// If neither string nor object, fail loudly so you can inspect\nthrow new Error('Unexpected AI Agent output type: ' + typeof out);\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        -160
+      ],
+      "id": "30baae7d-ea62-4590-9d20-2ba14442031d",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Metadata from \"Download file\" comes in as JSON on this node\nconst dl = $json;\n\nconst meta = {\n  file_id: dl.id || null,\n  file_name: dl.name || null,\n};\n\n// Keep the binary so the Merge still works as expected\nreturn [{\n  json: meta,\n  binary: $binary\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -416
+      ],
+      "id": "e10ec87b-225d-4447-af7d-e8bfd760ca3e",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        672,
+        -160
+      ],
+      "id": "50067fda-936b-43bb-aa10-8d930abf1147",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk/",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Levels",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2176,
+        -160
+      ],
+      "id": "7a39ff1c-b260-4ad4-a2ae-7a9770766425",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Run-once classification & generic base rate calculation.\n\n// 1. Get the parsed profile from \"Code in JavaScript1\"\nconst profileItems = $items('Code in JavaScript1');\nif (!profileItems.length || !profileItems[0].json) {\n  throw new Error(\n    'Profile data from node \"Code in JavaScript1\" not found. ' +\n    'Check the node name and wiring.'\n  );\n}\nconst profile = profileItems[0].json;\n\n// 2. Get levels from \"Get row(s) in sheet\" (Levels tab)\nconst levelItems = $items('Get row(s) in sheet');\nif (!levelItems.length) {\n  throw new Error('No level rows received from \"Get row(s) in sheet\".');\n}\n\n// Map raw rows to a typed representation, normalising nulls\nconst rawLevels = levelItems.map(item => {\n  const row = item.json;\n  const id = parseInt(row.level_id, 10);\n\n  // Handle missing min_years_dev for the lowest level by assuming 0\n  let minDevRaw = row.min_years_dev;\n  if ((minDevRaw === undefined || minDevRaw === '') && id === 1) {\n    minDevRaw = 0;\n  }\n\n  const minDev =\n    minDevRaw !== undefined && minDevRaw !== '' ? parseFloat(minDevRaw) : null;\n\n  const maxDevRaw = row.max_years_dev;\n  const minSkillRaw = row.min_years_skill;\n  const maxSkillRaw = row.max_years_skill;\n\n  return {\n    level_id: id,\n    label: row.label,              // optional, can be empty in sheet\n    key: row.key || null,          // optional, e.g. JUNIOR / SENIOR\n    min_years_dev: minDev,\n    max_years_dev:\n      maxDevRaw !== undefined && maxDevRaw !== '' ? parseFloat(maxDevRaw) : null,\n    min_years_skill:\n      minSkillRaw !== undefined && minSkillRaw !== '' ? parseFloat(minSkillRaw) : null,\n    max_years_skill:\n      maxSkillRaw !== undefined && maxSkillRaw !== '' ? parseFloat(maxSkillRaw) : null,\n    raw: row\n  };\n});\n\n// 2a. Deduplicate by level_id (keep first occurrence)\nconst levelMap = new Map();\nfor (const lvl of rawLevels) {\n  if (!lvl.level_id) continue;\n  if (!levelMap.has(lvl.level_id)) {\n    levelMap.set(lvl.level_id, lvl);\n  }\n}\nconst levels = Array.from(levelMap.values());\n\n// 2b. Sanity check on level ranges (only between *different* level_ids)\nconst sortedLevels = [...levels].sort(\n  (a, b) => (a.min_years_dev ?? 0) - (b.min_years_dev ?? 0)\n);\n\nfor (let i = 0; i < sortedLevels.length; i++) {\n  const current = sortedLevels[i];\n\n  if (current.min_years_dev == null) {\n    throw new Error(\n      `Level ${current.level_id} (${current.label || 'unnamed'}) has no min_years_dev.`\n    );\n  }\n\n  if (\n    current.max_years_dev != null &&\n    current.max_years_dev < current.min_years_dev\n  ) {\n    throw new Error(\n      `Level ${current.level_id} (${current.label || 'unnamed'}) has max_years_dev < min_years_dev.`\n    );\n  }\n\n  if (i > 0) {\n    const prev = sortedLevels[i - 1];\n\n    // Only treat as an error if the overlap is between *different* levels\n    if (\n      prev.level_id !== current.level_id &&\n      prev.max_years_dev != null &&\n      current.min_years_dev < prev.max_years_dev\n    ) {\n      throw new Error(\n        `Level ranges overlap or are out of order between ` +\n        `Level ${prev.level_id} and Level ${current.level_id}.`\n      );\n    }\n  }\n}\n\n// 3. Get base rates from \"Get row(s) in sheet2\" (Base_Rates tab)\nconst baseRateItems = $items('Get row(s) in sheet2');\nif (!baseRateItems.length) {\n  throw new Error('No base rate rows received from \"Get row(s) in sheet2\".');\n}\nconst rawBaseRates = baseRateItems.map(item => {\n  const row = item.json;\n  return {\n    level_id: parseInt(row.level_id, 10),\n    level_label: row.level_label,         // optional, convenience\n    currency: row.currency || 'USD',      // default if missing\n    buying_min:\n      row.buying_min !== undefined && row.buying_min !== ''\n        ? parseFloat(row.buying_min)\n        : null,\n    buying_max:\n      row.buying_max !== undefined && row.buying_max !== ''\n        ? parseFloat(row.buying_max)\n        : null,\n    raw: row\n  };\n});\n\n// Deduplicate base rates by level_id as well\nconst baseRateMap = new Map();\nfor (const br of rawBaseRates) {\n  if (!br.level_id) continue;\n  if (!baseRateMap.has(br.level_id)) {\n    baseRateMap.set(br.level_id, br);\n  }\n}\nconst baseRates = Array.from(baseRateMap.values());\n\n// 4. Get scarcity config from \"Get row(s) in sheet1\" (Scarcity_Factors tab)\nconst scarcityItems = $items('Get row(s) in sheet1') || [];\n\n// Deduplicate by scarcity_id and normalise\nconst scarcityMap = new Map();\nfor (const item of scarcityItems) {\n  const row = item.json;\n  if (!row.scarcity_id) continue;\n  if (!scarcityMap.has(row.scarcity_id)) {\n    scarcityMap.set(row.scarcity_id, {\n      scarcity_id: row.scarcity_id,\n      label: row.label,\n      description: row.description || '',\n      factor:\n        row.factor !== undefined && row.factor !== ''\n          ? parseFloat(row.factor)\n          : 1.0\n    });\n  }\n}\nconst scarcityOptions = Array.from(scarcityMap.values());\n\n// 5. Read years from the profile\nconst yearsDev = Number(profile.years_intl_dev ?? 0);\nconst yearsSkill = Number(profile.years_in_skill_area ?? 0);\n\n// ---- EXPERIENCE LEVEL CLASSIFICATION ----\nlet baseLevel = null;\n\nfor (const lvl of levels) {\n  const devOK =\n    yearsDev >= (lvl.min_years_dev ?? 0) &&\n    (lvl.max_years_dev == null || yearsDev <= lvl.max_years_dev);\n\n  const skillOK =\n    yearsSkill >= (lvl.min_years_skill ?? 0) &&\n    (lvl.max_years_skill == null || yearsSkill <= lvl.max_years_skill);\n\n  if (devOK && skillOK) {\n    baseLevel = lvl;\n  }\n}\n\n// If no exact match, fall back conservatively to the highest level\n// whose min_years_dev <= yearsDev\nif (!baseLevel) {\n  for (const lvl of sortedLevels) {\n    if (yearsDev >= (lvl.min_years_dev ?? 0)) {\n      baseLevel = lvl;\n    }\n  }\n}\n\n// If still no match (e.g. years missing), default to lowest level\nif (!baseLevel) {\n  baseLevel = levels.sort(\n    (a, b) => (a.level_id || 0) - (b.level_id || 0)\n  )[0];\n}\n\n// Promotion: leadership / publications → +1 level (max 4 by design)\nlet finalLevelId = baseLevel.level_id;\nconst hasLead = !!profile.has_team_lead_experience;\nconst hasPubs = !!profile.has_publications;\n\nif ((hasLead || hasPubs) && finalLevelId < 4) {\n  finalLevelId += 1;\n}\n\nconst finalLevel =\n  levels.find(l => l.level_id === finalLevelId) || baseLevel;\n\n// 6. Map level_id → stable key / label (safety net if sheet is incomplete)\nconst levelNameMap = {\n  1: 'Junior',\n  2: 'Intermediate',\n  3: 'Senior',\n  4: 'Expert'\n};\n\nconst levelKeyMap = {\n  1: 'JUNIOR',\n  2: 'INTER',\n  3: 'SENIOR',\n  4: 'EXPERT'\n};\n\nconst levelLabelFromSheet = finalLevel.raw && finalLevel.raw.label;\nconst levelKeyFromSheet = finalLevel.raw && finalLevel.raw.key;\n\nconst effectiveLevelLabel =\n  levelLabelFromSheet || levelNameMap[finalLevelId] || `Level ${finalLevelId}`;\n\nconst effectiveLevelKey =\n  levelKeyFromSheet || levelKeyMap[finalLevelId] || `LEVEL_${finalLevelId}`;\n\n// 7. GENERIC BASE RATE BAND FOR THIS PROFILE (no project context yet)\n\n// Find base rate row for this level\nlet baseRow = baseRates.find(br => br.level_id === finalLevelId);\nif (!baseRow) {\n  // fallback: lowest level if mismatch\n  baseRow = baseRates.sort(\n    (a, b) => (a.level_id || 0) - (b.level_id || 0)\n  )[0];\n}\n\nconst baseMin = baseRow.buying_min ?? 0;\nconst baseMax = baseRow.buying_max ?? baseMin;\nconst baseAvg = (baseMin + baseMax) / 2;\n\nconst genericRateBand = {\n  currency: baseRow.currency,\n  min: baseMin,\n  max: baseMax,\n  avg: baseAvg\n};\n\n// 8. SCARCITY OPTIONS (NOT APPLIED YET)\nconst scarcityFlags = {\n  applied_scarcity_ids: [],  // will be set in project-specific step\n  scarcity_factor: 1.0,      // neutral at generic stage\n  options: scarcityOptions\n};\n\n// 9. Build final enriched profile\nconst enrichedProfile = {\n  ...profile,\n  level_id: finalLevelId,\n  level_key: effectiveLevelKey,\n  level_label: effectiveLevelLabel,\n  level_config: finalLevel.raw,       // full row from Levels tab\n  generic_rate_band: genericRateBand, // min / max / avg for this CV\n  scarcity_flags: scarcityFlags,\n  classification_debug: {\n    base_level_id: baseLevel.level_id,\n    base_level_label: baseLevel.label || levelNameMap[baseLevel.level_id],\n    years_intl_dev: yearsDev,\n    years_in_skill_area: yearsSkill,\n    promoted_for_leadership_or_publications: hasLead || hasPubs\n  }\n};\n\n// 10. Return a single item\nreturn [{ json: enrichedProfile }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2688,
+        -160
+      ],
+      "id": "51520e58-d590-4f8d-b7d1-bb3dddea4ef1",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk/",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1881291929,
+          "mode": "list",
+          "cachedResultName": "Scarcity_Factors",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk/edit#gid=1881291929"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2448,
+        -160
+      ],
+      "id": "58b42776-5006-4420-ad86-cce2eb19b7e5",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk/",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1666150931,
+          "mode": "list",
+          "cachedResultName": "Base_Rates",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk/edit#gid=1666150931"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1904,
+        -160
+      ],
+      "id": "aeaaacc7-4cca-4f5a-9ce4-8a89b6df30fb",
+      "name": "Get row(s) in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 708939643,
+          "mode": "list",
+          "cachedResultName": "Profile_Schema",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk/edit#gid=708939643"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        1184,
+        176
+      ],
+      "id": "92d829bc-17c8-46d1-a76f-80cb25989328",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Profile rate tuning: from generic band (level-based) to individual band (profile-based)\n// This node:\n// - Starts from generic_rate_band (min/max/avg).\n// - Positions the consultant within the level based on years_intl_dev.\n// - Applies profile-level scarcity uplift (scarcity_ids_auto + is_economist).\n// - Applies a small language uplift (modern languages only, optional niche bonus).\n// - Returns an `individual_rate_band` with debug info.\n\n// 1. Current profile object\nconst p = $json;\n\n// 2. Generic band (must exist and be sensible)\nconst band = p.generic_rate_band || {};\nconst baseCurrency = band.currency || 'USD';\nconst baseMin = Number(band.min ?? 0);\nconst baseMax = Number(band.max ?? baseMin);\n\nif (!baseMin || !baseMax || baseMax <= baseMin) {\n  // If band is degenerate, just pass through without individual tuning\n  return [{\n    json: {\n      ...p,\n      individual_rate_band: null\n    }\n  }];\n}\n\n// 3. Position within level based on years_intl_dev vs level range\n\nconst cfg = p.level_config || {};\nconst levelMinDev = cfg.min_years_dev != null ? Number(cfg.min_years_dev) : null;\nconst levelMaxDev = cfg.max_years_dev != null ? Number(cfg.max_years_dev) : null;\n\n// Some profiles might have `years_intn_dev` instead of `years_intl_dev`\nconst yearsDev = Number(\n  p.years_intl_dev ??\n  p.years_intn_dev ??\n  0\n);\n\nlet position = 0.5; // default: middle of band if we can't compute properly\n\nif (levelMinDev != null && levelMaxDev != null && levelMaxDev > levelMinDev) {\n  const span = levelMaxDev - levelMinDev;\n  position = (yearsDev - levelMinDev) / span;\n  if (position < 0) position = 0;\n  if (position > 1) position = 1;\n} else if (levelMinDev != null && levelMaxDev == null) {\n  // Open-ended top level (e.g. min 15, no max):\n  // assume a notional 10-year span beyond min\n  const span = 10;\n  position = (yearsDev - levelMinDev) / span;\n  if (position < 0) position = 0;\n  if (position > 1) position = 1;\n}\n\n// Base suggested point inside the generic band (before scarcity/languages)\nconst baseSuggested = baseMin + position * (baseMax - baseMin);\n\n// 4. Profile-level scarcity from scarcity_ids_auto + is_economist\n\n// Load Scarcity_Factors from \"Get row(s) in sheet1\"\nconst scarcityItems = $items('Get row(s) in sheet1') || [];\nconst scarcityMap = new Map();\n\nfor (const item of scarcityItems) {\n  const row = item.json;\n  if (!row.scarcity_id) continue;\n\n  // profile_uplift_pct is the % uplift at profile level (e.g. 0.03 = +3%)\n  const upliftRaw = row.profile_uplift_pct;\n  const uplift =\n    upliftRaw !== undefined && upliftRaw !== ''\n      ? parseFloat(upliftRaw)\n      : 0.0;\n\n  scarcityMap.set(row.scarcity_id, {\n    scarcity_id: row.scarcity_id,\n    profile_uplift_pct: uplift\n  });\n}\n\n// Start from auto-detected scarcity_ids (from Profile_Schema / LLM)\nconst autoIds = Array.isArray(p.scarcity_ids_auto) ? [...p.scarcity_ids_auto] : [];\n\n// Map is_economist flag to ECON scarcity_id if present in config\nif (p.is_economist) {\n  if (!autoIds.includes('ECON')) {\n    autoIds.push('ECON');\n  }\n}\n\n// Sum profile uplifts from scarcity_ids_auto, with a conservative cap\nlet totalUplift = 0;\nfor (const id of autoIds) {\n  const cfgRow = scarcityMap.get(id);\n  if (!cfgRow) continue;\n  totalUplift += cfgRow.profile_uplift_pct || 0;\n}\n\n// Cap total profile uplift from scarcity to, say, +15%\nconst maxProfileUplift = 0.15;\nif (totalUplift > maxProfileUplift) {\n  totalUplift = maxProfileUplift;\n}\n\nconst scarcityFactor = 1 + totalUplift;\n\n// 5. Language factor (modern languages only + optional niche boost)\n\n// Normalize languages array\nconst langs = Array.isArray(p.languages) ? p.languages : [];\n\n// Define a simple list of \"modern/operative\" languages we care about\nconst modernLangs = [\n  'German', 'English', 'French', 'Spanish', 'Portuguese',\n  'Italian', 'Dutch', 'Swedish', 'Norwegian', 'Danish',\n  'Finnish', 'Polish', 'Czech', 'Slovak', 'Hungarian',\n  'Romanian', 'Bulgarian', 'Greek', 'Turkish',\n  'Arabic', 'Hebrew', 'Farsi', 'Urdu', 'Hindi',\n  'Bengali', 'Tamil', 'Telugu', 'Kannada', 'Malayalam',\n  'Russian', 'Ukrainian',\n  'Chinese', 'Japanese', 'Korean',\n  'Swahili', 'Amharic', 'Tigrinya', 'Somali',\n  'Thai', 'Vietnamese', 'Indonesian', 'Malay'\n];\n\n// Languages we treat as \"niche bonus\" for profile purposes\nconst nicheLangs = [\n  'Arabic', 'Russian', 'Pashto', 'Dari', 'Farsi',\n  'Tigrinya', 'Amharic', 'Somali', 'Swahili',\n  'Ukrainian', 'Hebrew'\n];\n\nlet modernLangCount = 0;\nlet hasNiche = false;\n\nfor (const l of langs) {\n  const name = (l.language || '').trim();\n  if (!name) continue;\n\n  if (modernLangs.includes(name)) {\n    modernLangCount += 1;\n  }\n  if (nicheLangs.includes(name)) {\n    hasNiche = true;\n  }\n}\n\nlet langFactor = 1.0;\n\n// e.g. +2% if the consultant speaks ≥3 modern languages\nif (modernLangCount >= 3) {\n  langFactor += 0.02;\n}\n\n// e.g. +3% if at least one niche language\nif (hasNiche) {\n  langFactor += 0.03;\n}\n\n// Cap the language uplift at +5% overall\nif (langFactor > 1.05) {\n  langFactor = 1.05;\n}\n\n// 6. Combined profile factor (without client/project yet)\n\nconst profileFactor = scarcityFactor * langFactor;\n\n// 7. Construct the individual band\n\n// We narrow around baseSuggested: ±15% (before applying profileFactor)\nconst spread = 0.15;\n\nlet indMin = baseSuggested * (1 - spread);\nlet indMax = baseSuggested * (1 + spread);\n\n// Clamp to the generic band\nif (indMin < baseMin) indMin = baseMin;\nif (indMax > baseMax) indMax = baseMax;\n\n// Apply profile factor to the band and suggested point\nconst finalMin = indMin * profileFactor;\nconst finalMax = indMax * profileFactor;\nconst finalAvg = (finalMin + finalMax) / 2;\nconst finalSuggested = baseSuggested * profileFactor;\n\n// 8. Build the result object\n\nconst individualBand = {\n  currency: baseCurrency,\n  min: finalMin,\n  max: finalMax,\n  avg: finalAvg,\n  suggested: finalSuggested,\n  debug: {\n    base_band_min: baseMin,\n    base_band_max: baseMax,\n    position_within_level: position,\n    scarcity_factor: scarcityFactor,\n    language_factor: langFactor,\n    profile_factor: profileFactor,\n    auto_scarcity_ids: autoIds,\n    years_intl_dev_used: yearsDev,\n    level_min_years_dev: levelMinDev,\n    level_max_years_dev: levelMaxDev\n  }\n};\n\n// 9. Return enriched profile with individual_rate_band\n\nreturn [{\n  json: {\n    ...p,\n    individual_rate_band: individualBand\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2976,
+        -160
+      ],
+      "id": "20e70225-6b09-468a-92f9-73f54290883d",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.name }}",
+            "Email": "={{ $json.email }}",
+            "highest_degree": "={{ $json.highest_degree }}",
+            "field_of_study": "={{ $json.field_of_study }}",
+            "total_years_experience": "={{ $json.total_years_experience }}",
+            "years_intn_dev": "={{ $json.years_intl_dev }}",
+            "primary_skill_area": "={{ $json.primary_skill_area }}",
+            "years_in_skill_area": "={{ $json.years_in_skill_area }}",
+            "other_skill_areas": "={{ $json.other_skill_areas }}",
+            "languages": "={{ $json.languages }}",
+            "region_worked": "={{ $json.regions_worked }}",
+            "countries_worked": "={{ $json.countries_worked }}",
+            "current_country": "={{ $json.current_country }}",
+            "has_team_lead_experience": "={{ $json.has_team_lead_experience }}",
+            "has_publication": "={{ $json.has_publications }}",
+            "notable_publications": "={{ $json.notable_publications }}",
+            "cv_source_file_id": "={{ $json.cv_source_file_id }}",
+            "cv_source_file_name": "={{ $json.cv_source_file_name }}",
+            "level_key": "={{ $json.level_key }}",
+            "level_label": "={{ $json.level_label }}",
+            "level_config": "={{ $json.level_config }}",
+            "generic_rate_band": "={{ $json.generic_rate_band }}",
+            "min_rate_indi": "={{ $json.individual_rate_band.min }}",
+            "max_rate_indi": "={{ $json.individual_rate_band.max }}",
+            "average_rate_indi": "={{ $json.individual_rate_band.avg }}",
+            "suggested_rate_indi": "={{ $json.individual_rate_band.suggested }}",
+            "is_economist": "={{ $json.is_economist }}",
+            "scarcity_ids_auto": "={{ $json.scarcity_ids_auto }}",
+            "level_id": "={{ $json.level_id }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Profile_version",
+              "displayName": "Profile_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Last_parsed",
+              "displayName": "Last_parsed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "linkedIn",
+              "displayName": "linkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "highest_degree",
+              "displayName": "highest_degree",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "field_of_study",
+              "displayName": "field_of_study",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_years_experience",
+              "displayName": "total_years_experience",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "years_intn_dev",
+              "displayName": "years_intn_dev",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "primary_skill_area",
+              "displayName": "primary_skill_area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "years_in_skill_area",
+              "displayName": "years_in_skill_area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "other_skill_areas",
+              "displayName": "other_skill_areas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "languages",
+              "displayName": "languages",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "region_worked",
+              "displayName": "region_worked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "countries_worked",
+              "displayName": "countries_worked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "current_country",
+              "displayName": "current_country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "has_team_lead_experience",
+              "displayName": "has_team_lead_experience",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "has_publication",
+              "displayName": "has_publication",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "notable_publications",
+              "displayName": "notable_publications",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cv_source_file_id",
+              "displayName": "cv_source_file_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cv_source_file_name",
+              "displayName": "cv_source_file_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "level_key",
+              "displayName": "level_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "level_label",
+              "displayName": "level_label",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "level_config",
+              "displayName": "level_config",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "generic_rate_band",
+              "displayName": "generic_rate_band",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "is_economist",
+              "displayName": "is_economist",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "min_rate_indi",
+              "displayName": "min_rate_indi",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "max_rate_indi",
+              "displayName": "max_rate_indi",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "average_rate_indi",
+              "displayName": "average_rate_indi",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "suggested_rate_indi",
+              "displayName": "suggested_rate_indi",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scarcity_ids_auto",
+              "displayName": "scarcity_ids_auto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "level_id",
+              "displayName": "level_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3264,
+        -160
+      ],
+      "id": "26532509-e78b-4626-b200-3aa50133bf83",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-09T08:40:29.367Z",
+      "createdAt": "2025-12-09T08:40:29.367Z",
+      "role": "workflow:owner",
+      "workflowId": "WGnNldDiVN6D7ccG",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-05-19T06:07:11.055Z",
+  "versionId": "6d01b11a-6cbe-4a12-8770-eac754e93300"
+}
