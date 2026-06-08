@@ -1,0 +1,1237 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-05T11:17:47.162Z",
+    "createdAt": "2026-06-05T11:17:47.162Z",
+    "versionId": "c5d923cf-695b-4945-ab3b-da8ebc6fa78c",
+    "workflowId": "P7VzgpTFym7i9PPl",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 12
+              }
+            ]
+          }
+        },
+        "id": "1d5a6c6c-fb99-4a62-bbe4-73ece1128efb",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -928,
+          432
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "searchQuery": "(Ukraine OR Ukrainian) AND (reconstruction OR recovery OR rebuilding) AND (conference OR summit OR forum OR workshop OR seminar) AND (2026 OR upcoming OR schedule)",
+          "options": {
+            "outputFormat": ""
+          },
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.jinaAi",
+        "typeVersion": 1,
+        "position": [
+          -512,
+          512
+        ],
+        "id": "c1fd8365-70f1-4511-a9f5-3b9412d0b21d",
+        "name": "Search web",
+        "credentials": {
+          "jinaAiApi": {
+            "id": "vO8eAsKc5rR8eQvz",
+            "name": "Jina Reader"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Extract the title, url and description fields\nreturn $input.all().map(item => {\n  return {\n    json: {\n      title: item.json.title,\n      url: item.json.url,\n      description: item.json.description\n    }\n  };\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -240,
+          320
+        ],
+        "id": "535f7256-bccd-4bfb-a538-cbe5d3aee18b",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Inspect this URL  {{ $json.url }}",
+          "options": {
+            "systemMessage": "=# Role\nYou are a specialized intelligence agent focused on event logistics, temporal data extraction, and verification. Your primary goal is to determine the viability of professional events based on their dates and physical/digital location.\n\n## Objective\nVisit a provided URL, extract all relevant event metadata, and perform a **\"Temporal Audit\"** to determine if the event is in the past or the future relative to the current timestamp.\n\n---\n\n## Step-by-Step Instructions\n\n### 1. Web Research\n- Use the `web_search` tool to visit the provided URL.\n- If the page contains a list of events, focus your extraction on the primary or most prominent event mentioned.\n\n### 2. Date Extraction\n- Locate the **Event Start Date** and **Event End Date**.\n- If only one date is mentioned, use that specific date for both the start and end fields.\n- Convert all extracted dates into a standardized ISO format (`YYYY-MM-DD`).\n\n### 3. Temporal Audit (The Logic Gate)\n- Compare the **Event Start Date** against the current date: `{{ $now }}`.\n- **Condition A:** If the event date is **before** the current date, mark the status as `\"past_event\"`.\n- **Condition B:** If the event date is **today or in the future**, mark the status as `\"future_event\"`.\n\n### 4. Location Classification\n- Identify the physical venue, city, or digital platform.\n- **Location Type Rules:**\n    - **`in_person`**: If a physical address or city is mentioned.\n    - **`hybrid`**: If both a physical address and a digital link (Zoom, Webex, Stream, etc.) are mentioned.\n    - **`online`**: If only a digital link or keywords like \"Virtual\" or \"Webinar\" are mentioned.\n\n---\n\n## Output Requirements\nReturn the result in **JSON format** using the following keys:\n\n{\n  \"title\": {{ $json.title }},\n  \"url\": {{ $json.url }},\n  \"description\":{{ $json.description }} ,\n  \"event_start_date\": \"YYYY-MM-DD\",\n  \"event_end_date\": \"YYYY-MM-DD\",\n  \"location\": \"City/Venue name OR 'Online' if no physical location exists\",\n  \"location_type\": \"in_person | hybrid | online\",\n  \"status\": \"future_event | past_event\"\n} "
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3,
+        "position": [
+          -16,
+          320
+        ],
+        "id": "d73cc5cf-1062-49b6-89ef-1992dfd264f2",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "gpt-4o-mini",
+            "mode": "list",
+            "cachedResultName": "gpt-4o-mini"
+          },
+          "builtInTools": {
+            "webSearch": {
+              "searchContextSize": "medium"
+            }
+          },
+          "options": {
+            "textFormat": {
+              "textOptions": {
+                "type": "json_schema",
+                "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"Map this from the input\"\n    },\n    \"url\": {\n      \"type\": \"string\",\n      \"description\": \"Map this from the input\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"Map this from the input\"\n    },\n    \"event_start_date\": {\n      \"type\": \"string\",\n      \"description\": \"The start date of the event in YYYY-MM-DD format.\"\n    },\n    \"event_end_date\": {\n      \"type\": \"string\",\n      \"description\": \"The end date of the event in YYYY-MM-DD format.\"\n    },\n    \"location\": {\n      \"type\": \"string\",\n      \"description\": \"The city/venue name or 'Online' if no physical location exists.\"\n    },\n    \"location_type\": {\n      \"type\": \"string\",\n      \"enum\": [\"in_person\", \"hybrid\", \"online\"],\n      \"description\": \"Classification of the event environment.\"\n    },\n    \"status\": {\n      \"type\": \"string\",\n      \"enum\": [\"future_event\", \"past_event\"],\n      \"description\": \"The temporal status based on the current date.\"\n    }\n  },\n  \"required\": [\n    \"title\",\n    \"url\",\n    \"description\",\n    \"event_start_date\",\n    \"event_end_date\",\n    \"location\",\n    \"location_type\",\n    \"status\"\n  ],\n  \"additionalProperties\": false\n}"
+              }
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.3,
+        "position": [
+          64,
+          544
+        ],
+        "id": "7b419ede-5e05-472d-9646-7f4074227305",
+        "name": "OpenAI Chat Model1",
+        "credentials": {
+          "openAiApi": {
+            "id": "a4ja82V4nnlunpii",
+            "name": "openai"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "b8e7b42b-1a81-4bf3-859d-86f0a6a94d50",
+                "leftValue": "={{ $json.status }}",
+                "rightValue": "future_event",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          528,
+          -160
+        ],
+        "id": "240eaa69-fa5a-4aa6-bf64-28ee2f5fc0da",
+        "name": "check event status"
+      },
+      {
+        "parameters": {
+          "jsCode": "return $input.all().map(item => {\n  try {\n    // This takes the 'output' text and turns it into a real JSON object\n    const parsedData = JSON.parse(item.json.output);\n    \n    return {\n      json: parsedData\n    };\n  } catch (error) {\n    // This handles cases where the AI might have returned non-JSON text\n    return {\n      json: {\n        error: \"Could not parse AI output\",\n        raw: item.json.output\n      }\n    }\n  }\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          336,
+          320
+        ],
+        "id": "3fae59b1-2e38-40fa-ab4f-90e9096e2d17",
+        "name": "format converter"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://xzulfjussvbykwnzgdba.supabase.co/rest/v1/rpc/check_event_exists",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "supabaseApi",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"url_to_check\": \"{{ $json.url }}\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          752,
+          -160
+        ],
+        "id": "b9e450a1-63e3-4c44-9222-8af28367567f",
+        "name": "Deduplication  Fx",
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "06d8a088-9ad9-46bf-b026-44852fc442b5",
+                "leftValue": "={{ $json.exists }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          976,
+          -160
+        ],
+        "id": "13f2ae65-7cb3-4ec2-be0d-4e0b59f9797c",
+        "name": "Results"
+      },
+      {
+        "parameters": {
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "url",
+                "field2": "url"
+              }
+            ]
+          },
+          "resolve": "preferInput2",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.compareDatasets",
+        "typeVersion": 2.3,
+        "position": [
+          1232,
+          288
+        ],
+        "id": "bf575179-83d9-448f-853d-2225940d7824",
+        "name": "Compare Datasets"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Analyze, classify and convert the following\ntitle: {{ $json.title }}\ndescription: {{ $json.description }}\nlocation: {{ $json.location }}\nlocation_type: {{ $json.location_type }}\nevent_start_date: {{ $json.event_start_date }},\nevent_end_date: {{ $json.event_end_date }},\nurl: {{ $json.url }}",
+          "options": {
+            "systemMessage": "=# Role & Persona\nYou are the Polyglot Event Classifier, a precise multilingual analyst specializing in international development and reconstruction logistics. Your job is to take raw event metadata and transform it into a localized, categorized format ready for a global database. You are detail-oriented and strictly follow classification taxonomies.\n\n# Objective\nTake the input event data (title, description, dates, etc.) and perform three specific tasks:\n1. **Language Detection & Translation**: Identify the source language and provide translations for English, Ukrainian, and German.\n2. **Sector Classification**: Assign the event to a specific recovery sector based on strict definitions.\n3. **Entity Extraction**: Identify the organizer and the specific format of the event.\n\n# Step-by-Step Execution\n\n## 1. Language Detection & Translation\n- Detect the `original_language` of the input title and description.\n- Translate the Title and Description into:\n    - English (`_en`)\n    - Ukrainian (`_uk`)\n    - German (`_de`)\n- If the input is already in one of these languages, preserve the original text for that specific field and translate the others.\n\n## 2. Sector Classification (Strict Criteria)\nAnalyze the description and title. You must set `primary_sector` to exactly one of the following four categories based on the primary purpose of the event:\n- **Disaster Risk Management**: Hazards, risk assessment, preparedness, emergency response, or recovery coordination.\n- **Basic Infrastructure**: Public utilities (energy, water, transport, comms) or critical facilities like hospitals.\n- **Housing**: Repair or reconstruction of permanent residential dwellings and buildings.\n- **Urban Resilience**: City planning, neighborhood-level interventions, and adapting cities to shocks/stresses.\n\n**Rule**: If an event overlaps, choose the most prominent one. Do not create new categories. Use these exact keys in the JSON: `housing`, `infrastructure`, `urban-resilience`, or `disaster-risk`.\n\n## 3. Event Type & Organizer extraction\n- **Identify the Organizer Name**: The organization, government body, or company hosting the event.\n- **Categorize the Event Type**: Choose from `conference`, `forum`, `webinar`, `roundtable`, `training`, `procurement_briefing`, or `other`.\n\n# Output Requirements (JSON)\nReturn the result in JSON format. Maintain all existing fields while adding the new localized and classified fields.\n\n{\n  \"title\": \"obtain this from the user input\",\n  \"title_en\": \"English Translation\",\n  \"title_uk\": \"Ukrainian Translation\",\n  \"title_de\": \"German Translation\",\n  \"url\": \"Obtain this from the user input\",\n  \"description\": \"Obtain this from the user input\",\n  \"description_en\": \"English Summary\",\n  \"description_uk\": \"Ukrainian Summary\",\n  \"description_de\": \"German Summary\",\n  \"event_start_date\": \"Obtain this from the user input\",\n  \"event_end_date\": \"Obtain this from the user input\",\n\"event_url\": \"Obtain this from the user input\"\n  \"location\": \"obtain this from the user input \",\n  \"location_type\": \"Obtain this from the user input\",\n  \"organizer_name\": \"Name or null\",\n  \"event_type\": \"conference | forum | webinar | roundtable | training | procurement_briefing | other\",\n  \"primary_sector\": \"housing | infrastructure | urban-resilience | disaster-risk\",\n  \"original_language\": \"English | Ukrainian | German | etc.\"\n} "
+          }
+        },
+        "id": "d4c7a784-c55d-4cc9-8cf8-3a0a5ea008d7",
+        "name": "classifier/language translator",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3,
+        "position": [
+          1456,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4.1-mini"
+          },
+          "builtInTools": {},
+          "options": {
+            "textFormat": {
+              "textOptions": {
+                "type": "json_schema",
+                "schema": "{\n    \"type\": \"object\",\n    \"properties\": {\n      \"title\": {\n        \"type\": \"string\",\n        \"description\": \"The original title of the event.\"\n      },\n      \"title_en\": {\n        \"type\": \"string\",\n        \"description\": \"English translation of the title.\"\n      },\n      \"title_uk\": {\n        \"type\": \"string\",\n        \"description\": \"Ukrainian translation of the title.\"\n      },\n      \"title_de\": {\n        \"type\": \"string\",\n        \"description\": \"German translation of the title.\"\n      },\n      \"url\": {\n        \"type\": \"string\",\n        \"description\": \"The source URL of the event.\"\n      },\n      \"description\": {\n        \"type\": \"string\",\n        \"description\": \"The original description of the event.\"\n      },\n      \"description_en\": {\n        \"type\": \"string\",\n        \"description\": \"English translation of the description.\"\n      },\n      \"description_uk\": {\n        \"type\": \"string\",\n        \"description\": \"Ukrainian translation of the description.\"\n      },\n      \"description_de\": {\n        \"type\": \"string\",\n        \"description\": \"German translation of the description.\"\n      },\n      \"event_start_date\": {\n        \"type\": \"string\",\n        \"description\": \"Start date in YYYY-MM-DD format.\"\n      },\n      \"event_end_date\": {\n        \"type\": \"string\",\n        \"description\": \"End date in YYYY-MM-DD format.\"\n      },\n      \"location\": {\n        \"type\": \"string\",\n        \"description\":\"original location from the input.\"\n      },\n      \"location_type\": {\n        \"type\": \"string\",\n        \"description\": \"original type from the input.\"\n      },\n      \"organizer_name\": {\n        \"type\": [\"string\", \"null\"],\n        \"description\": \"Name of the hosting organization or null if unknown.\"\n      },\n      \"event_type\": {\n        \"type\": \"string\",\n        \"enum\": [\"conference\", \"forum\", \"webinar\", \"roundtable\", \"training\", \"procurement_briefing\", \"other\"],\n        \"description\": \"The format of the event.\"\n      },\n      \"primary_sector\": {\n        \"type\": \"string\",\n        \"enum\": [\"housing\", \"infrastructure\", \"urban-resilience\", \"disaster-risk\"],\n        \"description\": \"The primary reconstruction sector this event belongs to.\"\n      },\n      \"original_language\": {\n        \"type\": \"string\",\n        \"description\": \"The detected language of the source input.\"\n      }\n    },\n    \"required\": [\n      \"title\",\n      \"title_en\",\n      \"title_uk\",\n      \"title_de\",\n      \"url\",\n      \"description\",\n      \"description_en\",\n      \"description_uk\",\n      \"description_de\",\n      \"event_start_date\",\n      \"event_end_date\",\n      \"location\",\n      \"location_type\",\n      \"organizer_name\",\n      \"event_type\",\n      \"primary_sector\",\n      \"original_language\"\n    ],\n    \"additionalProperties\": false\n  }"
+              }
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.3,
+        "position": [
+          1536,
+          544
+        ],
+        "id": "da0b1b51-10d5-465c-8efd-e205ca563e32",
+        "name": "OpenAI Chat Model2",
+        "credentials": {
+          "openAiApi": {
+            "id": "a4ja82V4nnlunpii",
+            "name": "openai"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "return $input.all().map(item => {\n  try {\n    // This takes the 'output' text and turns it into a real JSON object\n    const parsedData = JSON.parse(item.json.output);\n    \n    return {\n      json: parsedData\n    };\n  } catch (error) {\n    // This handles cases where the AI might have returned non-JSON text\n    return {\n      json: {\n        error: \"Could not parse AI output\",\n        raw: item.json.output\n      }\n    }\n  }\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1808,
+          320
+        ],
+        "id": "d6b88efb-e3a5-4a8c-a9d9-ed18187c0083",
+        "name": "format converter1"
+      },
+      {
+        "parameters": {
+          "tableId": "events",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "title_uk",
+                "fieldValue": "={{ $json.title_uk }}"
+              },
+              {
+                "fieldId": "title_en",
+                "fieldValue": "={{ $json.title_en }}"
+              },
+              {
+                "fieldId": "title_de",
+                "fieldValue": "={{ $json.title_de }}"
+              },
+              {
+                "fieldId": "description_uk",
+                "fieldValue": "={{ $json.description_uk }}"
+              },
+              {
+                "fieldId": "description_en",
+                "fieldValue": "={{ $json.description_en }}"
+              },
+              {
+                "fieldId": "event_date",
+                "fieldValue": "={{ $json.event_start_date }}"
+              },
+              {
+                "fieldId": "event_end_date",
+                "fieldValue": "={{ $json.event_end_date }}"
+              },
+              {
+                "fieldId": "location",
+                "fieldValue": "={{ $json.location }}"
+              },
+              {
+                "fieldId": "location_type",
+                "fieldValue": "={{ $json.location_type }}"
+              },
+              {
+                "fieldId": "event_url",
+                "fieldValue": "={{ $json.url }}"
+              },
+              {
+                "fieldId": "primary_sector",
+                "fieldValue": "={{ [$json.primary_sector] }}"
+              },
+              {
+                "fieldId": "organizer_name",
+                "fieldValue": "={{ $json.organizer_name }}"
+              },
+              {
+                "fieldId": "source_url",
+                "fieldValue": "={{ $json.url }}"
+              },
+              {
+                "fieldId": "original_language",
+                "fieldValue": "={{ $json.original_language }}"
+              },
+              {
+                "fieldId": "event_type",
+                "fieldValue": "={{ $json.event_type }}"
+              }
+            ]
+          }
+        },
+        "id": "644d91a5-200b-400e-a221-db73cd9f7fc8",
+        "name": "Supabase - Insert Event1",
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          2032,
+          320
+        ],
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "resource": "MapSearch",
+          "operation": "search",
+          "query": "onduct a thorough web search for any major news events relevant to Ukraine reconstruction / recovery (infrastructure, housing, energy, demining, municipal finance, governance reforms, donor coordination) happening in 2026. posted within the last 24 hours. Prefer authoritative organizers, stakeholders, NGOs, government websites. Provide the event URL, start date and end date of the evnt.",
+          "limit": 15,
+          "requestOptions": {}
+        },
+        "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+        "typeVersion": 1,
+        "position": [
+          -496,
+          176
+        ],
+        "id": "c1245d8f-ac50-41a8-b922-2f62065fdeb8",
+        "name": "Search the web and scrape results",
+        "credentials": {
+          "firecrawlApi": {
+            "id": "5bIzfAhyGwoRrIif",
+            "name": "Firecrawl account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## I'm a note \n# **Deduplication Logic**\nReplaced the content hash, with using the event URLs as the unique constraint. So we dedupe on the event_url\nCheck database record if the event already exists. The rest of the workflow only proceeds if event_url is unique",
+          "height": 480,
+          "width": 1184
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          80,
+          -336
+        ],
+        "id": "cca39548-0314-4fb3-986d-cf377dc326ac",
+        "name": "Sticky Note"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Search web",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Search the web and scrape results",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search web": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "format converter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "check event status": {
+        "main": [
+          [
+            {
+              "node": "Deduplication  Fx",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "format converter": {
+        "main": [
+          [
+            {
+              "node": "check event status",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Compare Datasets",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Deduplication  Fx": {
+        "main": [
+          [
+            {
+              "node": "Results",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Results": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Compare Datasets",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Compare Datasets": {
+        "main": [
+          [],
+          [],
+          [
+            {
+              "node": "classifier/language translator",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model2": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "classifier/language translator",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "classifier/language translator": {
+        "main": [
+          [
+            {
+              "node": "format converter1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "format converter1": {
+        "main": [
+          [
+            {
+              "node": "Supabase - Insert Event1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search the web and scrape results": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": " Scio Network ",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "c5d923cf-695b-4945-ab3b-da8ebc6fa78c",
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search web",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search the web and scrape results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search web": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "format converter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check event status": {
+      "main": [
+        [
+          {
+            "node": "Deduplication  Fx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format converter": {
+      "main": [
+        [
+          {
+            "node": "check event status",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Deduplication  Fx": {
+      "main": [
+        [
+          {
+            "node": "Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Results": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Datasets": {
+      "main": [
+        [],
+        [],
+        [
+          {
+            "node": "classifier/language translator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "classifier/language translator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "classifier/language translator": {
+      "main": [
+        [
+          {
+            "node": "format converter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format converter1": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Insert Event1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search the web and scrape results": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-03T12:18:00.914Z",
+  "id": "P7VzgpTFym7i9PPl",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_Events_Ingestion_v2",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "id": "1d5a6c6c-fb99-4a62-bbe4-73ece1128efb",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -928,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "searchQuery": "(Ukraine OR Ukrainian) AND (reconstruction OR recovery OR rebuilding) AND (conference OR summit OR forum OR workshop OR seminar) AND (2026 OR upcoming OR schedule)",
+        "options": {
+          "outputFormat": ""
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.jinaAi",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        512
+      ],
+      "id": "c1fd8365-70f1-4511-a9f5-3b9412d0b21d",
+      "name": "Search web",
+      "credentials": {
+        "jinaAiApi": {
+          "id": "vO8eAsKc5rR8eQvz",
+          "name": "Jina Reader"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract the title, url and description fields\nreturn $input.all().map(item => {\n  return {\n    json: {\n      title: item.json.title,\n      url: item.json.url,\n      description: item.json.description\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        320
+      ],
+      "id": "535f7256-bccd-4bfb-a538-cbe5d3aee18b",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Inspect this URL  {{ $json.url }}",
+        "options": {
+          "systemMessage": "=# Role\nYou are a specialized intelligence agent focused on event logistics, temporal data extraction, and verification. Your primary goal is to determine the viability of professional events based on their dates and physical/digital location.\n\n## Objective\nVisit a provided URL, extract all relevant event metadata, and perform a **\"Temporal Audit\"** to determine if the event is in the past or the future relative to the current timestamp.\n\n---\n\n## Step-by-Step Instructions\n\n### 1. Web Research\n- Use the `web_search` tool to visit the provided URL.\n- If the page contains a list of events, focus your extraction on the primary or most prominent event mentioned.\n\n### 2. Date Extraction\n- Locate the **Event Start Date** and **Event End Date**.\n- If only one date is mentioned, use that specific date for both the start and end fields.\n- Convert all extracted dates into a standardized ISO format (`YYYY-MM-DD`).\n\n### 3. Temporal Audit (The Logic Gate)\n- Compare the **Event Start Date** against the current date: `{{ $now }}`.\n- **Condition A:** If the event date is **before** the current date, mark the status as `\"past_event\"`.\n- **Condition B:** If the event date is **today or in the future**, mark the status as `\"future_event\"`.\n\n### 4. Location Classification\n- Identify the physical venue, city, or digital platform.\n- **Location Type Rules:**\n    - **`in_person`**: If a physical address or city is mentioned.\n    - **`hybrid`**: If both a physical address and a digital link (Zoom, Webex, Stream, etc.) are mentioned.\n    - **`online`**: If only a digital link or keywords like \"Virtual\" or \"Webinar\" are mentioned.\n\n---\n\n## Output Requirements\nReturn the result in **JSON format** using the following keys:\n\n{\n  \"title\": {{ $json.title }},\n  \"url\": {{ $json.url }},\n  \"description\":{{ $json.description }} ,\n  \"event_start_date\": \"YYYY-MM-DD\",\n  \"event_end_date\": \"YYYY-MM-DD\",\n  \"location\": \"City/Venue name OR 'Online' if no physical location exists\",\n  \"location_type\": \"in_person | hybrid | online\",\n  \"status\": \"future_event | past_event\"\n} "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -16,
+        320
+      ],
+      "id": "d73cc5cf-1062-49b6-89ef-1992dfd264f2",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "medium"
+          }
+        },
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"Map this from the input\"\n    },\n    \"url\": {\n      \"type\": \"string\",\n      \"description\": \"Map this from the input\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"description\": \"Map this from the input\"\n    },\n    \"event_start_date\": {\n      \"type\": \"string\",\n      \"description\": \"The start date of the event in YYYY-MM-DD format.\"\n    },\n    \"event_end_date\": {\n      \"type\": \"string\",\n      \"description\": \"The end date of the event in YYYY-MM-DD format.\"\n    },\n    \"location\": {\n      \"type\": \"string\",\n      \"description\": \"The city/venue name or 'Online' if no physical location exists.\"\n    },\n    \"location_type\": {\n      \"type\": \"string\",\n      \"enum\": [\"in_person\", \"hybrid\", \"online\"],\n      \"description\": \"Classification of the event environment.\"\n    },\n    \"status\": {\n      \"type\": \"string\",\n      \"enum\": [\"future_event\", \"past_event\"],\n      \"description\": \"The temporal status based on the current date.\"\n    }\n  },\n  \"required\": [\n    \"title\",\n    \"url\",\n    \"description\",\n    \"event_start_date\",\n    \"event_end_date\",\n    \"location\",\n    \"location_type\",\n    \"status\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        544
+      ],
+      "id": "7b419ede-5e05-472d-9646-7f4074227305",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b8e7b42b-1a81-4bf3-859d-86f0a6a94d50",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "future_event",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        528,
+        -160
+      ],
+      "id": "240eaa69-fa5a-4aa6-bf64-28ee2f5fc0da",
+      "name": "check event status"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  try {\n    // This takes the 'output' text and turns it into a real JSON object\n    const parsedData = JSON.parse(item.json.output);\n    \n    return {\n      json: parsedData\n    };\n  } catch (error) {\n    // This handles cases where the AI might have returned non-JSON text\n    return {\n      json: {\n        error: \"Could not parse AI output\",\n        raw: item.json.output\n      }\n    }\n  }\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        320
+      ],
+      "id": "3fae59b1-2e38-40fa-ab4f-90e9096e2d17",
+      "name": "format converter"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://xzulfjussvbykwnzgdba.supabase.co/rest/v1/rpc/check_event_exists",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"url_to_check\": \"{{ $json.url }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        -160
+      ],
+      "id": "b9e450a1-63e3-4c44-9222-8af28367567f",
+      "name": "Deduplication  Fx",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "06d8a088-9ad9-46bf-b026-44852fc442b5",
+              "leftValue": "={{ $json.exists }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        976,
+        -160
+      ],
+      "id": "13f2ae65-7cb3-4ec2-be0d-4e0b59f9797c",
+      "name": "Results"
+    },
+    {
+      "parameters": {
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "url",
+              "field2": "url"
+            }
+          ]
+        },
+        "resolve": "preferInput2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.compareDatasets",
+      "typeVersion": 2.3,
+      "position": [
+        1232,
+        288
+      ],
+      "id": "bf575179-83d9-448f-853d-2225940d7824",
+      "name": "Compare Datasets"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze, classify and convert the following\ntitle: {{ $json.title }}\ndescription: {{ $json.description }}\nlocation: {{ $json.location }}\nlocation_type: {{ $json.location_type }}\nevent_start_date: {{ $json.event_start_date }},\nevent_end_date: {{ $json.event_end_date }},\nurl: {{ $json.url }}",
+        "options": {
+          "systemMessage": "=# Role & Persona\nYou are the Polyglot Event Classifier, a precise multilingual analyst specializing in international development and reconstruction logistics. Your job is to take raw event metadata and transform it into a localized, categorized format ready for a global database. You are detail-oriented and strictly follow classification taxonomies.\n\n# Objective\nTake the input event data (title, description, dates, etc.) and perform three specific tasks:\n1. **Language Detection & Translation**: Identify the source language and provide translations for English, Ukrainian, and German.\n2. **Sector Classification**: Assign the event to a specific recovery sector based on strict definitions.\n3. **Entity Extraction**: Identify the organizer and the specific format of the event.\n\n# Step-by-Step Execution\n\n## 1. Language Detection & Translation\n- Detect the `original_language` of the input title and description.\n- Translate the Title and Description into:\n    - English (`_en`)\n    - Ukrainian (`_uk`)\n    - German (`_de`)\n- If the input is already in one of these languages, preserve the original text for that specific field and translate the others.\n\n## 2. Sector Classification (Strict Criteria)\nAnalyze the description and title. You must set `primary_sector` to exactly one of the following four categories based on the primary purpose of the event:\n- **Disaster Risk Management**: Hazards, risk assessment, preparedness, emergency response, or recovery coordination.\n- **Basic Infrastructure**: Public utilities (energy, water, transport, comms) or critical facilities like hospitals.\n- **Housing**: Repair or reconstruction of permanent residential dwellings and buildings.\n- **Urban Resilience**: City planning, neighborhood-level interventions, and adapting cities to shocks/stresses.\n\n**Rule**: If an event overlaps, choose the most prominent one. Do not create new categories. Use these exact keys in the JSON: `housing`, `infrastructure`, `urban-resilience`, or `disaster-risk`.\n\n## 3. Event Type & Organizer extraction\n- **Identify the Organizer Name**: The organization, government body, or company hosting the event.\n- **Categorize the Event Type**: Choose from `conference`, `forum`, `webinar`, `roundtable`, `training`, `procurement_briefing`, or `other`.\n\n# Output Requirements (JSON)\nReturn the result in JSON format. Maintain all existing fields while adding the new localized and classified fields.\n\n{\n  \"title\": \"obtain this from the user input\",\n  \"title_en\": \"English Translation\",\n  \"title_uk\": \"Ukrainian Translation\",\n  \"title_de\": \"German Translation\",\n  \"url\": \"Obtain this from the user input\",\n  \"description\": \"Obtain this from the user input\",\n  \"description_en\": \"English Summary\",\n  \"description_uk\": \"Ukrainian Summary\",\n  \"description_de\": \"German Summary\",\n  \"event_start_date\": \"Obtain this from the user input\",\n  \"event_end_date\": \"Obtain this from the user input\",\n\"event_url\": \"Obtain this from the user input\"\n  \"location\": \"obtain this from the user input \",\n  \"location_type\": \"Obtain this from the user input\",\n  \"organizer_name\": \"Name or null\",\n  \"event_type\": \"conference | forum | webinar | roundtable | training | procurement_briefing | other\",\n  \"primary_sector\": \"housing | infrastructure | urban-resilience | disaster-risk\",\n  \"original_language\": \"English | Ukrainian | German | etc.\"\n} "
+        }
+      },
+      "id": "d4c7a784-c55d-4cc9-8cf8-3a0a5ea008d7",
+      "name": "classifier/language translator",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1456,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n    \"type\": \"object\",\n    \"properties\": {\n      \"title\": {\n        \"type\": \"string\",\n        \"description\": \"The original title of the event.\"\n      },\n      \"title_en\": {\n        \"type\": \"string\",\n        \"description\": \"English translation of the title.\"\n      },\n      \"title_uk\": {\n        \"type\": \"string\",\n        \"description\": \"Ukrainian translation of the title.\"\n      },\n      \"title_de\": {\n        \"type\": \"string\",\n        \"description\": \"German translation of the title.\"\n      },\n      \"url\": {\n        \"type\": \"string\",\n        \"description\": \"The source URL of the event.\"\n      },\n      \"description\": {\n        \"type\": \"string\",\n        \"description\": \"The original description of the event.\"\n      },\n      \"description_en\": {\n        \"type\": \"string\",\n        \"description\": \"English translation of the description.\"\n      },\n      \"description_uk\": {\n        \"type\": \"string\",\n        \"description\": \"Ukrainian translation of the description.\"\n      },\n      \"description_de\": {\n        \"type\": \"string\",\n        \"description\": \"German translation of the description.\"\n      },\n      \"event_start_date\": {\n        \"type\": \"string\",\n        \"description\": \"Start date in YYYY-MM-DD format.\"\n      },\n      \"event_end_date\": {\n        \"type\": \"string\",\n        \"description\": \"End date in YYYY-MM-DD format.\"\n      },\n      \"location\": {\n        \"type\": \"string\",\n        \"description\":\"original location from the input.\"\n      },\n      \"location_type\": {\n        \"type\": \"string\",\n        \"description\": \"original type from the input.\"\n      },\n      \"organizer_name\": {\n        \"type\": [\"string\", \"null\"],\n        \"description\": \"Name of the hosting organization or null if unknown.\"\n      },\n      \"event_type\": {\n        \"type\": \"string\",\n        \"enum\": [\"conference\", \"forum\", \"webinar\", \"roundtable\", \"training\", \"procurement_briefing\", \"other\"],\n        \"description\": \"The format of the event.\"\n      },\n      \"primary_sector\": {\n        \"type\": \"string\",\n        \"enum\": [\"housing\", \"infrastructure\", \"urban-resilience\", \"disaster-risk\"],\n        \"description\": \"The primary reconstruction sector this event belongs to.\"\n      },\n      \"original_language\": {\n        \"type\": \"string\",\n        \"description\": \"The detected language of the source input.\"\n      }\n    },\n    \"required\": [\n      \"title\",\n      \"title_en\",\n      \"title_uk\",\n      \"title_de\",\n      \"url\",\n      \"description\",\n      \"description_en\",\n      \"description_uk\",\n      \"description_de\",\n      \"event_start_date\",\n      \"event_end_date\",\n      \"location\",\n      \"location_type\",\n      \"organizer_name\",\n      \"event_type\",\n      \"primary_sector\",\n      \"original_language\"\n    ],\n    \"additionalProperties\": false\n  }"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1536,
+        544
+      ],
+      "id": "da0b1b51-10d5-465c-8efd-e205ca563e32",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  try {\n    // This takes the 'output' text and turns it into a real JSON object\n    const parsedData = JSON.parse(item.json.output);\n    \n    return {\n      json: parsedData\n    };\n  } catch (error) {\n    // This handles cases where the AI might have returned non-JSON text\n    return {\n      json: {\n        error: \"Could not parse AI output\",\n        raw: item.json.output\n      }\n    }\n  }\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1808,
+        320
+      ],
+      "id": "d6b88efb-e3a5-4a8c-a9d9-ed18187c0083",
+      "name": "format converter1"
+    },
+    {
+      "parameters": {
+        "tableId": "events",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.title_uk }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.title_en }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.title_de }}"
+            },
+            {
+              "fieldId": "description_uk",
+              "fieldValue": "={{ $json.description_uk }}"
+            },
+            {
+              "fieldId": "description_en",
+              "fieldValue": "={{ $json.description_en }}"
+            },
+            {
+              "fieldId": "event_date",
+              "fieldValue": "={{ $json.event_start_date }}"
+            },
+            {
+              "fieldId": "event_end_date",
+              "fieldValue": "={{ $json.event_end_date }}"
+            },
+            {
+              "fieldId": "location",
+              "fieldValue": "={{ $json.location }}"
+            },
+            {
+              "fieldId": "location_type",
+              "fieldValue": "={{ $json.location_type }}"
+            },
+            {
+              "fieldId": "event_url",
+              "fieldValue": "={{ $json.url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "organizer_name",
+              "fieldValue": "={{ $json.organizer_name }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.url }}"
+            },
+            {
+              "fieldId": "original_language",
+              "fieldValue": "={{ $json.original_language }}"
+            },
+            {
+              "fieldId": "event_type",
+              "fieldValue": "={{ $json.event_type }}"
+            }
+          ]
+        }
+      },
+      "id": "644d91a5-200b-400e-a221-db73cd9f7fc8",
+      "name": "Supabase - Insert Event1",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        320
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "MapSearch",
+        "operation": "search",
+        "query": "onduct a thorough web search for any major news events relevant to Ukraine reconstruction / recovery (infrastructure, housing, energy, demining, municipal finance, governance reforms, donor coordination) happening in 2026. posted within the last 24 hours. Prefer authoritative organizers, stakeholders, NGOs, government websites. Provide the event URL, start date and end date of the evnt.",
+        "limit": 15,
+        "requestOptions": {}
+      },
+      "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        176
+      ],
+      "id": "c1245d8f-ac50-41a8-b922-2f62065fdeb8",
+      "name": "Search the web and scrape results",
+      "credentials": {
+        "firecrawlApi": {
+          "id": "5bIzfAhyGwoRrIif",
+          "name": "Firecrawl account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \n# **Deduplication Logic**\nReplaced the content hash, with using the event URLs as the unique constraint. So we dedupe on the event_url\nCheck database record if the event already exists. The rest of the workflow only proceeds if event_url is unique",
+        "height": 480,
+        "width": 1184
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -336
+      ],
+      "id": "cca39548-0314-4fb3-986d-cf377dc326ac",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-03T12:18:00.924Z",
+      "createdAt": "2026-03-03T12:18:00.924Z",
+      "role": "workflow:owner",
+      "workflowId": "P7VzgpTFym7i9PPl",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        12
+      ]
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-06-05T11:17:45.174Z",
+      "createdAt": "2026-06-05T11:17:45.174Z",
+      "id": "7SPpYOPYmPQmZkMA",
+      "name": "events-websearch-SUR"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-05T11:17:47.161Z",
+  "versionId": "c5d923cf-695b-4945-ab3b-da8ebc6fa78c"
+}
