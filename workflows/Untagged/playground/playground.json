@@ -1,0 +1,205 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "open router deep research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "open router deep research": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-10-23T07:50:14.374Z",
+  "id": "ecmT60LmQb6Zd7iy",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "playground",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -688,
+        -48
+      ],
+      "id": "e56f3233-5f22-4237-8709-9202798895d6",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openRouterApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"openai/o4-mini-deep-research:online\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"You are the GIZ Jordan Water & Energy Research Agent, an AI analyst supporting the GIZ Water & Energy Cluster in Jordan.\\nYour role is to deliver a concise, factual, source-based weekly briefing summarizing the most relevant developments and trends in Jordan’s water and energy sectors — including global developments with clear relevance for GIZ or Jordan’s context.\\n\\nTime Awareness Requirement:\\nToday’s date is {{ $json['Readable date'] }}. Include only developments published within the last 7 days ({{ $json['Readable date'] }} minus 7 days).\\n\\nCore Objectives\\n1. Search for recent (prefer ≤ 1 hour; maximum ≤ 7 days) information on Jordan’s water and energy sectors and global developments relevant to these sectors.\\n2. Identify and summarise key developments, such as:\\n• Technological or engineering innovations\\n• New national or international strategies, laws, MoUs, programmes, projects, events, funding initiatives, or partnerships\\n3. Prioritise official and verifiable sources across government, donors, private sector, academia, and reputable media.\\n\\nStakeholders to Prioritise (search across):\\nGovernment & Public Entities: MWI, WAJ, JVA, MEMR, EMRC, NEPCO, MoENV, MOPIC, RSS, NERC, JCI, PIMAC, Municipal/Local authorities, BMZ, European institutions.\\nDevelopment Partners: GIZ, USAID, KfW, EBRD, IFC, AFD, JICA, UNDP, World Bank.\\nPrivate Sector & NGOs: Miyahuna, AWC, YWC, Amarenco, ETA-max, ECO-Jordan Group, Future Sun, SMEs.\\nResearch & Technical Cooperation: GWP-Med, SEI, German-Jordanian Hydrogen initiatives, universities, research networks.\\n\\nSearch Guidelines\\nUse varied queries that capture official gov announcements, donor publications, industry news, and research updates. Prefer authoritative and recent sources.\\n\\nWriting Style Requirements (CRITICAL):\\nUse a formal, factual reporting style. Avoid conversational or narrative tone.\\n\\nOutput Format (CRITICAL — RETURN FINAL OUTPUT AS ONE SINGLE BLOCK CONTAINING BOTH SECTION 1 AND 2):\\n\\nSECTION 1 — OVERALL WEEKLY SUMMARY (8–10 sentences):\\nDescribe the key developments this week:\\n- What happened\\n- Who announced or led it\\n- When it occurred (approximate if needed)\\n- Why it matters strategically for Jordan’s water/energy context\\n- Any emerging trend or signal across multiple sources\\n\\nSECTION 2 — DETAILED ITEM SUMMARIES (LIST EACH ITEM SEPARATELY):\\nFor each identified update, provide:\\n\\nTitle:\\nSource URL:\\nSummary: (2–4 sentences, factual: what happened, who, when)\\nWhy it Matters: (2–3 sentences explaining strategic relevance)\\n\\nDo not return bullet points, tables, JSON, HTML, or category labels.\" \n        }\n      ]\n    }\n  ],\n  \"plugins\": [\n    {\n      \"id\": \"web\",\n      \"search_prompt\": \"Search the web for authoritative, verifiable sources about Jordan's water and energy sectors published within the last 7 days (relative to TODAY: {{ $json['Readable date'] }}). Prioritise government press releases, donor announcements, international finance institutions, reputable local and international media, and peer-reviewed/technical reports.\"\n    }\n  ],\n  \"max_output_tokens\": 5000,\n  \"reasoning\": {\n    \"effort\": \"medium\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -432,
+        -80
+      ],
+      "id": "0b851ff5-85ff-4a77-a2f4-caa39cd3307f",
+      "name": "open router deep research",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        },
+        "openRouterApi": {
+          "id": "s4XJORl2ppXpLXRV",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a data structuring assistant. Your job is to take the incoming input and convert it into a clean JSON format.\n\nCRITICAL INSTRUCTIONS:\n1. Extract everything as is, no changing any details\n2. Extract the executive summary from SECTION 1\n3. Parse all articles from SECTION 2\n4. Auto-categorize articles:\n   - If article mentions specific organizations (Green Climate Fund, GCF, World Bank, IRENA, USAID, EU, IMF, Asian Development Bank, African Development Bank, UN agencies, bilateral donors, or named companies/institutions) → place in \"stakeholderDevelopments\"\n   - Otherwise → place in \"generalDevelopments\"\n4. Extract all fields accurately: title, summary, whyItMatters, publisher, publishedDate, sourceUrl\n5. Return ONLY valid JSON \n6. Use the exact schema provided below\n\nOUTPUT SCHEMA:\n{\n  \"date\": \"YYYY-MM-DD\",\n  \"coverage\": \"string (e.g., 'last 1-84 hours')\",\n  \"executiveSummary\": \"string (120-150 words)\",\n  \"stakeholderDevelopments\": [\n    {\n      \"title\": \"string\",\n      \"summary\": \"string (main content)\",\n      \"whyItMatters\": \"string (significance/impact)\",\n      \"publisher\": \"string (e.g., Reuters, Bloomberg)\",\n      \"publishedDate\": \"string (e.g., '29 Oct 2025')\",\n      \"sourceUrl\": \"string (full URL)\"\n    }\n  ],\n  \"generalDevelopments\": [\n    {\n      \"title\": \"string\",\n      \"summary\": \"string\",\n      \"whyItMatters\": \"string\",\n      \"publisher\": \"string\",\n      \"publishedDate\": \"string\",\n      \"sourceUrl\": \"string\"\n    }\n  ]\n}\n\n\n\nIncoming input: {{ $json.choices[0].message.content }}\n\nDate for this report: {{ $('Schedule Trigger').item.json['Readable time'] }}\n\nFINAL OUTPUT\nFinal output is the response you receive from output_clean_json"
+            }
+          ]
+        },
+        "simplify": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -224,
+        -80
+      ],
+      "id": "f415126a-2f99-47bb-a32f-b95ca2ff9508",
+      "name": "Message a model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let raw = $input.first().json.choices[0].message.content;  \n\nraw = raw.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n\nlet data;\ntry {\n  data = JSON.parse(raw);\n} catch (err) {\n  throw new Error(\"Invalid JSON after cleanup: \" + err + \"\\nRaw:\\n\" + raw);\n}\n\n// Return cleaned object\nreturn {\n  json: data\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        128,
+        -80
+      ],
+      "id": "83e6c992-f824-45bb-896a-8b2196ab3dd6",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbxzTQ6qtEDruCprnHKH0PyaN9fbyr5YmgZfzZ1_2YS0jyNA2kBhZl04DxnJFCQzQBY/exec",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text",
+        "body": "={{ JSON.stringify({\n  date: $json.date,\n  coverage: $json.coverage,\n  executiveSummary: $json.executiveSummary,\n  stakeholderDevelopments: $json.stakeholderDevelopments,\n  generalDevelopments: $json.generalDevelopments\n}) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        336,
+        -80
+      ],
+      "id": "76080c2b-f7d7-426b-b2dd-8a719dec1a05",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-10-23T07:50:14.379Z",
+      "createdAt": "2025-10-23T07:50:14.379Z",
+      "role": "workflow:owner",
+      "workflowId": "ecmT60LmQb6Zd7iy",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-11T11:08:00.000Z",
+  "versionId": "d1b98ed9-85af-4972-a380-331f359b2207"
+}
