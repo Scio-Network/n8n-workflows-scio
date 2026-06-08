@@ -1,0 +1,446 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "URL Aggregator": {
+      "main": [
+        [
+          {
+            "node": "dedup fx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "dedup fx": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript7": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        []
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "URL Aggregator",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-19T10:51:08.485Z",
+  "id": "tmjzvGpsAlIqSaWb",
+  "isArchived": true,
+  "meta": null,
+  "name": "process_news_urls",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "medium"
+          }
+        },
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title_uk\": { \"type\": \"string\" },\n    \"title_en\": { \"type\": \"string\" },\n    \"title_de\": { \"type\": \"string\" },\n    \"summary_en\": { \"type\": \"string\" },\n    \"summary_de\": { \"type\": \"string\" },\n    \"source_url\": { \"type\": \"string\" },\n    \"published_date\": { \"type\": \"string\" },\n    \"sector_classification\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"actual_content_extracted\": { \"type\": \"string\" }\n  },\n  \"required\": [\n    \"title_uk\", \"title_en\", \"title_de\", \"summary_en\", \"summary_de\", \n    \"source_url\", \"published_date\", \n    \"sector_classification\", \"actual_content_extracted\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1520,
+        3760
+      ],
+      "id": "ae0e9ab5-eaa9-4606-b706-2aa099830403",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.title_uk }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.summary_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.summary_en }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.published_date }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.summary_de }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.title_de }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.title_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ $json.sector_classification }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "news"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        3600
+      ],
+      "id": "8d57f794-42fb-4b98-8eb1-e7bce0876e55",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "533faa95-a32f-42d3-91fe-fea2e54121eb",
+              "leftValue": "={{ $json.is_news }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        128,
+        3472
+      ],
+      "id": "364484d9-468c-473d-b667-b18c58c86d5a",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// merge URLs\nconst urls = [...new Set(\n  items\n    .map(item => item.json.url)\n    .filter(Boolean)\n)];\n\nreturn [\n  {\n    json: {\n      p_urls: urls\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        3456
+      ],
+      "id": "7e1e035c-0bd2-4740-a786-f486208e62af",
+      "name": "URL Aggregator"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://xzulfjussvbykwnzgdba.supabase.co/rest/v1/rpc/check_articles_urls",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        3440
+      ],
+      "id": "95639a39-66ba-42c6-8277-ded77b8d5756",
+      "name": "dedup fx",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "//create json object for each json string\nreturn $input.all().map(item => {\n  try {\n    const parsedData = JSON.parse(item.json.output);\n    \n    return {\n      json: parsedData\n    };\n  } catch (e) {\n    return {\n      json: { \n        error: \"Parse error\", \n        raw: item.json.output \n      }\n    };\n  }\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        3440
+      ],
+      "id": "89303920-f132-4273-aea2-69c5317f3e80",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Helper to normalize URLs for comparison\nconst clean = (url) => {\n  if (!url) return '';\n  return url\n    .toLowerCase()\n    .replace(/^https?:\\/\\//, '')\n    .replace(/^www\\./, '')\n    .replace(/\\/$/, '')\n    .trim();\n};\n\n// Input A: JSON parser node (has url, headline, snippet, published_date)\nconst itemsA = $('Start').first().json.Json_parser_allItems;\n\n// Input B: If node (has source_url, url_exists)\n// Reference it via $('If').all() or $node[\"If\"].json depending on your n8n version\nconst itemsB = $('If').all();\n\n// 1. Build a Set of cleaned source_urls from B (faster lookup than .includes)\nconst urlsInB = new Set(\n  itemsB.map(item => clean(item.json.source_url))\n);\n\n// 2. Filter items from A where the cleaned url exists in B's source_urls\nconst matches = itemsA.filter(item => {\n  const cleanedA = clean(item.json.url);\n  return urlsInB.has(cleanedA);\n});\n\n// 3. Return matched items with ALL their original fields preserved\nreturn matches.map(item => ({\n  json: {\n    ...item.json  // spreads: url, headline, snippet, published_date, etc.\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        3424
+      ],
+      "id": "a27024c3-babe-4ed5-82ed-cbb0200f3e00",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1072,
+        3424
+      ],
+      "id": "909cd128-1030-4bcd-b707-5309d0d4cad7",
+      "name": "Wait2",
+      "webhookId": "2bf4cfd7-58d5-457a-9052-0c505aa21070"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b1620e2c-620b-4621-a494-e1221f12a1cb",
+              "leftValue": "={{ $json.url_exists }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        3408
+      ],
+      "id": "1312d630-4893-4a5a-be49-6855ecf780cf",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=News item to process\nHeadline:{{ $json.headline }}\nurl: {{ $json.url }}\nsnippet: {{ $json.snippet }}\npublished_date:{{ $json.published_date }}",
+        "options": {
+          "systemMessage": "=# 🤖 ROLE\nYou are a Multilingual Policy and Infrastructure Analysis Assistant. You possess deep expertise in public-sector news, disaster risk management (DRM), infrastructure, housing, and urban resilience. You are fluent in Ukrainian, English, German, and other European languages.\n\n# 🎯 THE MISSION\nYou will receive a news item containing a 'headline', 'url', and 'snippet'.\n1. **Visit:** Use your Web Search tool to visit the URL and extract the full body content.\n2. **Translate & Analyze:** Internally translate all content to English to ensure high-accuracy analysis.\n3. **Classify & Summarize:** Apply strict sector classification and generate dual-language summaries (English/German) based ONLY on the extracted content.\n\n# 🛠️ STEP-BY-STEP EXECUTION PROTOCOL\n\n### STEP 1: DEEP EXTRACTION\n- Use your tool to visit the URL and extract the full, cleaned body text.\n- If the content is in Ukrainian or another language, translate it internally to English for processing.\n\n### STEP 2: TITLE & SUMMARY GENERATION\n- **Title Translation:** Provide the title in Ukrainian (original), English, and German.\n- **Dual Summaries:** Generate two 1–2 sentence factual summaries (one English, one German).\n- **Rules:** Be concise and factual. Do not speculate or add external information.\n\n### STEP 3: SECTOR CLASSIFICATION \nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors \n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- Classification must be based on the **translated meaning**, not surface keywords\n- If unclear or ambiguous, **default to \"N/A\"**\n\n\n---\n\n# 📤 OUTPUT SPECIFICATION (STRICT JSON)\nYou must return a valid JSON object. For fields like `published_date`, map the field directly from. Preserve the IDs provided in the input.\n\n{\n  \"title_uk\": \"Original Ukrainian Title\",\n  \"title_en\": \"English Translation of Title\",\n  \"title_de\": \"German Translation of Title\",\n  \"summary_en\": \"1-2 sentence English summary\",\n  \"summary_de\": \"1-2 sentence German summary\",\n  \"source_url\": \"The full article URL\",\n  \"published_date\": \"{{ $json.published_date }}\",\n  \"sector_classification\": [\"Sector A\", \"Sector B\"],\n  \"actual_content_extracted\": \"The full cleaned text used for analysis\"\n} "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1280,
+        3392
+      ],
+      "id": "93f7240e-4749-4a6c-938b-8900e549986d",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Json_parser_allItems",
+              "type": "any"
+            },
+            {
+              "name": "is_news",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "id": "33aa6eb0-2712-403c-9fb2-28a6617ac85c",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -80,
+        3472
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-19T10:51:08.488Z",
+      "createdAt": "2026-03-19T10:51:08.488Z",
+      "role": "workflow:owner",
+      "workflowId": "tmjzvGpsAlIqSaWb",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-19T11:25:58.000Z",
+  "versionId": "68045e9b-f9db-40a2-aa45-eb6c71f61684"
+}
