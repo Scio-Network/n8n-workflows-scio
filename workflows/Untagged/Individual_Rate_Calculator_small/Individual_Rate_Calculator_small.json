@@ -1,0 +1,588 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-17T14:24:38.710Z",
+  "id": "NTvJf45Xpn7oFJZP",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Individual_Rate_Calculator_small",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/folders/1W1WplfqXGzRgbyUaUy8fNSgY4dhvWaKh",
+          "mode": "url"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        -144
+      ],
+      "id": "db958bad-40c0-4f7a-a2f7-9843ee43df2a",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -528,
+        -144
+      ],
+      "id": "51288ec9-2ea6-4a6a-b0e7-f374e8a080ab",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -144
+      ],
+      "id": "d98ef4db-851b-43a5-b4ac-cf037662c082",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalise and slightly structure the CV text from \"Extract from File\"\n\n// 1) Raw text from the file extraction node\nlet text = $json.text || \"\";\n\n// 2) Normalise whitespace to reduce noise for the model\ntext = text.replace(/\\r/g, \"\\n\");\ntext = text.replace(/\\u00A0/g, \" \"); // non-breaking spaces\ntext = text.replace(/\\t/g, \" \");\ntext = text.replace(/\\n{3,}/g, \"\\n\\n\").trim();\n\n// 3) Capture a short header snippet (good for name detection)\n// Take the first 15 non-empty lines as cv_header\nconst lines = text.split(\"\\n\").map(l => l.trim()).filter(l => l !== \"\");\nconst headerLines = lines.slice(0, 15);\nconst cv_header = headerLines.join(\"\\n\");\n\n// 4) Optionally limit total length to protect token budget\nconst maxChars = 25000;\nif (text.length > maxChars) {\n  text = text.slice(0, maxChars);\n}\n\nreturn [\n  {\n    json: {\n      cv_text: text,\n      cv_header,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        -144
+      ],
+      "id": "09a7d0bf-1dd0-4e15-bd92-50b6822207de",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.1",
+          "mode": "list",
+          "cachedResultName": "gpt-5.1"
+        },
+        "options": {
+          "responseFormat": "json_object"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1184,
+        288
+      ],
+      "id": "f67715a7-8ad6-4bc2-8b78-e6581d2278ec",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are an HR & pricing assistant for an international development consultancy.\n\nYou receive, per execution:\n\n1. A rate grid (list of tiers) as JSON in the field `rate_grid`:\n\n{{ $json.rate_grid }}\n\nEach entry has:\n- id              (1–11)\n- scio_level      (string label of the tier)\n- profile_description (short text description of the typical role)\n- giz_level_reference (GIZ level mapping)\n- br_min_eur      (minimum buying rate for that tier, in EUR)\n- br_max_eur      (maximum buying rate for that tier, in EUR)\n\n2. A consultant CV in plain text in `cv_text`:\n\n{{ $json.cv_text }}\n\n3. A short header snippet from the top of the CV in `cv_header`\n   (this is especially useful to find the person's name):\n\n{{ $json.cv_header }}\n\nYour job is to:\n\nSTEP 1 – Extract a structured profile from the CV.\n\nFrom `cv_header` and `cv_text`, identify, if possible:\n\n- `name`: the candidate's full name as it appears in the CV header (or null if you are not sure).\n  Never invent a name and never use placeholders such as \"not provided\" or \"unidentified candidate\".\n- `email`: the main email address (or null).\n- `highest_degree`: e.g. \"MSc Economics\", \"BA in Political Science\" (or null).\n- `field_of_study`: a short label of the main study field (e.g. \"Economics\", \"Agricultural Engineering\").\n- `total_years_experience`: approximate total years of professional experience (integer, or null).\n- `years_intl_dev`: approximate years in international development / development cooperation (integer, or null).\n- `primary_skill_area`: short phrase like \"M&E / MEL\", \"climate finance\", \"rural development\".\n- `years_in_skill_area`: approximate years in that primary area (integer, or null).\n- `other_skill_areas`: comma-separated string with other relevant thematic areas.\n- `languages`: comma-separated list of languages with rough level, e.g. \"English (native), French (fluent)\".\n- `regions_worked`: comma-separated regions, e.g. \"Sub-Saharan Africa; South Asia\".\n- `countries_worked`: comma-separated list of countries frequently appearing in work history.\n- `current_country`: country where the consultant is currently based, if stated.\n- `has_team_lead_experience`: true if the CV shows clear Team Leader / Project Director / overall leadership roles, else false.\n- `has_publications`: true if the CV lists publications, else false.\n- `notable_publications`: short free-text note or null.\n- `is_economist`: true if the profile is clearly in economics / econometrics, else false.\n- `scarcity_ids_auto`: keep this null for now.\n\nIf information is not present, use null (or false for booleans). Do NOT guess.\n\nSTEP 2 – Choose exactly ONE tier from `rate_grid`.\n\nUsing the extracted profile plus the full `cv_text`, select the single best-fitting tier entry:\n- Use primarily the `profile_description` and `scio_level` fields.\n- Decide if the candidate behaves more like:\n  - overall Team Lead,\n  - Deputy / Co-Team Lead,\n  - Key Expert,\n  - Thematic Expert,\n  - Country Expert,\n  - Data / Research Analyst,\n  - Short-term Expert / Pool,\n  - Technical Backstopping,\n  - Regional Focal Point,\n  - MEL Lead / Project Manager,\n  - Other Senior Expert.\n- If the profile is clearly senior but doesn't fit neatly into the other families, use \"Other Senior Expert\".\n- When you are genuinely torn between two options, choose the more conservative (less senior / cheaper) tier.\n\nThen set:\n- `tier_id` to the chosen tier's `id`.\n- `tier_scio_level` to the chosen tier's `scio_level`.\n- `tier_profile_description` to the chosen tier's `profile_description`.\n- `tier_giz_level_reference` to the chosen tier's `giz_level_reference`.\n\nThese four fields MUST be copied exactly from the same single tier object in `rate_grid`.\n\nSTEP 3 – Estimate the position within the chosen tier.\n\nSet:\n- `seniority_score` as a number between 0.0 and 1.0:\n  - 0.0  = barely meets the tier description (bottom of band).\n  - 0.5  = solid, typical fit for the tier.\n  - 1.0  = very strong / exemplary profile for the tier (top of band).\n  - If unsure, choose a value between 0.3 and 0.6, and be slightly conservative.\n- `justification`: 2–4 sentences explaining why the tier and `seniority_score` make sense,\n  referencing years of experience, leadership roles, and thematic fit.\n\nSTEP 4 – Output format\n\nReturn a SINGLE JSON object with EXACTLY these keys:\n\n{\n  \"name\": string | null,\n  \"email\": string | null,\n  \"highest_degree\": string | null,\n  \"field_of_study\": string | null,\n  \"total_years_experience\": number | null,\n  \"years_intl_dev\": number | null,\n  \"primary_skill_area\": string | null,\n  \"years_in_skill_area\": number | null,\n  \"other_skill_areas\": string | null,\n  \"languages\": string | null,\n  \"regions_worked\": string | null,\n  \"countries_worked\": string | null,\n  \"current_country\": string | null,\n  \"has_team_lead_experience\": boolean,\n  \"has_publications\": boolean,\n  \"notable_publications\": string | null,\n  \"is_economist\": boolean,\n  \"scarcity_ids_auto\": string | null,\n\n  \"tier_id\": number,\n  \"tier_scio_level\": string,\n  \"tier_profile_description\": string,\n  \"tier_giz_level_reference\": string,\n  \"seniority_score\": number,\n  \"justification\": string\n}\n\nFormatting rules:\n- Output MUST be valid JSON.\n- No comments, no trailing commas, no markdown, no code fences.\n- Use null when information is missing or unclear.\n- Do not create additional keys.\n- Do not call tools; solve the task only from `rate_grid`, `cv_header` and `cv_text`.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1184,
+        80
+      ],
+      "id": "855c7e06-5cf6-4aa8-95d1-57bc3917acc5",
+      "name": "AI Agent",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code in JavaScript1\n// Runs after the AI Agent node.\n// It:\n// 1) Parses the Agent's JSON string in `json.output`\n// 2) Maps `tier_id` / `tier_scio_level` to a static rate grid\n// 3) Computes min / max / avg / recommended buying rate\n\n// 1. Static rate grid: your 11 tiers\nconst rateGrid = [\n  {\n    id: 1,\n    scio_level: \"Margin incl. BL – fixed SR – Team Lead\",\n    profile_description: \"Overall leadership and client liaison for complex assignments\",\n    giz_level_reference: \"Level 4–5 (Chief / Principal Consultant)\",\n    br_min_eur: 629,\n    br_max_eur: 732,\n  },\n  {\n    id: 2,\n    scio_level: \"Margin incl. BL – fixed SR – Co-Team Lead / Deputy TL\",\n    profile_description: \"Deputy leadership, quality assurance, and technical steering\",\n    giz_level_reference: \"Level 3–4 (Senior / Chief Consultant)\",\n    br_min_eur: 432,\n    br_max_eur: 503,\n  },\n  {\n    id: 3,\n    scio_level: \"Margin incl. BL – fixed SR – Key Expert\",\n    profile_description: \"Lead subject-matter expert responsible for main workstreams\",\n    giz_level_reference: \"Level 3–4 (Senior Consultant)\",\n    br_min_eur: 432,\n    br_max_eur: 503,\n  },\n  {\n    id: 4,\n    scio_level: \"Margin incl. BL – fixed SR – Thematic Expert\",\n    profile_description: \"Specialised expertise (e.g. ESIA, agribusiness, value chains)\",\n    giz_level_reference: \"Level 3 (Senior Consultant)\",\n    br_min_eur: 413,\n    br_max_eur: 480,\n  },\n  {\n    id: 5,\n    scio_level: \"Margin incl. BL – fixed SR – Country Expert\",\n    profile_description: \"In-country expert with contextual and network knowledge\",\n    giz_level_reference: \"Level 2–3 (Consultant / Senior Consultant)\",\n    br_min_eur: 315,\n    br_max_eur: 366,\n  },\n  {\n    id: 6,\n    scio_level: \"Margin incl. BL – fixed SR – Data / Research Analyst\",\n    profile_description: \"Quantitative / qualitative data analysis, background research\",\n    giz_level_reference: \"Level 1–2 (Junior / Consultant)\",\n    br_min_eur: 315,\n    br_max_eur: 366,\n  },\n  {\n    id: 7,\n    scio_level: \"Margin incl. BL – fixed SR – Short-term Expert / Pool\",\n    profile_description: \"Specialist input on defined tasks, short missions\",\n    giz_level_reference: \"Level 2–3 (Consultant / Senior Consultant)\",\n    br_min_eur: 432,\n    br_max_eur: 503,\n  },\n  {\n    id: 8,\n    scio_level: \"Margin incl. BL – fixed SR – Technical Backstopping\",\n    profile_description: \"HQ-based technical support, QA, and mentoring\",\n    giz_level_reference: \"Level 2–3 (Consultant / Senior Consultant)\",\n    br_min_eur: 393,\n    br_max_eur: 458,\n  },\n  {\n    id: 9,\n    scio_level: \"Margin incl. BL – fixed SR – Regional Focal Point\",\n    profile_description: \"Regional coordination and light technical support\",\n    giz_level_reference: \"Level 3 (Senior Consultant)\",\n    br_min_eur: 354,\n    br_max_eur: 412,\n  },\n  {\n    id: 10,\n    scio_level: \"Margin incl. BL – fixed SR – MEL Lead / Project Manager\",\n    profile_description: \"Monitoring, evaluation & learning lead and overall PM\",\n    giz_level_reference: \"Level 3–4 (Senior / Chief Consultant)\",\n    br_min_eur: 551,\n    br_max_eur: 641,\n  },\n  {\n    id: 11,\n    scio_level: \"Margin incl. BL – fixed SR – Other Senior Expert\",\n    profile_description: \"Senior profile not fitting other families (e.g. cross-cutting expert)\",\n    giz_level_reference: \"Level 3–4 (Senior Consultant)\",\n    br_min_eur: 472,\n    br_max_eur: 549,\n  },\n];\n\n// Helper to parse the AI Agent output for each item\nfunction parseAgentOutput(itemJson) {\n  // Most common case: { output: \"{...json...}\" }\n  if (itemJson && typeof itemJson.output === 'string') {\n    return JSON.parse(itemJson.output);\n  }\n  // If the whole json is the string\n  if (typeof itemJson === 'string') {\n    return JSON.parse(itemJson);\n  }\n  // If the Agent ever starts returning an object directly\n  if (itemJson && typeof itemJson === 'object') {\n    return itemJson;\n  }\n  return null;\n}\n\nconst items = $input.all();\n\nreturn items.map(item => {\n  let cls;\n  try {\n    cls = parseAgentOutput(item.json);\n  } catch (e) {\n    return {\n      json: {\n        error: 'Could not parse AI Agent output as JSON: ' + e.message,\n        raw: item.json,\n      },\n    };\n  }\n\n  if (!cls || cls.tier_id == null) {\n    return {\n      json: {\n        error: 'AI Agent output does not contain tier_id',\n        parsed: cls,\n        raw: item.json,\n      },\n    };\n  }\n\n  // Find the tier from the rate grid by id\n  let tier = rateGrid.find(t => t.id === Number(cls.tier_id));\n\n  // If tier_id and tier_scio_level disagree, trust the name\n  if ((!tier || !tier.id) && cls.tier_scio_level) {\n    const byName = rateGrid.find(t => t.scio_level === cls.tier_scio_level);\n    if (byName) {\n      tier = byName;\n      cls.tier_id = byName.id;\n    }\n  }\n\n  if (!tier) {\n    return {\n      json: {\n        error: 'No rate grid entry found for tier_id ' + cls.tier_id,\n        classification: cls,\n      },\n    };\n  }\n\n  // Clamp seniority_score to [0,1]\n  let s = Number(cls.seniority_score);\n  if (!Number.isFinite(s)) s = 0.5;\n  if (s < 0) s = 0;\n  if (s > 1) s = 1;\n\n  const min = tier.br_min_eur;\n  const max = tier.br_max_eur;\n  const avg = Math.round(((min + max) / 2) * 10) / 10;\n  const recommended = Math.round((min + s * (max - min)) * 10) / 10;\n\n  return {\n    json: {\n      ...cls,\n      min_buying_rate_eur: min,\n      max_buying_rate_eur: max,\n      avg_buying_rate_eur: avg,\n      recommended_buying_rate_eur: recommended,\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        -144
+      ],
+      "id": "a73979f7-21d9-48a8-a82c-25bc2e99bd2d",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract basic file metadata from \"Download file\"\n// and keep the binary data so subsequent nodes still have access to the file.\n\nconst dl = $json;\n\nreturn [\n  {\n    json: {\n      cv_source_file_id: dl.id || null,\n      cv_source_file_name: dl.name || null,\n    },\n    binary: $binary,\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        -416
+      ],
+      "id": "6f6af876-f0db-4409-89c0-968f48707589",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        672,
+        -160
+      ],
+      "id": "6cea4ab4-4e32-4138-82c7-33d6a3a754ad",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "=https://docs.google.com/spreadsheets/d/19tZ_GHeXEhF22SehLUhttVtliQQnAdtQ9WB01c54q5k",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19tZ_GHeXEhF22SehLUhttVtliQQnAdtQ9WB01c54q5k/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        1328,
+        400
+      ],
+      "id": "fe4400c5-b484-49fe-9241-61afdcb72802",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const rate_grid = [\n  {\n    id: 1,\n    scio_level: \"Margin incl. BL – fixed SR – Team Lead\",\n    profile_description: \"Overall leadership and client liaison for complex assignments\",\n    giz_level_reference: \"Level 4–5 (Chief / Principal Consultant)\",\n    br_min_eur: 629,\n    br_max_eur: 732,\n  },\n  {\n    id: 2,\n    scio_level: \"Margin incl. BL – fixed SR – Co-Team Lead / Deputy TL\",\n    profile_description: \"Deputy leadership, quality assurance, and technical steering\",\n    giz_level_reference: \"Level 3–4 (Senior / Chief Consultant)\",\n    br_min_eur: 432,\n    br_max_eur: 503,\n  },\n  {\n    id: 3,\n    scio_level: \"Margin incl. BL – fixed SR – Key Expert\",\n    profile_description: \"Lead subject-matter expert responsible for main workstreams\",\n    giz_level_reference: \"Level 3–4 (Senior Consultant)\",\n    br_min_eur: 432,\n    br_max_eur: 503,\n  },\n  {\n    id: 4,\n    scio_level: \"Margin incl. BL – fixed SR – Thematic Expert\",\n    profile_description: \"Specialised expertise (e.g. ESIA, agribusiness, value chains)\",\n    giz_level_reference: \"Level 3 (Senior Consultant)\",\n    br_min_eur: 413,\n    br_max_eur: 480,\n  },\n  {\n    id: 5,\n    scio_level: \"Margin incl. BL – fixed SR – Country Expert\",\n    profile_description: \"In-country expert with contextual and network knowledge\",\n    giz_level_reference: \"Level 2–3 (Consultant / Senior Consultant)\",\n    br_min_eur: 315,\n    br_max_eur: 366,\n  },\n  {\n    id: 6,\n    scio_level: \"Margin incl. BL – fixed SR – Data / Research Analyst\",\n    profile_description: \"Quantitative / qualitative data analysis, background research\",\n    giz_level_reference: \"Level 1–2 (Junior / Consultant)\",\n    br_min_eur: 315,\n    br_max_eur: 366,\n  },\n  {\n    id: 7,\n    scio_level: \"Margin incl. BL – fixed SR – Short-term Expert / Pool\",\n    profile_description: \"Specialist input on defined tasks, short missions\",\n    giz_level_reference: \"Level 2–3 (Consultant / Senior Consultant)\",\n    br_min_eur: 432,\n    br_max_eur: 503,\n  },\n  {\n    id: 8,\n    scio_level: \"Margin incl. BL – fixed SR – Technical Backstopping\",\n    profile_description: \"HQ-based technical support, QA, and mentoring\",\n    giz_level_reference: \"Level 2–3 (Consultant / Senior Consultant)\",\n    br_min_eur: 393,\n    br_max_eur: 458,\n  },\n  {\n    id: 9,\n    scio_level: \"Margin incl. BL – fixed SR – Regional Focal Point\",\n    profile_description: \"Regional coordination and light technical support\",\n    giz_level_reference: \"Level 3 (Senior Consultant)\",\n    br_min_eur: 354,\n    br_max_eur: 412,\n  },\n  {\n    id: 10,\n    scio_level: \"Margin incl. BL – fixed SR – MEL Lead / Project Manager\",\n    profile_description: \"Monitoring, evaluation & learning lead and overall PM\",\n    giz_level_reference: \"Level 3–4 (Senior / Chief Consultant)\",\n    br_min_eur: 551,\n    br_max_eur: 641,\n  },\n  {\n    id: 11,\n    scio_level: \"Margin incl. BL – fixed SR – Other Senior Expert\",\n    profile_description: \"Senior profile not fitting other families (e.g. cross-cutting expert)\",\n    giz_level_reference: \"Level 3–4 (Senior Consultant)\",\n    br_min_eur: 472,\n    br_max_eur: 549,\n  },\n];\n\nreturn [\n  {\n    json: { rate_grid },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        80
+      ],
+      "id": "11de1feb-2160-4cc0-81aa-51de6a681e69",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an HR & pricing assistant for an international development consultancy.\n\nYou receive, per execution:\n\n1. A rate grid (list of tiers) as JSON in the field `rate_grid`:\n\n{{ $json.rate_grid }}\n\nEach entry has:\n- id              (1–11)\n- scio_level      (string label of the tier)\n- profile_description (short text description of the typical role)\n- giz_level_reference (GIZ level mapping)\n- br_min_eur      (minimum buying rate for that tier, in EUR)\n- br_max_eur      (maximum buying rate for that tier, in EUR)\n\n2. A consultant CV in plain text in `cv_text`:\n\n{{ $json.cv_text }}\n\n3. A short header snippet from the top of the CV in `cv_header`\n   (this is especially useful to find the person's name):\n\n{{ $json.cv_header }}\n\nYour job is to:\n\nSTEP 1 – Extract a structured profile from the CV.\n\nFrom `cv_header` and `cv_text`, identify, if possible:\n\n- `name`: the candidate's full name as it appears in the CV header (or null if you are not sure).\n  Never invent a name and never use placeholders such as \"not provided\" or \"unidentified candidate\".\n- `email`: the main email address (or null).\n- `highest_degree`: e.g. \"MSc Economics\", \"BA in Political Science\" (or null).\n- `field_of_study`: a short label of the main study field (e.g. \"Economics\", \"Agricultural Engineering\").\n- `total_years_experience`: approximate total years of professional experience (integer, or null).\n- `years_intl_dev`: approximate years in international development / development cooperation (integer, or null).\n- `primary_skill_area`: short phrase like \"M&E / MEL\", \"climate finance\", \"rural development\".\n- `years_in_skill_area`: approximate years in that primary area (integer, or null).\n- `other_skill_areas`: comma-separated string with other relevant thematic areas.\n- `languages`: comma-separated list of languages with rough level, e.g. \"English (native), French (fluent)\".\n- `regions_worked`: comma-separated regions, e.g. \"Sub-Saharan Africa; South Asia\".\n- `countries_worked`: comma-separated list of countries frequently appearing in work history.\n- `current_country`: country where the consultant is currently based, if stated.\n- `has_team_lead_experience`: true if the CV shows clear Team Leader / Project Director / overall leadership roles, else false.\n- `has_publications`: true if the CV lists publications, else false.\n- `notable_publications`: short free-text note or null.\n- `is_economist`: true if the profile is clearly in economics / econometrics, else false.\n- `scarcity_ids_auto`: keep this null for now.\n\nIf information is not present, use null (or false for booleans). Do NOT guess.\n\nSTEP 2 – Choose exactly ONE tier from `rate_grid`.\n\nUsing the extracted profile plus the full `cv_text`, select the single best-fitting tier entry:\n- Use primarily the `profile_description` and `scio_level` fields.\n- Decide if the candidate behaves more like:\n  - overall Team Lead,\n  - Deputy / Co-Team Lead,\n  - Key Expert,\n  - Thematic Expert,\n  - Country Expert,\n  - Data / Research Analyst,\n  - Short-term Expert / Pool,\n  - Technical Backstopping,\n  - Regional Focal Point,\n  - MEL Lead / Project Manager,\n  - Other Senior Expert.\n- If the profile is clearly senior but doesn't fit neatly into the other families, use \"Other Senior Expert\".\n- When you are genuinely torn between two options, choose the more conservative (less senior / cheaper) tier.\n\nThen set:\n- `tier_id` to the chosen tier's `id`.\n- `tier_scio_level` to the chosen tier's `scio_level`.\n- `tier_profile_description` to the chosen tier's `profile_description`.\n- `tier_giz_level_reference` to the chosen tier's `giz_level_reference`.\n\nThese four fields MUST be copied exactly from the same single tier object in `rate_grid`.\n\nSTEP 3 – Estimate the position within the chosen tier.\n\nSet:\n- `seniority_score` as a number between 0.0 and 1.0:\n  - 0.0  = barely meets the tier description (bottom of band).\n  - 0.5  = solid, typical fit for the tier.\n  - 1.0  = very strong / exemplary profile for the tier (top of band).\n  - If unsure, choose a value between 0.3 and 0.6, and be slightly conservative.\n- `justification`: 2–4 sentences explaining why the tier and `seniority_score` make sense,\n  referencing years of experience, leadership roles, and thematic fit.\n\nSTEP 4 – Output format\n\nReturn a SINGLE JSON object with EXACTLY these keys:\n\n{\n  \"name\": string | null,\n  \"email\": string | null,\n  \"highest_degree\": string | null,\n  \"field_of_study\": string | null,\n  \"total_years_experience\": number | null,\n  \"years_intl_dev\": number | null,\n  \"primary_skill_area\": string | null,\n  \"years_in_skill_area\": number | null,\n  \"other_skill_areas\": string | null,\n  \"languages\": string | null,\n  \"regions_worked\": string | null,\n  \"countries_worked\": string | null,\n  \"current_country\": string | null,\n  \"has_team_lead_experience\": boolean,\n  \"has_publications\": boolean,\n  \"notable_publications\": string | null,\n  \"is_economist\": boolean,\n  \"scarcity_ids_auto\": string | null,\n\n  \"tier_id\": number,\n  \"tier_scio_level\": string,\n  \"tier_profile_description\": string,\n  \"tier_giz_level_reference\": string,\n  \"seniority_score\": number,\n  \"justification\": string\n}\n\nFormatting rules:\n- Output MUST be valid JSON.\n- No comments, no trailing commas, no markdown, no code fences.\n- Use null when information is missing or unclear.\n- Do not create additional keys.\n- Do not call tools; solve the task only from `rate_grid`, `cv_header` and `cv_text`.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        992,
+        -432
+      ],
+      "id": "7e611cd6-e43b-43aa-8650-b25fcff0112f",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.1",
+          "mode": "list",
+          "cachedResultName": "gpt-5.1"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        976,
+        -288
+      ],
+      "id": "9ca66c74-7df7-45f3-b3c6-92b0d342bcc3",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/19tZ_GHeXEhF22SehLUhttVtliQQnAdtQ9WB01c54q5k",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1628350477,
+          "mode": "list",
+          "cachedResultName": "Profiles",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19tZ_GHeXEhF22SehLUhttVtliQQnAdtQ9WB01c54q5k/edit#gid=1628350477"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "CV_File_Name": "={{ $('Google Drive Trigger').item.json.originalFilename }}",
+            "Tier_ID": "={{ $json.tier_id }}",
+            "Tier_SCIO_Level": "={{ $json.tier_scio_level }}",
+            "tier_profile_description": "={{ $json.tier_profile_description }}",
+            "tier_giz_level_reference": "={{ $json.tier_giz_level_reference }}",
+            "seniority_score": "={{ $json.seniority_score }}",
+            "justification": "={{ $json.justification }}",
+            "min_buying_rate_eur": "={{ $json.min_buying_rate_eur }}",
+            "max_buying_rate_eur": "={{ $json.max_buying_rate_eur }}",
+            "recommended_buying_rate_eur": "={{ $json.recommended_buying_rate_eur }}",
+            "Name": "={{ $json.name }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CV_File_Name",
+              "displayName": "CV_File_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tier_ID",
+              "displayName": "Tier_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tier_SCIO_Level",
+              "displayName": "Tier_SCIO_Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tier_profile_description",
+              "displayName": "tier_profile_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tier_giz_level_reference",
+              "displayName": "tier_giz_level_reference",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "seniority_score",
+              "displayName": "seniority_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "justification",
+              "displayName": "justification",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "min_buying_rate_eur",
+              "displayName": "min_buying_rate_eur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "max_buying_rate_eur",
+              "displayName": "max_buying_rate_eur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recommended_buying_rate_eur",
+              "displayName": "recommended_buying_rate_eur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1856,
+        -144
+      ],
+      "id": "e93b1f4e-b00d-4dfd-8640-e83cbf5d9f94",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-17T14:24:38.713Z",
+      "createdAt": "2025-12-17T14:24:38.713Z",
+      "role": "workflow:owner",
+      "workflowId": "NTvJf45Xpn7oFJZP",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-18T12:21:52.621Z",
+  "versionId": "117527c3-1f9b-48fe-b86a-6affba436df2"
+}
