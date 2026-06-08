@@ -1,0 +1,250 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        []
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-07T14:11:20.282Z",
+  "id": "X0GTNcWpguJZ2iVo",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_Event_Ingestion_v0",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "id": "8f27494d-560b-4cf6-9309-c318cfd93d4f",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        1648,
+        -112
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "events",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.title_en }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.summary_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ $json.primary_sector }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.summary_en }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "={{ $json.article_type }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.published_date }}"
+            },
+            {
+              "fieldId": "source_id",
+              "fieldValue": "={{ $('Normalize RSS Items').item.json.__feed.source_id }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "translation_status",
+              "fieldValue": "={{ $json.translation_status }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.summary_de }}"
+            },
+            {
+              "fieldId": "n8n_content_hash",
+              "fieldValue": "={{ $('Normalize RSS Items').item.json.n8n_content_hash }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.title_de }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.title_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $('Normalize RSS Items').item.json.source_url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2672,
+        32
+      ],
+      "id": "327c3dd8-e24d-4db9-ac54-cdc97dc79abe",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please find 5 upcoming events (date>={{ $json[\"Readable date\"] }}) regarding the reconstruction of Ukraine and save them as individual json objects.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1936,
+        -112
+      ],
+      "id": "ba32e1e5-df0d-48a9-882f-2bfb248c2fae",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "high"
+          }
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1936,
+        96
+      ],
+      "id": "30d74def-ad42-4c44-b5ad-14eceb380616",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function stripFences(s) {\n  return String(s || \"\")\n    .trim()\n    .replace(/^```json\\s*/i, \"\")\n    .replace(/^```\\s*/i, \"\")\n    .replace(/```$/i, \"\")\n    .trim();\n}\n\nfunction safeParseJsonString(s) {\n  const cleaned = stripFences(s);\n  try {\n    const parsed = JSON.parse(cleaned);\n    // Must be an object\n    if (parsed && typeof parsed === \"object\" && !Array.isArray(parsed)) return parsed;\n    return null;\n  } catch {\n    return null;\n  }\n}\n\n// 1) Base item is always an object\nconst base = ($json && typeof $json === \"object\" && !Array.isArray($json)) ? $json : {};\n\n// 2) AI output string (may be in output, text, response depending on your AI node)\nconst aiRaw = base.output ?? base.text ?? base.response ?? \"\";\n\n// 3) Parse AI JSON string safely\nconst ai = safeParseJsonString(aiRaw) || {};\n\n// 4) Build final object (MUST be an object)\nconst out = {\n  title_uk: base.title_uk ?? \"\",\n  summary_uk: base.summary_uk ?? \"\",\n\n  title_en: ai.title_en ?? \"\",\n  title_de: ai.title_de ?? \"\",\n  summary_en: ai.summary_en ?? \"\",\n  summary_de: ai.summary_de ?? \"\",\n\n  primary_sector: ai.primary_sector ?? base.primary_sector ?? \"infrastructure\",\n  translation_status: ai.translation_status ?? \"machine\",\n\n  article_type: base.article_type ?? \"news\",\n  published_date: base.published_date ?? new Date().toISOString(),\n  source_url: base.source_url ?? \"\",\n  source_id: base.source_id ?? null,\n  secondary_sectors: Array.isArray(base.secondary_sectors) ? base.secondary_sectors : [],\n  credibility_tier: Number.isFinite(base.credibility_tier) ? base.credibility_tier : 2,\n  original_language: base.original_language ?? \"uk\",\n  content_hash: base.content_hash ?? null,\n\n  processing_status: base.processing_status ?? \"ready_for_review\",\n  requires_review: base.requires_review ?? false\n};\n\n// 5) Enforce allowed sectors\nconst allowed = new Set([\"housing\",\"infrastructure\",\"urban-resilience\",\"disaster-risk\"]);\nif (!allowed.has(out.primary_sector)) {\n  out.primary_sector = \"infrastructure\";\n  out.requires_review = true;\n  out.processing_status = \"needs_enrichment\";\n  out.review_reason = \"invalid_primary_sector_from_ai\";\n}\n\n// 6) If AI fields missing, mark review but still return valid object\nif (!out.title_en || !out.title_de || !out.summary_en || !out.summary_de) {\n  out.requires_review = true;\n  out.processing_status = \"needs_enrichment\";\n  out.review_reason = out.review_reason ?? \"ai_missing_required_fields\";\n}\n\n// 7) CRITICAL: Always return json as an OBJECT\nreturn [{ json: out }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2320,
+        -112
+      ],
+      "id": "cbe08823-d4f5-4f14-9c0e-ce03a985b40b",
+      "name": "Code in JavaScript2"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-07T14:11:20.287Z",
+      "createdAt": "2026-01-07T14:11:20.287Z",
+      "role": "workflow:owner",
+      "workflowId": "X0GTNcWpguJZ2iVo",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        0
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-11T08:00:38.000Z",
+  "versionId": "ed846b7f-a75f-441a-9366-42159aafbba8"
+}
