@@ -1,0 +1,832 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-13T08:41:10.415Z",
+    "createdAt": "2025-12-13T08:41:10.414Z",
+    "versionId": "49fd10e6-be47-42cc-804c-88a4eb58901b",
+    "workflowId": "Au8C0dDsXsslNx69",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ingest",
+          "responseMode": "responseNode",
+          "options": {
+            "binaryPropertyName": "file"
+          }
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "0219632b-6545-44bc-9189-fea1c9c06cca",
+        "name": "Webhook",
+        "webhookId": "1066ea3a-7bb5-483a-9387-a54aaddf23c5"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={ \"jobId\": \"{{$json.jobId}}\", \"message\": \"Queued\" }",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4,
+        "position": [
+          208,
+          0
+        ],
+        "id": "6ed2337f-cfbf-4c05-8a3c-8173f429bd2a",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Make a jobId and pass through any incoming fields you want to keep later\nreturn [{\n  json: {\n    jobId: Date.now() + '-' + Math.random().toString(36).slice(2),\n    state: 'QUEUED'\n  }\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          208,
+          -208
+        ],
+        "id": "89357731-b606-4635-be35-ce2ef9002175",
+        "name": "Init Job"
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "base": {
+            "__rl": true,
+            "value": "appL4IZysxZTkn08g",
+            "mode": "id"
+          },
+          "table": {
+            "__rl": true,
+            "value": "=tbl129glCxQEXFZxD",
+            "mode": "id"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "jobId": "={{$json.jobId}}",
+              "state": "QUEUED"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "jobId",
+                "displayName": "jobId",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "state",
+                "displayName": "state",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "warningOverLimit",
+                "displayName": "warningOverLimit",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "boolean",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "designspec",
+                "displayName": "designspec",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "createdAt",
+                "displayName": "createdAt",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "dateTime",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "error",
+                "displayName": "error",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          416,
+          -208
+        ],
+        "id": "18843541-e478-46fb-ae55-2b71909000bd",
+        "name": "Create a record",
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "JTOlUpWkPDRjR8yC",
+            "name": "Airtable Personal Access Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const b64 = $json.fileBase64 || null;\nlet warning = false;\nlet pages = null;\n\ntry {\n  if (b64) {\n    const text = Buffer.from(b64, 'base64').toString('binary');\n    const matches = text.match(/\\/Type\\s*\\/Page[^s]/g);\n    pages = matches ? matches.length : null;\n    warning = pages && pages > 30;\n  }\n} catch (e) {}\n\nreturn [{\n  json: {\n    ...$json,\n    pages,\n    warningOverLimit: warning\n  }\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          624,
+          -208
+        ],
+        "id": "d59cdca7-9eeb-46a7-90c4-f32db03fba83",
+        "name": "Quick Page Count"
+      },
+      {
+        "parameters": {
+          "jsCode": "const designSpec = {\n  title: \"Prototype from Paper\",\n  screens: [\n    { id: \"home\", type: \"screen\", elements: [\"header\", \"upload box\", \"cta button\"] },\n    { id: \"results\", type: \"screen\", elements: [\"summary text\", \"user persona cards\"] }\n  ],\n  personas: [\n    { name: \"Early Adopter\", needs: \"fast testing\", goal: \"see if product idea resonates\" }\n  ]\n};\n\nreturn [{\n  json: {\n    ...$json,\n    designspec: JSON.stringify(designSpec, null, 2),\n    state: \"DONE\"\n  }\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          832,
+          -208
+        ],
+        "id": "d15513d8-018d-4968-8204-4d19d85f20b4",
+        "name": "Build DesignSpec"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "base": {
+            "__rl": true,
+            "value": "appL4IZysxZTkn08g",
+            "mode": "list",
+            "cachedResultName": "PaperPrototypeJobs",
+            "cachedResultUrl": "https://airtable.com/appL4IZysxZTkn08g"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tbl129glCxQEXFZxD",
+            "mode": "list",
+            "cachedResultName": "Jobs",
+            "cachedResultUrl": "https://airtable.com/appL4IZysxZTkn08g/tbl129glCxQEXFZxD"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "warningOverLimit": "={{$json.warningOverLimit}}",
+              "state": "={{$json.state}}",
+              "designspec": "={{$json.designspec}}",
+              "jobId": "={{$node[\"Init Job\"].json.jobId}}"
+            },
+            "matchingColumns": [
+              "jobId"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": true,
+                "removed": false
+              },
+              {
+                "id": "jobId",
+                "displayName": "jobId",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "state",
+                "displayName": "state",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "warningOverLimit",
+                "displayName": "warningOverLimit",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "boolean",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "designspec",
+                "displayName": "designspec",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "create time",
+                "displayName": "create time",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "dateTime",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "error",
+                "displayName": "error",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {
+            "typecast": true
+          }
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          1248,
+          -208
+        ],
+        "id": "296044d7-a5f3-4416-99d3-937ff7044b5e",
+        "name": "Update record",
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "JTOlUpWkPDRjR8yC",
+            "name": "Airtable Personal Access Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Convert to a real boolean, default false when missing\nconst raw = $json.warningOverLimit;\nconst warn = (raw === true) || (raw === 'true') || (raw === 1) || (raw === '1');\nreturn [{ json: { ...$json, warningOverLimit: warn } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1040,
+          -208
+        ],
+        "id": "5fab97f5-efa4-47d1-a18f-69b0a115d0ac",
+        "name": "Normalize Warn"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Init Job",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Init Job": {
+        "main": [
+          [
+            {
+              "node": "Create a record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a record": {
+        "main": [
+          [
+            {
+              "node": "Quick Page Count",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Quick Page Count": {
+        "main": [
+          [
+            {
+              "node": "Build DesignSpec",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Build DesignSpec": {
+        "main": [
+          [
+            {
+              "node": "Normalize Warn",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Normalize Warn": {
+        "main": [
+          [
+            {
+              "node": "Update record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "49fd10e6-be47-42cc-804c-88a4eb58901b",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Init Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Init Job": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Quick Page Count",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quick Page Count": {
+      "main": [
+        [
+          {
+            "node": "Build DesignSpec",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build DesignSpec": {
+      "main": [
+        [
+          {
+            "node": "Normalize Warn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Warn": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-22T10:51:17.772Z",
+  "id": "Au8C0dDsXsslNx69",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ingest",
+        "responseMode": "responseNode",
+        "options": {
+          "binaryPropertyName": "file"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0219632b-6545-44bc-9189-fea1c9c06cca",
+      "name": "Webhook",
+      "webhookId": "1066ea3a-7bb5-483a-9387-a54aaddf23c5"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"jobId\": \"{{$json.jobId}}\", \"message\": \"Queued\" }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "6ed2337f-cfbf-4c05-8a3c-8173f429bd2a",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Make a jobId and pass through any incoming fields you want to keep later\nreturn [{\n  json: {\n    jobId: Date.now() + '-' + Math.random().toString(36).slice(2),\n    state: 'QUEUED'\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -208
+      ],
+      "id": "89357731-b606-4635-be35-ce2ef9002175",
+      "name": "Init Job"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appL4IZysxZTkn08g",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "=tbl129glCxQEXFZxD",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "jobId": "={{$json.jobId}}",
+            "state": "QUEUED"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "jobId",
+              "displayName": "jobId",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "warningOverLimit",
+              "displayName": "warningOverLimit",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "designspec",
+              "displayName": "designspec",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "error",
+              "displayName": "error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        -208
+      ],
+      "id": "18843541-e478-46fb-ae55-2b71909000bd",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "JTOlUpWkPDRjR8yC",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const b64 = $json.fileBase64 || null;\nlet warning = false;\nlet pages = null;\n\ntry {\n  if (b64) {\n    const text = Buffer.from(b64, 'base64').toString('binary');\n    const matches = text.match(/\\/Type\\s*\\/Page[^s]/g);\n    pages = matches ? matches.length : null;\n    warning = pages && pages > 30;\n  }\n} catch (e) {}\n\nreturn [{\n  json: {\n    ...$json,\n    pages,\n    warningOverLimit: warning\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        -208
+      ],
+      "id": "d59cdca7-9eeb-46a7-90c4-f32db03fba83",
+      "name": "Quick Page Count"
+    },
+    {
+      "parameters": {
+        "jsCode": "const designSpec = {\n  title: \"Prototype from Paper\",\n  screens: [\n    { id: \"home\", type: \"screen\", elements: [\"header\", \"upload box\", \"cta button\"] },\n    { id: \"results\", type: \"screen\", elements: [\"summary text\", \"user persona cards\"] }\n  ],\n  personas: [\n    { name: \"Early Adopter\", needs: \"fast testing\", goal: \"see if product idea resonates\" }\n  ]\n};\n\nreturn [{\n  json: {\n    ...$json,\n    designspec: JSON.stringify(designSpec, null, 2),\n    state: \"DONE\"\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        -208
+      ],
+      "id": "d15513d8-018d-4968-8204-4d19d85f20b4",
+      "name": "Build DesignSpec"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appL4IZysxZTkn08g",
+          "mode": "list",
+          "cachedResultName": "PaperPrototypeJobs",
+          "cachedResultUrl": "https://airtable.com/appL4IZysxZTkn08g"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl129glCxQEXFZxD",
+          "mode": "list",
+          "cachedResultName": "Jobs",
+          "cachedResultUrl": "https://airtable.com/appL4IZysxZTkn08g/tbl129glCxQEXFZxD"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "warningOverLimit": "={{$json.warningOverLimit}}",
+            "state": "={{$json.state}}",
+            "designspec": "={{$json.designspec}}",
+            "jobId": "={{$node[\"Init Job\"].json.jobId}}"
+          },
+          "matchingColumns": [
+            "jobId"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "jobId",
+              "displayName": "jobId",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "warningOverLimit",
+              "displayName": "warningOverLimit",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "designspec",
+              "displayName": "designspec",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "create time",
+              "displayName": "create time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "error",
+              "displayName": "error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1248,
+        -208
+      ],
+      "id": "296044d7-a5f3-4416-99d3-937ff7044b5e",
+      "name": "Update record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "JTOlUpWkPDRjR8yC",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Convert to a real boolean, default false when missing\nconst raw = $json.warningOverLimit;\nconst warn = (raw === true) || (raw === 'true') || (raw === 1) || (raw === '1');\nreturn [{ json: { ...$json, warningOverLimit: warn } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        -208
+      ],
+      "id": "5fab97f5-efa4-47d1-a18f-69b0a115d0ac",
+      "name": "Normalize Warn"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-09-22T10:51:17.775Z",
+      "createdAt": "2025-09-22T10:51:17.775Z",
+      "role": "workflow:owner",
+      "workflowId": "Au8C0dDsXsslNx69",
+      "projectId": "Bg5ZL2boMU9uQ3IS"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-09-22T18:51:03.000Z",
+  "versionId": "49fd10e6-be47-42cc-804c-88a4eb58901b"
+}
