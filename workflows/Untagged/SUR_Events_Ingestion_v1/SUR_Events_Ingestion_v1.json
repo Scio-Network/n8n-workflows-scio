@@ -1,0 +1,1278 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-05T14:32:36.854Z",
+    "createdAt": "2026-02-05T14:32:36.854Z",
+    "versionId": "5e0bb6cd-9e31-43e2-8fdd-8553e0795b21",
+    "workflowId": "V9bqgDpzw6sh6ICc",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 12
+              }
+            ]
+          }
+        },
+        "id": "172737b9-b403-4f42-98f4-4b7719a217a1",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -304,
+          192
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Compute \"today\" and \"horizon\" for the prompt and filtering.\nconst horizonDays = 180;\nconst now = new Date();\nconst todayISO = now.toISOString().slice(0, 10);\nconst horizon = new Date(now.getTime() + horizonDays * 24 * 3600 * 1000).toISOString().slice(0, 10);\n\n// Centralized sector definitions for the agent prompt\nconst sector_definitions = [\n  \"Disaster Risk Management: Activities, systems, and governance whose primary purpose is to anticipate, reduce, manage, and recover from hazards by strengthening risk assessment, preparedness, emergency response capacity, and disaster recovery coordination.\",\n  \"Basic Infrastructure: Reconstruction or provision of essential public utilities and everyday service infrastructure that keeps settlements functioning, including lifeline networks (energy, water, wastewater, heating, waste, transport, communications) and critical public facilities such as hospitals and other health infrastructure.\",\n  \"Housing: Repair, reconstruction, or development of permanent residential dwellings and residential buildings, focused on restoring safe, adequate, long-term living conditions for households.\",\n  \"Urban Resilience: Integrated city- or neighborhood-level planning, governance, and multi-sector interventions that increase a city’s ability to withstand and adapt to shocks and long-term stresses while improving recovery capacity and overall urban livability.\"\n].join(\"\\n\");\n\nreturn [{\n  json: {\n    todayISO,\n    horizon,\n    horizonDays,\n    sector_definitions\n  }\n}];\n"
+        },
+        "id": "e92a98f7-3309-40d8-b82a-861d32761c37",
+        "name": "Set Date Window",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          608,
+          192
+        ]
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=You are an automated event ingestion agent for a database.\n\nTODAY (system date):{{ $json.todayISO }}\n\n\nSECTOR DEFINITIONS (MUST USE)\n{{ $json.sector_definitions }}\n\nSECTOR OUTPUT RULE (STRICT)\n- You MUST set primary_sector to exactly one of:\n  - Housing\n  - Basic Infrastructure\n  - Disaster Risk Management\n  - Urban Resilience\n- Choose based on PRIMARY PURPOSE of the event.\n- If unclear, pick the closest match; do not invent new categories.\n\n\nGOAL\nNo less than 5 upcoming events that have their start date after relevant to Ukraine reconstruction / recovery (infrastructure, housing, energy, demining, municipal finance, governance reforms, donor coordination). Prefer authoritative organizers. Events should not be part of the titles we have already in our database: {{ $('Code in JavaScript5').item.json.all_event_titles }}\n\nHARD EXCLUSION RULES (must follow)\n1) Do NOT include events that already happened.\n   - An event is “already happened” if its start date/time is earlier than TODAY ({{ $json.todayISO }}) in its local timezone.\n2) Do NOT include events outside the allowed date window.\n3) Do NOT include “annual series” or “recurring” pages unless the specific upcoming edition date is clearly stated.\n4) Do NOT include items where the date is missing, ambiguous, or only mentioned as a past edition (“2024 recap”, “last year”, etc.).\n5) Each event MUST have a dedicated event page URL (registration page, official event page, or official agenda page).\n6) Map each item clearly to one of the four sectors: housing, infrastructure, disaster risk or urban resilience. No other sector definitions are allowed.\n\nDATE PARSING RULES\n- If a page shows a date range like “12–14 March 2026”, set event_date to the start datetime and event_end_date to the end datetime.\n- If only a date is available (no time), set time to 09:00:00 and timezone to the event’s location if known; otherwise use UTC.\n- If the timezone cannot be determined, still return an ISO timestamp, but set it to UTC and keep location accurate.\n\nOUTPUT (STRICT JSON ONLY)\nReturn only JSON (no markdown). Schema:\n{\n  \"events\": [\n    {\n      \"title\": \"string\",\n      \"event_date\": \"ISO-8601 timestamp with timezone (e.g. 2026-03-12T09:00:00+01:00)\",\n      \"event_end_date\": \"ISO-8601 timestamp with timezone or null\",\n      \"location\": \"string (e.g. 'Kyiv, Ukraine' or 'Online')\",\n      \"location_type\": \"in_person|online|hybrid\",\n      \"event_url\": \"string\",\n      \"source_url\": \"string (page used to verify; can be same as event_url)\",\n      \"organizer_name\": \"string or null\",\n      \"event_type\": \"conference|forum|webinar|roundtable|training|procurement_briefing|other\",\n      \"primary_sector\": \"housing|infrastructure|urban-resilience|disaster-risk\",\n      \"original_language\": \"uk|en|de|other\",\n      \"credibility_tier\": 1|2|3\n    }\n  ]\n}\n\nQUALITY CHECK BEFORE YOU RETURN\n- Re-check every event_date against TODAY ({{ $json.todayISO }}). If it is earlier, REMOVE it.\n- Keep only events with clear upcoming dates.\n\nOUTPUT SAFETY\n- Return at most 10 events.\n- DO NOT STOP BEFORE YOU FOUND AT LEAST 5 EVENTS THAT ARE NOT IN THE DATABASE.\n- NEVER RETURN ANY EVENTS BEFORE {{ $json.todayISO }} ! This is critical!\n- Keep all strings short (title <= 140 chars, description <= 400 chars).\n- If you cannot fit all events, return fewer events. NEVER truncate JSON.\n- Your final answer must be valid JSON that parses with JSON.parse().\n- YOU MUST NOT STOP BEFORE YOU FOUND AT LEAST 5 EVENTS.\n- BEFORE YOU ANSWER, MAKE SURE THAT ALL ITEMS ARE LATER THAN {{ $json.todayISO }}\n",
+          "options": {}
+        },
+        "id": "d013e1de-eab6-45c9-91fc-2c212feafdd3",
+        "name": "AI Agent (web search)",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3,
+        "position": [
+          1120,
+          192
+        ]
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "gpt-5.1",
+            "mode": "list",
+            "cachedResultName": "gpt-5.1"
+          },
+          "builtInTools": {
+            "webSearch": {
+              "searchContextSize": "high"
+            }
+          },
+          "options": {}
+        },
+        "id": "d4d1a504-3e15-470e-9c62-de39762568b1",
+        "name": "OpenAI Chat Model",
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.3,
+        "position": [
+          1120,
+          448
+        ],
+        "credentials": {
+          "openAiApi": {
+            "id": "a4ja82V4nnlunpii",
+            "name": "openai"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "tableId": "events",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "title_uk",
+                "fieldValue": "={{ $json.title }}"
+              },
+              {
+                "fieldId": "title_en",
+                "fieldValue": "={{ $json.title }}"
+              },
+              {
+                "fieldId": "title_de",
+                "fieldValue": "={{ $json.title }}"
+              },
+              {
+                "fieldId": "description_uk",
+                "fieldValue": "="
+              },
+              {
+                "fieldId": "description_en",
+                "fieldValue": "={{ $json.source_url }}"
+              },
+              {
+                "fieldId": "event_date",
+                "fieldValue": "={{ $json.event_date }}"
+              },
+              {
+                "fieldId": "event_end_date",
+                "fieldValue": "={{ $json.event_end_date }}"
+              },
+              {
+                "fieldId": "location",
+                "fieldValue": "={{ $json.location }}"
+              },
+              {
+                "fieldId": "location_type",
+                "fieldValue": "={{ $json.location_type }}"
+              },
+              {
+                "fieldId": "event_url",
+                "fieldValue": "={{ $json.event_url }}"
+              },
+              {
+                "fieldId": "primary_sector",
+                "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+              },
+              {
+                "fieldId": "organizer_name",
+                "fieldValue": "={{ $json.organizer_name }}"
+              },
+              {
+                "fieldId": "source_url",
+                "fieldValue": "={{ $json.source_url }}"
+              },
+              {
+                "fieldId": "credibility_tier",
+                "fieldValue": "={{ $json.credibility_tier }}"
+              },
+              {
+                "fieldId": "original_language",
+                "fieldValue": "={{ $json.original_language }}"
+              },
+              {
+                "fieldId": "event_type",
+                "fieldValue": "={{ $json.event_type }}"
+              },
+              {
+                "fieldId": "n8n_title_hash",
+                "fieldValue": "={{ $json.n8n_title_hash }}"
+              }
+            ]
+          }
+        },
+        "id": "b529dbe3-d55f-48ec-8474-d42adaf47054",
+        "name": "Supabase - Insert Event",
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          3968,
+          192
+        ],
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "jsCode": "function stripFences(s) {\n  return String(s || \"\")\n    .trim()\n    .replace(/^```json\\s*/i, \"\")\n    .replace(/^```\\s*/i, \"\")\n    .replace(/```$/i, \"\")\n    .trim();\n}\n\nfunction parsePossiblyDoubleEncoded(raw) {\n  if (raw == null) return null;\n  if (typeof raw === \"object\") return raw;\n\n  const cleaned = stripFences(String(raw));\n  let p;\n  try { p = JSON.parse(cleaned); } catch { return null; }\n\n  if (typeof p === \"string\") {\n    try { p = JSON.parse(p); } catch { return null; }\n  }\n  return p;\n}\n\nconst raw = $json.output ?? $json.text ?? $json.response ?? \"\";\nconst parsed = parsePossiblyDoubleEncoded(raw);\n\nif (!parsed || !Array.isArray(parsed.events)) {\n  throw new Error(\"No valid events[] found.\");\n}\n\nreturn [{ json: { events: parsed.events } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1488,
+          192
+        ],
+        "id": "38490329-8e0e-4779-ac66-5900023d7cbe",
+        "name": "Parse Events JSON"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "events",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1696,
+          192
+        ],
+        "id": "5242c5c0-15f7-4c5b-95e7-09afbb031989",
+        "name": "Split Out Events"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "events",
+          "matchType": "allFilters",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "n8n_title_hash",
+                "condition": "eq",
+                "keyValue": "={{ $json.n8n_title_hash }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          2720,
+          32
+        ],
+        "id": "4fc6f3a6-cf68-4021-8f3e-228ab3109829",
+        "name": "Get many rows",
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "fieldsToMatchString": "n8n_title_hash",
+          "joinMode": "enrichInput2",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          3136,
+          176
+        ],
+        "id": "c6e5e309-339a-4c91-b49c-5e8f2b6f99e1",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "jsCode": "const crypto = require('crypto');\n\nfunction stripDiacritics(s) {\n  return s.normalize('NFKD').replace(/[\\u0300-\\u036f]/g, '');\n}\n\nfunction normTitle(input) {\n  let s = String(input || '').trim();\n  s = stripDiacritics(s);\n  s = s.toLowerCase();\n\n  // replace punctuation with spaces (keeps alphanumerics)\n  s = s.replace(/[^a-z0-9]+/g, ' ');\n\n  // collapse whitespace\n  s = s.replace(/\\s+/g, ' ').trim();\n\n  return s;\n}\n\nfunction sha256Hex(s) {\n  return crypto.createHash('sha256').update(s, 'utf8').digest('hex');\n}\n\nfunction normUrl(input) {\n  const raw = String(input || '').trim();\n  if (!raw) return '';\n  try {\n    const u = new URL(raw);\n    u.hash = '';\n    const drop = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','fbclid','gclid'];\n    drop.forEach(k => u.searchParams.delete(k));\n    return u.toString().replace(/\\/$/, '');\n  } catch {\n    return raw.replace(/\\/$/, '');\n  }\n}\n\nfunction normDateToUtcIso(input) {\n  if (!input) return '';\n  const d = new Date(String(input));\n  if (Number.isNaN(d.getTime())) return '';\n  return d.toISOString();\n}\n\nreturn $input.all().map(item => {\n  const j = item.json || {};\n\n  const titleNorm = normTitle(j.title ?? j.title_en ?? '');\n  const titleHash = titleNorm ? sha256Hex(titleNorm) : '';\n\n  // Normalize URL + dates EARLY so DB lookups use the same canonical form as inserts\n  const eventUrlNorm = normUrl(j.event_url);\n  const eventDateUtc = normDateToUtcIso(j.event_date);\n  const eventEndUtc = j.event_end_date ? normDateToUtcIso(j.event_end_date) : j.event_end_date;\n\n  return {\n    json: {\n      ...j,\n      title: j.title ?? j.title_en ?? j.title_uk ?? j.title_de, // keep original if present\n      n8n_title_norm: titleNorm,\n      n8n_title_hash: titleHash,\n      event_url: eventUrlNorm,\n      event_date: eventDateUtc,\n      event_end_date: eventEndUtc,\n    }\n  };\n});\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2080,
+          192
+        ],
+        "id": "4ac6162f-5d68-4895-91ba-7e685e0880c2",
+        "name": "Compute Title Hash"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          864,
+          192
+        ],
+        "id": "7f051491-3a94-4c53-bc78-5a56a5c91ed9",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "jsCode": "const allowed = new Set([\"housing\", \"infrastructure\", \"disaster-risk\", \"urban-resilience\"]);\n\nfunction norm(s) {\n  return String(s || \"\")\n    .trim()\n    .toLowerCase()\n    .replace(/[_\\s]+/g, \"-\");\n}\n\nfunction mapSector(input) {\n  const s = norm(input);\n\n  // already valid\n  if (allowed.has(s)) return s;\n\n  // common synonyms / variants\n  const synonyms = new Map([\n    [\"basic-infrastructure\", \"infrastructure\"],\n    [\"critical-infrastructure\", \"infrastructure\"],\n    [\"health-infrastructure\", \"infrastructure\"],\n    [\"drm\", \"disaster-risk\"],\n    [\"disaster-risk-management\", \"disaster-risk\"],\n    [\"disaster-risk-reduction\", \"disaster-risk\"],\n    [\"urban-resilience\", \"urban-resilience\"],\n    [\"resilience\", \"urban-resilience\"],\n  ]);\n\n  return synonyms.get(s) || \"\";\n}\n\nconst out = [];\n\nfor (const item of $input.all()) {\n  const j = item.json || {};\n  const mapped = mapSector(j.primary_sector);\n\n  // drop items that don't comply (better than inserting wrong data)\n  if (!mapped) continue;\n\n  out.push({\n    json: {\n      ...j,\n      primary_sector: mapped,\n    }\n  });\n}\n\nreturn out;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1888,
+          192
+        ],
+        "id": "01487396-2497-4079-a257-8eac505e1445",
+        "name": "Code in JavaScript2"
+      },
+      {
+        "parameters": {
+          "messages": {
+            "message": [
+              {
+                "content": "Find 5 upcoming events regarding the reconstruction of Ukraine"
+              }
+            ]
+          },
+          "options": {},
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.perplexity",
+        "typeVersion": 1,
+        "position": [
+          448,
+          464
+        ],
+        "id": "8486bfec-21a8-4c6d-ab81-89b6fd476348",
+        "name": "Message a model",
+        "credentials": {
+          "perplexityApi": {
+            "id": "tuqtaFOroht6JjEE",
+            "name": "Perplexity account"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "bcddee9b-e7a1-4517-a262-bc3e0c4f81b7",
+                "leftValue": "={{ $json.__is_duplicate.toBoolean() }}",
+                "rightValue": false,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          3632,
+          176
+        ],
+        "id": "f0a7a1dd-59c9-4926-be27-1fde31c29c4e",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "jsCode": "return $input.all().map(i => ({\n  json: {\n    ...i.json,\n    // join key must exist before the Supabase lookup\n    dedupe_key: i.json.n8n_title_hash,\n  }\n}));\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2288,
+          192
+        ],
+        "id": "d9bd4c9d-e3f8-42a5-8cb0-31163157360a",
+        "name": "Code in JavaScript4"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "events",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "n8n_title_hash",
+                "condition": "gt",
+                "keyValue": "0"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          48,
+          192
+        ],
+        "id": "eaf2bda2-3753-4ce1-803d-fea5c17b5067",
+        "name": "Get many rows1",
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Collect titles from all incoming items and output ONE item with all unique titles.\n\nfunction addIfValid(set, v) {\n  const s = String(v ?? \"\").trim();\n  if (s) set.add(s);\n}\n\nconst titles = new Set();\n\nfor (const item of $input.all()) {\n  const e = item.json || {};\n  addIfValid(titles, e.title_uk);\n  addIfValid(titles, e.title_en);\n  addIfValid(titles, e.title_de);\n}\n\nreturn [{\n  json: {\n    all_event_titles: Array.from(titles),\n    all_event_titles_joined: Array.from(titles).join(\" | \"),\n    count: titles.size\n  }\n}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          320,
+          192
+        ],
+        "id": "92a9b09f-c89b-460c-a9f7-e32b3f47edad",
+        "name": "Code in JavaScript5"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "02e21e98-684a-47dd-9827-c68cbb07875e",
+                "name": "__is_duplicate",
+                "value": "={{ !!$json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "includeOtherFields": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          3360,
+          176
+        ],
+        "id": "59e583ad-9ec2-4205-8317-5ada4609ea76",
+        "name": "Edit Fields"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Get many rows1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Date Window": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent (web search)": {
+        "main": [
+          [
+            {
+              "node": "Parse Events JSON",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent (web search)",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse Events JSON": {
+        "main": [
+          [
+            {
+              "node": "Split Out Events",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out Events": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many rows": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Compute Title Hash": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "AI Agent (web search)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript2": {
+        "main": [
+          [
+            {
+              "node": "Compute Title Hash",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Message a model": {
+        "main": [
+          []
+        ]
+      },
+      "If": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Supabase - Insert Event",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript4": {
+        "main": [
+          [
+            {
+              "node": "Get many rows",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Get many rows1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript5",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript5": {
+        "main": [
+          [
+            {
+              "node": "Set Date Window",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": " Scio Network ",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "5e0bb6cd-9e31-43e2-8fdd-8553e0795b21",
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Date Window": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent (web search)": {
+      "main": [
+        [
+          {
+            "node": "Parse Events JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent (web search)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Events JSON": {
+      "main": [
+        [
+          {
+            "node": "Split Out Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Events": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Title Hash": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent (web search)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Compute Title Hash",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        []
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Supabase - Insert Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Set Date Window",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-07T14:36:57.047Z",
+  "id": "V9bqgDpzw6sh6ICc",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_Events_Ingestion_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "id": "172737b9-b403-4f42-98f4-4b7719a217a1",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -304,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compute \"today\" and \"horizon\" for the prompt and filtering.\nconst horizonDays = 180;\nconst now = new Date();\nconst todayISO = now.toISOString().slice(0, 10);\nconst horizon = new Date(now.getTime() + horizonDays * 24 * 3600 * 1000).toISOString().slice(0, 10);\n\n// Centralized sector definitions for the agent prompt\nconst sector_definitions = [\n  \"Disaster Risk Management: Activities, systems, and governance whose primary purpose is to anticipate, reduce, manage, and recover from hazards by strengthening risk assessment, preparedness, emergency response capacity, and disaster recovery coordination.\",\n  \"Basic Infrastructure: Reconstruction or provision of essential public utilities and everyday service infrastructure that keeps settlements functioning, including lifeline networks (energy, water, wastewater, heating, waste, transport, communications) and critical public facilities such as hospitals and other health infrastructure.\",\n  \"Housing: Repair, reconstruction, or development of permanent residential dwellings and residential buildings, focused on restoring safe, adequate, long-term living conditions for households.\",\n  \"Urban Resilience: Integrated city- or neighborhood-level planning, governance, and multi-sector interventions that increase a city’s ability to withstand and adapt to shocks and long-term stresses while improving recovery capacity and overall urban livability.\"\n].join(\"\\n\");\n\nreturn [{\n  json: {\n    todayISO,\n    horizon,\n    horizonDays,\n    sector_definitions\n  }\n}];\n"
+      },
+      "id": "e92a98f7-3309-40d8-b82a-861d32761c37",
+      "name": "Set Date Window",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an automated event ingestion agent for a database.\n\nTODAY (system date):{{ $json.todayISO }}\n\n\nSECTOR DEFINITIONS (MUST USE)\n{{ $json.sector_definitions }}\n\nSECTOR OUTPUT RULE (STRICT)\n- You MUST set primary_sector to exactly one of:\n  - Housing\n  - Basic Infrastructure\n  - Disaster Risk Management\n  - Urban Resilience\n- Choose based on PRIMARY PURPOSE of the event.\n- If unclear, pick the closest match; do not invent new categories.\n\n\nGOAL\nNo less than 5 upcoming events that have their start date after relevant to Ukraine reconstruction / recovery (infrastructure, housing, energy, demining, municipal finance, governance reforms, donor coordination). Prefer authoritative organizers. Events should not be part of the titles we have already in our database: {{ $('Code in JavaScript5').item.json.all_event_titles }}\n\nHARD EXCLUSION RULES (must follow)\n1) Do NOT include events that already happened.\n   - An event is “already happened” if its start date/time is earlier than TODAY ({{ $json.todayISO }}) in its local timezone.\n2) Do NOT include events outside the allowed date window.\n3) Do NOT include “annual series” or “recurring” pages unless the specific upcoming edition date is clearly stated.\n4) Do NOT include items where the date is missing, ambiguous, or only mentioned as a past edition (“2024 recap”, “last year”, etc.).\n5) Each event MUST have a dedicated event page URL (registration page, official event page, or official agenda page).\n6) Map each item clearly to one of the four sectors: housing, infrastructure, disaster risk or urban resilience. No other sector definitions are allowed.\n\nDATE PARSING RULES\n- If a page shows a date range like “12–14 March 2026”, set event_date to the start datetime and event_end_date to the end datetime.\n- If only a date is available (no time), set time to 09:00:00 and timezone to the event’s location if known; otherwise use UTC.\n- If the timezone cannot be determined, still return an ISO timestamp, but set it to UTC and keep location accurate.\n\nOUTPUT (STRICT JSON ONLY)\nReturn only JSON (no markdown). Schema:\n{\n  \"events\": [\n    {\n      \"title\": \"string\",\n      \"event_date\": \"ISO-8601 timestamp with timezone (e.g. 2026-03-12T09:00:00+01:00)\",\n      \"event_end_date\": \"ISO-8601 timestamp with timezone or null\",\n      \"location\": \"string (e.g. 'Kyiv, Ukraine' or 'Online')\",\n      \"location_type\": \"in_person|online|hybrid\",\n      \"event_url\": \"string\",\n      \"source_url\": \"string (page used to verify; can be same as event_url)\",\n      \"organizer_name\": \"string or null\",\n      \"event_type\": \"conference|forum|webinar|roundtable|training|procurement_briefing|other\",\n      \"primary_sector\": \"housing|infrastructure|urban-resilience|disaster-risk\",\n      \"original_language\": \"uk|en|de|other\",\n      \"credibility_tier\": 1|2|3\n    }\n  ]\n}\n\nQUALITY CHECK BEFORE YOU RETURN\n- Re-check every event_date against TODAY ({{ $json.todayISO }}). If it is earlier, REMOVE it.\n- Keep only events with clear upcoming dates.\n\nOUTPUT SAFETY\n- Return at most 10 events.\n- DO NOT STOP BEFORE YOU FOUND AT LEAST 5 EVENTS THAT ARE NOT IN THE DATABASE.\n- NEVER RETURN ANY EVENTS BEFORE {{ $json.todayISO }} ! This is critical!\n- Keep all strings short (title <= 140 chars, description <= 400 chars).\n- If you cannot fit all events, return fewer events. NEVER truncate JSON.\n- Your final answer must be valid JSON that parses with JSON.parse().\n- YOU MUST NOT STOP BEFORE YOU FOUND AT LEAST 5 EVENTS.\n- BEFORE YOU ANSWER, MAKE SURE THAT ALL ITEMS ARE LATER THAN {{ $json.todayISO }}\n",
+        "options": {}
+      },
+      "id": "d013e1de-eab6-45c9-91fc-2c212feafdd3",
+      "name": "AI Agent (web search)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.1",
+          "mode": "list",
+          "cachedResultName": "gpt-5.1"
+        },
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "high"
+          }
+        },
+        "options": {}
+      },
+      "id": "d4d1a504-3e15-470e-9c62-de39762568b1",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        448
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "events",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "description_uk",
+              "fieldValue": "="
+            },
+            {
+              "fieldId": "description_en",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "event_date",
+              "fieldValue": "={{ $json.event_date }}"
+            },
+            {
+              "fieldId": "event_end_date",
+              "fieldValue": "={{ $json.event_end_date }}"
+            },
+            {
+              "fieldId": "location",
+              "fieldValue": "={{ $json.location }}"
+            },
+            {
+              "fieldId": "location_type",
+              "fieldValue": "={{ $json.location_type }}"
+            },
+            {
+              "fieldId": "event_url",
+              "fieldValue": "={{ $json.event_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "organizer_name",
+              "fieldValue": "={{ $json.organizer_name }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "credibility_tier",
+              "fieldValue": "={{ $json.credibility_tier }}"
+            },
+            {
+              "fieldId": "original_language",
+              "fieldValue": "={{ $json.original_language }}"
+            },
+            {
+              "fieldId": "event_type",
+              "fieldValue": "={{ $json.event_type }}"
+            },
+            {
+              "fieldId": "n8n_title_hash",
+              "fieldValue": "={{ $json.n8n_title_hash }}"
+            }
+          ]
+        }
+      },
+      "id": "b529dbe3-d55f-48ec-8474-d42adaf47054",
+      "name": "Supabase - Insert Event",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3968,
+        192
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "function stripFences(s) {\n  return String(s || \"\")\n    .trim()\n    .replace(/^```json\\s*/i, \"\")\n    .replace(/^```\\s*/i, \"\")\n    .replace(/```$/i, \"\")\n    .trim();\n}\n\nfunction parsePossiblyDoubleEncoded(raw) {\n  if (raw == null) return null;\n  if (typeof raw === \"object\") return raw;\n\n  const cleaned = stripFences(String(raw));\n  let p;\n  try { p = JSON.parse(cleaned); } catch { return null; }\n\n  if (typeof p === \"string\") {\n    try { p = JSON.parse(p); } catch { return null; }\n  }\n  return p;\n}\n\nconst raw = $json.output ?? $json.text ?? $json.response ?? \"\";\nconst parsed = parsePossiblyDoubleEncoded(raw);\n\nif (!parsed || !Array.isArray(parsed.events)) {\n  throw new Error(\"No valid events[] found.\");\n}\n\nreturn [{ json: { events: parsed.events } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        192
+      ],
+      "id": "38490329-8e0e-4779-ac66-5900023d7cbe",
+      "name": "Parse Events JSON"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "events",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        192
+      ],
+      "id": "5242c5c0-15f7-4c5b-95e7-09afbb031989",
+      "name": "Split Out Events"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "events",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "n8n_title_hash",
+              "condition": "eq",
+              "keyValue": "={{ $json.n8n_title_hash }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2720,
+        32
+      ],
+      "id": "4fc6f3a6-cf68-4021-8f3e-228ab3109829",
+      "name": "Get many rows",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "n8n_title_hash",
+        "joinMode": "enrichInput2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3136,
+        176
+      ],
+      "id": "c6e5e309-339a-4c91-b49c-5e8f2b6f99e1",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nfunction stripDiacritics(s) {\n  return s.normalize('NFKD').replace(/[\\u0300-\\u036f]/g, '');\n}\n\nfunction normTitle(input) {\n  let s = String(input || '').trim();\n  s = stripDiacritics(s);\n  s = s.toLowerCase();\n\n  // replace punctuation with spaces (keeps alphanumerics)\n  s = s.replace(/[^a-z0-9]+/g, ' ');\n\n  // collapse whitespace\n  s = s.replace(/\\s+/g, ' ').trim();\n\n  return s;\n}\n\nfunction sha256Hex(s) {\n  return crypto.createHash('sha256').update(s, 'utf8').digest('hex');\n}\n\nfunction normUrl(input) {\n  const raw = String(input || '').trim();\n  if (!raw) return '';\n  try {\n    const u = new URL(raw);\n    u.hash = '';\n    const drop = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','fbclid','gclid'];\n    drop.forEach(k => u.searchParams.delete(k));\n    return u.toString().replace(/\\/$/, '');\n  } catch {\n    return raw.replace(/\\/$/, '');\n  }\n}\n\nfunction normDateToUtcIso(input) {\n  if (!input) return '';\n  const d = new Date(String(input));\n  if (Number.isNaN(d.getTime())) return '';\n  return d.toISOString();\n}\n\nreturn $input.all().map(item => {\n  const j = item.json || {};\n\n  const titleNorm = normTitle(j.title ?? j.title_en ?? '');\n  const titleHash = titleNorm ? sha256Hex(titleNorm) : '';\n\n  // Normalize URL + dates EARLY so DB lookups use the same canonical form as inserts\n  const eventUrlNorm = normUrl(j.event_url);\n  const eventDateUtc = normDateToUtcIso(j.event_date);\n  const eventEndUtc = j.event_end_date ? normDateToUtcIso(j.event_end_date) : j.event_end_date;\n\n  return {\n    json: {\n      ...j,\n      title: j.title ?? j.title_en ?? j.title_uk ?? j.title_de, // keep original if present\n      n8n_title_norm: titleNorm,\n      n8n_title_hash: titleHash,\n      event_url: eventUrlNorm,\n      event_date: eventDateUtc,\n      event_end_date: eventEndUtc,\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2080,
+        192
+      ],
+      "id": "4ac6162f-5d68-4895-91ba-7e685e0880c2",
+      "name": "Compute Title Hash"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        192
+      ],
+      "id": "7f051491-3a94-4c53-bc78-5a56a5c91ed9",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allowed = new Set([\"housing\", \"infrastructure\", \"disaster-risk\", \"urban-resilience\"]);\n\nfunction norm(s) {\n  return String(s || \"\")\n    .trim()\n    .toLowerCase()\n    .replace(/[_\\s]+/g, \"-\");\n}\n\nfunction mapSector(input) {\n  const s = norm(input);\n\n  // already valid\n  if (allowed.has(s)) return s;\n\n  // common synonyms / variants\n  const synonyms = new Map([\n    [\"basic-infrastructure\", \"infrastructure\"],\n    [\"critical-infrastructure\", \"infrastructure\"],\n    [\"health-infrastructure\", \"infrastructure\"],\n    [\"drm\", \"disaster-risk\"],\n    [\"disaster-risk-management\", \"disaster-risk\"],\n    [\"disaster-risk-reduction\", \"disaster-risk\"],\n    [\"urban-resilience\", \"urban-resilience\"],\n    [\"resilience\", \"urban-resilience\"],\n  ]);\n\n  return synonyms.get(s) || \"\";\n}\n\nconst out = [];\n\nfor (const item of $input.all()) {\n  const j = item.json || {};\n  const mapped = mapSector(j.primary_sector);\n\n  // drop items that don't comply (better than inserting wrong data)\n  if (!mapped) continue;\n\n  out.push({\n    json: {\n      ...j,\n      primary_sector: mapped,\n    }\n  });\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1888,
+        192
+      ],
+      "id": "01487396-2497-4079-a257-8eac505e1445",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "messages": {
+          "message": [
+            {
+              "content": "Find 5 upcoming events regarding the reconstruction of Ukraine"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexity",
+      "typeVersion": 1,
+      "position": [
+        448,
+        464
+      ],
+      "id": "8486bfec-21a8-4c6d-ab81-89b6fd476348",
+      "name": "Message a model",
+      "credentials": {
+        "perplexityApi": {
+          "id": "tuqtaFOroht6JjEE",
+          "name": "Perplexity account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bcddee9b-e7a1-4517-a262-bc3e0c4f81b7",
+              "leftValue": "={{ $json.__is_duplicate.toBoolean() }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3632,
+        176
+      ],
+      "id": "f0a7a1dd-59c9-4926-be27-1fde31c29c4e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(i => ({\n  json: {\n    ...i.json,\n    // join key must exist before the Supabase lookup\n    dedupe_key: i.json.n8n_title_hash,\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2288,
+        192
+      ],
+      "id": "d9bd4c9d-e3f8-42a5-8cb0-31163157360a",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "events",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "n8n_title_hash",
+              "condition": "gt",
+              "keyValue": "0"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        48,
+        192
+      ],
+      "id": "eaf2bda2-3753-4ce1-803d-fea5c17b5067",
+      "name": "Get many rows1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Collect titles from all incoming items and output ONE item with all unique titles.\n\nfunction addIfValid(set, v) {\n  const s = String(v ?? \"\").trim();\n  if (s) set.add(s);\n}\n\nconst titles = new Set();\n\nfor (const item of $input.all()) {\n  const e = item.json || {};\n  addIfValid(titles, e.title_uk);\n  addIfValid(titles, e.title_en);\n  addIfValid(titles, e.title_de);\n}\n\nreturn [{\n  json: {\n    all_event_titles: Array.from(titles),\n    all_event_titles_joined: Array.from(titles).join(\" | \"),\n    count: titles.size\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        192
+      ],
+      "id": "92a9b09f-c89b-460c-a9f7-e32b3f47edad",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "02e21e98-684a-47dd-9827-c68cbb07875e",
+              "name": "__is_duplicate",
+              "value": "={{ !!$json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3360,
+        176
+      ],
+      "id": "59e583ad-9ec2-4205-8317-5ada4609ea76",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-07T14:36:57.050Z",
+      "createdAt": "2026-01-07T14:36:57.050Z",
+      "role": "workflow:owner",
+      "workflowId": "V9bqgDpzw6sh6ICc",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        12
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-05T14:32:36.851Z",
+  "versionId": "5e0bb6cd-9e31-43e2-8fdd-8553e0795b21"
+}
