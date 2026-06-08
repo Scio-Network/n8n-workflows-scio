@@ -1,0 +1,243 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Date Window",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Date Window": {
+      "main": [
+        [
+          {
+            "node": "AI Agent (web search)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent (web search)": {
+      "main": [
+        [
+          {
+            "node": "Parse Events JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent (web search)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Events JSON": {
+      "main": [
+        [
+          {
+            "node": "Split Out Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Events": {
+      "main": [
+        [
+          {
+            "node": "Normalize + Filter (fast)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize + Filter (fast)": {
+      "main": [
+        [
+          {
+            "node": "Insert (ignore duplicates)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-07T21:30:33.638Z",
+  "id": "WnteaqeqAovMnUJu",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_Upcoming_Events_WebSearch_v2_Clean",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "id": "0aaacc36-7d30-4ad1-9123-0a238d054090",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Produces a stable date window the whole workflow can reference.\nconst horizonDays = 180;\nconst now = new Date();\nconst todayISO = now.toISOString().slice(0,10);\nconst horizon = new Date(now.getTime() + horizonDays*24*3600*1000).toISOString().slice(0,10);\nreturn [{ json: { todayISO, horizon, horizonDays } }];"
+      },
+      "id": "26bda51c-daf2-4ec6-bbd0-bc1c0291acee",
+      "name": "Set Date Window",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "TODAY: {{ $node[\"Set Date Window\"].json.todayISO }}\nALLOWED WINDOW: {{ $node[\"Set Date Window\"].json.todayISO }} to {{ $node[\"Set Date Window\"].json.horizon }} (inclusive)\n\nTask: Find up to 10 UPCOMING events relevant to Ukraine reconstruction / recovery.\nHard rules:\n- Do NOT include past events.\n- Do NOT include events outside the allowed window.\n- Each event MUST have a dedicated event page URL (not a generic /events listing).\n- If date is not clearly stated on the event page, do NOT include the event.\n- If you cannot fit all events, return fewer (never truncate JSON).\n\nReturn STRICT JSON only (no markdown):\n{\n  \"events\":[\n    {\n      \"title\":\"string\",\n      \"event_date\":\"ISO-8601 timestamp with timezone\",\n      \"event_end_date\":\"ISO-8601 timestamp with timezone or null\",\n      \"location\":\"string (e.g. 'Kyiv, Ukraine' or 'Online')\",\n      \"location_type\":\"in_person|online|hybrid\",\n      \"event_url\":\"string\",\n      \"source_url\":\"string\",\n      \"organizer_name\":\"string or null\",\n      \"event_type\":\"conference|forum|webinar|roundtable|training|procurement_briefing|other\",\n      \"primary_sector\":\"housing|infrastructure|urban-resilience|disaster-risk\",\n      \"secondary_sectors\":[\"string\"],\n      \"original_language\":\"uk|en|de|other\",\n      \"credibility_tier\":1|2|3\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "9b43e1c6-f76f-49ca-93fb-f7043a2fc41c",
+      "name": "AI Agent (web search)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        464,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "medium"
+          }
+        },
+        "options": {}
+      },
+      "id": "28059179-a58f-46ed-9e3d-4141b2fde3ca",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        464,
+        160
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse AI output into a single item: { events: [...] }\nfunction stripFences(s) {\n  return String(s || \"\")\n    .trim()\n    .replace(/^```json\\s*/i, \"\")\n    .replace(/^```\\s*/i, \"\")\n    .replace(/```$/i, \"\")\n    .trim();\n}\nfunction parsePossiblyDoubleEncoded(raw) {\n  if (raw == null) return null;\n  if (typeof raw === \"object\") return raw;\n  const cleaned = stripFences(String(raw));\n  let p;\n  try { p = JSON.parse(cleaned); } catch { return null; }\n  if (typeof p === \"string\") {\n    try { p = JSON.parse(p); } catch { return null; }\n  }\n  return p;\n}\nconst raw = $json.output ?? $json.text ?? $json.response ?? \"\";\nconst parsed = parsePossiblyDoubleEncoded(raw);\nif (!parsed || !Array.isArray(parsed.events)) {\n  throw new Error(\"No valid events[] found in AI output.\");\n}\nreturn [{ json: { events: parsed.events } }];"
+      },
+      "id": "73468ac4-1897-4075-bc64-5629a3f5c1b8",
+      "name": "Parse Events JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "events",
+        "options": {}
+      },
+      "id": "0cedc994-b965-491d-81fc-20bde38dc40a",
+      "name": "Split Out Events",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        928,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalize + enforce upcoming window + FK-safe primary_sector.\n// IMPORTANT: Run once for each item (this node is placed after Split Out Events).\nfunction norm(s) { return String(s ?? \"\").replace(/\\s+/g, \" \").trim(); }\nfunction toDate(s) { const d = new Date(String(s ?? \"\")); return isNaN(d.getTime()) ? null : d; }\n\nconst todayISO = $node[\"Set Date Window\"].json.todayISO;\nconst horizonISO = $node[\"Set Date Window\"].json.horizon;\n\nconst title = norm($json.title);\nconst location = norm($json.location);\nconst event_url = norm($json.event_url);\nconst source_url = norm($json.source_url || $json.event_url) || null;\n\nconst start = toDate($json.event_date);\nif (!title || !location || !event_url || !start) return [];\n\n// Drop generic listing pages (quick heuristic)\nif (/\\/events\\/?$/.test(event_url)) return [];\n\nconst startYMD = start.toISOString().slice(0,10);\nif (startYMD < todayISO) return [];\nif (startYMD > horizonISO) return [];\n\n// FK-safe sector\nconst allowed = new Set([\"housing\",\"infrastructure\",\"urban-resilience\",\"disaster-risk\"]);\nlet sector = norm($json.primary_sector).toLowerCase();\nif (sector === \"urban resilience\") sector = \"urban-resilience\";\nif (sector === \"disaster risk\") sector = \"disaster-risk\";\nif (!allowed.has(sector)) sector = \"infrastructure\";\n\n// Ensure NOT NULL event_type\nconst event_type = norm($json.event_type) || \"other\";\n\nreturn [{\n  json: {\n    // events table payload (source_id intentionally omitted; use DB default)\n    title_uk: title,\n    title_en: null,\n    title_de: null,\n    description_uk: norm($json.description_uk || $json.description || \"\") || null,\n    description_en: null,\n    description_de: null,\n    event_date: start.toISOString(),\n    event_end_date: toDate($json.event_end_date)?.toISOString() || null,\n    location,\n    location_type: norm($json.location_type) || null,\n    event_url,\n    primary_sector: sector,\n    secondary_sectors: Array.isArray($json.secondary_sectors) ? $json.secondary_sectors : [],\n    event_type,\n    organizer_stakeholder_id: $json.organizer_stakeholder_id ?? null,\n    organizer_name: norm($json.organizer_name) || null,\n    source_url,\n    credibility_tier: Number.isFinite($json.credibility_tier) ? $json.credibility_tier : 2,\n    original_language: norm($json.original_language) || \"en\",\n    translation_status: \"machine\",\n    llm_extracted_speakers: Array.isArray($json.llm_extracted_speakers) ? $json.llm_extracted_speakers : [],\n    llm_topics: Array.isArray($json.llm_topics) ? $json.llm_topics : [],\n    llm_expected_attendees: norm($json.llm_expected_attendees) || null\n  }\n}];"
+      },
+      "id": "30462e6c-ad70-4dbe-afc5-01cdc47b15be",
+      "name": "Normalize + Filter (fast)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://YOUR_PROJECT_REF.supabase.co/rest/v1/events?on_conflict=event_url,event_date",
+        "options": {}
+      },
+      "id": "c6ade81b-4146-4ab2-a312-64d46552fa3d",
+      "name": "Insert (ignore duplicates)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1360,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-07T21:30:33.649Z",
+      "createdAt": "2026-01-07T21:30:33.649Z",
+      "role": "workflow:owner",
+      "workflowId": "WnteaqeqAovMnUJu",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-07T21:31:23.000Z",
+  "versionId": "7b023799-5001-4d8d-a62d-f44c17558441"
+}
