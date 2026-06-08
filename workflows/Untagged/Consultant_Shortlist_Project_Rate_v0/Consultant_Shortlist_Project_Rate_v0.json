@@ -1,0 +1,742 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get scarcity factors": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get project roles": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Consultants": {
+      "main": [
+        [
+          {
+            "node": "Get scarcity factors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Get project roles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Get Consultants",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-11T12:49:06.387Z",
+  "id": "sGNjuPJ0EaUxqHPp",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Consultant_Shortlist_Project_Rate_v0",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -704,
+        -32
+      ],
+      "id": "b505c8c2-36bb-4945-be9c-76b57932d635",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk/",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1881291929,
+          "mode": "list",
+          "cachedResultName": "Scarcity_Factors",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk/edit#gid=1881291929"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        160,
+        -32
+      ],
+      "id": "48ca431a-7957-4be4-adfb-c1a2469feb4e",
+      "name": "Get scarcity factors",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "list",
+          "cachedResultName": "Expert_Profile_Extended_Source_of_Truth",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $json.sheet_id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        800,
+        -32
+      ],
+      "id": "db2855ae-ba5b-4ed6-b003-1cc081d4a176",
+      "name": "Get project roles",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// FLOW 3 — Consultant_Shortlist_Project_Rate_v0 — Code node: \"Code in JavaScript\"\n// Fixes:\n// 1) Correctly merges calc_* fields into output (use ...calc, not .calc)\n// 2) Keeps shortlist + selected consultant pricing outputs\n// 3) Adds small safety guards so missing fields don't crash the node\n\nconst SHORTLIST_SIZE = 5;\nconst TOPN_EXPOSED = 3;\n\n// ---------- Helpers ----------\nfunction levelNameToNum(name) {\n  if (!name) return null;\n  const n = String(name).toLowerCase();\n  if (n.startsWith(\"junior\")) return 1;\n  if (n.startsWith(\"inter\")) return 2;\n  if (n.startsWith(\"senior\")) return 3;\n  if (n.startsWith(\"expert\")) return 4;\n  return null;\n}\n\nfunction parseCsv(str) {\n  if (!str) return [];\n  return String(str)\n    .split(\",\")\n    .map((s) => s.trim())\n    .filter(Boolean);\n}\n\nfunction normaliseLang(l) {\n  return String(l || \"\").trim().toLowerCase();\n}\n\nfunction computeFitScore(role, consultant) {\n  let penalty = 0;\n\n  // level mismatch penalty\n  const roleLevelNum = levelNameToNum(role.role_level_required);\n  const consLevelNum =\n    consultant.level_id != null ? Number(consultant.level_id) : null;\n\n  if (roleLevelNum != null && consLevelNum != null) {\n    const diff = Math.abs(roleLevelNum - consLevelNum);\n    if (diff === 1) penalty += 10;\n    else if (diff === 2) penalty += 20;\n    else if (diff >= 3) penalty += 30;\n  }\n\n  // skill area penalty (basic)\n  const roleSkill = (role.role_skill_area || \"\").toLowerCase();\n  if (roleSkill) {\n    const primarySkill = (consultant.primary_skill_area || \"\").toLowerCase();\n    const otherSkills = parseCsv(consultant.other_skill_areas || \"\").map((s) =>\n      s.toLowerCase()\n    );\n    const inPrimary = primarySkill.includes(roleSkill);\n    const inOther = otherSkills.some((s) => s.includes(roleSkill));\n    if (!inPrimary && !inOther) penalty += 30;\n  }\n\n  // language penalty\n  const roleLangs = parseCsv(role.role_languages_required);\n  if (roleLangs.length) {\n    const consLangs = parseCsv(consultant.languages_raw || \"\").map(normaliseLang);\n    for (const required of roleLangs) {\n      const reqNorm = normaliseLang(required);\n      if (!reqNorm) continue;\n      const hasLang =\n        consLangs.includes(reqNorm) ||\n        consLangs.some((l) => l.startsWith(reqNorm) || reqNorm.startsWith(l));\n      if (!hasLang) penalty += 15;\n    }\n  }\n\n  if (penalty < 0) penalty = 0;\n  if (penalty > 80) penalty = 80;\n\n  return { score: 100 - penalty };\n}\n\nfunction computeRateForPair(role, consultant, scarcityConf) {\n  const baseMin =\n    consultant.min_rate_indi != null ? Number(consultant.min_rate_indi) : 0;\n  const baseMax =\n    consultant.max_rate_indi != null ? Number(consultant.max_rate_indi) : 0;\n\n  const baseSuggested =\n    (consultant.suggested_rate_indi != null &&\n      Number(consultant.suggested_rate_indi)) ||\n    (consultant.average_rate_indi != null &&\n      Number(consultant.average_rate_indi)) ||\n    baseMin;\n\n  let currency = \"EUR\";\n  if (\n    consultant.generic_rate_band &&\n    typeof consultant.generic_rate_band === \"object\" &&\n    consultant.generic_rate_band.currency\n  ) {\n    currency = consultant.generic_rate_band.currency;\n  }\n\n  if (!baseMin || !baseMax || baseMax <= baseMin) {\n    return {\n      error: \"Invalid individual band\",\n      currency,\n      baseMin,\n      baseMax,\n      baseSuggested,\n      roleScIds: parseCsv(role.role_scarcity_ids || \"\"),\n      consScIds: parseCsv(consultant.scarcity_ids_raw || \"\"),\n      matchedScIds: [],\n      scarcityUpliftMult: 1.0,\n      scarcityUpliftMultCapped: 1.0,\n      scarcityCapApplied: false,\n      clientBuyingFactor: null,\n      clientDefaultMargin: null,\n      locationFactor: 1.0,\n      buyRateRaw: null,\n      buyRateClamped: null,\n      buyRateClampReason: null,\n      sellRate: null,\n      days: null,\n      budgetBuyTotal: null,\n      budgetSellTotal: null,\n      marginAbs: null,\n      marginPctRealized: null,\n    };\n  }\n\n  const roleScIds = parseCsv(role.role_scarcity_ids || \"\");\n  const consScIds = [];\n\n  if (consultant.scarcity_ids_raw) {\n    consScIds.push(...parseCsv(consultant.scarcity_ids_raw));\n  }\n  if (consultant.is_economist && !consScIds.includes(\"ECON\")) {\n    consScIds.push(\"ECON\");\n  }\n\n  const consSet = new Set(consScIds);\n  const matchedScIds = roleScIds.filter((id) => consSet.has(id));\n\n  // multiplicative uplift\n  let scarcityUpliftMult = 1.0;\n  for (const id of matchedScIds) {\n    const cfg = scarcityConf.get(id);\n    if (!cfg) continue;\n    const u = Number(cfg.project_uplift_pct || 0); // expected decimal, e.g. 0.05\n    scarcityUpliftMult *= 1 + u;\n  }\n\n  // cap to +20% (mult <= 1.2)\n  let scarcityUpliftMultCapped = scarcityUpliftMult;\n  let scarcityCapApplied = false;\n  if (scarcityUpliftMultCapped > 1.2) {\n    scarcityUpliftMultCapped = 1.2;\n    scarcityCapApplied = true;\n  }\n\n  const clientBuyingFactor =\n    role.client_buying_factor != null && role.client_buying_factor !== \"\"\n      ? Number(role.client_buying_factor)\n      : 1.0;\n\n  const clientDefaultMargin =\n    role.client_default_margin != null && role.client_default_margin !== \"\"\n      ? Number(role.client_default_margin)\n      : 0.2;\n\n  const locationFactor = 1.0; // placeholder for now\n\n  const buyRateRaw =\n    baseSuggested * scarcityUpliftMultCapped * clientBuyingFactor * locationFactor;\n\n  // clamp inside band\n  let buyRateClamped = buyRateRaw;\n  let buyRateClampReason = \"NONE\";\n  if (buyRateClamped < baseMin) {\n    buyRateClamped = baseMin;\n    buyRateClampReason = \"BELOW_MIN\";\n  } else if (buyRateClamped > baseMax) {\n    buyRateClamped = baseMax;\n    buyRateClampReason = \"ABOVE_MAX\";\n  }\n\n  const sellRate = buyRateClamped * (1 + clientDefaultMargin);\n  const days =\n    role.role_days != null && role.role_days !== \"\" ? Number(role.role_days) : 0;\n\n  const budgetBuyTotal = buyRateClamped * days;\n  const budgetSellTotal = sellRate * days;\n\n  const marginAbs = budgetSellTotal - budgetBuyTotal;\n  const marginPctRealized = budgetSellTotal > 0 ? marginAbs / budgetSellTotal : null;\n\n  return {\n    error: null,\n    currency,\n    baseMin,\n    baseMax,\n    baseSuggested,\n    roleScIds,\n    consScIds,\n    matchedScIds,\n    scarcityUpliftMult,\n    scarcityUpliftMultCapped,\n    scarcityCapApplied,\n    clientBuyingFactor,\n    clientDefaultMargin,\n    locationFactor,\n    buyRateRaw,\n    buyRateClamped,\n    buyRateClampReason,\n    sellRate,\n    days,\n    budgetBuyTotal,\n    budgetSellTotal,\n    marginAbs,\n    marginPctRealized,\n  };\n}\n\n// ---------- Inputs ----------\nconst projectItems = $items(\"Get project roles\");\nconst consultantItems = $items(\"Get Consultants\");\nconst scarcityItems = $items(\"Get scarcity factors\");\n\n// ---------- Build consultants ----------\nconst consultants = [];\nfor (const item of consultantItems) {\n  const row = item.json || {};\n  const email = String(row.Email || row.email || \"\").trim();\n  if (!email) continue;\n\n  let genericBand = {};\n  if (row.generic_rate_band) {\n    try {\n      genericBand = JSON.parse(row.generic_rate_band);\n    } catch {\n      genericBand = {};\n    }\n  }\n\n  consultants.push({\n    raw: row,\n    name: row.Name || row.name || null,\n    email,\n    level_id:\n      row.level_id != null && row.level_id !== \"\" ? Number(row.level_id) : null,\n    level_label: row.level_label || row.level_key || null,\n    primary_skill_area: row.primary_skill_area || \"\",\n    other_skill_areas: row.other_skill_areas || \"\",\n    languages_raw: row.languages || \"\",\n    scarcity_ids_raw: row.scarcity_ids_auto || \"\",\n    is_economist:\n      String(row.is_economist || \"\").toLowerCase() === \"true\" || row.is_economist === true,\n    generic_rate_band: genericBand,\n    min_rate_indi:\n      row.min_rate_indi != null && row.min_rate_indi !== \"\" ? Number(row.min_rate_indi) : 0,\n    max_rate_indi:\n      row.max_rate_indi != null && row.max_rate_indi !== \"\" ? Number(row.max_rate_indi) : 0,\n    average_rate_indi:\n      row.average_rate_indi != null && row.average_rate_indi !== \"\" ? Number(row.average_rate_indi) : 0,\n    suggested_rate_indi:\n      row.suggested_rate_indi != null && row.suggested_rate_indi !== \"\" ? Number(row.suggested_rate_indi) : 0,\n  });\n}\n\n// ---------- Scarcity config map ----------\nconst scarcityConf = new Map();\nfor (const item of scarcityItems) {\n  const row = item.json || {};\n  const id = row.scarcity_id;\n  if (!id) continue;\n  const raw =\n    row.project_uplift_pct != null && row.project_uplift_pct !== \"\"\n      ? Number(row.project_uplift_pct)\n      : 0;\n  scarcityConf.set(id, {\n    scarcity_id: id,\n    project_uplift_pct: Number.isFinite(raw) ? raw : 0,\n  });\n}\n\n// ---------- Process each role ----------\nconst out = [];\n\nfor (const item of projectItems) {\n  const r = item.json || {};\n\n  // n8n commonly uses row_number\n  const rowNumber = r.row_number || r.rowNumber;\n  if (!rowNumber) continue;\n\n  const roleId = r.role_id;\n  if (!roleId || String(roleId).trim() === \"\") continue;\n\n  const consultantEmailRaw = String(r.consultant_email || \"\").trim();\n\n  const role = {\n    project_id: r.project_id,\n    project_name: r.project_name,\n    client_name_raw: r.client_name_raw,\n    client_key: r.client_key,\n    client_type: r.client_type,\n    client_group: r.client_group,\n    client_buying_factor: r.client_buying_factor,\n    client_default_margin: r.client_default_margin,\n    country: r.country,\n    location_group: r.location_group,\n    file_id: r.file_id,\n    file_name: r.file_name,\n    role_id: r.role_id,\n    role_title: r.role_title,\n    role_level_required: r.role_level_required,\n    role_days: r.role_days,\n    role_skill_area: r.role_skill_area,\n    role_languages_required: r.role_languages_required,\n    role_scarcity_ids: r.role_scarcity_ids,\n  };\n\n  // ---- Shortlist ----\n  const shortlistCandidates = [];\n  for (const cons of consultants) {\n    const fit = computeFitScore(role, cons);\n    const rateRes = computeRateForPair(role, cons, scarcityConf);\n\n    shortlistCandidates.push({\n      email: cons.email,\n      name: cons.name,\n      level_id: cons.level_id,\n      level_label: cons.level_label,\n      fit_score: fit.score,\n      approx_buy_rate: rateRes.error ? null : rateRes.buyRateClamped,\n      approx_sell_rate: rateRes.error ? null : rateRes.sellRate,\n      is_economist: cons.is_economist,\n    });\n  }\n\n  shortlistCandidates.sort((a, b) => {\n    if (b.fit_score !== a.fit_score) return b.fit_score - a.fit_score;\n    const aBuy = a.approx_buy_rate ?? Number.POSITIVE_INFINITY;\n    const bBuy = b.approx_buy_rate ?? Number.POSITIVE_INFINITY;\n    if (aBuy !== bBuy) return aBuy - bBuy;\n    return String(a.name || \"\").localeCompare(String(b.name || \"\"));\n  });\n\n  const shortlist = shortlistCandidates.slice(0, SHORTLIST_SIZE);\n  const top3 = shortlist.slice(0, TOPN_EXPOSED);\n\n  const shortlistTop3Emails = top3.map((s) => s.email).join(\", \");\n  const shortlistTop3Names = top3.map((s) => s.name).join(\", \");\n  const shortlistTop3Scores = top3.map((s) => String(Math.round(s.fit_score))).join(\", \");\n\n  const shortlistStatus = shortlist.length > 0 ? \"BUILT\" : \"NO_MATCH_FOUND\";\n\n  // ---- Selected consultant & transparent rate breakdown ----\n  let consultantName = null;\n  let consultantLevelId = null;\n  let consultantLevelLabel = null;\n  let consultantCurrency = null;\n  let consultantFitScore = null;\n\n  let consultantBuyRate = null;\n  let consultantSellRate = null;\n  let consultantBudgetTotal = null;\n\n  let rateStatus = \"NO_SELECTION\";\n  let rateError = null;\n\n  // calc_* outputs\n  const calc = {\n    calc_base_min_rate: null,\n    calc_base_max_rate: null,\n    calc_base_suggested_rate: null,\n\n    calc_role_scarcity_ids: parseCsv(role.role_scarcity_ids || \"\").join(\", \"),\n    calc_consultant_scarcity_ids: null,\n    calc_matched_scarcity_ids: null,\n    calc_scarcity_uplift_mult: null,\n    calc_scarcity_uplift_mult_capped: null,\n    calc_scarcity_cap_applied: null,\n\n    calc_client_buying_factor:\n      role.client_buying_factor != null && role.client_buying_factor !== \"\"\n        ? Number(role.client_buying_factor)\n        : 1.0,\n    calc_location_factor: 1.0,\n    calc_margin_pct_default:\n      role.client_default_margin != null && role.client_default_margin !== \"\"\n        ? Number(role.client_default_margin)\n        : 0.2,\n\n    calc_buy_rate_raw: null,\n    calc_buy_rate_clamped: null,\n    calc_buy_rate_clamp_reason: null,\n\n    calc_sell_rate: null,\n    calc_days: role.role_days != null && role.role_days !== \"\" ? Number(role.role_days) : 0,\n    calc_budget_buy_total: null,\n    calc_budget_sell_total: null,\n    calc_margin_abs: null,\n    calc_margin_pct_realized: null,\n  };\n\n  if (consultantEmailRaw) {\n    const key = consultantEmailRaw.toLowerCase();\n    const selected = consultants.find((c) => c.email.toLowerCase() === key);\n\n    if (!selected) {\n      rateStatus = \"ERROR\";\n      rateError = \"Consultant not found in master sheet\";\n    } else {\n      const fitRes = computeFitScore(role, selected);\n      const rateRes = computeRateForPair(role, selected, scarcityConf);\n\n      consultantName = selected.name;\n      consultantLevelId = selected.level_id;\n      consultantLevelLabel = selected.level_label;\n      consultantCurrency =\n        (selected.generic_rate_band && selected.generic_rate_band.currency) || \"EUR\";\n      consultantFitScore = fitRes.score;\n\n      // fill calc breakdown even if error (as far as possible)\n      calc.calc_base_min_rate = rateRes.baseMin ?? null;\n      calc.calc_base_max_rate = rateRes.baseMax ?? null;\n      calc.calc_base_suggested_rate = rateRes.baseSuggested ?? null;\n\n      calc.calc_consultant_scarcity_ids = (rateRes.consScIds || []).join(\", \");\n      calc.calc_matched_scarcity_ids = (rateRes.matchedScIds || []).join(\", \");\n      calc.calc_scarcity_uplift_mult = rateRes.scarcityUpliftMult ?? null;\n      calc.calc_scarcity_uplift_mult_capped = rateRes.scarcityUpliftMultCapped ?? null;\n      calc.calc_scarcity_cap_applied = rateRes.scarcityCapApplied ?? null;\n\n      calc.calc_buy_rate_raw = rateRes.buyRateRaw ?? null;\n      calc.calc_buy_rate_clamped = rateRes.buyRateClamped ?? null;\n      calc.calc_buy_rate_clamp_reason = rateRes.buyRateClampReason ?? null;\n\n      calc.calc_sell_rate = rateRes.sellRate ?? null;\n      calc.calc_budget_buy_total = rateRes.budgetBuyTotal ?? null;\n      calc.calc_budget_sell_total = rateRes.budgetSellTotal ?? null;\n      calc.calc_margin_abs = rateRes.marginAbs ?? null;\n      calc.calc_margin_pct_realized = rateRes.marginPctRealized ?? null;\n\n      if (rateRes.error) {\n        rateStatus = \"ERROR\";\n        rateError = rateRes.error;\n      } else {\n        rateStatus = \"CALCULATED\";\n        consultantBuyRate = rateRes.buyRateClamped;\n        consultantSellRate = rateRes.sellRate;\n        consultantBudgetTotal = rateRes.budgetSellTotal;\n      }\n    }\n  }\n\n  const debug = {\n    consultant_email: consultantEmailRaw || null,\n    has_selection: !!consultantEmailRaw,\n    role,\n    shortlist_size: shortlist.length,\n    shortlist_preview: top3,\n  };\n\n  out.push({\n    json: {\n      rowNumber,\n\n      shortlist_status: shortlistStatus,\n      shortlist_top3_emails: shortlistTop3Emails,\n      shortlist_top3_names: shortlistTop3Names,\n      shortlist_top3_fit_scores: shortlistTop3Scores,\n      shortlist_json: JSON.stringify(shortlist),\n\n      consultant_name: consultantName,\n      consultant_level_id: consultantLevelId,\n      consultant_level_label: consultantLevelLabel,\n      consultant_currency: consultantCurrency,\n      consultant_fit_score: consultantFitScore,\n\n      consultant_buy_rate: consultantBuyRate,\n      consultant_sell_rate: consultantSellRate,\n      consultant_budget_total: consultantBudgetTotal,\n      rate_status: rateStatus,\n      rate_error_message: rateError,\n      rate_debug_json: JSON.stringify(debug),\n\n      // ✅ IMPORTANT: this actually outputs the calc_* columns\n      ...calc,\n    },\n  });\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        -32
+      ],
+      "id": "17588c39-d4ad-4e02-93eb-b3c95c1917ba",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "list",
+          "cachedResultName": "Expert_Profile_Extended_Source_of_Truth",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Consultant_Profile_Plus",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -48,
+        -32
+      ],
+      "id": "27c247b5-12ab-4a9a-bbbb-1babddb09e03",
+      "name": "Get Consultants",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "list",
+          "cachedResultName": "Expert_Profile_Extended_Source_of_Truth",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Code in JavaScript1').item.json.sheet_id }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.rowNumber }}",
+            "shortlist_status": "={{ $json.shortlist_status }}",
+            "shortlist_top3_emails": "={{ $json.shortlist_top3_emails }}",
+            "shortlist_top3_names": "={{ $json.shortlist_top3_names }}",
+            "shortlist_json": "={{ $json.shortlist_json }}",
+            "shortlist_top3_fit_scores": "={{ $json.shortlist_top3_fit_scores }}",
+            "rate_status": "={{ $json.rate_status }}",
+            "rate_error_message": "={{ $json.rate_error_message }}",
+            "rate_debug_json": "={{ $json.rate_debug_json }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "project_id",
+              "displayName": "project_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "project_name",
+              "displayName": "project_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_name_raw",
+              "displayName": "client_name_raw",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_key",
+              "displayName": "client_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_type",
+              "displayName": "client_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_group",
+              "displayName": "client_group",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_buying_factor",
+              "displayName": "client_buying_factor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_default_margin",
+              "displayName": "client_default_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "location_group",
+              "displayName": "location_group",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "file_id",
+              "displayName": "file_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "file_name",
+              "displayName": "file_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_id",
+              "displayName": "role_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_title",
+              "displayName": "role_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_level_required",
+              "displayName": "role_level_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_days",
+              "displayName": "role_days",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_skill_area",
+              "displayName": "role_skill_area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_languages_required",
+              "displayName": "role_languages_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_scarcity_ids",
+              "displayName": "role_scarcity_ids",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_email",
+              "displayName": "consultant_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "shortlist_status",
+              "displayName": "shortlist_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "shortlist_top3_emails",
+              "displayName": "shortlist_top3_emails",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "shortlist_top3_names",
+              "displayName": "shortlist_top3_names",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "shortlist_top3_fit_scores",
+              "displayName": "shortlist_top3_fit_scores",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "shortlist_json",
+              "displayName": "shortlist_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_name",
+              "displayName": "consultant_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_level_id",
+              "displayName": "consultant_level_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_level_label",
+              "displayName": "consultant_level_label",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_currency",
+              "displayName": "consultant_currency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_fit_score",
+              "displayName": "consultant_fit_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_buy_rate",
+              "displayName": "consultant_buy_rate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_sell_rate",
+              "displayName": "consultant_sell_rate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_budget_total",
+              "displayName": "consultant_budget_total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "rate_status",
+              "displayName": "rate_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "rate_error_message",
+              "displayName": "rate_error_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "rate_debug_json",
+              "displayName": "rate_debug_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1232,
+        -32
+      ],
+      "id": "66746bdd-5c94-4241-b045-2549c20f15b0",
+      "name": "Update row in sheet",
+      "executeOnce": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "list",
+          "cachedResultName": "Expert_Profile_Extended_Source_of_Truth",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Code in JavaScript2').item.json.sheet_id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        -32
+      ],
+      "id": "4e45770c-fa69-42b7-a78c-f19b2e49e4c4",
+      "name": "Get row(s) in sheet",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * FLOW 3 — Code in JavaScript1\n * Purpose (as you requested):\n * - Do NOT iterate over many items.\n * - Work ONLY on the single item produced by \"Code in JavaScript2\".\n * - Pass it through (optionally applying the cooldown).\n *\n * IMPORTANT:\n * - Your input example uses `shortlist_run_at`, but your old code checked `last_shortlist_run_at`.\n *   That mismatch is why it looked like it “should work” but then behaved unexpectedly in your flow.\n * - We accept BOTH field names and normalise to `last_shortlist_run_at` for downstream consistency.\n */\n\nconst MIN_MINUTES = 3;\nconst now = Date.now();\n\n// Always take the single selected project from Code in JavaScript2\nconst p = $('Code in JavaScript2').first()?.json;\nif (!p) {\n  throw new Error('No input from \"Code in JavaScript2\". Make sure this node is connected after it.');\n}\n\n// status gate (keep if you use it; otherwise comment out)\nif (String(p.status || 'ACTIVE').toUpperCase() !== 'ACTIVE') {\n  return [];\n}\n\n// Normalise timestamps: support both shortlist_run_at and last_shortlist_run_at\nconst lastRun =\n  p.last_shortlist_run_at ??\n  p.shortlist_run_at ??\n  null;\n\n// Optional cooldown gate\nif (lastRun) {\n  const t = Date.parse(lastRun);\n  if (!Number.isNaN(t)) {\n    const diffMinutes = (now - t) / (1000 * 60);\n    if (diffMinutes < MIN_MINUTES) {\n      return [];\n    }\n  }\n}\n\n// sheet_id must exist and must be numeric (gid/tab id)\nconst sheet_id_raw = p.sheet_id ?? p.sheetId ?? null;\nif (sheet_id_raw == null || sheet_id_raw === '') {\n  throw new Error('Missing sheet_id on selected project.');\n}\n\nconst sheet_id = String(sheet_id_raw).trim().replace(/^=+/, '').replace(/^gid=/i, '').replace(/^#/, '').trim();\nif (!/^\\d+$/.test(sheet_id)) {\n  throw new Error(`Invalid sheet_id \"${sheet_id_raw}\". Expected a numeric tab id (gid).`);\n}\n\nreturn [\n  {\n    json: {\n      ...p,\n      sheet_id,                 // clean digits-only string\n      last_shortlist_run_at: lastRun, // normalised field name\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        -32
+      ],
+      "id": "5b02f782-e667-41b5-9ffe-0b5870f0191e",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "list",
+          "cachedResultName": "Expert_Profile_Extended_Source_of_Truth",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1525764996,
+          "mode": "list",
+          "cachedResultName": "Project_Index",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit#gid=1525764996"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -480,
+        -32
+      ],
+      "id": "c9bd31e7-99ed-4883-907e-0d5698f08a0f",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * FLOW 3 — Pick last project from Projects_Index\n *\n * Input:\n *  - Items from \"Get Row(s)\" on Projects_Index\n *\n * Output:\n *  - Exactly ONE item: the last row in the sheet\n *  - If sheet is empty → returns no items (flow stops cleanly)\n */\n\nconst items = $input.all();\n\nif (!items || items.length === 0) {\n  // No projects in index → nothing to process\n  return [];\n}\n\n// Google Sheets returns rows in sheet order\n// Last item = newest project\nconst lastItem = items[items.length - 1];\n\n// Defensive copy + normalization\nconst row = lastItem.json || {};\n\nconst result = {\n  project_id: row.project_id ?? null,\n  project_name: row.project_name ?? null,\n  file_id: row.file_id ?? null,\n  sheet_id: row.sheet_id ?? row.sheetId ?? null,\n  created_at: row.created_at ?? null,\n  shortlist_run_at: row.shortlist_run_at ?? null,\n};\n\nif (!result.sheet_id) {\n  throw new Error(\n    'Projects_Index last row does not contain a valid sheet_id. Cannot continue.'\n  );\n}\n\nreturn [\n  {\n    json: result,\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -32
+      ],
+      "id": "58c1c160-0b63-439f-838e-f8d706619c3b",
+      "name": "Code in JavaScript2"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-11T12:49:06.389Z",
+      "createdAt": "2025-12-11T12:49:06.389Z",
+      "role": "workflow:owner",
+      "workflowId": "sGNjuPJ0EaUxqHPp",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-16T07:54:53.708Z",
+  "versionId": "ef8a4d1f-0929-4783-b355-a689669febf6"
+}
