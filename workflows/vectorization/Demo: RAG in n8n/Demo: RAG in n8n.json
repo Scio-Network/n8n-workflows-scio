@@ -1,0 +1,632 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Upload your file here": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Public Intelligence Assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Public Intelligence Assistant",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader1": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader1",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "main": [
+        []
+      ]
+    },
+    "Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "Public Intelligence Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "web_search_tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Public Intelligence Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Public Intelligence Assistant": {
+      "main": [
+        [
+          {
+            "node": "Risk Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Risk Classifier": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Response": {
+      "main": [
+        []
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2026-03-31T09:05:48.376Z",
+  "id": "nNT20xw2vnbxFL8v",
+  "isArchived": false,
+  "meta": {
+    "templateId": "rag-starter-template",
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Demo: RAG in n8n",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Upload your data to test RAG",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Upload your file(s)",
+              "fieldType": "file",
+              "acceptFileTypes": ".pdf, .docx",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -128,
+        0
+      ],
+      "id": "f7a656ec-83fc-4ed2-a089-57a9def662b7",
+      "name": "Upload your file here",
+      "webhookId": "82848bc4-5ea2-4e5a-8bb6-3c09b94a8c5d"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        640,
+        912
+      ],
+      "id": "6ea78663-cf2f-4f2d-8e68-43047c2afd87",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "### Readme\nLoad your data into a vector database with the 📚 **Load Data** flow, and then use your data as chat context with the 🐕 **Retriever** flow.\n\n**Quick start**\n1. Click on the `Execute Workflow` button to run the 📚 **Load Data** flow.\n2. Click on `Open Chat` button to run the 🐕 **Retriever** flow. Then ask a question about content from your document(s)\n\n\n",
+        "height": 300,
+        "width": 440,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -656,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "0d07742b-0b36-4c2e-990c-266cbe6e2d4d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "### 📚 Load Data Flow",
+        "height": 460,
+        "width": 700,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        -96
+      ],
+      "typeVersion": 1,
+      "id": "d19d04f3-5231-4e47-bed7-9f24a4a8f582",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "allowFileUploads": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        0
+      ],
+      "id": "9c30de61-935a-471f-ae88-ec5f67beeefc",
+      "name": "When chat message received",
+      "webhookId": "4091fa09-fb9a-4039-9411-7104d213f601"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        784,
+        256
+      ],
+      "id": "b5aa8942-9cd5-4c2f-bd77-7a0ceb921bac",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "### 🐕 2. Retriever Flow",
+        "height": 524,
+        "width": 776,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        608,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "28bc73a1-e64a-47bf-ac1c-ffe644894ea5",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "### Embeddings\n\nThe Insert and Retrieve operation use the same embedding node.\n\nThis is to ensure that they are using the **exact same embeddings and settings**.\n\nDifferent embeddings might not work at all, or have unintended consequences.\n",
+        "height": 240,
+        "width": 320,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        848,
+        592
+      ],
+      "typeVersion": 1,
+      "id": "0cf8c647-418c-4d1a-8952-766145afca72",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "n8n_document_chunks",
+          "mode": "list",
+          "cachedResultName": "n8n_document_chunks"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        112,
+        -64
+      ],
+      "id": "f90f6949-3a6f-4125-8ad0-ef33871a1b2a",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "z5OaWh47DIlC12UR",
+          "name": "Palestine Workshop Demo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        128
+      ],
+      "id": "f2f8981f-0346-4278-afac-cb752a168da5",
+      "name": "Default Data Loader1"
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        400,
+        288
+      ],
+      "id": "09fd8e4e-5e77-4039-b3eb-0b6295fba3d7",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Work with the data from supabase vector database",
+        "tableName": {
+          "__rl": true,
+          "value": "n8n_document_chunks",
+          "mode": "list",
+          "cachedResultName": "n8n_document_chunks"
+        },
+        "options": {
+          "queryName": "match_documents_v2"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        912,
+        272
+      ],
+      "id": "af34d9b9-3d5f-4b47-8840-2bdfc80b894f",
+      "name": "Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "z5OaWh47DIlC12UR",
+          "name": "Palestine Workshop Demo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "## Role Definition\nYou are an AI agent responsible for interpreting chat messages from users, extracting relevant queries, and retrieving precise answers using the available tools. Your primary task is to provide accurate and concise responses to user inquiries by leveraging the vector store tool first, and the web search tool when current or recent information is needed.\n\n## Specific Instructions and Constraints\n1. You must always call the Vector Store tool first for every user question.\n2. Use only the tool results to answer.\n3. If the Vector Store tool returns no relevant results, use the web_search_tool to look for current or public information.\n4. If the user asks about recent updates, latest changes, current regulations, new announcements, customs notices, or anything time-sensitive, use both the Vector Store tool and the web_search_tool.\n5. If the Vector Store tool returns no relevant results and the web_search_tool also does not provide useful information, say: \"No relevant context was found in the document database or public sources.\"\n6. Ensure the response is directly related to the user's query and devoid of unrelated information.\n7. Maintain a formal and informative tone in all communications.\n8. Prioritize clarity and brevity in your responses.\n9. Handle one query at a time to maintain focus and precision.\n\n## Input/Output Format Specifications\n- Input: Receive chat messages from the user in plain text format.\n- Output: Provide a response to the query in plain text format, ensuring it is well-structured and easily understandable."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        944,
+        0
+      ],
+      "id": "579aed76-9644-42d1-ac13-7369059ff1c2",
+      "name": "Public Intelligence Assistant"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search the public web for recent updates, official announcements, regulatory changes, customs notices, ministry circulars, chamber updates, and other current information relevant to Palestine, ministries, commerce, licensing, SMEs, and import/export compliance.",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        1184,
+        272
+      ],
+      "id": "218dbe8f-78b6-47de-8d43-ebd7efa97dd2",
+      "name": "web_search_tool"
+    },
+    {
+      "parameters": {
+        "content": "###  3. **Risk Classifier**",
+        "height": 512,
+        "width": 736,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        -96
+      ],
+      "id": "84f6bbc3-31b6-4700-bad3-fe8c597cb0e5",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.2",
+          "mode": "list",
+          "cachedResultName": "GPT-5.2"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=You are a risk classification assistant for ministry and chamber workflows.\n\nClassify the case as LOW, MEDIUM, or HIGH.\n\nMark HIGH if:\n- the query involves customs, import/export, licensing enforcement, regulatory penalties, deadlines, or legal/compliance exposure\n- the answer mentions uncertainty, recent changes, new updates, or missing confirmation\n- the case may need review by a ministry or chamber officer\n\nMark MEDIUM if:\n- the case is not clearly risky, but may still require caution or follow-up\n\nMark LOW if:\n- the query is routine and informational with no obvious compliance or enforcement risk\n\nReturn valid JSON only in this format:\n{\n  \"risk_level\": \"LOW | MEDIUM | HIGH\",\n  \"reason\": \"short explanation\",\n  \"needs_email\": true,\n  \"recommended_team\": \"licensing | customs | chamber_advisory | investment | general\"\n}\n\nUser query:\n{{ $json.output }}\n\nAgent answer:\n{{ $('When chat message received').item.json.chatInput }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"risk_level\": {\n      \"type\": \"string\"\n    },\n    \"reason\": {\n      \"type\": \"string\"\n    },\n    \"needs_email\": {\n      \"type\": \"string\"\n    },\n    \"recommended_team\": {\n      \"type\": \"string\"\n    }\n  },\n  \"additionalProperties\": false,\n  \"required\": [\"risk_level\", \"reason\", \"needs_email\", \"recommended_team\"]\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        1568,
+        48
+      ],
+      "id": "41c5ea08-fa67-401b-b77c-082fdc8010f6",
+      "name": "Risk Classifier",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "36bed485-298e-4773-9a0c-54063f93860c",
+              "leftValue": "={{ $json.output[0].content[0].text.needs_email }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1856,
+        -48
+      ],
+      "id": "22535636-d0fe-4aa1-8d0c-27e8f272c0da",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "nyairo@scio.net",
+        "subject": "={{ '[HIGH-RISK CASE][' + ($json.output[0].content[0].text.recommended_team || 'general').toUpperCase() + '] Ministry Intelligence Alert' }}",
+        "message": "={{ ` <html>   <body style=\"margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, sans-serif; color:#1f2937;\">     <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"background-color:#f4f6f8; padding:24px 0;\">       <tr>         <td align=\"center\">           <table role=\"presentation\" width=\"760\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#ffffff; border:1px solid #d1d5db; border-radius:8px; overflow:hidden;\">                          <tr>               <td style=\"background:#0f172a; color:#ffffff; padding:20px 28px;\">                 <div style=\"font-size:12px; letter-spacing:1px; text-transform:uppercase; opacity:0.85;\">                   Ministry / Chamber Policy Intelligence System                 </div>                 <div style=\"font-size:24px; font-weight:bold; margin-top:8px;\">                   High-Risk Case Notification                 </div>               </td>             </tr>              <tr>               <td style=\"padding:28px;\">                 <p style=\"margin:0 0 16px 0; font-size:15px; line-height:1.6;\">                   This is an automated escalation generated by the Policy Intelligence Assistant for internal officer review.                 </p>                  <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-collapse:collapse; margin-bottom:24px;\">                   <tr>                     <td style=\"padding:12px; background:#f9fafb; border:1px solid #e5e7eb; width:220px; font-weight:bold;\">Risk Level</td>                     <td style=\"padding:12px; border:1px solid #e5e7eb;\">${$json.output[0].content[0].text.risk_level || 'N/A'}</td>                   </tr>                   <tr>                     <td style=\"padding:12px; background:#f9fafb; border:1px solid #e5e7eb; font-weight:bold;\">Recommended Team</td>                     <td style=\"padding:12px; border:1px solid #e5e7eb;\">${$json.output[0].content[0].text.recommended_team || 'general'}</td>                   </tr>                   <tr>                     <td style=\"padding:12px; background:#f9fafb; border:1px solid #e5e7eb; font-weight:bold;\">Needs Email</td>                     <td style=\"padding:12px; border:1px solid #e5e7eb;\">${$json.output[0].content[0].text.needs_email}</td>                   </tr>                 </table>                  <div style=\"margin-bottom:20px;\">                   <div style=\"font-size:16px; font-weight:bold; margin-bottom:8px; color:#111827;\">Assessment Reason</div>                   <div style=\"padding:16px; background:#fff7ed; border-left:4px solid #c2410c; line-height:1.6;\">                     ${$json.output[0].content[0].text.reason || 'No reason provided.'}                   </div>                 </div>                  <div style=\"margin-bottom:24px;\">                   <div style=\"font-size:16px; font-weight:bold; margin-bottom:8px; color:#111827;\">Required Action</div>                   <div style=\"padding:16px; background:#f9fafb; border:1px solid #e5e7eb; line-height:1.6;\">                     Please review this case and confirm whether additional compliance, licensing, customs, or regulatory action is required before the user proceeds.                   </div>                 </div>                  <div style=\"font-size:13px; color:#6b7280; border-top:1px solid #e5e7eb; padding-top:16px;\">                   Generated automatically by the Policy Intelligence Assistant demo workflow.                 </div>               </td>             </tr>            </table>         </td>       </tr>     </table>   </body> </html> ` }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2112,
+        -64
+      ],
+      "id": "7be75632-6232-4cce-be9e-f4b2dc64c753",
+      "name": "Send a message",
+      "webhookId": "efbe88da-6962-413b-8db6-6c81ebe71b1d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fD8VmggKPtaXNY04",
+          "name": "Ai (gemini account)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c428829e-82a8-44b6-85ea-b5f79c5ed36e",
+              "name": "final_response",
+              "value": "Your request may involve compliance or regulatory considerations. Based on the available information, additional confirmation is needed before you proceed. A relevant officer will review the matter and follow up shortly. Please stay in the chat",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2320,
+        48
+      ],
+      "id": "451ba549-c3a7-43ee-8e37-ffd736830aa6",
+      "name": "Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe62ef64-d4a9-48a1-9243-63a7955bdf11",
+              "name": "final_response",
+              "value": "={{ $('Public Intelligence Assistant').item.json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1984,
+        192
+      ],
+      "id": "71eec85e-38ea-4513-a352-cd6ed4295baa",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {
+    "Public Intelligence Assistant": [
+      {
+        "json": {
+          "output": "Recent updates indicate that new import regulations are set to be implemented in Palestine, effective January 2026. Key points include:\n\n1. **Mandatory Pre-Shipment Inspection**: Certain goods will require inspection certificates prior to shipment.\n2. **Updated HS Code Classification**: There will be adjustments to the classification of imported items.\n3. **Digital Submission of Customs Declarations**: Importers must utilize the ASYCUDA system for submitting customs declarations.\n4. **Increased Inspection Rates**: There will be higher inspection frequency for goods classified as high-risk.\n\nThese changes primarily affect sectors such as food imports, pharmaceuticals, and construction materials. Non-compliance may result in delays, financial penalties (up to 10% of the shipment value), or confiscation of goods.\n\nIt is advised for importers to ensure their documentation is complete, engage certified customs brokers, and stay informed through official Ministry circulars."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-31T09:05:48.379Z",
+      "createdAt": "2026-03-31T09:05:48.379Z",
+      "role": "workflow:owner",
+      "workflowId": "nNT20xw2vnbxFL8v",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-06-05T11:16:08.934Z",
+      "createdAt": "2026-06-05T11:16:08.934Z",
+      "id": "xN5TOsu4TspNXGPr",
+      "name": "vectorization"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-05T11:16:11.623Z",
+  "versionId": "b34df868-c79c-434d-87f3-38bcfe29cfaf"
+}
