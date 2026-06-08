@@ -1,0 +1,444 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set | Import Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Code | Create Sheet Extraction Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set | Import Config": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Debug Summary": {
+      "main": [
+        [
+          {
+            "node": "Code | Prepare Export Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code | Debug Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Prepare Export Files": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code | Create Clean CSV Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Create Clean CSV Binary": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        []
+      ]
+    },
+    "Code | Create Sheet Extraction Tasks": {
+      "main": [
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Normalize Multi-Section XLSX": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "Code | Normalize Multi-Section XLSX",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-01T11:04:30.256Z",
+  "id": "MwXOx5nIAptfJ4jH",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Abu_Dhabi_Data_Transformation_Events_v0.1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        544
+      ],
+      "id": "efdb0a05-6391-496e-8db5-ce3c49dc7a2a",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.source_file_id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -176,
+        544
+      ],
+      "id": "b350e5d8-04b7-460f-bb2e-3f1bf7ac4e83",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $node[\"Set | Import Config\"].json;\n\nreturn [\n  {\n    json: {\n      source_file_name: config.source_file_name,\n      source_file_id: config.source_file_id,\n      record_type: config.record_type,\n      schema_version: config.schema_version,\n      inferred_year: Number(config.inferred_year || 2026),\n      extracted_item_count: items.length,\n      first_item: items[0]?.json || null,\n      first_5_items: items.slice(0, 5).map(item => item.json)\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        368
+      ],
+      "id": "0fefe9c3-5142-4980-946a-1519ef43d9ab",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c8701828-7bed-4fb2-b91c-578d5ce5c3f9",
+              "name": "source_file_id",
+              "value": "15ouT2jTRz_lfwRFgcf-zOva5HCkiats-",
+              "type": "string"
+            },
+            {
+              "id": "8d7782c9-a8bf-43c3-b145-5451429dde6a",
+              "name": "inferred_year",
+              "value": "2026",
+              "type": "string"
+            },
+            {
+              "id": "dd77f32f-a3cf-4360-85ba-27d96789bb66",
+              "name": "record_type",
+              "value": "event",
+              "type": "string"
+            },
+            {
+              "id": "f49f10eb-6c80-410e-a142-4743af318b14",
+              "name": "source_file_name",
+              "value": "EVENTS_Mock_Data_Secure_no_PII",
+              "type": "string"
+            },
+            {
+              "id": "b2670dc1-fa54-4e1c-927d-67d1f32193ba",
+              "name": "schema_version",
+              "value": "canonical-records-v1",
+              "type": "string"
+            },
+            {
+              "id": "834848f6-78a4-4840-a508-652c76a4b03d",
+              "name": "spreadsheet_id",
+              "value": "15ouT2jTRz_lfwRFgcf-zOva5HCkiats-",
+              "type": "string"
+            },
+            {
+              "id": "3b46d5fb-737b-4779-82ed-21277da6078f",
+              "name": "sheet_names_csv",
+              "value": "Own & Subsidiary Events,DIV,Seminars and Training",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -352,
+        544
+      ],
+      "id": "cd3af802-d8d0-428b-a622-53c8de758537",
+      "name": "Set | Import Config"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = items[0].json;\n\nif (!output.job) {\n  throw new Error(\n    'Debug Summary expected output.job. Make sure this node is connected directly after Normalize + Validate XLSX.'\n  );\n}\n\nreturn [\n  {\n    json: {\n      ...output,\n      debug_summary: {\n        success: true,\n        import_job_id: output.job.import_job_id,\n        status: output.job.status,\n        clean_record_count: output.job.clean_record_count,\n        rejected_row_count: output.job.rejected_row_count,\n        issue_count: output.job.issue_count,\n        warning_count: output.job.warning_count,\n        error_count: output.job.error_count,\n        first_clean_record: output.records?.[0] || null,\n        rejected_rows_sample: output.rejected_rows?.slice(0, 5) || [],\n        issues_sample: output.issues?.slice(0, 10) || [],\n        message: 'Transformation completed. No database write performed yet.'\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        528
+      ],
+      "id": "fde76909-29ab-43aa-bd20-e2cfbe22fec7",
+      "name": "Code | Debug Summary"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = items[0].json;\n\nif (!output.job) {\n  throw new Error('Missing output.job. Connect this node after Normalize + Validate XLSX or after the pass-through Debug Summary node.');\n}\n\nif (!Array.isArray(output.records)) {\n  throw new Error('Missing output.records array. The previous node probably removed the full normalized payload.');\n}\n\nconst cleanRecords = output.records.map(record => ({\n  record_type: record.record_type,\n  record_category: record.record_category,\n  record_subcategory: record.record_subcategory,\n  title: record.title,\n  start_date: record.start_date,\n  end_date: record.end_date,\n  month: record.month,\n  location: record.location,\n  website: record.website,\n  entity: record.entity,\n  ga: record.ga,\n  attendance_format: record.attendance_format,\n  sponsoring_level: record.sponsoring_level,\n  contact_person: record.contact_person,\n  project_owner: record.project_owner,\n  status: record.status,\n  validation_status: record.validation_status,\n  validation_notes: record.validation_notes,\n  source_file_name: record.source_file_name,\n  source_sheet: record.source_sheet,\n  source_row_number: record.source_row_number\n}));\n\nconst baseName = String(output.job.source_file_name || 'events_import')\n  .replace(/\\.[^.]+$/, '')\n  .replace(/[^\\w.-]+/g, '_');\n\nreturn [\n  {\n    json: {\n      file_type: 'clean_records',\n      file_name: `${baseName}_clean_records.json`,\n      data: cleanRecords\n    }\n  },\n  {\n    json: {\n      file_type: 'rejected_rows',\n      file_name: `${baseName}_rejected_rows.json`,\n      data: output.rejected_rows || []\n    }\n  },\n  {\n    json: {\n      file_type: 'issues',\n      file_name: `${baseName}_import_issues.json`,\n      data: output.issues || []\n    }\n  },\n  {\n    json: {\n      file_type: 'full_import_payload',\n      file_name: `${baseName}_full_import_payload.json`,\n      data: output\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        528
+      ],
+      "id": "3644ba47-08a5-4bcb-84f8-6a6ef10abc39",
+      "name": "Code | Prepare Export Files"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        528
+      ],
+      "id": "d9a548ab-99de-44c8-9eee-bc89f0e49c91",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "33735f71-72e6-41c1-9215-7a2228f270e9",
+              "leftValue": "={{ $json.file_type }}",
+              "rightValue": "={{ $json.file_type }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1872,
+        528
+      ],
+      "id": "d36c499e-45bf-40a0-a878-014f8eb5b784",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = items[0].json;\n\nif (item.file_type !== 'clean_records') {\n  throw new Error(`Expected file_type \"clean_records\", received \"${item.file_type}\".`);\n}\n\nif (!Array.isArray(item.data)) {\n  throw new Error('Expected item.data to be an array of clean records.');\n}\n\nconst rows = item.data;\n\nconst preferredColumns = [\n  'record_type',\n  'record_category',\n  'record_subcategory',\n  'title',\n  'start_date',\n  'end_date',\n  'month',\n  'location',\n  'website',\n  'entity',\n  'ga',\n  'attendance_format',\n  'sponsoring_level',\n  'contact_person',\n  'project_owner',\n  'status',\n  'validation_status',\n  'validation_notes',\n  'source_file_name',\n  'source_sheet',\n  'source_row_number'\n];\n\nconst allColumns = Array.from(\n  new Set(rows.flatMap(row => Object.keys(row)))\n);\n\nconst columns = [\n  ...preferredColumns.filter(col => allColumns.includes(col)),\n  ...allColumns.filter(col => !preferredColumns.includes(col))\n];\n\nfunction csvEscape(value) {\n  if (value === null || value === undefined) return '';\n\n  let s;\n\n  if (typeof value === 'object') {\n    s = JSON.stringify(value);\n  } else {\n    s = String(value);\n  }\n\n  if (/[\",\\n\\r]/.test(s)) {\n    return `\"${s.replace(/\"/g, '\"\"')}\"`;\n  }\n\n  return s;\n}\n\nconst lines = [];\n\nlines.push(columns.map(csvEscape).join(','));\n\nfor (const row of rows) {\n  lines.push(columns.map(col => csvEscape(row[col])).join(','));\n}\n\nconst csv = '\\uFEFF' + lines.join('\\r\\n');\n\nconst baseName = String(item.file_name || 'clean_records.json')\n  .replace(/\\.json$/i, '')\n  .replace(/[^\\w.-]+/g, '_');\n\nconst fileName = `${baseName}.csv`;\n\nconst binaryData = await this.helpers.prepareBinaryData(\n  Buffer.from(csv, 'utf8'),\n  fileName,\n  'text/csv'\n);\n\nreturn [\n  {\n    json: {\n      file_type: 'clean_records_csv',\n      file_name: fileName,\n      row_count: rows.length,\n      column_count: columns.length,\n      columns\n    },\n    binary: {\n      data: binaryData\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        384
+      ],
+      "id": "56fd6f24-91f0-4468-9773-41a3e0c199fc",
+      "name": "Code | Create Clean CSV Binary"
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.file_name }}",
+        "driveId": {
+          "__rl": true,
+          "value": "0ACI-sZoajtL_Uk9PVA",
+          "mode": "list",
+          "cachedResultName": "07_Projects",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/0ACI-sZoajtL_Uk9PVA"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/folders/1l2VpYeiA7CX133QIv2h3GG5-X1eP-QtP",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2512,
+        384
+      ],
+      "id": "6b528f9a-ccd0-430d-b2ae-f6a007d30b12",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $node[\"Set | Import Config\"].json;\n\nif (!items[0].binary?.data) {\n  throw new Error('Missing binary.data from Google Drive download.');\n}\n\nconst sheetNames = String(config.sheet_names_csv || '')\n  .split(',')\n  .map(s => s.trim())\n  .filter(Boolean);\n\nif (!sheetNames.length) {\n  throw new Error('No sheet names provided in sheet_names_csv.');\n}\n\nreturn sheetNames.map(sheetName => ({\n  json: {\n    source_sheet: sheetName,\n    source_file_id: config.source_file_id,\n    source_file_name: config.source_file_name,\n    record_type: config.record_type || 'event',\n    schema_version: config.schema_version || 'canonical-records-v1',\n    inferred_year: Number(config.inferred_year || 2026)\n  },\n  binary: items[0].binary\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        544
+      ],
+      "id": "b2dfd3c8-1361-419a-a58f-8a81a25989f4",
+      "name": "Code | Create Sheet Extraction Tasks"
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $node[\"Set | Import Config\"].json;\n\nconst schemaVersion = config.schema_version || 'canonical-records-v1';\nconst defaultRecordType = config.record_type || 'event';\nconst inferredYear = Number(config.inferred_year || 2026);\nconst sourceFileId = config.source_file_id || null;\nconst sourceFileName = config.source_file_name || 'unknown_xlsx_file';\n\nconst importJobId = `imp_${Date.now()}`;\n\nconst MONTHS = {\n  jan: 'January', january: 'January',\n  feb: 'February', february: 'February', febuary: 'February', febiary: 'February',\n  mar: 'March', march: 'March',\n  apr: 'April', april: 'April',\n  may: 'May',\n  jun: 'June', june: 'June',\n  jul: 'July', july: 'July',\n  aug: 'August', august: 'August',\n  sep: 'September', sept: 'September', september: 'September',\n  oct: 'October', october: 'October',\n  nov: 'November', november: 'November',\n  dec: 'December', december: 'December',\n};\n\nconst MONTH_NUM = {\n  January: 1,\n  February: 2,\n  March: 3,\n  April: 4,\n  May: 5,\n  June: 6,\n  July: 7,\n  August: 8,\n  September: 9,\n  October: 10,\n  November: 11,\n  December: 12,\n};\n\nfunction clean(value) {\n  if (value === null || value === undefined) return null;\n\n  const s = String(value)\n    .replace(/\\u00a0/g, ' ')\n    .trim()\n    .replace(/\\s+/g, ' ');\n\n  if (!s) return null;\n\n  const lower = s.toLowerCase();\n  if (['-', '—', 'n/a', 'na', 'null', 'undefined'].includes(lower)) {\n    return null;\n  }\n\n  return s;\n}\n\nfunction norm(value) {\n  return String(value ?? '')\n    .replace(/\\u00a0/g, ' ')\n    .trim()\n    .toLowerCase()\n    .replace(/&/g, ' and ')\n    .replace(/[_\\-./:;()\\[\\]]+/g, ' ')\n    .replace(/[^\\p{L}\\p{N}\\s?]+/gu, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction hash(input, length = 16) {\n  let h = 2166136261;\n  const s = String(input ?? '');\n\n  for (let i = 0; i < s.length; i++) {\n    h ^= s.charCodeAt(i);\n    h = Math.imul(h, 16777619);\n  }\n\n  const hex = (h >>> 0).toString(16).padStart(8, '0');\n  return (hex + hex + hex + hex).slice(0, length);\n}\n\nfunction monthName(value) {\n  const s = norm(value);\n  if (!s) return null;\n  return MONTHS[s] || MONTHS[s.split(' ')[0]] || null;\n}\n\nfunction pad2(n) {\n  return String(n).padStart(2, '0');\n}\n\nfunction isoDate(year, month, day) {\n  const y = Number(year);\n  const m = Number(month);\n  const d = Number(day);\n\n  if (!y || !m || !d) return null;\n\n  const date = new Date(Date.UTC(y, m - 1, d));\n\n  if (\n    date.getUTCFullYear() !== y ||\n    date.getUTCMonth() !== m - 1 ||\n    date.getUTCDate() !== d\n  ) {\n    return null;\n  }\n\n  return `${y}-${pad2(m)}-${pad2(d)}`;\n}\n\nfunction excelSerialToIso(value) {\n  const n = Number(value);\n\n  if (!Number.isFinite(n)) return null;\n  if (n < 1 || n > 80000) return null;\n\n  const ms = Date.UTC(1899, 11, 30) + n * 24 * 60 * 60 * 1000;\n  const d = new Date(ms);\n\n  return isoDate(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate());\n}\n\nfunction parseYear(value) {\n  const n = Number(value);\n  if (!Number.isFinite(n)) return null;\n  return n < 100 ? 2000 + n : n;\n}\n\nfunction parseDate(value, monthContext) {\n  const serialDate = excelSerialToIso(value);\n\n  if (serialDate) {\n    return {\n      date: serialDate,\n      warning: null,\n      error: null,\n    };\n  }\n\n  const raw = clean(value);\n\n  if (!raw) {\n    return {\n      date: null,\n      warning: null,\n      error: null,\n    };\n  }\n\n  let m;\n\n  // 2026-01-11\n  m = raw.match(/^(\\d{4})[-/.](\\d{1,2})[-/.](\\d{1,2})$/);\n  if (m) {\n    const date = isoDate(Number(m[1]), Number(m[2]), Number(m[3]));\n    if (date) return { date, warning: null, error: null };\n  }\n\n  // 11-Jan-26\n  m = raw.match(/^(\\d{1,2})(?:st|nd|rd|th)?[-\\s]([A-Za-z]+)[-\\s](\\d{2,4})$/i);\n  if (m) {\n    const mo = monthName(m[2]);\n    const date = mo ? isoDate(parseYear(m[3]), MONTH_NUM[mo], Number(m[1])) : null;\n    if (date) return { date, warning: null, error: null };\n  }\n\n  // 11 Jan 2026\n  m = raw.match(/^(\\d{1,2})(?:st|nd|rd|th)?\\s+([A-Za-z]+)\\s+(\\d{2,4})$/i);\n  if (m) {\n    const mo = monthName(m[2]);\n    const date = mo ? isoDate(parseYear(m[3]), MONTH_NUM[mo], Number(m[1])) : null;\n    if (date) return { date, warning: null, error: null };\n  }\n\n  // DD/MM/YYYY or DD-MM-YY\n  m = raw.match(/^(\\d{1,2})[-/.](\\d{1,2})[-/.](\\d{2,4})$/);\n  if (m) {\n    const date = isoDate(parseYear(m[3]), Number(m[2]), Number(m[1]));\n    if (date) return { date, warning: null, error: null };\n  }\n\n  // 12th, with month inferred\n  m = raw.match(/^(\\d{1,2})(?:st|nd|rd|th)?$/i);\n  if (m && monthContext) {\n    const mo = monthName(monthContext);\n    const date = mo ? isoDate(inferredYear, MONTH_NUM[mo], Number(m[1])) : null;\n\n    if (date) {\n      return {\n        date,\n        warning: `Date \"${raw}\" had no month/year. Inferred ${mo} ${inferredYear}.`,\n        error: null,\n      };\n    }\n  }\n\n  return {\n    date: null,\n    warning: null,\n    error: `Could not parse date \"${raw}\".`,\n  };\n}\n\nfunction parseBool(value) {\n  const s = norm(value);\n  if (!s) return null;\n\n  if (['yes', 'y', 'true', '1', 'ja'].includes(s)) return true;\n  if (['no', 'n', 'false', '0', 'nein'].includes(s)) return false;\n\n  return null;\n}\n\nfunction normalizeUrl(value) {\n  const s = clean(value);\n  if (!s) return null;\n\n  if (/^https?:\\/\\//i.test(s)) return s;\n\n  if (/^[\\w.-]+\\.[a-z]{2,}(\\/.*)?$/i.test(s)) {\n    return `https://${s}`;\n  }\n\n  return s;\n}\n\nfunction fieldFromHeader(header) {\n  const h = norm(header);\n\n  const aliases = {\n    month: [\n      'month'\n    ],\n\n    start_date: [\n      'event start date',\n      'start date',\n      'event date',\n      'date',\n      'from'\n    ],\n\n    end_date: [\n      'event end date',\n      'end date',\n      'to'\n    ],\n\n    title: [\n      'event name',\n      'title',\n      'name',\n      'event',\n      'activity name'\n    ],\n\n    location: [\n      'location',\n      'venue',\n      'place',\n      'city'\n    ],\n\n    ga: [\n      'ga',\n      'ga?',\n      'general availability'\n    ],\n\n    website: [\n      'website',\n      'web site',\n      'url',\n      'link'\n    ],\n\n    attendance_sponsoring_combined: [\n      'type of attendance and sponsering',\n      'type of attendance and sponsoring',\n      'attendance and sponsoring',\n      'attendance sponsoring',\n      'attendance/sponsoring'\n    ],\n\n    attendance_format: [\n      'attendance format',\n      'type of attendance',\n      'attendance',\n      'attendance type'\n    ],\n\n    sponsoring_level: [\n      'sponsering',\n      'sponsoring',\n      'sponsoring level',\n      'sponsorship level',\n      'sponsorship'\n    ],\n\n    entity: [\n      'entity',\n      'company',\n      'organization',\n      'organisation',\n      'business unit'\n    ],\n\n    contact_person: [\n      'comments',\n      'comment',\n      'contact person',\n      'contact',\n      'responsible contact'\n    ],\n\n    project_owner: [\n      'project owner',\n      'owner',\n      'project lead',\n      'responsible'\n    ],\n\n    status: [\n      'status',\n      'state',\n      'completed postponed cancelled',\n      'completed postponed canceled'\n    ],\n\n    requirements: [\n      'requirements',\n      'requirement'\n    ],\n\n    record_category: [\n      'category',\n      'event category',\n      'type',\n      'event type'\n    ],\n  };\n\n  for (const [field, list] of Object.entries(aliases)) {\n    if (list.map(norm).includes(h)) return field;\n  }\n\n  return null;\n}\n\nfunction buildColumnMapFromHeaderValues(row) {\n  const columnMap = {};\n\n  for (const [key, value] of Object.entries(row)) {\n    if (key.startsWith('_n8n_')) continue;\n\n    const label = clean(value) || key;\n    const field = fieldFromHeader(label);\n\n    if (field && columnMap[field] === undefined) {\n      columnMap[field] = key;\n    }\n  }\n\n  return columnMap;\n}\n\nfunction buildColumnMapFromKeys(row) {\n  const columnMap = {};\n\n  for (const key of Object.keys(row)) {\n    if (key.startsWith('_n8n_')) continue;\n\n    const field = fieldFromHeader(key);\n\n    if (field && columnMap[field] === undefined) {\n      columnMap[field] = key;\n    }\n  }\n\n  return columnMap;\n}\n\nfunction countMapFields(map) {\n  return Object.keys(map || {}).length;\n}\n\nfunction mapSignature(map) {\n  return JSON.stringify(Object.keys(map || {}).sort());\n}\n\nfunction hasCoreKeyBasedFields(map) {\n  return Boolean(\n    map &&\n    map.start_date !== undefined &&\n    (\n      map.title !== undefined ||\n      map.website !== undefined ||\n      map.location !== undefined\n    )\n  );\n}\n\nfunction mapsAreCompatible(currentMap, nextMap) {\n  if (!currentMap || !nextMap) return false;\n\n  const importantFields = [\n    'start_date',\n    'title',\n    'location',\n    'website',\n    'attendance_sponsoring_combined',\n    'entity',\n    'contact_person',\n    'project_owner'\n  ];\n\n  const sharedImportantFields = importantFields.filter(field =>\n    currentMap[field] !== undefined && nextMap[field] !== undefined\n  );\n\n  return sharedImportantFields.length >= 2;\n}\n\nfunction isHeaderLikeRow(row) {\n  const values = Object.values(row).map(clean).filter(Boolean);\n  if (values.length < 2) return false;\n\n  const mappedCount = values.filter(value => fieldFromHeader(value)).length;\n\n  return mappedCount >= 2;\n}\n\nfunction detectSectionName(row, fallbackIndex, source) {\n  const keys = Object.keys(row).map(clean).filter(Boolean);\n  const values = Object.values(row).map(clean).filter(Boolean);\n\n  const keyText = keys.join(' | ');\n  const valueText = values.join(' | ');\n  const combined = `${keyText} | ${valueText}`;\n\n  if (/external/i.test(combined)) {\n    return 'External | International & National Events';\n  }\n\n  if (/delegates/i.test(combined) || /internal events/i.test(combined) || /visits/i.test(combined)) {\n    return 'Delegates, Internal Events and Visits';\n  }\n\n  const keyNames = keys.map(norm);\n\n  if (\n    keyNames.includes('event date') &&\n    (keyNames.includes('title') || keyNames.includes('name')) &&\n    keyNames.includes('website')\n  ) {\n    return 'Seminars and Training';\n  }\n\n  if (source === 'keys' && keys.some(key => fieldFromHeader(key))) {\n    return 'Seminars and Training';\n  }\n\n  return `Section ${fallbackIndex}`;\n}\n\nfunction splitAttendanceAndSponsoring(combined, attendanceRaw, sponsoringRaw) {\n  let attendance = clean(attendanceRaw);\n  let sponsoring = clean(sponsoringRaw);\n\n  const c = clean(combined);\n\n  if (!c) {\n    return {\n      attendance_format: attendance,\n      sponsoring_level: sponsoring,\n    };\n  }\n\n  const parts = c\n    .split(/\\s*\\+\\s*|\\s*\\/\\s*|\\s*,\\s*/)\n    .map(clean)\n    .filter(Boolean);\n\n  const sponsorWords = [\n    'sponsor',\n    'sponsoring',\n    'sponsering',\n    'sponsorship',\n    'gold',\n    'silver',\n    'bronze',\n    'platinum',\n  ];\n\n  const attendanceParts = [];\n  const sponsoringParts = [];\n\n  for (const part of parts.length ? parts : [c]) {\n    const n = norm(part);\n\n    if (sponsorWords.some(word => n.includes(word))) {\n      sponsoringParts.push(part.replace(/sponsering/ig, 'Sponsoring'));\n    } else {\n      attendanceParts.push(part);\n    }\n  }\n\n  if (!attendance && attendanceParts.length) {\n    attendance = attendanceParts.join(' + ');\n  }\n\n  if (!sponsoring && sponsoringParts.length) {\n    sponsoring = sponsoringParts.join(' + ');\n  }\n\n  if (!attendance && !sponsoring && c) {\n    attendance = c;\n  }\n\n  return {\n    attendance_format: attendance,\n    sponsoring_level: sponsoring,\n  };\n}\n\nfunction getMappedValue(row, columnMap, field) {\n  if (!columnMap) return null;\n\n  const key = columnMap[field];\n  return key === undefined ? null : row[key];\n}\n\nfunction getMappedValueFromEitherMap(row, primaryMap, fallbackMap, field) {\n  const primary = getMappedValue(row, primaryMap, field);\n\n  if (clean(primary) !== null) {\n    return primary;\n  }\n\n  return getMappedValue(row, fallbackMap, field);\n}\n\nfunction currentMapCanReadRow(row, currentMap) {\n  if (!currentMap) return false;\n\n  return Boolean(\n    clean(getMappedValue(row, currentMap, 'title')) ||\n    clean(getMappedValue(row, currentMap, 'start_date')) ||\n    clean(getMappedValue(row, currentMap, 'website')) ||\n    clean(getMappedValue(row, currentMap, 'location'))\n  );\n}\n\nfunction keyMapCanReadRow(row, keyMap) {\n  if (!keyMap) return false;\n\n  return Boolean(\n    clean(getMappedValue(row, keyMap, 'title')) ||\n    clean(getMappedValue(row, keyMap, 'start_date')) ||\n    clean(getMappedValue(row, keyMap, 'website')) ||\n    clean(getMappedValue(row, keyMap, 'location'))\n  );\n}\n\nfunction findNextExplicitMonth(startIndex, columnMap) {\n  for (let j = startIndex; j < items.length; j++) {\n    const futureRow = items[j].json;\n\n    const futureValueMap = buildColumnMapFromHeaderValues(futureRow);\n    const futureKeyMap = buildColumnMapFromKeys(futureRow);\n\n    const futureLooksLikeHeader = isHeaderLikeRow(futureRow);\n\n    // A real value-based header means a new section has started.\n    if (futureLooksLikeHeader && countMapFields(futureValueMap) >= 2) {\n      return null;\n    }\n\n    // If keys change but are still compatible with the current section,\n    // keep scanning. This matters for Seminars rows where Month/Name\n    // appear only on some rows.\n    if (\n      countMapFields(futureKeyMap) >= 2 &&\n      !mapsAreCompatible(columnMap, futureKeyMap) &&\n      hasCoreKeyBasedFields(futureKeyMap)\n    ) {\n      return null;\n    }\n\n    const rawMonth =\n      getMappedValue(futureRow, columnMap, 'month') ??\n      getMappedValue(futureRow, futureKeyMap, 'month');\n\n    const explicitMonth = monthName(rawMonth);\n\n    if (explicitMonth) {\n      return explicitMonth;\n    }\n  }\n\n  return null;\n}\n\nfunction buildRawRow(row, headerRow) {\n  const raw = {};\n\n  for (const [key, value] of Object.entries(row)) {\n    if (key.startsWith('_n8n_')) continue;\n\n    if (headerRow) {\n      raw[clean(headerRow[key]) || key] = value ?? null;\n    } else {\n      raw[key] = value ?? null;\n    }\n  }\n\n  return raw;\n}\n\nfunction buildExtraFields(row, columnMap, headerRow) {\n  const usedKeys = new Set(Object.values(columnMap || {}));\n  const extra = {};\n\n  for (const [key, value] of Object.entries(row)) {\n    if (key.startsWith('_n8n_')) continue;\n    if (usedKeys.has(key)) continue;\n\n    const label = headerRow ? clean(headerRow[key]) || key : key;\n    const cleanedValue = clean(value);\n\n    if (cleanedValue !== null) {\n      extra[label] = cleanedValue;\n    }\n  }\n\n  return extra;\n}\n\nfunction addIssue(issues, base, severity, issueCode, fieldName, message, originalValue = null, normalizedValue = null) {\n  issues.push({\n    import_job_id: importJobId,\n    severity,\n    issue_code: issueCode,\n    field_name: fieldName,\n    source_file_id: sourceFileId,\n    source_file_name: sourceFileName,\n    source_sheet: base.source_sheet,\n    source_row_number: base.source_row_number,\n    original_value: originalValue === null || originalValue === undefined ? null : String(originalValue),\n    normalized_value: normalizedValue === null || normalizedValue === undefined ? null : String(normalizedValue),\n    message,\n  });\n}\n\nconst records = [];\nconst rejected_rows = [];\nconst issues = [];\n\nlet currentSection = null;\nlet currentColumnMap = null;\nlet currentHeaderRow = null;\nlet currentMonth = null;\nlet currentSectionSignature = null;\nlet sectionCounter = 0;\n\nfor (let i = 0; i < items.length; i++) {\n  const row = items[i].json;\n\n  // The Extract From File node skipped the visual title row in this workbook,\n  // so this approximates the original Excel row number.\n  const sourceRowNumber = i + 2;\n\n  const valueMap = buildColumnMapFromHeaderValues(row);\n  const keyMap = buildColumnMapFromKeys(row);\n\n  const valueFieldCount = countMapFields(valueMap);\n  const keyFieldCount = countMapFields(keyMap);\n\n  const keySignature = mapSignature(keyMap);\n  const currentSignature = currentSectionSignature;\n\n  const rowLooksLikeHeader = isHeaderLikeRow(row);\n\n  const shouldStartValueHeaderSection =\n    rowLooksLikeHeader && valueFieldCount >= 2;\n\n  const currentCanReadThisRow = currentMapCanReadRow(row, currentColumnMap);\n  const keyMapCanReadThisRow = keyMapCanReadRow(row, keyMap);\n\n  const shouldStartKeyBasedSection =\n    keyFieldCount >= 2 &&\n    hasCoreKeyBasedFields(keyMap) &&\n    (\n      !currentColumnMap ||\n\n      // Critical fix:\n      // if the previous section map cannot read this row,\n      // but the current row's own keys can, this is a new key-based section.\n      (\n        !currentCanReadThisRow &&\n        keyMapCanReadThisRow\n      ) ||\n\n      (\n        keySignature !== currentSignature &&\n        !mapsAreCompatible(currentColumnMap, keyMap)\n      )\n    );\n\n  if (shouldStartValueHeaderSection) {\n    sectionCounter++;\n\n    currentSection = detectSectionName(row, sectionCounter, 'values');\n    currentColumnMap = valueMap;\n    currentHeaderRow = row;\n    currentMonth = null;\n    currentSectionSignature = mapSignature(currentColumnMap);\n\n    addIssue(\n      issues,\n      {\n        source_sheet: currentSection,\n        source_row_number: sourceRowNumber\n      },\n      'info',\n      'section_header_detected',\n      null,\n      `Detected section header for \"${currentSection}\" from row values.`,\n      null,\n      JSON.stringify(currentColumnMap)\n    );\n\n    continue;\n  }\n\n  if (shouldStartKeyBasedSection) {\n    sectionCounter++;\n\n    currentSection = detectSectionName(row, sectionCounter, 'keys');\n    currentColumnMap = keyMap;\n    currentHeaderRow = null;\n    currentMonth = null;\n    currentSectionSignature = mapSignature(currentColumnMap);\n\n    addIssue(\n      issues,\n      {\n        source_sheet: currentSection,\n        source_row_number: sourceRowNumber\n      },\n      'info',\n      'section_from_keys_detected',\n      null,\n      `Detected section \"${currentSection}\" from extracted JSON keys.`,\n      null,\n      JSON.stringify(currentColumnMap)\n    );\n  }\n\n  if (!currentColumnMap) {\n    addIssue(\n      issues,\n      {\n        source_sheet: 'Unknown',\n        source_row_number: sourceRowNumber\n      },\n      'warning',\n      'row_skipped_no_section',\n      null,\n      'Skipped row because no section/header had been detected yet.'\n    );\n\n    continue;\n  }\n\n  const visibleValues = Object.entries(row)\n    .filter(([key]) => !key.startsWith('_n8n_'))\n    .map(([, value]) => value);\n\n  if (visibleValues.every(value => clean(value) === null)) {\n    continue;\n  }\n\n  const get = field => getMappedValueFromEitherMap(\n    row,\n    currentColumnMap,\n    keyMap,\n    field\n  );\n\n  const rawMonth = get('month');\n  const explicitMonth = monthName(rawMonth);\n\n  if (explicitMonth) {\n    currentMonth = explicitMonth;\n  }\n\n  let month = explicitMonth || currentMonth;\n\n  const startRaw = get('start_date');\n  const endRaw = get('end_date');\n\n  const startLooksDayOnly =\n    clean(startRaw) &&\n    /^(\\d{1,2})(?:st|nd|rd|th)?$/i.test(clean(startRaw));\n\n  const base = {\n    source_sheet: currentSection,\n    source_row_number: sourceRowNumber\n  };\n\n  if (!month && startLooksDayOnly) {\n    const nextMonth = findNextExplicitMonth(i + 1, currentColumnMap);\n\n    if (nextMonth) {\n      month = nextMonth;\n      currentMonth = nextMonth;\n\n      addIssue(\n        issues,\n        base,\n        'warning',\n        'month_backfilled_from_next_row',\n        'month',\n        `Blank month backfilled from a later row as ${nextMonth}.`,\n        rawMonth,\n        nextMonth\n      );\n    }\n  }\n\n  if (!explicitMonth && month) {\n    addIssue(\n      issues,\n      base,\n      'warning',\n      'month_filled_down',\n      'month',\n      `Blank month filled down as ${month}.`,\n      rawMonth,\n      month\n    );\n  }\n\n  const startParsed = parseDate(startRaw, month);\n  const endParsed = parseDate(endRaw, month);\n\n  if (startParsed.warning) {\n    addIssue(\n      issues,\n      base,\n      'warning',\n      'inferred_start_date',\n      'start_date',\n      startParsed.warning,\n      startRaw,\n      startParsed.date\n    );\n  }\n\n  if (startParsed.error) {\n    addIssue(\n      issues,\n      base,\n      'error',\n      'unparseable_start_date',\n      'start_date',\n      startParsed.error,\n      startRaw\n    );\n  }\n\n  if (endParsed.warning) {\n    addIssue(\n      issues,\n      base,\n      'warning',\n      'inferred_end_date',\n      'end_date',\n      endParsed.warning,\n      endRaw,\n      endParsed.date\n    );\n  }\n\n  if (endParsed.error && clean(endRaw)) {\n    addIssue(\n      issues,\n      base,\n      'error',\n      'unparseable_end_date',\n      'end_date',\n      endParsed.error,\n      endRaw\n    );\n  }\n\n  let startDate = startParsed.date;\n  let endDate = endParsed.date;\n\n  if (startDate && !endDate) {\n    endDate = startDate;\n\n    addIssue(\n      issues,\n      base,\n      'warning',\n      'end_date_defaulted_to_start_date',\n      'end_date',\n      'Missing end date defaulted to start date.',\n      endRaw,\n      endDate\n    );\n  }\n\n  const split = splitAttendanceAndSponsoring(\n    get('attendance_sponsoring_combined'),\n    get('attendance_format'),\n    get('sponsoring_level')\n  );\n\n  const title = clean(get('title'));\n  const location = clean(get('location'));\n  const entity = clean(get('entity'));\n\n  const requirements = clean(get('requirements'));\n\n  const rawRow = buildRawRow(row, currentHeaderRow);\n  const extraFields = buildExtraFields(row, currentColumnMap, currentHeaderRow);\n\n  if (requirements) {\n    extraFields.requirements = requirements;\n  }\n\n  const normalizedPayload = {\n    record_type: defaultRecordType,\n    record_category: currentSection,\n    record_subcategory: null,\n    title,\n    start_date: startDate,\n    end_date: endDate,\n    month,\n    location,\n    website: normalizeUrl(get('website')),\n    entity,\n    ga: parseBool(get('ga')),\n    attendance_format: split.attendance_format,\n    sponsoring_level: split.sponsoring_level,\n    contact_person: clean(get('contact_person')),\n    project_owner: clean(get('project_owner')),\n    status: clean(get('status')) || 'Unknown',\n  };\n\n  const record = {\n    record_id: `rec_${hash([importJobId, currentSection, sourceRowNumber, title, startDate].join('|'), 24)}`,\n    import_job_id: importJobId,\n    schema_version: schemaVersion,\n    ...normalizedPayload,\n    source_file_id: sourceFileId,\n    source_file_name: sourceFileName,\n    source_sheet: currentSection,\n    source_row_number: sourceRowNumber,\n    validation_status: 'valid',\n    validation_notes: null,\n    raw_row: rawRow,\n    normalized_payload: normalizedPayload,\n    extra_fields: extraFields,\n  };\n\n  const errors = [];\n\n  if (!record.title) {\n    errors.push({\n      field: 'title',\n      code: 'required_field_missing',\n      message: 'title is required.',\n    });\n  }\n\n  if (defaultRecordType === 'event' && !record.start_date) {\n    errors.push({\n      field: 'start_date',\n      code: 'required_field_missing',\n      message: 'start_date is required for event records.',\n    });\n  }\n\n  if (record.start_date && record.end_date && record.end_date < record.start_date) {\n    errors.push({\n      field: 'end_date',\n      code: 'end_date_before_start_date',\n      message: 'end_date is before start_date.',\n    });\n  }\n\n  const rowWarnings = issues\n    .filter(issue =>\n      issue.source_sheet === currentSection &&\n      issue.source_row_number === sourceRowNumber &&\n      issue.severity === 'warning'\n    )\n    .map(issue => issue.issue_code);\n\n  if (errors.length) {\n    record.validation_status = 'rejected';\n    record.validation_notes = errors.map(e => e.message).join('; ');\n\n    rejected_rows.push({\n      import_job_id: importJobId,\n      source_file_id: sourceFileId,\n      source_file_name: sourceFileName,\n      source_sheet: currentSection,\n      source_row_number: sourceRowNumber,\n      rejection_reason: record.validation_notes,\n      errors,\n      raw_row: rawRow,\n    });\n\n    for (const error of errors) {\n      addIssue(\n        issues,\n        base,\n        'error',\n        error.code,\n        error.field,\n        error.message\n      );\n    }\n  } else {\n    if (rowWarnings.length) {\n      record.validation_status = 'valid_with_warnings';\n      record.validation_notes = rowWarnings.join('; ');\n    }\n\n    records.push(record);\n  }\n}\n\nconst warningCount = issues.filter(issue => issue.severity === 'warning').length;\nconst errorCount = issues.filter(issue => issue.severity === 'error').length;\n\nconst job = {\n  import_job_id: importJobId,\n  schema_version: schemaVersion,\n  status:\n    errorCount > 0 && records.length === 0\n      ? 'failed_no_clean_records'\n      : warningCount || errorCount\n        ? 'completed_with_issues'\n        : 'completed',\n  source_system: 'google_drive_xlsx_extract_multi_section',\n  source_file_id: sourceFileId,\n  source_file_name: sourceFileName,\n  record_type: defaultRecordType,\n  inferred_year: inferredYear,\n  total_records: records.length + rejected_rows.length,\n  clean_record_count: records.length,\n  rejected_row_count: rejected_rows.length,\n  issue_count: issues.length,\n  warning_count: warningCount,\n  error_count: errorCount,\n  processed_sections: [...new Set(records.map(record => record.source_sheet))],\n};\n\nreturn [\n  {\n    json: {\n      job,\n      records,\n      rejected_rows,\n      issues,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        544
+      ],
+      "id": "ac006de7-29d7-489d-8c81-d33175d0f023",
+      "name": "Code | Normalize Multi-Section XLSX"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "sheetName": "={{ $json.source_sheet }}"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        544
+      ],
+      "id": "1f180fd4-5e7e-4d70-be7e-165f70679f0d",
+      "name": "Extract from File2"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-01T11:04:30.261Z",
+      "createdAt": "2026-06-01T11:04:30.261Z",
+      "role": "workflow:owner",
+      "workflowId": "MwXOx5nIAptfJ4jH",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-02T10:34:36.941Z",
+  "versionId": "d101721c-ab92-45c5-b2f0-393d9f43fc48"
+}
