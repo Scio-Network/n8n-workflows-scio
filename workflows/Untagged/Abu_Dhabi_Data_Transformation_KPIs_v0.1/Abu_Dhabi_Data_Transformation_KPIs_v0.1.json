@@ -1,0 +1,444 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set | Import Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Code | Create Sheet Extraction Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set | Import Config": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Debug Summary": {
+      "main": [
+        [
+          {
+            "node": "Code | Prepare Export Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code | Debug Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Prepare Export Files": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code | Create Clean CSV Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Create Clean CSV Binary": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        []
+      ]
+    },
+    "Code | Create Sheet Extraction Tasks": {
+      "main": [
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "Code | Normalize KPI Workbook to Canonical Records",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | Normalize KPI Workbook to Canonical Records": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-02T10:37:14.621Z",
+  "id": "SbpYvXtqOp7LE7z9",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Abu_Dhabi_Data_Transformation_KPIs_v0.1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        544
+      ],
+      "id": "f0e18fd7-19e4-49ea-bd82-4d545a5f2fb6",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.source_file_id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -176,
+        544
+      ],
+      "id": "e53604bd-09e9-4af9-b179-266aa6f3282f",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $node[\"Set | Import Config\"].json;\n\nreturn [\n  {\n    json: {\n      source_file_name: config.source_file_name,\n      source_file_id: config.source_file_id,\n      record_type: config.record_type,\n      schema_version: config.schema_version,\n      inferred_year: Number(config.inferred_year || 2026),\n      extracted_item_count: items.length,\n      first_item: items[0]?.json || null,\n      first_5_items: items.slice(0, 5).map(item => item.json)\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        368
+      ],
+      "id": "61146b6f-39eb-451b-b0b4-38fe3914ede9",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c8701828-7bed-4fb2-b91c-578d5ce5c3f9",
+              "name": "source_file_id",
+              "value": "1gaXnawovIQxF1iR6LzuhAb_r3r950NYJ",
+              "type": "string"
+            },
+            {
+              "id": "8d7782c9-a8bf-43c3-b145-5451429dde6a",
+              "name": "inferred_year",
+              "value": "2026",
+              "type": "string"
+            },
+            {
+              "id": "dd77f32f-a3cf-4360-85ba-27d96789bb66",
+              "name": "record_type",
+              "value": "kpi_monthly_actual",
+              "type": "string"
+            },
+            {
+              "id": "f49f10eb-6c80-410e-a142-4743af318b14",
+              "name": "source_file_name",
+              "value": "Strategic_KPI_Tracker_2025_no_PII_safe",
+              "type": "string"
+            },
+            {
+              "id": "b2670dc1-fa54-4e1c-927d-67d1f32193ba",
+              "name": "schema_version",
+              "value": "canonical-records-v1",
+              "type": "string"
+            },
+            {
+              "id": "834848f6-78a4-4840-a508-652c76a4b03d",
+              "name": "spreadsheet_id",
+              "value": "1gaXnawovIQxF1iR6LzuhAb_r3r950NYJ",
+              "type": "string"
+            },
+            {
+              "id": "3b46d5fb-737b-4779-82ed-21277da6078f",
+              "name": "sheet_names_csv",
+              "value": "🏆 Summary Dashboard,📊 Monthly KPI Tracker",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -352,
+        544
+      ],
+      "id": "e6f618ba-b4b8-4f3b-81d2-e2b2805d6ede",
+      "name": "Set | Import Config"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = items[0].json;\n\nif (!output.job) {\n  throw new Error(\n    'Debug Summary expected output.job. Make sure this node is connected directly after the KPI normalization node.'\n  );\n}\n\nreturn [\n  {\n    json: {\n      ...output,\n      debug_summary: {\n        success: true,\n        import_job_id: output.job.import_job_id,\n        status: output.job.status,\n        clean_record_count: output.job.clean_record_count,\n        rejected_row_count: output.job.rejected_row_count,\n        issue_count: output.job.issue_count,\n        warning_count: output.job.warning_count,\n        error_count: output.job.error_count,\n        tracker_kpi_count: output.job.tracker_kpi_count,\n        summary_kpi_count: output.job.summary_kpi_count,\n        processed_sections: output.job.processed_sections,\n        first_clean_record: output.records?.[0] || null,\n        rejected_rows_sample: output.rejected_rows?.slice(0, 5) || [],\n        issues_sample: output.issues?.slice(0, 10) || [],\n        message: 'KPI transformation completed. No database write performed yet.'\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        528
+      ],
+      "id": "8685584f-a6db-4c80-bf6f-08251fac534c",
+      "name": "Code | Debug Summary"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = items[0].json;\n\nif (!output.job) {\n  throw new Error('Missing output.job. Connect this node after the KPI normalization node or pass-through Debug Summary node.');\n}\n\nif (!Array.isArray(output.records)) {\n  throw new Error('Missing output.records array.');\n}\n\nconst cleanRecords = output.records.map(record => ({\n  record_id: record.record_id,\n  import_job_id: record.import_job_id,\n  schema_version: record.schema_version,\n\n  record_type: record.record_type,\n  record_category: record.record_category,\n  record_subcategory: record.record_subcategory,\n\n  title: record.title,\n  start_date: record.start_date,\n  end_date: record.end_date,\n  month: record.month,\n  status: record.status,\n\n  year: record.normalized_payload?.year ?? null,\n  month_number: record.normalized_payload?.month_number ?? null,\n  period_start: record.normalized_payload?.period_start ?? null,\n  period_end: record.normalized_payload?.period_end ?? null,\n\n  strategic_pillar: record.normalized_payload?.strategic_pillar ?? null,\n  kpi_number: record.normalized_payload?.kpi_number ?? null,\n  kpi_id: record.normalized_payload?.kpi_id ?? null,\n  kpi_name: record.normalized_payload?.kpi_name ?? null,\n\n  actual_value: record.normalized_payload?.actual_value ?? null,\n  latest_value: record.normalized_payload?.latest_value ?? null,\n  latest_value_2024: record.extra_fields?.latest_value_2024 ?? null,\n  target_2025: record.normalized_payload?.target_2025 ?? null,\n  gap_to_target: record.normalized_payload?.gap_to_target ?? null,\n\n  unit: record.normalized_payload?.unit ?? null,\n  calculation_type: record.normalized_payload?.calculation_type ?? null,\n  value_source: record.normalized_payload?.value_source ?? null,\n\n  fallback_used: record.extra_fields?.fallback_used ?? false,\n  fallback_details: record.extra_fields?.fallback_details ?? null,\n  summary_dashboard_available: record.extra_fields?.summary_dashboard_available ?? false,\n\n  validation_status: record.validation_status,\n  validation_notes: record.validation_notes,\n\n  source_file_name: record.source_file_name,\n  source_sheet: record.source_sheet,\n  source_row_number: record.source_row_number\n}));\n\nconst baseName = String(output.job.source_file_name || 'kpi_import')\n  .replace(/\\.[^.]+$/, '')\n  .replace(/[^\\w.-]+/g, '_');\n\nreturn [\n  {\n    json: {\n      file_type: 'clean_records',\n      file_name: `${baseName}_clean_kpi_monthly_records.json`,\n      data: cleanRecords\n    }\n  },\n  {\n    json: {\n      file_type: 'rejected_rows',\n      file_name: `${baseName}_rejected_rows.json`,\n      data: output.rejected_rows || []\n    }\n  },\n  {\n    json: {\n      file_type: 'issues',\n      file_name: `${baseName}_import_issues.json`,\n      data: output.issues || []\n    }\n  },\n  {\n    json: {\n      file_type: 'full_import_payload',\n      file_name: `${baseName}_full_import_payload.json`,\n      data: output\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        528
+      ],
+      "id": "4a919bd5-b55f-45c1-a145-e956f435d8e1",
+      "name": "Code | Prepare Export Files"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        528
+      ],
+      "id": "7112421c-0cef-4dc9-a5dd-02a062faf15a",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "33735f71-72e6-41c1-9215-7a2228f270e9",
+              "leftValue": "={{ $json.file_type }}",
+              "rightValue": "={{ $json.file_type }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1872,
+        528
+      ],
+      "id": "5e788159-71bb-44f1-997a-6d68d4b08276",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = items[0].json;\n\nif (item.file_type !== 'clean_records') {\n  throw new Error(`Expected file_type \"clean_records\", received \"${item.file_type}\".`);\n}\n\nif (!Array.isArray(item.data)) {\n  throw new Error('Expected item.data to be an array of clean KPI records.');\n}\n\nconst rows = item.data;\n\nconst preferredColumns = [\n  'record_id',\n  'import_job_id',\n  'schema_version',\n\n  'record_type',\n  'record_category',\n  'record_subcategory',\n\n  'title',\n  'start_date',\n  'end_date',\n  'month',\n  'status',\n\n  'year',\n  'month_number',\n  'period_start',\n  'period_end',\n\n  'strategic_pillar',\n  'kpi_number',\n  'kpi_id',\n  'kpi_name',\n\n  'actual_value',\n  'latest_value',\n  'latest_value_2024',\n  'target_2025',\n  'gap_to_target',\n\n  'unit',\n  'calculation_type',\n  'value_source',\n\n  'fallback_used',\n  'fallback_details',\n  'summary_dashboard_available',\n\n  'validation_status',\n  'validation_notes',\n\n  'source_file_name',\n  'source_sheet',\n  'source_row_number'\n];\n\nconst allColumns = Array.from(\n  new Set(rows.flatMap(row => Object.keys(row)))\n);\n\nconst columns = [\n  ...preferredColumns.filter(col => allColumns.includes(col)),\n  ...allColumns.filter(col => !preferredColumns.includes(col))\n];\n\nfunction csvEscape(value) {\n  if (value === null || value === undefined) return '';\n\n  const s = typeof value === 'object' ? JSON.stringify(value) : String(value);\n\n  if (/[\",\\n\\r]/.test(s)) {\n    return `\"${s.replace(/\"/g, '\"\"')}\"`;\n  }\n\n  return s;\n}\n\nconst lines = [];\n\nlines.push(columns.map(csvEscape).join(','));\n\nfor (const row of rows) {\n  lines.push(columns.map(col => csvEscape(row[col])).join(','));\n}\n\nconst csv = '\\uFEFF' + lines.join('\\r\\n');\n\nconst baseName = String(item.file_name || 'clean_kpi_records.json')\n  .replace(/\\.json$/i, '')\n  .replace(/[^\\w.-]+/g, '_');\n\nconst fileName = `${baseName}.csv`;\n\nconst binaryData = await this.helpers.prepareBinaryData(\n  Buffer.from(csv, 'utf8'),\n  fileName,\n  'text/csv'\n);\n\nreturn [\n  {\n    json: {\n      file_type: 'clean_records_csv',\n      file_name: fileName,\n      row_count: rows.length,\n      column_count: columns.length,\n      columns\n    },\n    binary: {\n      data: binaryData\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        384
+      ],
+      "id": "f6c6622e-81fa-483b-b00d-933b2ed594d6",
+      "name": "Code | Create Clean CSV Binary"
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.file_name }}",
+        "driveId": {
+          "__rl": true,
+          "value": "0ACI-sZoajtL_Uk9PVA",
+          "mode": "list",
+          "cachedResultName": "07_Projects",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/0ACI-sZoajtL_Uk9PVA"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/folders/1l2VpYeiA7CX133QIv2h3GG5-X1eP-QtP",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2512,
+        384
+      ],
+      "id": "fa33b40b-ab05-486c-9489-612650270a23",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $node[\"Set | Import Config\"].json;\n\nif (!items[0].binary?.data) {\n  throw new Error('Missing binary.data from Google Drive download.');\n}\n\nconst sheetNames = String(config.sheet_names_csv || '')\n  .split(',')\n  .map(s => s.trim())\n  .filter(Boolean);\n\nif (!sheetNames.length) {\n  throw new Error('No sheet names provided in sheet_names_csv.');\n}\n\nreturn sheetNames.map(sheetName => ({\n  json: {\n    source_sheet: sheetName,\n    source_file_id: config.source_file_id,\n    source_file_name: config.source_file_name,\n    record_type: config.record_type || 'kpi_monthly_actual',\n    schema_version: config.schema_version || 'canonical-records-v1',\n    year: Number(config.year || 2025)\n  },\n  binary: items[0].binary\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        544
+      ],
+      "id": "3fabd3c6-dbd8-4aae-ad18-91568e4b1e34",
+      "name": "Code | Create Sheet Extraction Tasks"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "sheetName": "={{ $json.source_sheet }}"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        544
+      ],
+      "id": "a959cf0d-5784-4309-9491-33ff90443be3",
+      "name": "Extract from File2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $node[\"Set | Import Config\"].json;\n\nconst schemaVersion = config.schema_version || 'canonical-records-v1';\nconst recordType = config.record_type || 'kpi_monthly_actual';\nconst year = Number(config.year || 2025);\nconst sourceFileId = config.source_file_id || null;\nconst sourceFileName = config.source_file_name || 'unknown_kpi_workbook';\n\nconst importJobId = `kpi_imp_${Date.now()}`;\n\nconst MONTHS = [\n  { key: 'jan', label: 'Jan', month_number: 1 },\n  { key: 'feb', label: 'Feb', month_number: 2 },\n  { key: 'mar', label: 'Mar', month_number: 3 },\n  { key: 'apr', label: 'Apr', month_number: 4 },\n  { key: 'may', label: 'May', month_number: 5 },\n  { key: 'jun', label: 'Jun', month_number: 6 },\n  { key: 'jul', label: 'Jul', month_number: 7 },\n  { key: 'aug', label: 'Aug', month_number: 8 },\n  { key: 'sep', label: 'Sep', month_number: 9 },\n  { key: 'oct', label: 'Oct', month_number: 10 },\n  { key: 'nov', label: 'Nov', month_number: 11 },\n  { key: 'dec', label: 'Dec', month_number: 12 }\n];\n\nconst FORMULA_ERRORS = new Set([\n  '#REF!',\n  '#VALUE!',\n  '#DIV/0!',\n  '#NAME?',\n  '#N/A',\n  '#NUM!',\n  '#NULL!'\n]);\n\nfunction clean(value) {\n  if (value === null || value === undefined) return null;\n\n  const s = String(value)\n    .replace(/\\u00a0/g, ' ')\n    .replace(/\\n/g, ' ')\n    .trim()\n    .replace(/\\s+/g, ' ');\n\n  if (!s) return null;\n\n  const lower = s.toLowerCase();\n\n  if (['-', '—', '–', 'n/a', 'na', 'null', 'undefined'].includes(lower)) {\n    return null;\n  }\n\n  return s;\n}\n\nfunction norm(value) {\n  return String(value ?? '')\n    .replace(/\\u00a0/g, ' ')\n    .replace(/\\n/g, ' ')\n    .trim()\n    .toLowerCase()\n    .replace(/&/g, ' and ')\n    .replace(/[_\\-./:;()\\[\\]#]+/g, ' ')\n    .replace(/[^\\p{L}\\p{N}\\s]+/gu, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction hash(input, length = 16) {\n  let h = 2166136261;\n  const s = String(input ?? '');\n\n  for (let i = 0; i < s.length; i++) {\n    h ^= s.charCodeAt(i);\n    h = Math.imul(h, 16777619);\n  }\n\n  const hex = (h >>> 0).toString(16).padStart(8, '0');\n  return (hex + hex + hex + hex).slice(0, length);\n}\n\nfunction isFormulaError(value) {\n  const s = clean(value);\n  if (!s) return false;\n  return FORMULA_ERRORS.has(s.toUpperCase());\n}\n\nfunction toNumberOrNull(value) {\n  if (value === null || value === undefined || value === '') return null;\n\n  if (typeof value === 'number' && Number.isFinite(value)) {\n    return value;\n  }\n\n  const s = clean(value);\n  if (!s) return null;\n  if (isFormulaError(s)) return null;\n\n  const normalized = s\n    .replace(/,/g, '')\n    .replace(/%$/, '')\n    .trim();\n\n  const n = Number(normalized);\n\n  if (!Number.isFinite(n)) return null;\n\n  return n;\n}\n\nfunction pad2(n) {\n  return String(n).padStart(2, '0');\n}\n\nfunction periodStart(yearValue, monthNumber) {\n  return `${yearValue}-${pad2(monthNumber)}-01`;\n}\n\nfunction periodEnd(yearValue, monthNumber) {\n  const d = new Date(Date.UTC(yearValue, monthNumber, 0));\n  return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth() + 1)}-${pad2(d.getUTCDate())}`;\n}\n\nfunction fieldFromHeader(header) {\n  const h = norm(header);\n\n  const aliases = {\n    strategic_pillar: [\n      'strategic pillar',\n      'pillar'\n    ],\n\n    kpi_number: [\n      'no',\n      'number',\n      'kpi number',\n      'kpi no'\n    ],\n\n    kpi_name: [\n      'kpi',\n      'kpi name',\n      'metric',\n      'indicator'\n    ],\n\n    latest_value_2024: [\n      'latest value 2024',\n      '2024 latest value',\n      'latest 2024'\n    ],\n\n    latest_value: [\n      'latest value',\n      '2025 actual',\n      'actual 2025',\n      'latest actual',\n      'actual'\n    ],\n\n    target_2025: [\n      '2025 target',\n      'target 2025',\n      'target'\n    ],\n\n    gap_to_target: [\n      'vs target gap',\n      'gap',\n      'target gap',\n      'gap to target'\n    ],\n\n    status: [\n      'status',\n      'rag status'\n    ],\n\n    unit_type: [\n      'unit type',\n      'unit',\n      'type'\n    ]\n  };\n\n  for (const month of MONTHS) {\n    if (h === month.key || h === norm(month.label)) {\n      return month.key;\n    }\n  }\n\n  for (const [field, list] of Object.entries(aliases)) {\n    if (list.map(norm).includes(h)) return field;\n  }\n\n  return null;\n}\n\nfunction buildColumnMapFromHeaderValues(row) {\n  const map = {};\n\n  for (const [key, value] of Object.entries(row)) {\n    const label = clean(value) || key;\n    const field = fieldFromHeader(label);\n\n    if (field && map[field] === undefined) {\n      map[field] = key;\n    }\n  }\n\n  return map;\n}\n\nfunction buildColumnMapFromKeys(row) {\n  const map = {};\n\n  for (const key of Object.keys(row)) {\n    const field = fieldFromHeader(key);\n\n    if (field && map[field] === undefined) {\n      map[field] = key;\n    }\n  }\n\n  return map;\n}\n\nfunction countMonthFields(map) {\n  return MONTHS.filter(month => map?.[month.key] !== undefined).length;\n}\n\nfunction get(row, map, field) {\n  const key = map?.[field];\n  return key === undefined ? null : row[key];\n}\n\nfunction getEither(row, primaryMap, fallbackMap, field) {\n  const primary = get(row, primaryMap, field);\n\n  if (clean(primary) !== null) return primary;\n\n  return get(row, fallbackMap, field);\n}\n\nfunction values(row) {\n  return Object.values(row).map(clean).filter(Boolean);\n}\n\nfunction detectSectionFromMap(map) {\n  if (!map) return null;\n\n  const hasKpi = map.kpi_name !== undefined;\n  const hasTarget = map.target_2025 !== undefined;\n  const monthCount = countMonthFields(map);\n  const hasSummaryFields =\n    map.latest_value_2024 !== undefined ||\n    map.latest_value !== undefined;\n\n  if (hasKpi && monthCount >= 2 && hasTarget) {\n    return 'monthly_tracker';\n  }\n\n  if (hasKpi && hasTarget && hasSummaryFields && monthCount < 2) {\n    return 'summary_dashboard';\n  }\n\n  return null;\n}\n\nfunction detectSectionFromRowValues(row) {\n  const valueMap = buildColumnMapFromHeaderValues(row);\n  return {\n    section: detectSectionFromMap(valueMap),\n    map: valueMap\n  };\n}\n\nfunction detectSectionFromKeys(row) {\n  const keyMap = buildColumnMapFromKeys(row);\n  return {\n    section: detectSectionFromMap(keyMap),\n    map: keyMap\n  };\n}\n\nfunction parseUnitType(value) {\n  const s = clean(value);\n\n  if (!s) {\n    return {\n      unit: null,\n      calculation_type: null,\n      unit_raw: null\n    };\n  }\n\n  const match = s.match(/^(.*?)\\s*\\((.*?)\\)\\s*$/);\n\n  if (match) {\n    return {\n      unit: clean(match[1]),\n      calculation_type: clean(match[2]),\n      unit_raw: s\n    };\n  }\n\n  return {\n    unit: s,\n    calculation_type: null,\n    unit_raw: s\n  };\n}\n\nfunction addIssue(issues, base, severity, issueCode, fieldName, message, originalValue = null, normalizedValue = null) {\n  issues.push({\n    import_job_id: importJobId,\n    severity,\n    issue_code: issueCode,\n    field_name: fieldName,\n    source_file_id: sourceFileId,\n    source_file_name: sourceFileName,\n    source_sheet: base.source_sheet || null,\n    source_row_number: base.source_row_number || null,\n    original_value: originalValue === null || originalValue === undefined ? null : String(originalValue),\n    normalized_value: normalizedValue === null || normalizedValue === undefined ? null : String(normalizedValue),\n    message\n  });\n}\n\nfunction buildRawRow(row, headerRow) {\n  const raw = {};\n\n  for (const [key, value] of Object.entries(row)) {\n    if (headerRow) {\n      raw[clean(headerRow[key]) || key] = value ?? null;\n    } else {\n      raw[key] = value ?? null;\n    }\n  }\n\n  return raw;\n}\n\nfunction makeKpiId(kpiNumber, kpiName) {\n  if (kpiNumber !== null && kpiNumber !== undefined) {\n    return `KPI-${String(kpiNumber).padStart(2, '0')}`;\n  }\n\n  return `KPI-${hash(kpiName, 8).toUpperCase()}`;\n}\n\nconst issues = [];\nconst trackerRows = [];\nconst summaryRows = [];\n\nlet currentSection = null;\nlet currentMap = null;\nlet currentHeaderRow = null;\nlet currentPillar = null;\nlet trackerRowCounter = 0;\nlet summaryRowCounter = 0;\n\nfor (let i = 0; i < items.length; i++) {\n  const row = items[i].json;\n  const sourceRowNumber = i + 1;\n\n  const byValues = detectSectionFromRowValues(row);\n  const byKeys = detectSectionFromKeys(row);\n\n  if (byValues.section) {\n    currentSection = byValues.section;\n    currentMap = byValues.map;\n    currentHeaderRow = row;\n    currentPillar = null;\n\n    addIssue(\n      issues,\n      {\n        source_sheet: currentSection === 'monthly_tracker' ? 'Monthly KPI Tracker' : 'Summary Dashboard',\n        source_row_number: sourceRowNumber\n      },\n      'info',\n      currentSection === 'monthly_tracker' ? 'tracker_header_detected' : 'summary_header_detected',\n      null,\n      `Detected ${currentSection} header from row values.`,\n      null,\n      JSON.stringify(currentMap)\n    );\n\n    continue;\n  }\n\n  if (byKeys.section) {\n    currentSection = byKeys.section;\n    currentMap = byKeys.map;\n    currentHeaderRow = null;\n    currentPillar = null;\n\n    addIssue(\n      issues,\n      {\n        source_sheet: currentSection === 'monthly_tracker' ? 'Monthly KPI Tracker' : 'Summary Dashboard',\n        source_row_number: sourceRowNumber\n      },\n      'info',\n      currentSection === 'monthly_tracker' ? 'tracker_detected_from_keys' : 'summary_detected_from_keys',\n      null,\n      `Detected ${currentSection} from extracted JSON keys.`,\n      null,\n      JSON.stringify(currentMap)\n    );\n  }\n\n  if (!currentSection || !currentMap) {\n    continue;\n  }\n\n  const keyMap = buildColumnMapFromKeys(row);\n\n  const sourceSheet =\n    currentSection === 'monthly_tracker'\n      ? 'Monthly KPI Tracker'\n      : 'Summary Dashboard';\n\n  const base = {\n    source_sheet: sourceSheet,\n    source_row_number: sourceRowNumber\n  };\n\n  const kpiName = clean(getEither(row, currentMap, keyMap, 'kpi_name'));\n\n  if (!kpiName) {\n    continue;\n  }\n\n  if (/^overall score$/i.test(kpiName)) {\n    continue;\n  }\n\n  const explicitPillar = clean(getEither(row, currentMap, keyMap, 'strategic_pillar'));\n  if (explicitPillar) currentPillar = explicitPillar;\n\n  const strategicPillar = explicitPillar || currentPillar;\n\n  const kpiNumber = toNumberOrNull(getEither(row, currentMap, keyMap, 'kpi_number'));\n  const kpiId = makeKpiId(kpiNumber, kpiName);\n  const unitParsed = parseUnitType(getEither(row, currentMap, keyMap, 'unit_type'));\n\n  const rawRow = buildRawRow(row, currentHeaderRow);\n\n  for (const [field, label] of [\n    ['latest_value_2024', 'latest value 2024'],\n    ['target_2025', '2025 target'],\n    ['latest_value', 'latest value / actual'],\n    ['gap_to_target', 'gap to target'],\n    ['status', 'status']\n  ]) {\n    const rawValue = getEither(row, currentMap, keyMap, field);\n\n    if (isFormulaError(rawValue)) {\n      addIssue(\n        issues,\n        base,\n        'warning',\n        'formula_error_detected',\n        field,\n        `Formula error detected in ${label}.`,\n        rawValue,\n        null\n      );\n    }\n  }\n\n  if (currentSection === 'monthly_tracker') {\n    trackerRowCounter++;\n\n    const monthlyActuals = {};\n\n    for (const month of MONTHS) {\n      monthlyActuals[month.key] = toNumberOrNull(getEither(row, currentMap, keyMap, month.key));\n    }\n\n    trackerRows.push({\n      source_sheet: sourceSheet,\n      source_row_number: sourceRowNumber,\n      strategic_pillar: strategicPillar,\n      kpi_number: kpiNumber,\n      kpi_id: kpiId,\n      kpi_name: kpiName,\n      latest_value: toNumberOrNull(getEither(row, currentMap, keyMap, 'latest_value')),\n      target_2025: toNumberOrNull(getEither(row, currentMap, keyMap, 'target_2025')),\n      gap_to_target: toNumberOrNull(getEither(row, currentMap, keyMap, 'gap_to_target')),\n      status: clean(getEither(row, currentMap, keyMap, 'status')),\n      unit: unitParsed.unit,\n      calculation_type: unitParsed.calculation_type,\n      unit_raw: unitParsed.unit_raw,\n      monthly_actuals: monthlyActuals,\n      raw_row: rawRow,\n      row_order: trackerRowCounter\n    });\n  }\n\n  if (currentSection === 'summary_dashboard') {\n    summaryRowCounter++;\n\n    summaryRows.push({\n      source_sheet: sourceSheet,\n      source_row_number: sourceRowNumber,\n      strategic_pillar: strategicPillar,\n      kpi_number: kpiNumber,\n      kpi_id: kpiId,\n      kpi_name: kpiName,\n      latest_value_2024: toNumberOrNull(getEither(row, currentMap, keyMap, 'latest_value_2024')),\n      latest_value: toNumberOrNull(getEither(row, currentMap, keyMap, 'latest_value')),\n      target_2025: toNumberOrNull(getEither(row, currentMap, keyMap, 'target_2025')),\n      status: clean(getEither(row, currentMap, keyMap, 'status')),\n      unit: unitParsed.unit,\n      calculation_type: unitParsed.calculation_type,\n      unit_raw: unitParsed.unit_raw,\n      raw_row: rawRow,\n      row_order: summaryRowCounter\n    });\n  }\n}\n\nconst summaryByKpiId = {};\nconst summaryByName = {};\n\nfor (const row of summaryRows) {\n  summaryByKpiId[row.kpi_id] = row;\n  summaryByName[norm(row.kpi_name)] = row;\n}\n\nconst records = [];\nconst rejected_rows = [];\n\nfor (const tracker of trackerRows) {\n  const summary =\n    summaryByKpiId[tracker.kpi_id] ||\n    summaryByName[norm(tracker.kpi_name)] ||\n    null;\n\n  const fallbackDetails = {\n    target_2025: false,\n    latest_value: false,\n    status: false,\n    unit: false\n  };\n\n  let target2025 = tracker.target_2025;\n  let latestValue = tracker.latest_value;\n  let status = tracker.status;\n  let unit = tracker.unit;\n  let calculationType = tracker.calculation_type;\n\n  if (target2025 === null && summary?.target_2025 !== null && summary?.target_2025 !== undefined) {\n    target2025 = summary.target_2025;\n    fallbackDetails.target_2025 = true;\n  }\n\n  if (latestValue === null && summary?.latest_value !== null && summary?.latest_value !== undefined) {\n    latestValue = summary.latest_value;\n    fallbackDetails.latest_value = true;\n  }\n\n  if (!status && summary?.status) {\n    status = summary.status;\n    fallbackDetails.status = true;\n  }\n\n  if (!unit && summary?.unit) {\n    unit = summary.unit;\n    calculationType = summary.calculation_type;\n    fallbackDetails.unit = true;\n  }\n\n  const fallbackUsed = Object.values(fallbackDetails).some(Boolean);\n\n  for (const month of MONTHS) {\n    const actualValue = tracker.monthly_actuals[month.key];\n\n    const validationNotes = [];\n\n    if (!tracker.strategic_pillar) {\n      validationNotes.push('Missing strategic pillar.');\n    }\n\n    if (!tracker.kpi_name) {\n      validationNotes.push('Missing KPI name.');\n    }\n\n    if (target2025 === null) {\n      validationNotes.push('Missing 2025 target.');\n    }\n\n    if (actualValue === null) {\n      validationNotes.push('Monthly actual is blank.');\n    }\n\n    if (fallbackUsed) {\n      validationNotes.push('One or more fields used Summary Dashboard fallback.');\n    }\n\n    const validationStatus = validationNotes.length\n      ? 'valid_with_warnings'\n      : 'valid';\n\n    const startDate = periodStart(year, month.month_number);\n    const endDate = periodEnd(year, month.month_number);\n\n    const normalizedPayload = {\n      year,\n      month_number: month.month_number,\n      period_start: startDate,\n      period_end: endDate,\n      strategic_pillar: tracker.strategic_pillar,\n      kpi_number: tracker.kpi_number,\n      kpi_id: tracker.kpi_id,\n      kpi_name: tracker.kpi_name,\n      actual_value: actualValue,\n      latest_value: latestValue,\n      target_2025: target2025,\n      gap_to_target: tracker.gap_to_target,\n      status,\n      unit,\n      calculation_type: calculationType,\n      value_source: fallbackUsed\n        ? 'monthly_tracker_with_summary_fallback'\n        : 'monthly_tracker'\n    };\n\n    const extraFields = {\n      fallback_used: fallbackUsed,\n      fallback_details: fallbackDetails,\n      summary_dashboard_available: Boolean(summary),\n      summary_dashboard_source_row_number: summary?.source_row_number || null,\n      latest_value_2024: summary?.latest_value_2024 ?? null,\n      raw_tracker_row: tracker.raw_row,\n      raw_summary_row: summary?.raw_row || null\n    };\n\n    const record = {\n      record_id: `rec_${hash([\n        importJobId,\n        tracker.kpi_id,\n        month.key,\n        year\n      ].join('|'), 24)}`,\n      import_job_id: importJobId,\n      schema_version: schemaVersion,\n\n      record_type: recordType,\n      record_category: tracker.strategic_pillar,\n      record_subcategory: tracker.kpi_id,\n\n      title: tracker.kpi_name,\n      start_date: startDate,\n      end_date: endDate,\n      month: month.label,\n\n      location: null,\n      website: null,\n      entity: null,\n      ga: null,\n\n      attendance_format: null,\n      sponsoring_level: null,\n      contact_person: null,\n      project_owner: null,\n      status,\n\n      source_file_id: sourceFileId,\n      source_file_name: sourceFileName,\n      source_sheet: tracker.source_sheet,\n      source_row_number: tracker.source_row_number,\n\n      validation_status: validationStatus,\n      validation_notes: validationNotes.join(' '),\n\n      raw_row: tracker.raw_row,\n      normalized_payload: normalizedPayload,\n      extra_fields: extraFields\n    };\n\n    if (!record.title) {\n      rejected_rows.push({\n        import_job_id: importJobId,\n        source_file_id: sourceFileId,\n        source_file_name: sourceFileName,\n        source_sheet: tracker.source_sheet,\n        source_row_number: tracker.source_row_number,\n        rejection_reason: 'KPI title is required.',\n        errors: [\n          {\n            field: 'title',\n            code: 'required_field_missing',\n            message: 'KPI title is required.'\n          }\n        ],\n        raw_row: tracker.raw_row\n      });\n    } else {\n      records.push(record);\n    }\n  }\n}\n\nif (!trackerRows.length) {\n  addIssue(\n    issues,\n    {\n      source_sheet: 'Monthly KPI Tracker',\n      source_row_number: null\n    },\n    'error',\n    'monthly_tracker_not_detected',\n    null,\n    'No Monthly KPI Tracker rows were detected. Check sheet name and Extract From File settings.'\n  );\n}\n\nif (!summaryRows.length) {\n  addIssue(\n    issues,\n    {\n      source_sheet: 'Summary Dashboard',\n      source_row_number: null\n    },\n    'warning',\n    'summary_dashboard_not_detected',\n    null,\n    'No Summary Dashboard rows were detected. Summary fallback and cross-check are unavailable.'\n  );\n}\n\nconst warningCount = issues.filter(issue => issue.severity === 'warning').length;\nconst errorCount = issues.filter(issue => issue.severity === 'error').length;\n\nconst job = {\n  import_job_id: importJobId,\n  schema_version: schemaVersion,\n  status:\n    errorCount > 0 && records.length === 0\n      ? 'failed_no_clean_records'\n      : warningCount || errorCount\n        ? 'completed_with_issues'\n        : 'completed',\n  source_system: 'google_drive_xlsx_kpi_tracker',\n  source_file_id: sourceFileId,\n  source_file_name: sourceFileName,\n  record_type: recordType,\n  year,\n  total_records: records.length + rejected_rows.length,\n  clean_record_count: records.length,\n  rejected_row_count: rejected_rows.length,\n  issue_count: issues.length,\n  warning_count: warningCount,\n  error_count: errorCount,\n  tracker_kpi_count: trackerRows.length,\n  summary_kpi_count: summaryRows.length,\n  processed_sections: [\n    ...new Set([\n      ...trackerRows.map(row => row.source_sheet),\n      ...summaryRows.map(row => row.source_sheet)\n    ])\n  ]\n};\n\nreturn [\n  {\n    json: {\n      job,\n      records,\n      rejected_rows,\n      issues,\n      tracker_rows: trackerRows,\n      summary_rows: summaryRows\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        544
+      ],
+      "id": "9030b825-0437-4271-b80b-65ef95ba93a6",
+      "name": "Code | Normalize KPI Workbook to Canonical Records"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-02T10:37:14.625Z",
+      "createdAt": "2026-06-02T10:37:14.625Z",
+      "role": "workflow:owner",
+      "workflowId": "SbpYvXtqOp7LE7z9",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-03T07:31:36.545Z",
+  "versionId": "442a1460-cfc0-4120-a534-0c0674a0c851"
+}
