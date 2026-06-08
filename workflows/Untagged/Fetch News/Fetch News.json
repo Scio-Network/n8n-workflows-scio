@@ -1,0 +1,485 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "URL EXTRACTING AGENT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Create a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "URL EXTRACTING AGENT": {
+      "main": [
+        []
+      ]
+    },
+    "Json parser": {
+      "main": [
+        [
+          {
+            "node": "URL Aggregator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "URL Aggregator": {
+      "main": [
+        [
+          {
+            "node": "dedup fx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "dedup fx": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-12T16:29:38.989Z",
+  "id": "UlaDxO5ZW4Hi1IKB",
+  "isArchived": true,
+  "meta": null,
+  "name": "Fetch News",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -672,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=News item to process\nHeadline:{{ $json.headline }}\nurl: {{ $json.url }}\nsnippet: {{ $json.snippet }}\npublished_date:{{ $json.published_date }}",
+        "options": {
+          "systemMessage": "=# 🤖 ROLE\nYou are a Multilingual Policy and Infrastructure Analysis Assistant. You possess deep expertise in public-sector news, disaster risk management (DRM), infrastructure, housing, and urban resilience. You are fluent in Ukrainian, English, German, and other European languages.\n\n# 🎯 THE MISSION\nYou will receive a news item containing a 'headline', 'url', and 'snippet'.\n1. **Visit:** Use your Web Search tool to visit the URL and extract the full body content.\n2. **Translate & Analyze:** Internally translate all content to English to ensure high-accuracy analysis.\n3. **Classify & Summarize:** Apply strict sector classification and generate dual-language summaries (English/German) based ONLY on the extracted content.\n\n# 🛠️ STEP-BY-STEP EXECUTION PROTOCOL\n\n### STEP 1: DEEP EXTRACTION\n- Use your tool to visit the URL and extract the full, cleaned body text.\n- If the content is in Ukrainian or another language, translate it internally to English for processing.\n\n### STEP 2: TITLE & SUMMARY GENERATION\n- **Title Translation:** Provide the title in Ukrainian (original), English, and German.\n- **Dual Summaries:** Generate two 1–2 sentence factual summaries (one English, one German).\n- **Rules:** Be concise and factual. Do not speculate or add external information.\n\n### STEP 3: SECTOR CLASSIFICATION \nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors \n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- Classification must be based on the **translated meaning**, not surface keywords\n- If unclear or ambiguous, **default to \"N/A\"**\n\n\n---\n\n# 📤 OUTPUT SPECIFICATION (STRICT JSON)\nYou must return a valid JSON object. For fields like `published_date`, map the field directly from. Preserve the IDs provided in the input.\n\n{\n  \"title_uk\": \"Original Ukrainian Title\",\n  \"title_en\": \"English Translation of Title\",\n  \"title_de\": \"German Translation of Title\",\n  \"summary_en\": \"1-2 sentence English summary\",\n  \"summary_de\": \"1-2 sentence German summary\",\n  \"source_url\": \"The full article URL\",\n  \"published_date\": \"{{ $json.published_date }}\",\n  \"sector_classification\": [\"Sector A\", \"Sector B\"],\n  \"actual_content_extracted\": \"The full cleaned text used for analysis\"\n} "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        880,
+        288
+      ],
+      "id": "49bc8fb0-6fd0-4daa-ac6c-c54036509782",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "medium"
+          }
+        },
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title_uk\": { \"type\": \"string\" },\n    \"title_en\": { \"type\": \"string\" },\n    \"title_de\": { \"type\": \"string\" },\n    \"summary_en\": { \"type\": \"string\" },\n    \"summary_de\": { \"type\": \"string\" },\n    \"source_url\": { \"type\": \"string\" },\n    \"published_date\": { \"type\": \"string\" },\n    \"sector_classification\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"actual_content_extracted\": { \"type\": \"string\" }\n  },\n  \"required\": [\n    \"title_uk\", \"title_en\", \"title_de\", \"summary_en\", \"summary_de\", \n    \"source_url\", \"published_date\", \n    \"sector_classification\", \"actual_content_extracted\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1040,
+        496
+      ],
+      "id": "9086f237-0389-4229-85e1-88058bde9c56",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.title_uk }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.summary_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.summary_en }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.published_date }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.summary_de }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.title_de }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.title_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ $json.sector_classification }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "news"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1456,
+        224
+      ],
+      "id": "19945dd4-f97f-49eb-a38a-890884ea0717",
+      "name": "Create a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "//create json object for each json string\nreturn $input.all().map(item => {\n  try {\n    const parsedData = JSON.parse(item.json.output);\n    \n    return {\n      json: parsedData\n    };\n  } catch (e) {\n    return {\n      json: { \n        error: \"Parse error\", \n        raw: item.json.output \n      }\n    };\n  }\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        224
+      ],
+      "id": "53ccb055-c6da-4ac8-a16d-b115863c420c",
+      "name": "Code in JavaScript6"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "263f3653-f81d-4ccb-92ad-61a005b9e162",
+              "leftValue": "={{ $json.published_date === '0000-00-00' ? DateTime.fromISO('2025-01-01') : DateTime.fromISO($json.published_date) }}",
+              "rightValue": "2026-01-01T00:00:00",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": "",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        656,
+        176
+      ],
+      "id": "62dffd8d-9971-462b-afaa-aa7dfcaca7e4",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Here is the Noisy Markdown Content for you to analyze:{{ $json.data }}"
+            },
+            {
+              "role": "system",
+              "content": "# 🤖 ROLE: PRECISION DATA AUDITOR & LINK SCOUT\nYour objective is to audit noisy Markdown, strip away all site infrastructure, and extract every valid News/Project/Report URL into a structured JSON list.\n\n# 🎯 THE GOAL\nCreate an exhaustive inventory of all mission-critical links. By \"Mission-Critical,\" I mean anything related to News, Projects, Reports, or Updates.\n\n# 🛠️ AUDIT LOGIC\n1. **IGNORE/DELETE (Noise):** Mentally discard Navigation menus, Language switchers, Social Media links, Privacy/Terms, and the long list of countries in the footer.\n2. **IDENTIFY (Critical Content):** Locate every text cluster that represents a News Posting, a Current Project, or a Publication.\n3. **EXTRACT:** For every item identified, capture:\n   - headline: The original verbatim headline.\n   - url: The exact, absolute URL.\n   - snippet: The original teaser text provided in the input.\n-date: if the url or article has a date extract otherwise default date to 0000-00-00\n\n# 📜 CRITICAL RULES\n- **ZERO LOSS:** You must not skip a single news article or project link found in the content.\n- **VERBATIM:** Headlines and snippets must be 100% identical to the input text.\n- **LIGHTWEIGHT OUTPUT:**  Return ONLY the JSON OBJECT.\n\n# 📥 INPUT\nYou will receive a raw Markdown dump from a website.\n\n# 📤 OUTPUT\nA JSON object containing an array called `news_list`."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"news_list\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"headline\": { \"type\": \"string\" },\n          \"url\": { \"type\": \"string\" },\n          \"snippet\": { \"type\": \"string\" },\n          \"published_date\": { \"type\": \"string\" }\n        },\n        \"required\": [\"headline\", \"url\", \"snippet\",\"published_date\" ],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\"news_list\"],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -464,
+        432
+      ],
+      "id": "11db4361-7478-4495-8138-c61d12f21ca0",
+      "name": "URL EXTRACTING AGENT",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// This pulls the news_list to the top level so Split Out can find it easily\nconst rawData = items[0].json.output[0].content[0].text;\n\n// If the model returned a string instead of an object, we parse it\nconst newsList = typeof rawData === 'string' ? JSON.parse(rawData).news_list : rawData.news_list;\n\nreturn newsList.map(item => {\n  return { json: item };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        544
+      ],
+      "id": "56136da7-6ab1-43b0-b04e-8ed2b554028a",
+      "name": "Json parser"
+    },
+    {
+      "parameters": {
+        "jsCode": "// merge URLs\nconst urls = [...new Set(\n  items\n    .map(item => item.json.url)\n    .filter(Boolean)\n)];\n\nreturn [\n  {\n    json: {\n      p_urls: urls\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        672
+      ],
+      "id": "5ef7d597-8e35-4858-aac8-e6b2b4e1c26e",
+      "name": "URL Aggregator"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://xzulfjussvbykwnzgdba.supabase.co/rest/v1/rpc/check_articles_urls",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        592
+      ],
+      "id": "a2ad9422-367d-474d-a586-153bee0a14c2",
+      "name": "dedup fx",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=News item to process\nHeadline:{{ $json.headline }}\nurl: {{ $json.url }}\nsnippet: {{ $json.snippet }}\npublished_date:{{ $json.published_date }}",
+        "options": {
+          "systemMessage": "=# 🤖 ROLE\nYou are a Multilingual Policy and Infrastructure Analysis Assistant. You possess deep expertise in public-sector news, disaster risk management (DRM), infrastructure, housing, and urban resilience. You are fluent in Ukrainian, English, German, and other European languages.\n\n# 🎯 THE MISSION\nYou will receive a news item containing a 'headline', 'url', and 'snippet'.\n1. **Visit:** Use your Web Search tool to visit the URL and extract the full body content.\n2. **Translate & Analyze:** Internally translate all content to English to ensure high-accuracy analysis.\n3. **Classify & Summarize:** Apply strict sector classification and generate dual-language summaries (English/German) based ONLY on the extracted content.\n\n# 🛠️ STEP-BY-STEP EXECUTION PROTOCOL\n\n### STEP 1: DEEP EXTRACTION\n- Use your tool to visit the URL and extract the full, cleaned body text.\n- If the content is in Ukrainian or another language, translate it internally to English for processing.\n\n### STEP 2: TITLE & SUMMARY GENERATION\n- **Title Translation:** Provide the title in Ukrainian (original), English, and German.\n- **Dual Summaries:** Generate two 1–2 sentence factual summaries (one English, one German).\n- **Rules:** Be concise and factual. Do not speculate or add external information.\n\n### STEP 3: SECTOR CLASSIFICATION \nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors \n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- Classification must be based on the **translated meaning**, not surface keywords\n- If unclear or ambiguous, **default to \"N/A\"**\n\n\n---\n\n# 📤 OUTPUT SPECIFICATION (STRICT JSON)\nYou must return a valid JSON object. For fields like `published_date`, map the field directly from. Preserve the IDs provided in the input.\n\n{\n  \"title_uk\": \"Original Ukrainian Title\",\n  \"title_en\": \"English Translation of Title\",\n  \"title_de\": \"German Translation of Title\",\n  \"summary_en\": \"1-2 sentence English summary\",\n  \"summary_de\": \"1-2 sentence German summary\",\n  \"source_url\": \"The full article URL\",\n  \"published_date\": \"{{ $json.published_date }}\",\n  \"sector_classification\": [\"Sector A\", \"Sector B\"],\n  \"actual_content_extracted\": \"The full cleaned text used for analysis\"\n} "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        960,
+        432
+      ],
+      "id": "ee86549e-4250-4795-b964-94b93a7a230e",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "jsCode": "//create json object for each json string\nreturn $input.all().map(item => {\n  try {\n    const parsedData = JSON.parse(item.json.output);\n    \n    return {\n      json: parsedData\n    };\n  } catch (e) {\n    return {\n      json: { \n        error: \"Parse error\", \n        raw: item.json.output \n      }\n    };\n  }\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        240
+      ],
+      "id": "b95f37d9-435e-45db-9f56-54616d260694",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b1620e2c-620b-4621-a494-e1221f12a1cb",
+              "leftValue": "={{ $json.url_exists }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        544,
+        448
+      ],
+      "id": "2e8d54a5-35c0-4297-aec1-2b939d085e2e",
+      "name": "If1"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-12T16:29:38.996Z",
+      "createdAt": "2026-03-12T16:29:38.996Z",
+      "role": "workflow:owner",
+      "workflowId": "UlaDxO5ZW4Hi1IKB",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-19T11:26:05.000Z",
+  "versionId": "4c1f5827-59fb-4563-8f11-1e3ebba9426c"
+}
