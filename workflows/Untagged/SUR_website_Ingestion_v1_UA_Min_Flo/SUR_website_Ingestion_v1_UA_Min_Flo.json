@@ -1,0 +1,1073 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "MoDtr",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "MoE",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "MoF",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "MoJ",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "MoDtr": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoE": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoF": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoJ": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge4": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Message a model2": {
+      "main": [
+        [
+          {
+            "node": "Create a row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge5": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Message a model2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-22T06:19:59.965Z",
+  "id": "6Q0pY4zY7DodXV73",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_website_Ingestion_v1_UA_Min_Flo",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HC1YbOY5bjxXWH2K",
+          "mode": "list",
+          "cachedResultName": "Ministry Websites",
+          "cachedResultUrl": "/projects/cFPhnNmamSW061Vq/datatables/HC1YbOY5bjxXWH2K"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Digital Transformation"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Economy"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Finance"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Energy"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Justice"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        240,
+        896
+      ],
+      "id": "078c321b-5630-4ff1-9d7d-f718ad830cdc",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Digital Transformation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c576bfb2-d416-4180-875f-a5128ccf767e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Digital Transformation"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "15a2c1c2-11a0-4045-ac41-d8c770783837",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Economy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Economy"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4344ca4c-deab-4a2a-8c31-9570d3256971",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Finance",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Finance"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6eed03eb-6bfd-4e38-928c-6f9bd73e5856",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Energy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Energy"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c9040c6d-bee5-4f2f-b4e1-c5847cfb8aff",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Justice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Justice"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        464,
+        848
+      ],
+      "id": "8fefa1dc-df66-41cc-a8b2-c4c27ebb107f",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        1088
+      ],
+      "id": "2bd44eb9-1c67-4fc1-9807-3bff38a506fc",
+      "name": "HTTP Request6",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        896
+      ],
+      "id": "c2ed01e6-fee3-427e-963a-188cbefd7d9d",
+      "name": "MoF",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        704
+      ],
+      "id": "a70ae4d3-3a1b-4190-a6f0-c97249d9c979",
+      "name": "MoE",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        512
+      ],
+      "id": "efab6e43-d86d-44b3-bc6d-794a54febfb6",
+      "name": "MoDtr",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        1280
+      ],
+      "id": "28c16bc0-a3a1-4232-9753-f05e1ee4d98c",
+      "name": "MoJ",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.output[0].content[0].text.published_date }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_de }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_de }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "news"
+            },
+            {
+              "fieldId": "summary_uk",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_uk }}"
+            },
+            {
+              "fieldId": "n8n_content_hash",
+              "fieldValue": "={{ $('Code in JavaScript5').item.json.n8n_content_hash }}"
+            },
+            {
+              "fieldId": "source_id",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3488,
+        912
+      ],
+      "id": "6c14c491-72a4-4035-9d85-054fdd833466",
+      "name": "Create a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require(\"crypto\");\n\n/* =========================\n   PLACEHOLDER INPUTS (for testing)\n   ========================= */\nconst PLACEHOLDER_URL = \"$input.first().json.url\";\nconst PLACEHOLDER_TITLE = \"$input.first().json.title\";\nconst PLACEHOLDER_SUMMARY = \"$input.first().json.content\";\n\n/* =========================\n   HELPERS\n   ========================= */\nfunction normalizeWhitespace(input) {\n  return String(input || \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction canonicalUrl(url) {\n  try {\n    const u = new URL(String(url || \"\").trim());\n    const DROP_PARAMS = new Set([\n      \"utm_source\", \"utm_medium\", \"utm_campaign\", \"utm_term\", \"utm_content\",\n      \"fbclid\", \"gclid\", \"igshid\",\n      \"mc_cid\", \"mc_eid\",\n      \"at_medium\", \"at_campaign\", \"at_custom1\", \"at_custom2\", \"at_custom3\"\n    ]);\n    [...u.searchParams.keys()].forEach(key => {\n      if (DROP_PARAMS.has(key.toLowerCase())) u.searchParams.delete(key);\n    });\n    const sortedParams = [...u.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b));\n    u.search = \"\";\n    for (const [k, v] of sortedParams) u.searchParams.append(k, v);\n    u.pathname = u.pathname.replace(/\\/+$/, \"\");\n    return u.toString();\n  } catch {\n    return String(url || \"\").trim();\n  }\n}\n\nfunction sha256Hex(input) {\n  return crypto.createHash(\"sha256\").update(input, \"utf8\").digest(\"hex\");\n}\n\n/**\n * Parse common UA/RU textual dates (e.g., \"15 Січня 2026\") into ISO.\n * Returns ISO string (UTC midnight) or null if can't parse.\n */\nfunction parseUaRuDateToISO(raw) {\n  if (!raw) return null;\n\n  // If already a Date or a numeric timestamp\n  if (raw instanceof Date && !isNaN(raw.getTime())) return raw.toISOString();\n  if (typeof raw === \"number\") {\n    const d = new Date(raw);\n    return isNaN(d.getTime()) ? null : d.toISOString();\n  }\n\n  let s = String(raw).trim();\n  if (!s) return null;\n\n  // Try native parsing first (handles ISO, RFC, many numeric formats)\n  const native = new Date(s);\n  if (!isNaN(native.getTime())) return native.toISOString();\n\n  // Normalize spaces and remove common \"р.\" (UA for \"year\") etc.\n  s = s\n    .replace(/\\u00A0/g, \" \")     // non-breaking space -> space\n    .replace(/\\s+/g, \" \")\n    .replace(/\\bр\\.?\\b/gi, \"\")   // \"р.\" / \"р\" (year marker)\n    .trim();\n\n  // Map UA + RU month names (genitive forms most common in dates)\n  const monthMap = new Map([\n    // Ukrainian\n    [\"січня\", 1], [\"січень\", 1],\n    [\"лютого\", 2], [\"лютий\", 2],\n    [\"березня\", 3], [\"березень\", 3],\n    [\"квітня\", 4], [\"квітень\", 4],\n    [\"травня\", 5], [\"травень\", 5],\n    [\"червня\", 6], [\"червень\", 6],\n    [\"липня\", 7], [\"липень\", 7],\n    [\"серпня\", 8], [\"серпень\", 8],\n    [\"вересня\", 9], [\"вересень\", 9],\n    [\"жовтня\", 10], [\"жовтень\", 10],\n    [\"листопада\", 11], [\"листопад\", 11],\n    [\"грудня\", 12], [\"грудень\", 12],\n\n    // Russian\n    [\"января\", 1], [\"январь\", 1],\n    [\"февраля\", 2], [\"февраль\", 2],\n    [\"марта\", 3], [\"март\", 3],\n    [\"апреля\", 4], [\"апрель\", 4],\n    [\"мая\", 5], [\"май\", 5],\n    [\"июня\", 6], [\"июнь\", 6],\n    [\"июля\", 7], [\"июль\", 7],\n    [\"августа\", 8], [\"август\", 8],\n    [\"сентября\", 9], [\"сентябрь\", 9],\n    [\"октября\", 10], [\"октябрь\", 10],\n    [\"ноября\", 11], [\"ноябрь\", 11],\n    [\"декабря\", 12], [\"декабрь\", 12],\n  ]);\n\n  // Lowercase for matching (keeps Cyrillic)\n  const lower = s.toLowerCase();\n\n  // Pattern: \"15 січня 2026\" (optionally with time \"15:30\")\n  // Also handles \"15-січня-2026\" poorly formatted, so allow separators.\n  const m1 = lower.match(\n    /(\\d{1,2})\\s*[-./]?\\s*([a-z\\u0400-\\u04ff]+)\\s*[-./]?\\s*(\\d{4})(?:\\s+(\\d{1,2}):(\\d{2})(?::(\\d{2}))?)?/i\n  );\n  if (m1) {\n    const day = parseInt(m1[1], 10);\n    const monthName = m1[2];\n    const year = parseInt(m1[3], 10);\n    const month = monthMap.get(monthName);\n\n    const hh = m1[4] ? parseInt(m1[4], 10) : 0;\n    const mm = m1[5] ? parseInt(m1[5], 10) : 0;\n    const ss = m1[6] ? parseInt(m1[6], 10) : 0;\n\n    if (month && year >= 1900 && year <= 2100 && day >= 1 && day <= 31) {\n      // Use UTC to avoid timezone surprises; adjust if you prefer local.\n      const d = new Date(Date.UTC(year, month - 1, day, hh, mm, ss));\n      return isNaN(d.getTime()) ? null : d.toISOString();\n    }\n  }\n\n  // Pattern: \"15.01.2026\" or \"15/01/2026\" (optionally with time)\n  const m2 = lower.match(\n    /(\\d{1,2})[./-](\\d{1,2})[./-](\\d{4})(?:\\s+(\\d{1,2}):(\\d{2})(?::(\\d{2}))?)?/\n  );\n  if (m2) {\n    const day = parseInt(m2[1], 10);\n    const month = parseInt(m2[2], 10);\n    const year = parseInt(m2[3], 10);\n    const hh = m2[4] ? parseInt(m2[4], 10) : 0;\n    const mm = m2[5] ? parseInt(m2[5], 10) : 0;\n    const ss = m2[6] ? parseInt(m2[6], 10) : 0;\n\n    if (month >= 1 && month <= 12 && year >= 1900 && year <= 2100 && day >= 1 && day <= 31) {\n      const d = new Date(Date.UTC(year, month - 1, day, hh, mm, ss));\n      return isNaN(d.getTime()) ? null : d.toISOString();\n    }\n  }\n\n  return null;\n}\n\n/**\n * Pick a candidate date field from the item.\n * Adjust this list to match your scraper output.\n */\nfunction pickRawDate(json) {\n  return (\n    json.published_at ??\n    json.publishedAt ??\n    json.date ??\n    json.published ??\n    json.pubDate ??\n    json.created_at ??\n    json.createdAt ??\n    null\n  );\n}\n\n/* =========================\n   MAIN PROCESSING\n   ========================= */\nreturn $input.all().map(item => {\n  const json = item.json || {};\n\n  // Prefer an already-attached source_id. If not present, try common nested locations.\n  const source_id =\n    json.source_id ||\n    json.__feed?.source_id ||\n    json.__source?.source_id ||\n    json.articles?.source_id ||\n    \"\";\n\n  // Optional: preserve stakeholder_id similarly if you use it\n  const stakeholder_id =\n    json.stakeholder_id ||\n    json.__feed?.stakeholder_id ||\n    json.__source?.stakeholder_id ||\n    json.articles?.stakeholder_id ||\n    \"\";\n\n  // If placeholders are filled, use them; else use actual item data\n  const url = PLACEHOLDER_URL !== \"$input.first().json.url\"\n    ? PLACEHOLDER_URL\n    : (json.url || json.link || json.source_url || \"\");\n\n  const title = PLACEHOLDER_TITLE !== \"$input.first().json.title\"\n    ? PLACEHOLDER_TITLE\n    : (json.title || json.headline || \"\");\n\n  const summary = PLACEHOLDER_SUMMARY !== \"$input.first().json.content\"\n    ? PLACEHOLDER_SUMMARY\n    : (json.summary || json.content || json.contentSnippet || json.description || \"\");\n\n  const canonical_url = canonicalUrl(url);\n  const normalized_title = normalizeWhitespace(title).toLowerCase();\n  const normalized_summary = normalizeWhitespace(summary).toLowerCase();\n\n  // ---- DATE NORMALIZATION ----\n  const rawDate = pickRawDate(json);\n  const published_at = parseUaRuDateToISO(rawDate); // ISO or null\n\n  // Include source_id so dedupe is source-aware\n  const hash_material = [\n    \"v1\",\n    source_id || \"no_source\",\n    canonical_url,\n    normalized_title,\n    normalized_summary\n  ].join(\"|\");\n\n  const content_hash = sha256Hex(hash_material);\n\n  return {\n    json: {\n      ...json,\n\n      // Preserve/promote IDs\n      ...(source_id ? { source_id } : {}),\n      ...(stakeholder_id ? { stakeholder_id } : {}),\n\n      // Normalize content fields\n      url,\n      title,\n      summary,\n\n      // Normalized timestamp field for Supabase (use this in your insert)\n      published_at, // ISO string or null\n      // Keep raw date too (optional but useful for debugging)\n      raw_published_at: rawDate ?? null,\n\n      // Hashes\n      content_hash,\n      n8n_content_hash: content_hash\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        896
+      ],
+      "id": "7226849e-897a-49f0-991e-e9068f0bfa2c",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        512
+      ],
+      "id": "888bf236-c982-4d8d-a91b-753e27111c5d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        704
+      ],
+      "id": "57c68b3c-40cb-4c2b-b868-6a13c025f665",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        896
+      ],
+      "id": "b74ef433-d7cd-485f-a6bc-19e0153c30d4",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        1088
+      ],
+      "id": "b869420d-7ec2-4767-a971-d2806328c2fc",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        1280
+      ],
+      "id": "7191fcd3-532f-4aaa-bbd3-de5b9fc645f4",
+      "name": "Merge4"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=# Role\nYou are a multilingual policy and infrastructure analysis assistant with expertise in public-sector news, disaster risk management, infrastructure, housing, and urban resilience.\n\nYou can read and translate Ukrainian, English, and other European languages accurately.\n\n---\n\n# Task\nGiven a news article **title** and **content**, perform the following tasks using ONLY the provided input text.\n\nIf the title or content is **not in English**, first translate it internally to English before performing summarization and classification.\n\n---\n\n## 1. Title Translation\n- Translate the article title into **German**\n- If the original title is in **Ukrainian or any non-English language**, accurately translate it\n- Preserve original meaning and professional tone\n- Do NOT add interpretation\n\n---\n\n## 2. Context Summarization\nGenerate **two short summaries**, each **1–2 sentences**, capturing the main context of the article:\n- One summary in **English**\n- One summary in **German**\n\nRules:\n- If the source content is Ukrainian or another language, translate it internally before summarizing\n- Summaries must reflect the **true meaning** of the original content\n- Be concise, factual, and neutral\n- Do not speculate or introduce external information\n\n---\n\n## 3. Sector Classification\nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors (STRICT LIST — no other values allowed)\n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- Classification must be based on the **translated meaning**, not surface keywords\n- If unclear or ambiguous, **default to \"Basic Infrastructure\"**\n- Do NOT invent categories or infer beyond the text\n\n---\n\n## Input\n- **Article Title:** {{ $json.title }}\n- **Article Content:**{{ $json.content }}\n\n---\n\n## Output Format (STRICT)\nReturn a JSON object with the following fields\n\n{\n  \"title_de\": \"\",\n  \"title_uk\": \"{{ $json.title }}\",\n  \"title_en\": \"\",\n  \"summary_en\": \"\",\n  \"summary_de\": \"\",\n  \"source_url\": {{ $json.url }},\n   \"published_date\"{{ $json.published_at }}: ,\n\"n8n_contenthash\": {{ $json.content_hash }},\n\"source_id\": {{ $json.source_id }},\n  \"sector_classification\": []\n}\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        2848,
+        912
+      ],
+      "id": "4a7829c4-6f72-4644-917c-952a92ce5093",
+      "name": "Message a model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1728,
+        848
+      ],
+      "id": "aa946499-c045-4c45-bdb2-56cad4bf4867",
+      "name": "Merge5"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2336,
+        896
+      ],
+      "id": "a9ed7d62-3bce-4864-a218-4baeb4bff602",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -48,
+        896
+      ],
+      "id": "da283a74-e0f1-4297-bfd5-ea27ae2aeb16",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {
+    "MoJ": [
+      {
+        "json": {
+          "title": "15-01-202617:23\nМін’юст обговорив із стейкхолдерами механізми розвитку медіації в Україні",
+          "url": "https://minjust.gov.ua/news/ministry/minyust-obgovoriv-iz-steykholderami-mehanizmi-rozvitku-mediatsii-v-ukraini",
+          "date": "15-01-2026",
+          "content": "15 січня 2026 року відбулося засідання робочої групи з питань розвитку та популяризації медіації Міжвідомчої координаційної ради з питань розвитку альтернативних способів вирішення спорів (далі - МКР).\n\nПід час засідання Міністерство юстиції України презентувало результати опитування медіаторів щодо запровадження в Україні обов’язкових зустрічей з медіатором, а також представило позицію Мін’юсту щодо напрацьованих варіантів подальшого розвитку медіації.\n\nУ ході активної дискусії члени робочої групи обговорили запропоновані підходи та заслухали думки всіх залучених стейкхолдерів у сфері медіації.\n\nЗа результатами засідання вирішено, що члени МКР до 30 січня 2026 року нададуть свої коментарі та пропозиції щодо презентованих механізмів запровадження обов’язкових зустрічей з медіатором. Отримані матеріали будуть узагальнені та проаналізовані Міністерством юстиції України до наступного засідання робочої групи."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "15-01-202617:00\nУкраїна демонструє важливі результати у виконанні рішень ЄСПЛ: 97 справ закрито у 2025 році",
+          "url": "https://minjust.gov.ua/news/ministry/ukraina-demonstrue-vajlivi-rezultati-u-vikonanni-rishen-espl-97-sprav-zakrito-u-2025-rotsi",
+          "date": "15-01-2026",
+          "content": "Комітет міністрів Ради Європи закрив нагляд за виконанням 97 рішень Європейського суду з прав людини у справах проти України – це на 44,8% більше, ніж у 2022 році. Серед них - 11 керівних справ, що стосувалися системних проблем у сфері прав людини.\n\nПідсумки роботи за 2025 рік підбила Уповноважений у справах Європейського суду з прав людини Маргарита Сокоренко. Результати свідчать про суттєвий прогрес України у виконанні міжнародних зобов’язань у сфері захисту прав людини навіть в умовах війни.\n\nЗакриття справ: ключові показники\n\nЗа результатами інформації, наданої Урядом України, у 2025 році Комітет міністрів Ради Європи припинив нагляд за виконанням 97 рішень ЄСПЛ у справах проти України. Кількість закритих справ зросла на 29,3% порівняно з 2023 -2024 роками та на 44,8% — порівняно з 2022 роком. Така динаміка підтверджує послідовну роботу держави з усунення системних проблем у сфері прав людини.\n\nОсобливо важливим досягненням стало закриття 11 керівних справ - рішень, що виявляють структурні проблеми та потребують комплексних загальних заходів. Їх виконання має ключове для запобіганням масовим порушенням у майбутньому.\n\nСудова реформа: справа «Олександр Волков проти України»\n\nСеред найбільш знакових результатів - закриття справи «Олександр Волков проти України», яка перебувала під наглядом Комітету міністрів з 2013 року. Комітет відзначив суттєвий прогрес, досягнутий завдяки масштабній судовій реформі.\n\nЗокрема, створення та функціонування органів, задіяних у призначенні суддів і дисциплінарних провадженнях, включно з Вищою радою правосуддя, Службою дисциплінарної інспекції та Вищою кваліфікаційною комісією суддів, відреагували на багато проблем, виявлених ЄСПЛ.\n\nРеформа системи довічного ув’язнення\n\nВажливим кроком стало також закриття справи «Пєтухов проти України № 2», що перебувала під наглядом з 2019 року. Після прийняття законів № 2689-IX та 2690-IX від 6 листопада 2022 року було запроваджено комплексну правову реформу, що встановлює механізм перегляду довічних вироків відповідно до Конвенції.\n\nНова система передбачає можливість подання клопотання про заміну довічного ув'язнення на строкове після відбуття щонайменше 15 рок ів покарання, а також право на повторне звернення у разі відмови. Ефективність реформи підтверджена висновками ЄСПЛ у рішеннях 2025 року у справах «Медвідь проти України» та «Коваленко та інші проти України».\n\nВиборче законодавство та митне регулювання\n\nСправу «Білоцерківська проти України», що перебувала під наглядом з 2022 року, закрито після набуття чинності новим Виборчим кодексом України. Документ скасував мажоритарну виборчу систему та запровадив пропорційну. Кодекс містить вичерпний перелік підстав для відмови в реєстрації кандидатів та чіткі процедури виправлення недоліків у поданих документах.\n\nПрогрес досягнуто й у сфері митного регулювання. У справі «Краєва проти України» Конституційний Суд у липні 2023 році визнав неконституційними положення Митного кодексу щодо накладення штрафу, що дорівнює вартості імпортованих товарів, та обов’язкового характеру таких штрафів. Змінене законодавство надало національним судам право обирати санкцію в межах, встановлених Кодексом.\n\nРезультати розгляду нових справ у 2025 році\n\nУпродовж 2025 року Європейський суд ухвалив 164 рішення у справах проти України, об’єднавши 569 заяв. У 131 рішенні суд встановив порушення положень Конвенції та присудив заявникам виплату відшкодування, у 12 – констатував порушення без призначення компенсації, а у 4 – встановив відсутність порушень.\n\nЩе 36 справ було визнано неприйнятними. Серед них – справа колишнього народного депутата щодо проведення негласних слідчих дій з боку НАБУ, справа «Ряшенцева та інші проти України» щодо скарг на нібито обстріли ЗСУ окупованих територій Донецької та Луганської областей, поданих адвокатами з Москви, а також справа щодо скарг на конкурс на суддів Касаційного адміністративного суду.\n\nУ трьох справах Європейський суд не встановив порушень, зокрема у справі «Басюк та інші проти України» щодо затримки у виплаті заробітної плати працівникам Донецької залізниці через форс-мажорні обставини, а саме припинення діяльності підприємства через окупацію території.\n\nКрім того, у 45 заявах суд визнав частину скарг неприйнятними або визнав відсутність порушень після отримання позиції Уряду України. У 21 справі, що охоплювали 97 заяв, справи було вилучено з реєстру через порушення заявниками строків подачі коментарів.\n\nЕкспертна робота з попередження порушень\n\nПротягом 2025 року проведено юридичну експертизу на відповідність положенням Конвенції близько 7000 проєктів актів. Серед них 5030 проєктів законів України, актів Кабінету Міністрів та Президента України, а також 1913 нормативно-правових актів міністерств та інших органів виконавчої влади.\n\nЗа результатами експертизи з метою попередження порушення Конвенції надано 79 висновків щодо невідповідності положенням Конвенції, до 142 документів висловлено застереження, а до 6 відомчих нормативно-правових актів надано висновки щодо необхідності доопрацювання. Також розглянуто та надано відповідь на 177 звернень різних суб’єктів, включно з листами суддів Конституційного Суду України, народних депутатів та комітетів Верховної Ради.\n\nРобота над тривалими системними проблемами\n\nУ 2025 році продовжено роботу над вирішенням тривалих системних проблем, зокрема щодо невиконання рішень національних судів, жорстокого поводження представників держави із заявниками, незаконного та надмірно тривалого тримання під вартою, надмірної тривалості судових проваджень в Україні.\n\nУсі рішення ЄСПЛ системно доводилися до відповідних органів влади. Протягом року готувалися щоквартальні подання Кабінету Міністрів України, аналітичні огляди для Верховного суду та пропозиції для врахування у законодавчій роботі.\n\nДосягнуті результати підтверджують послідовну та системну роботу України з виконання рішень ЄСПЛ і впровадження європейських стандартів захисту прав людини навіть в умовах повномасштабної війни.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "15-01-202616:07\n15 січня 2026 року Мін’юстом до Вищого антикорупційного суду подано позов до АТ «Авіакор-авіційний завод» про застосування до нього санкції",
+          "url": "https://minjust.gov.ua/news/ministry/15-sichnya-2026-roku-minyustom-do-vischogo-antikoruptsiynogo-sudu-podano-pozov-do-at-aviakor-avitsiyniy-zavod-pro-zastosuvannya-do-nogo-sanktsii",
+          "date": "15-01-2026",
+          "content": "позов до АТ «Авіакор-авіційний завод» про застосування до нього санкції, передбаченої пунктом 1-1 частини першої статті 4 ЗУ «Про санкції».\n\nАТ «Авіакор-авіційний завод» - одне з найбільших російських авіабудівних підприємств. Основними компетенціями заводу є авіабудування, капітальний ремонт та обслуговування різних типів авіаційної техніки, виробництво комплектуючих. Підприємство входить до підприємств, обороно-промислового комплексу рф та здійснює матеріально-технічне забезпечення збройної агресії проти України, шляхом модернізації, обслуговування та ремонту військових літаків.\n\nДо стягнення Міністерством юстиції України заявлено запчастини для літака АН-140.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "15-01-202614:00\nДержавна виконавча служба у 2025 році забезпечила виплату 440,5 млн грн заборгованості із зарплати",
+          "url": "https://minjust.gov.ua/news/ministry/derjavna-vikonavcha-slujba-u-2025-rotsi-zabezpechila-viplatu-4405-mln-grn-zaborgovanosti-iz-zarplati",
+          "date": "15-01-2026",
+          "content": "Органи державної виконавчої служби Міністерства юстиції України продовжують забезпечувати примусове виконання судових рішень та рішень інших органів (посадових осіб) зі стягнення заборгованості із заробітної плати та інших виплат, пов’язаних із трудовими правовідносинами.\n\nПротягом 2025 року в органах ДВС підлягало виконанню 43 413 виконавчих документів про стягнення заборгованості із заробітної плати та інших пов’язаних виплат на загальну суму 2,45 млрд грн. Для порівняння, у 2024 році таких документів було 38 705 на суму 2,03 млрд грн.\n\nКількість завершених проваджень у минулому році у порівнянні з попереднім зросла майже на 60%. Якщо у 2024 році державні виконавці завершили 6 518 проваджень на суму 399,9 млн грн, то у 2025 році — 10\n\n317 (+58,3%) на суму 521,8 млн грн (+30,5%).\n\nКількість фактично виконаних виконавчих документів у 2025 році склала 8 867. Це на 82,4% більше, ніж у 2024-му. Загальна сума фактично стягнутих коштів зросла до 440,5 млн грн, що на 50,1% більше показника 2024 року.\n\nЗростання показників свідчить про посилення ефективності роботи органів державної виконавчої служби у сфері захисту трудових прав громадян та забезпечення своєчасної виплати працівникам заробітної плати.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "15-01-202611:28\n14 січня 2026 року Вищим антикорупційним судом задоволено позовні вимоги Мін’юсту до Гамзалова Станіслава Джахпаровича про застосування до нього санкції",
+          "url": "https://minjust.gov.ua/news/ministry/14-sichnya-2026-roku-vischim-antikoruptsiynim-sudom-zadovoleno-pozovni-vimogi-minyustu-do-gamzalova-stanislava-djahparovicha-pro-zastosuvannya-do-nogo-sanktsii",
+          "date": "15-01-2026",
+          "content": "14 січня 2026 року Вищим антикорупційним судом задоволено позовні вимоги Мін’юсту до Гамзалова Станіслава Джахпаровича про застосування до нього санкції, передбаченої пунктом 11 частини першої статті 4 ЗУ «Про санкції».\n\nГамзалов С.Д. є власником низки російських підприємств, що здійснюють матеріально-технічне забезпечення російської федерації у її збройній агресії проти України. Зокрема, ними здійснюється постачання товарів для підприємств, задіяних у військово-промисловому комплексі рф.\n\nНа підставі рішення ВАКС, в дохід держави стягнуто 25% від загальної кількості акцій публічного акціонерного товариства «Крюківський вагонобудівний завод» (код згідно з ЄДРПОУ: 05763814), що перебували в опосередкованому володінні Гамзалова С.Д.\n\nНаразі триває строк для подання апеляційної скарги на рішення суду.\n\nМін’юст висловлює подяку Службі зовнішньої розвідки України, Головному управлінню розвідки Міністерства оборони України за сприяння та співпрацю в підготовці доказової бази.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "15-01-202611:23\nУ Мін’юсті провели інформаційно-консультативний семінар по проблемам запобігання виникненню конфлікту інтересів у зв’язку з роботою близьких осіб",
+          "url": "https://minjust.gov.ua/news/ministry/u-minyusti-proveli-informatsiyno-konsultativniy-seminar-po-problemam-zapobigannya-viniknennyu-konfliktu-interesiv-u-zvyazku-z-robotoyu-blizkih-osib",
+          "date": "15-01-2026",
+          "content": "В Міністерстві юстиції України було проведено інформаційно-консультативний семінар по питанням запобігання та врегулювання конфлікту інтересів пов’язаного із спільною роботою близьких осіб.\n\nУ заході взяло участь 54 працівника апарату. Захід організовано з метою підвищення рівня обізнаності працівників апарату в царині існуючих обмежень пов’язаних із спільною роботою близьких осіб.\n\nПід час навчань було обговорено особливості дій працівників з метою запобігання конфлікту інтересів. Окрему увагу приділили питанням врегулювання конфлікту інтересів.\n\nЗа результатами проведеного семінару учасникам були доведені обов’язкові кроки, які необхідно виконати для запобігання виникненню конфлікту інтересів.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "15-01-202610:44\nЩодо проведення тестування на знання законодавства у сфері державної реєстрації у період з 16 по 20 березня 2026 року",
+          "url": "https://minjust.gov.ua/news/ministry/schodo-provedennya-testuvannya-na-znannya-zakonodavstva-u-sferi-derjavnoi-reestratsii-u-period-z-16-po-20-bereznya-2026-roku",
+          "date": "15-01-2026",
+          "content": "Проведення тестування на знання законодавства у сфері державної реєстрації осіб, які мають намір виконувати функції державного реєстратора та претендують на посаду державного реєстратора або на іншу посаду, що передбачає виконання функцій державного реєстратора у суб’єкта державної реєстрації, крім Мін’юсту чи його територіального органу (далі – тестування) відбудеться у період з 16 по 20 березня 2026 року в приміщенні Міністерства юстиції України за адресою: вул. Січових Стрільців, буд. 73, м. Київ.\n\nЗапити для проходження тестування від суб’єктів державної реєстрації прийматимуться Міністерством юстиції України до 13 лютого 2026 року (включно).\n\nЗапити для проходження тестування від суб’єктів державної реєстрації, що надходили у період з 08 листопада 2025 року по 13 січня 2026 року, опрацьовуються Міністерством юстиції України. У зв’язку з цим необхідність їх повторного направлення відсутня.\n\nДнем подання запиту для проходження тестування, вважається день фактичного отримання (реєстрації) його Мін’юстом.\n\nАдреса для листування (01001, м. Київ, вул. Архітектора Городецького, 13).\n\nПовідомлення про дату, час та місце проведення тестування на знання законодавства у сфері державної реєстрації, а також прізвище, ім’я та по батькові осіб, які запрошуються на таке тестування, розміщуються на офіційному вебсайті Мін’юсту (зокрема, за посиланням:\n\nhttps://minjust.gov.ua/m/grafik-provedennya-testuvannya-u-sferi-derjavnoi-reestratsii ) не пізніше ніж за сім календарних днів до дня його проведення.\n\nЗ актуальною інформацією стосовно тестування, можна ознайомитись на вебсайті Міністерства юстиції України у розділі «Напрями діяльності» в рубриці «Визначення професійної компетентності осіб, які мають намір виконувати функції державного реєстратора» за посиланням:\n\nhttps://minjust.gov.ua/ndd/dergreestr/dergreestr_vuzn .\n\nДовідкова інформація за номером телефону: (044) 330 02 74.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "15-01-202610:00\nНДЦНСЕ розпочав експертні дослідження для виробників безпілотних систем і засобів РЕБ",
+          "url": "https://minjust.gov.ua/news/ministry/ndtsnse-rozpochav-ekspertni-doslidjennya-dlya-virobnikiv-bezpilotnih-sistem-i-zasobiv-reb",
+          "date": "15-01-2026",
+          "content": "Науково-дослідний центр незалежних судових експертиз Міністерства юстиції України розпочав проведення експертних товарознавчих досліджень щодо безпілотних систем, засобів радіоелектронної боротьби та їх складових частин українського виробництва.\n\nНовий вид експертних досліджень орієнтований на виробників і постачальників, які беруть участь у процедурах закупівель, укладають державні контракти або проходять етапи погодження ціноутворення.\n\nМета проведення досліджень — підтвердити економічну доцільність ціни, визначити обґрунтовану орієнтовну (очікувану) вартість виробу, мінімізувати ризики зауважень з боку контролюючих органів, а також забезпечити виробників і постачальників незалежним експертним документом для використання у взаємодії з державними замовниками.\n\nДослідження проводяться щодо безпілотних літальних апаратів (БПЛА), безпілотних авіаційних комплексів (БПАК), засобів радіоелектронної боротьби тактичного рівня, а також окремих компонентів і складових частин таких виробів.\n\nЕкспертне товарознавче дослідження здійснюється на підставі наданих замовником документів, зокрема затверджених технічних умов, тактико-технічних характеристик, комплектації та розрахунку ціни виробу.\n\nЗа результатами проведення дослідження замовник отримує висновок експерта.\n\nМінімальний строк виконання дослідження становить 7 робочих днів за умови надання повного пакета документів та оперативного оформлення в місті Києві.\n\nДодаткова інформація — за посиланням: https://srcif.com.ua/ai-choose.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "14-01-202617:30\nДо відома осіб, які виявили намір здійснювати діяльність приватного виконавця",
+          "url": "https://minjust.gov.ua/news/ministry/do-vidoma-osib-yaki-viyavili-namir-zdiysnyuvati-diyalnist-privatnogo-vikonavtsya-35253",
+          "date": "14-01-2026",
+          "content": "Кваліфікаційна комісія приватних виконавців (далі – Комісія) повідомляє, що згідно протоколу засідання Комісії від 12.01.2026 № 172 за результатами розгляду заяв осіб, які виявили намір отримати право на здійснення діяльності приватного виконавця, про допуск до складання кваліфікаційного іспиту Комісією прийнято відповідне рішення (список осіб, яким надано допуск, додається).\n\nОсоби, яким надано допуск"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "14-01-202616:00\nПрава дитини під захистом держави: у 2025 році органи ДВС стягнули на 32,1% більше аліментів, ніж у попередньому",
+          "url": "https://minjust.gov.ua/news/ministry/prava-ditini-pid-zahistom-derjavi-u-2025-rotsi-organi-dvs-styagnuli-na-321-bilshe-alimentiv-nij-u-poperednomu",
+          "date": "14-01-2026",
+          "content": "Забезпечення належного виконання рішень судів щодо стягнення аліментів залишається одним із ключових пріоритетів у діяльності органів державної виконавчої служби, які перебувають у сфері управління Міністерства юстиції України. Системна робота державних виконавців та застосування передбачених законом заходів дозволяють забезпечувати належне виконання обов’язків громадян зі сплати аліментів.\n\nЗа 2025 рік органи державної виконавчої служби стягнули 16 243 100 408 грн аліментів. Ця сума на 3 947 836 736 грн (або на 32,1%) більша, ніж аналогічний показник за 2024 рік.\n\nСтаном на 31 грудня 2025 року на виконанні ДВС перебувало понад 511 тисяч виконавчих документів про стягнення аліментів. Понад третина справ стосувалась заборгованості зі сплати аліментів більше ніж за три місяці — і з такими боргами держава працює особливо наполегливо.\n\nЮридичні механізми впливу на боржників\n\nНагадаємо, відповідно до Закону України «Про виконавче провадження» за наявності заборгованості зі сплати аліментів, сукупний розмір якої перевищує суму платежів за три місяці:\n- стягнення може бути звернено на майно боржника. При цьому звернення стягнення на заробітну плату не виключає можливості одночасного звернення стягнення на інше майно боржника;\n- боржника вносять до Єдиного реєстру боржників;\n- виконавець роз’яснює стягувачу право звернення до органів досудового розслідування із заявою (повідомленням) про вчинене кримінальне правопорушення — ухилення від сплати аліментів.\n\nУ разі, якщо заборгованість перевищує суму відповідних платежів за чотири місяці, державний виконавець має право винести постанови про тимчасове обмеження боржника у таких правах:\n- виїзд за межі України;\n- керування транспортними засобами;\n- користування вогнепальною мисливською, пневматичною та охолощеною зброєю;\n- право на полювання.\n\nЯкщо сукупний розмір заборгованості перевищує суму відповідних платежів за шість місяців з моменту пред’явлення виконавчого документа до примусового виконання, державний виконавець складає протокол про адміністративне правопорушення за статтею 183-1 Кодексу України про адміністративні правопорушення та надсилає його до суду.\n\nУ випадках, коли заборгованість зі сплати аліментів перевищує:\n- один рік — накладається штраф у розмірі 20% суми заборгованості;\n- два роки — 30%;\n- три роки — 50%.\n\nСуми таких штрафів стягуються з боржника в установленому порядку та перераховуються стягувачу. Заходи примусового виконання передбачені Законом не застосовуються у разі відсутності заборгованості понад три місяці.\n\nМін’юст і надалі послідовно забезпечуватиме виконання судових рішень, адже аліменти — це не формальність, а реальна підтримка дитини.\n\nПідпишись на наш Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "14-01-202610:00\nБез юридичних бар’єрів: як працює міжнародна правова допомога у сфері нотаріату",
+          "url": "https://minjust.gov.ua/news/ministry/bez-yuridichnih-bareriv-yak-pratsyue-mijnarodna-pravova-dopomoga-u-sferi-notariatu",
+          "date": "14-01-2026",
+          "content": "Міжнародна правова допомога у сфері нотаріату усуває юридичні бар’єри між державами, дозволяючи безперешкодно використовувати документи по обидва боки кордону. Вона необхідна для людей, які живуть, навчаються, працюють або ведуть бізнес за межами України і не втрачають при цьому зв’язку з домом. Міністерство юстиції розповідає про цю систему взаємодії між державами, яка забезпечує правову визначеність і можливість громадянам реалізовувати свої права незалежно від країни перебування.\n\nНа чому ґрунтується міжнародна правова допомога у сфері нотаріату?\n\nВона здійснюється на підставі двосторонніх і багатосторонніх міжнародних договорів України, а також принципу взаємності. Порядок виконання нотаріальних дій визначається положеннями відповідного міжнародного договору.\n\nЗаяви та застереження, зроблені державами під час ратифікації або приєднання до договору, є його невід’ємною частиною.\n\nУ разі якщо міжнародним договором України встановлено інші правила вчинення нотаріальних дій, ніж передбачені національним законодавством, застосовуються положення міжнародного договору. Якщо договір покладає на нотаріусів виконання дій, не передбачених національним законодавством, вони здійснюються у порядку, встановленому Міністерством юстиції України.\n\nДе можна ознайомитися з міжнародними договорами України?\n\nВони розміщені на офіційному сайті Міністерства юстиції України у розділі «Перелік двосторонніх та багатосторонніх міжнародних договорів у сфері правової допомоги та правового співробітництва у цивільних та кримінальних справах»: https://is.gd/Y1NTVO\n\nЧи приймаються в Україні документи, видані за кордоном?\n\nТак, за умови їхньої легалізації Міністерством закордонних справ України. Без легалізації такі документи можуть прийматися у випадках, передбачених законодавством України або міжнародними договорами. Легалізація підтверджує дійсність документа для його використання в іншій державі. Вона може здійснюватися у формі консульської легалізації або шляхом проставлення апостиля.\n\nУ чому різниця між консульською легалізацією та апостилем?\n\nКонсульська легалізація застосовується до документів держав, які не є учасниками Гаазької конвенції 1961 року, та передбачає кілька етапів засвідчення.\n\nАпостиль — це спрощена процедура між державами — учасницями Конвенції, яка підтверджує справжність підпису та печатки і визнається без додаткових підтверджень.\n\nЧи потрібен переклад документа та хто засвідчує підпис?\n\nУ більшості випадків — так. Після легалізації або апостилювання документ перекладається мовою держави подання. Переклад має бути нотаріально посвідчений, а в окремих країнах — додатково апостильований або засвідчений.\n\nСправжність підпису на документах, які подаються до іноземних органів, може засвідчити або нотаріус, або консульська установа за кордоном.\n\nЯк посвідчуються довіреності для використання за кордоном?\n\nДовіреність посвідчується відповідно до законодавства держави, у якій вона видана, та використовується за кордоном після легалізації або апостилювання, якщо це передбачено міжнародними договорами.\n\nНотаріуси можуть звертатися із запитами до іноземних компетентних органів, зокрема щодо наявності спадкової справи, факту реєстрації шлюбу або наявності заповіту.\n\nЧому міжнародне нотаріальне співробітництво важливе?\n\nВоно сприяє спрощенню процедур, цифровізації взаємодії та створенню доступних і зрозумілих сервісів відповідно до принципів безбар’єрності — для осіб в Україні та за кордоном.\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "13-01-202615:00\nСудові експерти Мін’юсту у 2025 році провели майже 3,7 тис. експертиз щодо злочинів рф: встановлено збитки на понад 73,6 млрд грн",
+          "url": "https://minjust.gov.ua/news/ministry/sudovi-eksperti-minyustu-u-2025-rotsi-proveli-mayje-37-tis-ekspertiz-schodo-zlochiniv-rf-vstanovleno-zbitki-na-ponad-736-mlrd-grn",
+          "date": "13-01-2026",
+          "content": "У 2025 році працівники науково-дослідних установ судових експертиз Міністерства юстиції України провели 3689 експертиз, пов’язаних зі збройною агресією російської федерації проти України. Дослідження здійснювалися в межах кримінальних проваджень, а також за зверненнями фізичних і юридичних осіб.\n\nЕкспертизи стосувалися, зокрема, встановлення причин і масштабів руйнувань або пошкоджень рухомого й нерухомого майна, об’єктів навколишнього природного середовища, а також визначення розмірів матеріальної та моральної шкоди, завданої громадянам і юридичним особам.\n\nОкремим напрямом роботи є участь судових експертів у процесах ідентифікації тіл загиблих воїнів та розслідуваннях щодо осіб, зниклих безвісти за особливих обставин — як серед військових, так і серед цивільного населення.\n\nЗагальна сума збитків, встановлених за результатами експертиз проведених у 2025 році, — 73 623 277 499 гривень. Із цієї суми:\n\n- 58 351 059 106 гривень — за експертизами, призначеними органами досудового розслідування та судами;\n\n- 15 272 218 393 гривні — за зверненнями фізичних і юридичних осіб.\n\nЗа словами заступника Міністра юстиції України Андрія Гайченка, науково-дослідні установи судових експертиз Мін'юсту мають найбільший в країні досвід у сфері експертного забезпечення розслідування воєнних злочинів: «Наші експертні інститути проводять близько 100 видів різних експертиз. Саме фахівці Мін’юсту спеціалізуються на проведенні унікальних судових експертиз наслідків ракетних та дронових ударів по Україні. І саме вони оцінюють обсяги завданих збитків та вартість майбутньої відбудови. Це дуже важливо в контексті роботи міжнародного компенсаційного механізму для нашої держави».\n\nНагадаємо, науково-дослідні установи судових експертиз Міністерства юстиції України та їхні регіональні відділення проводять широкий спектр судових експертиз: криміналістичні (почеркознавча, балістична), інженерно-технічні (будівельно-технічна, оціночна), економічні та інші. Також вони забезпечують експертну підтримку правосуддя та допомагають у визначенні збитків, завданих збройною агресією рф.\n\nЕкспертні послуги надаються на підставі постанов слідчих, суддів, прокурорів, а також за договорами з юридичними та фізичними особами.\n\nПерелік та контакти науково-дослідних установи судових експертиз, які проводять експертизи щодо визначення розмірів збитків, завданих збройною агресією рф, тут: https://is.gd/7u07ec .\n\nЧитайте також:\n\nВ Інституті судових експертиз Мін’юсту запропонували механізм, що прискорить ідентифікацію тіл загиблих\n\nУ Мін’юсті відбулась VII Міжнародна науково-практична конференція з актуальних питань судової експертології\n\nМін’юст працює над розвитком сучасних судових експертиз, зокрема — для виявлення підроблених документів та фальшивих банкнот\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "13-01-202612:00\nІмена новонароджених в Україні: тенденції ІІ півріччя 2025 року",
+          "url": "https://minjust.gov.ua/news/ministry/imena-novonarodjenih-v-ukraini-tendentsii-ii-pivrichchya-2025-roku",
+          "date": "13-01-2026",
+          "content": "У другому півріччі 2025 року батьки в Україні продовжували поєднувати класичні українські імена з міжнародними та рідковживаними варіантами. Про це свідчать дані, надані відділами державної реєстрації актів цивільного стану Міністерства юстиції України.\n\nНайпоширеніші жіночі імена\n\nУ більшості регіонів серед лідерів залишаються: Софія, Єва, Емілія, Соломія, Марія, Злата, Мілана.\n\nНайпоширеніші чоловічі імена\n\nНайчастіше хлопчиків називали: Артем, Матвій, Максим, Марк, Тимофій, Олександр, Давид.\n\nРегіональні особливості\n\nУ різних частинах країни спостерігаються власні іменні тенденції. Так, у західних областях частіше обирають імена Соломія, Юстина, Уляна, Софія, а серед чоловічих — Марко, Дем’ян, Матвій.\n\nУ центральних та південних регіонах популярними залишаються Мілана, Єва, Софія, Марія, Злата, серед хлопчиків — Артем, Владислав, Богдан, Дмитро.\n\nУ східних областях батьки частіше надають перевагу іменам Софія, Поліна, Єва, Злата, а також Артем, Марк, Матвій, Тимофій, що свідчить про збереження загальнонаціональних іменних трендів.\n\nУ великих містах дедалі частіше обирають короткі та міжнародні імена — Мія, Емма, Лія, Ніколь, Тео, Леон, Лукас, Марк, які легко вимовляються різними мовами.\n\nРідковживані імена\n\nПоряд із популярними іменами батьки дедалі частіше надають дітям унікальні імена. Серед рідковживаних у ІІ півріччі 2025 року зафіксовано, зокрема:\n\nжіночі: Авіелла, Теона, Сапфіра, Ренесмі, Ноема, Ясміна, Кіара;\nчоловічі: Еней, Тео, Одін, Рагнар, Авенір, Силас, Златан. Такі імена траплялися поодиноко, однак саме вони формують яскраву картину сучасних іменних уподобань в Україні.\n\nІнформацію підготовлено на основі даних, наданих відділами державної реєстрації актів цивільного стану Міністерства юстиції України.\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "12-01-202617:08\nРезультати засідання дисциплінарної палати ЦЕКК при Міністерстві юстиції України",
+          "url": "https://minjust.gov.ua/news/ministry/rezultati-zasidannya-distsiplinarnoi-palati-tsekk-pri-ministerstvi-yustitsii-ukraini-35241",
+          "date": "12-01-2026",
+          "content": "Засідання дисциплінарної палати Центральної експертно-кваліфікаційної комісії при Міністерстві юстиції України відбулося 08.01.2026. За результатами розгляду питань щодо дисциплінарної відповідальності:\n\nпритягнуто до дисциплінарної відповідальності 1 судового експерта, до якого застосовано дисциплінарне стягнення у виді попередження;\n\nвирішено відкрити дисциплінарне провадження щодо 1 судового експерта;\n\nвирішено не відкривати дисциплінарне провадження щодо 4 судових експертів."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "title": "12-01-202616:45\nНові судово-експертні послуги та технології: плани ННЦ ІСЕ на 2026 рік",
+          "url": "https://minjust.gov.ua/news/ministry/novi-sudovo-ekspertni-poslugi-ta-tehnologii-plani-nnts-ise-na-2026-rik",
+          "date": "12-01-2026",
+          "content": "У 2026 році Національний науковий центр Інститут судових експертиз ім. Засл. проф. М. С. Бокаріуса» планує розширити перелік судово-експертних послуг і впровадити сучасні технологічні рішення у проведенні експертиз.\n\nПро це повідомила директорка ННЦ ІСЕ Анастасія Купріянова під час зустрічі з представниками органів виконавчої влади та правоохоронних органів Харківської області.\n\nЗа її словами, у 2026 році Центр запропонує правоохоронним органам, органам державної влади та місцевого самоврядування, а також фізичним особам — нові, більш технологічні можливості у сфері судової експертизи.\n\nОдним із ключових напрямів стане розвиток експертиз відео- та звукозаписів. У співпраці зі Службою безпеки України ННЦ ІСЕ підготував фахівців для роботи з програмним продуктом SIVE BASE, який забезпечує високоточну ідентифікацію диктора за голосом і мовленням.\n\nСеред нових послуг, які заклад надаватиме у 2026 році, — технічний нагляд за відновленням і будівництвом об’єктів цивільної інфраструктури, автомобільних доріг, мостів, шляхопроводів та інших інженерних споруд. Для цього ННЦ ІСЕ придбав мобільну дорожньо-технічну лабораторію та сучасне інженерно-технічне обладнання.\n\nВодночас у 2025 році Центр, завдяки оновленню управлінських підходів, суттєво наростив показники своєї діяльності. Зокрема, наповнення спеціального фонду Державного бюджету за чотири місяці 2025 року майже на 30 % перевищило показники аналогічного періоду минулого року.\n\nНаціональний науковий центр «Інститут судових експертиз ім. Засл. проф. М. С. Бокаріуса» продовжує розширювати експертні можливості та посилювати роль установи як ключового партнера у сфері судово-експертного забезпечення.\n\nРаніше повідомлялось про те, що у 2025 році працівники науково-дослідних установ судових експертиз Міністерства юстиції України провели 3689 експертиз, пов’язаних зі збройною агресією російської федерації проти України. Загальна сума збитків, встановлених за результатами цих експертиз, — понад 73,6 млрд гривень.\n\nЧитайте також:\n\nВ Інституті судових експертиз Мін’юсту запропонували механізм, що прискорить ідентифікацію тіл загиблих\n\nУ Мін’юсті відбулась VII Міжнародна науково-практична конференція з актуальних питань судової експертології\n\nМін’юст працює над розвитком сучасних судових експертиз, зокрема — для виявлення підроблених документів та фальшивих банкнот\n\nПідпишись на Телеграм"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-22T06:19:59.971Z",
+      "createdAt": "2026-01-22T06:19:59.971Z",
+      "role": "workflow:owner",
+      "workflowId": "6Q0pY4zY7DodXV73",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-11T09:22:35.000Z",
+  "versionId": "e05e0b65-fa30-47f2-ac29-92e9f903ec87"
+}
