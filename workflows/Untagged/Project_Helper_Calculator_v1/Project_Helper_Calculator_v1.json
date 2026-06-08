@@ -1,0 +1,1101 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Create sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create sheet": {
+      "main": [
+        [
+          {
+            "node": "Build header row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "write header row": {
+      "main": [
+        [
+          {
+            "node": "Attach sheetID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build header row": {
+      "main": [
+        [
+          {
+            "node": "write header row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach sheetID": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet1": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "fetch row and column index": {
+      "main": [
+        [
+          {
+            "node": "append dropdown column",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-09T07:12:10.394Z",
+  "id": "DoTJjpS3QDgB7RjH",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Project_Helper_Calculator_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/u/0/folders/1UJ-PLWk9sE9JmRYPBMzwh2CHWsyJxLgW",
+          "mode": "url"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8844d215-b3c8-40a0-9ad8-b45bc5704c55",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        240,
+        0
+      ],
+      "id": "16434de3-a4c7-4297-92ee-3d1b36e3cfd9",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        480,
+        0
+      ],
+      "id": "6b5cf35a-e4fc-4c39-ac77-b5973b772d4e",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an experienced project manager and HR expert in international development.\n\nYou receive the text of a Terms of Reference (ToR) document for a consulting assignment.\nYour task is to extract key project metadata and a structured list of expert roles needed for the project.\n\nYou have access to a Google Sheets tool for the \"Client_Factors\" tab, which contains known clients and their weighting factors.\nYou MUST use this tool to find a matching client row when possible.\n\nYou MUST output a SINGLE JSON object in the exact schema defined below.\nNo arrays at the top level, no prose, no comments, no markdown. Only valid JSON.\n\n-----------------\nINPUT YOU RECEIVE\n-----------------\n\nYou get:\n- The ToR text (plain text).\n- The file ID and file name from Google Drive.\n- Access to the Client_Factors sheet via the Sheets tool.\n\nTreat the ToR text as authoritative for project/role info. If something is not clearly stated, use null or [].\n\n-----------------\nCLIENT FACTORS SHEET\n-----------------\n\nThe Client_Factors sheet has rows with at least these columns:\n\n- client_key\n- client_name_pattern  (semicolon-separated list of substrings)\n- client_type\n- client_group\n- buying_factor\n- default_margin\n- notes\n\nYou MUST:\n\n1. Call the Google Sheets tool to retrieve ALL rows from Client_Factors.\n2. For each row, inspect client_name_pattern:\n   - Split it on \";\" into substrings.\n   - If any substring (case-insensitive) appears in the ToR text, consider that row a match.\n3. If multiple rows match, choose the one whose pattern looks most specific to the actual client.\n4. If no row matches, use null for all client-specific fields and default factors.\n\n-----------------\nOUTPUT JSON SCHEMA\n-----------------\n\nYou MUST output a single JSON object with the following structure:\n\n{\n  \"project_id\": string | null,\n  \"project_name\": string | null,\n  \"client_name_raw\": string | null,\n  \"client_key\": string | null,\n  \"client_type\": \"GIZ\" | \"UN\" | \"INGO\" | \"Foundation\" | \"Private\" | null,\n  \"client_group\": string | null,\n  \"client_buying_factor\": number | null,\n  \"client_default_margin\": number | null,\n  \"country\": string | null,\n  \"location_group\": \"HIC\" | \"MIC\" | \"LIC\" | \"Remote\" | null,\n  \"file_id\": string | null,\n  \"file_name\": string | null,\n  \"roles\": [\n    {\n      \"role_id\": string,\n      \"role_title\": string | null,\n      \"role_level_required\": \"Junior\" | \"Intermediate\" | \"Senior\" | \"Expert\" | null,\n      \"role_days\": number | null,\n      \"role_skill_area\": string | null,\n      \"role_languages_required\": string[],\n      \"role_scarcity_ids\": string[]\n    }\n  ]\n}\n\nField-by-field rules:\n\n- project_id:\n  - If the ToR has a clear project code or reference number, use that.\n  - Otherwise, construct a short ID from the file name (e.g. \"PRJ_\" + a short slug of the file_name).\n  - If nothing reasonable can be constructed, use null.\n\n- project_name:\n  - Prefer a clear project title from the ToR (e.g. in the header or introduction).\n  - If none, use null.\n\n- client_name_raw:\n  - The client or donor name as written in the ToR (e.g. \"UNDP\", \"GIZ\", \"European Commission\").\n  - If unclear, use null.\n\n- client_key, client_type, client_group, client_buying_factor, client_default_margin:\n  - After calling the Client_Factors sheet tool:\n    - If a matching row is found:\n      - client_key           = row.client_key\n      - client_type          = row.client_type\n      - client_group         = row.client_group\n      - client_buying_factor = numeric value of row.buying_factor\n      - client_default_margin = numeric value of row.default_margin\n    - If no row matches:\n      - client_key           = null\n      - client_type          = a reasonable generic type if obvious (GIZ, UN, INGO, Foundation, Private) or null if unsure.\n      - client_group         = null\n      - client_buying_factor = null\n      - client_default_margin = null\n\n- country:\n  - The main country where the assignment is implemented.\n  - If multiple countries, choose the primary one mentioned or null.\n\n- location_group:\n  - Classify country into:\n    - \"HIC\" for high-income countries,\n    - \"MIC\" for middle-income countries,\n    - \"LIC\" for low-income countries,\n    - \"Remote\" for fully remote assignments.\n  - Be conservative, and use null if you really cannot tell.\n\n- file_id, file_name:\n  - Copy the FILE_ID and FILE_NAME you are given as input, or null if not available.\n\n- roles:\n  - An array with one element per expert position mentioned in the ToR.\n  - Ignore administrative / non-expert roles (e.g. backstopping admin staff).\n  - For each role:\n\n    - role_id:\n      - A short stable identifier, e.g. \"R1\", \"R2\", or a short code like \"TEAM_LEAD\".\n      - It MUST be non-empty, unique within this array, and contain no spaces.\n\n    - role_title:\n      - The main title used in the ToR (Team Leader, Senior Expert M&E, etc.).\n      - If not clearly stated, use null.\n\n    - role_level_required:\n      - Map ToR language to one of:\n        - \"Junior\" (junior, entry-level, 0–3 yrs).\n        - \"Intermediate\" (mid-level, 3–7 yrs).\n        - \"Senior\" (senior, 7–15 yrs).\n        - \"Expert\" (lead / principal expert, 15+ yrs or very high seniority).\n      - If the ToR does not indicate seniority, use null.\n\n    - role_days:\n      - If the ToR specifies days for the role, use that number.\n      - If it gives a range, use the midpoint.\n      - If impossible to infer, use null.\n\n    - role_skill_area:\n      - Short description of the main thematic/functional focus (e.g. \"M&E\", \"AI and digitalization\", \"gender\", \"climate\", \"governance\").\n      - If unclear, use null.\n\n    - role_languages_required:\n      - Array of language names that are explicitly required or clearly expected.\n      - E.g. [\"English\"], [\"English\", \"German\"].\n      - If none are clearly specified, use [].\n\n    - role_scarcity_ids:\n      - Array of short scarcity IDs that clearly apply to this role, based on the ToR requirements.\n      - Use only these IDs:\n        - \"FC\" for fragile/conflict context experience,\n        - \"ADV_QUANT\" for advanced quantitative methods (econometrics, R/Stan/ML),\n        - \"NICHE_LANG\" for niche languages (e.g. Pashto, Tigrinya, etc.),\n        - \"CROSS_CUT\" for highly cross-cutting profiles (e.g. climate x digital x fragility),\n        - \"ECON\" for strong economist profiles (economics degree + applied economic analysis).\n      - Only include an ID if the ToR clearly requires it. Be conservative.\n\n-----------------\nINPUT VARIABLES (AS PROVIDED BY n8n)\n-----------------\n\nToR text (verbatim):\n{{ $json.text }}\n\nFILE_ID:{{ $('Download file').item.json.id }}\n\n\nFILE_NAME:{{ $('Download file').item.json.name }}\n\n-----------------\nOUTPUT\n-----------------\n\nReturn ONLY the JSON object described above. No prose, no markdown, no comments.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        0
+      ],
+      "id": "c21c64c6-44be-4b3e-be0b-db7da4a3b5ca",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        208
+      ],
+      "id": "6849b070-d160-44bb-9c9c-b13ca6934840",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Flatten the AI Agent's parsed ToR JSON into one item per role,\n// ready to be appended as rows in a new project-specific sheet.\n\n// 1. Get the agent's raw output and parse it into `proj` if needed.\n\nlet projRaw = $json;\nlet proj;\n\n// Case 1: direct JSON object with roles\nif (projRaw && typeof projRaw === 'object' && Array.isArray(projRaw.roles)) {\n  proj = projRaw;\n} else {\n  // Case 2: JSON string inside `output` / `data` / `result`\n  const candidateStrings = [];\n\n  if (typeof projRaw === 'string') {\n    candidateStrings.push(projRaw);\n  }\n  if (typeof projRaw.output === 'string') {\n    candidateStrings.push(projRaw.output);\n  }\n  if (typeof projRaw.data === 'string') {\n    candidateStrings.push(projRaw.data);\n  }\n  if (typeof projRaw.result === 'string') {\n    candidateStrings.push(projRaw.result);\n  }\n\n  let parsed = null;\n  let lastError = null;\n\n  for (const s of candidateStrings) {\n    try {\n      const maybe = JSON.parse(s);\n      if (maybe && typeof maybe === 'object') {\n        parsed = maybe;\n        break;\n      }\n    } catch (e) {\n      lastError = e;\n    }\n  }\n\n  if (!parsed) {\n    throw new Error(\n      'Could not parse ToR JSON from AI Agent output. ' +\n      'Check that the agent returns ONLY a JSON object (no markdown, no prose). ' +\n      (lastError ? `Last parse error: ${lastError.message}` : '')\n    );\n  }\n\n  proj = parsed;\n}\n\n// 2. Base project + client metadata\n\nconst projectId =\n  proj.project_id ||\n  (proj.file_id ? `PRJ_${String(proj.file_id).slice(0, 8)}` : null);\n\nconst projectName = proj.project_name || proj.file_name || 'Unnamed project';\n\nconst clientNameRaw = proj.client_name_raw || null;\nconst clientKey = proj.client_key || null;\nconst clientType = proj.client_type || null;\nconst clientGroup = proj.client_group || null;\n\nconst clientBuyingFactor =\n  proj.client_buying_factor != null ? Number(proj.client_buying_factor) : null;\n\nconst clientDefaultMargin =\n  proj.client_default_margin != null ? Number(proj.client_default_margin) : null;\n\nconst country = proj.country || null;\nconst locGroup = proj.location_group || null;\n\nconst fileId = proj.file_id || null;\nconst fileName = proj.file_name || null;\n\n// 3. Roles array\n\nconst roles = Array.isArray(proj.roles) ? proj.roles : [];\n\nif (!roles.length) {\n  throw new Error(\n    'Parsed ToR JSON contains no roles. ' +\n    'Check that the AI Agent sees the ToR text and returns a \"roles\" array.'\n  );\n}\n\n// 4. Build items array: one per role\n\nconst items = roles.map((r, idx) => {\n  const roleId = r.role_id || `R${idx + 1}`;\n\n  const roleTitle = r.role_title || null;\n  const roleLevel = r.role_level_required || null;\n  const roleDays =\n    typeof r.role_days === 'number'\n      ? r.role_days\n      : r.role_days != null\n      ? Number(r.role_days)\n      : null;\n\n  const roleSkill = r.role_skill_area || null;\n\n  const roleLangs = Array.isArray(r.role_languages_required)\n    ? r.role_languages_required\n    : [];\n  const roleLangsStr = roleLangs.join(', ');\n\n  const roleScarcityIds = Array.isArray(r.role_scarcity_ids)\n    ? r.role_scarcity_ids\n    : [];\n  const roleScarcityStr = roleScarcityIds.join(', ');\n\n  return {\n    json: {\n      project_id: projectId,\n      project_name: projectName,\n\n      client_name_raw: clientNameRaw,\n      client_key: clientKey,\n      client_type: clientType,\n      client_group: clientGroup,\n      client_buying_factor: clientBuyingFactor,\n      client_default_margin: clientDefaultMargin,\n\n      country,\n      location_group: locGroup,\n      file_id: fileId,\n      file_name: fileName,\n\n      role_id: roleId,\n      role_title: roleTitle,\n      role_level_required: roleLevel,\n      role_days: roleDays,\n      role_skill_area: roleSkill,\n      role_languages_required: roleLangsStr,\n      role_scarcity_ids: roleScarcityStr,\n\n      // To be filled manually later\n      consultant_email: null\n    }\n  };\n});\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "fc955ba5-f225-4853-8368-3b2508be835c",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $json.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "project_id": "={{ $json.project_id }}",
+            "project_name": "={{ $json.project_name }}",
+            "client_name_raw": "={{ $json.client_name_raw }}",
+            "client_key": "={{ $json.client_key }}",
+            "client_type": "={{ $json.client_type }}",
+            "client_group": "={{ $json.client_group }}",
+            "client_buying_factor": "={{ $json.client_buying_factor }}",
+            "client_default_margin": "={{ $json.client_default_margin }}",
+            "country": "={{ $json.country }}",
+            "location_group": "={{ $json.location_group }}",
+            "file_id": "={{ $json.file_id }}",
+            "file_name": "={{ $json.file_name }}",
+            "role_id": "={{ $json.role_id }}",
+            "role_title": "={{ $json.role_title }}",
+            "role_level_required": "={{ $json.role_level_required }}",
+            "role_days": "={{ $json.role_days }}",
+            "role_skill_area": "={{ $json.role_skill_area }}",
+            "role_languages_required": "={{ $json.role_languages_required }}",
+            "role_scarcity_ids": "={{ $json.role_scarcity_ids }}",
+            "consultant_email": "={{ $json.consultant_email }}"
+          },
+          "matchingColumns": [
+            "project_id"
+          ],
+          "schema": [
+            {
+              "id": "project_id",
+              "displayName": "project_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "project_name",
+              "displayName": "project_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_name_raw",
+              "displayName": "client_name_raw",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_key",
+              "displayName": "client_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_type",
+              "displayName": "client_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_group",
+              "displayName": "client_group",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_buying_factor",
+              "displayName": "client_buying_factor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_default_margin",
+              "displayName": "client_default_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "location_group",
+              "displayName": "location_group",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "file_id",
+              "displayName": "file_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "file_name",
+              "displayName": "file_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_id",
+              "displayName": "role_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_title",
+              "displayName": "role_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_level_required",
+              "displayName": "role_level_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_days",
+              "displayName": "role_days",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_skill_area",
+              "displayName": "role_skill_area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_languages_required",
+              "displayName": "role_languages_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_scarcity_ids",
+              "displayName": "role_scarcity_ids",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_email",
+              "displayName": "consultant_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2672,
+        0
+      ],
+      "id": "ca131f01-a342-432a-b832-22a918601cc2",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 806182928,
+          "mode": "list",
+          "cachedResultName": "Client_Factors",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16W89cBD_YA1UAaZBWwFvXeyqc_7BAxUEnJxHSd9Hsvk/edit#gid=806182928"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        336
+      ],
+      "id": "d6647f75-bded-491b-b764-9bab0ffd63e5",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit?usp=drivesdk",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com(?:\\/.*|)\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "title": "=Team_{{ $json.file_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1392,
+        0
+      ],
+      "id": "34ac6e68-bd7e-44a2-9410-978ef039d19b",
+      "name": "Create sheet",
+      "executeOnce": false,
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create sheet').item.json.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "project_id",
+              "displayName": "project_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "project_name",
+              "displayName": "project_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_name_raw",
+              "displayName": "client_name_raw",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_key",
+              "displayName": "client_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_type",
+              "displayName": "client_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_group",
+              "displayName": "client_group",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_buying_factor",
+              "displayName": "client_buying_factor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_default_margin",
+              "displayName": "client_default_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "location_group",
+              "displayName": "location_group",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "file_id",
+              "displayName": "file_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "file_name",
+              "displayName": "file_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_id",
+              "displayName": "role_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_title",
+              "displayName": "role_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_level_required",
+              "displayName": "role_level_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_days",
+              "displayName": "role_days",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_skill_area",
+              "displayName": "role_skill_area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_languages_required",
+              "displayName": "role_languages_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role_scarcity_ids",
+              "displayName": "role_scarcity_ids",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consultant_email",
+              "displayName": "consultant_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2128,
+        0
+      ],
+      "id": "3f19c4f4-f191-4bdd-91ff-c245882d1932",
+      "name": "write header row",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// FLOW 2 — Project_Helper_Calculator_v1 — Code node: \"Build header row\"\n// Replace the entire node code with this.\n//\n// What this does:\n// - Keeps your existing columns\n// - Adds explicit, transparent calculation columns so team leads can see EXACTLY\n//   how buy/sell/budget/margin are computed per selected consultant.\n// - These columns are designed to be filled by Flow 3 (when consultant_email is set)\n//   OR by sheet formulas (if you later prefer sheet-native calculation).\n//\n// Source: this node currently creates the header+blank template for each project sheet. :contentReference[oaicite:1]{index=1}\n\nreturn [\n  {\n    json: {\n      // --- Project meta / role definition (Flow 2) ---\n      project_id: \"\",\n      project_name: \"\",\n      client_name_raw: \"\",\n      client_key: \"\",\n      client_type: \"\",\n      client_group: \"\",\n      client_buying_factor: \"\",\n      client_default_margin: \"\",\n      country: \"\",\n      location_group: \"\",\n      file_id: \"\",\n      file_name: \"\",\n\n      role_id: \"\",\n      role_title: \"\",\n      role_level_required: \"\",\n      role_days: \"\",\n      role_skill_area: \"\",\n      role_languages_required: \"\",\n      role_scarcity_ids: \"\",\n\n      // --- Team lead input (dropdown) ---\n      consultant_email: \"\",\n\n      // --- Shortlist outputs (Flow 3) ---\n      shortlist_status: \"\",\n      shortlist_top3_emails: \"\",\n      shortlist_top3_names: \"\",\n      shortlist_top3_fit_scores: \"\",\n      shortlist_json: \"\",\n\n      // --- Selected consultant enrichment (Flow 3) ---\n      consultant_name: \"\",\n      consultant_level_id: \"\",\n      consultant_level_label: \"\",\n      consultant_currency: \"\",\n      consultant_fit_score: \"\",\n\n      // --- Final outputs (Flow 3 or formulas) ---\n      consultant_buy_rate: \"\",\n      consultant_sell_rate: \"\",\n      consultant_budget_total: \"\",\n      rate_status: \"\",\n      rate_error_message: \"\",\n      rate_debug_json: \"\",\n\n      // ==========================================================\n      // NEW: Transparent calculation breakdown columns\n      // ==========================================================\n\n      // Individual band (from master profile)\n      calc_base_min_rate: \"\",\n      calc_base_max_rate: \"\",\n      calc_base_suggested_rate: \"\",\n\n      // Scarcity matching\n      calc_role_scarcity_ids: \"\",           // parsed/cleaned role scarcity ids (csv)\n      calc_consultant_scarcity_ids: \"\",     // parsed/cleaned consultant scarcity ids (csv)\n      calc_matched_scarcity_ids: \"\",        // intersection(role, consultant)\n      calc_scarcity_uplift_mult: \"\",        // multiplicative uplift before cap (e.g. 1.12)\n      calc_scarcity_uplift_mult_capped: \"\", // after cap (e.g. max 1.20)\n      calc_scarcity_cap_applied: \"\",        // TRUE/FALSE\n\n      // Client & location factors\n      calc_client_buying_factor: \"\",\n      calc_location_factor: \"\",             // placeholder (1.0 for now)\n      calc_margin_pct_default: \"\",          // client default margin\n\n      // Buy rate path (transparent)\n      calc_buy_rate_raw: \"\",                // baseSuggested * scarcity * client * location\n      calc_buy_rate_clamped: \"\",            // clamped within [baseMin, baseMax]\n      calc_buy_rate_clamp_reason: \"\",       // BELOW_MIN / ABOVE_MAX / NONE\n\n      // Sell + budgets + margin (transparent)\n      calc_sell_rate: \"\",                   // buy * (1 + margin)\n      calc_days: \"\",                        // role_days parsed numeric\n      calc_budget_buy_total: \"\",            // buy * days\n      calc_budget_sell_total: \"\",           // sell * days\n      calc_margin_abs: \"\",                  // sell_total - buy_total\n      calc_margin_pct_realized: \"\"          // margin_abs / sell_total\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1696,
+        0
+      ],
+      "id": "25fdeaa9-7c5f-4632-9c79-4ff092f23659",
+      "name": "Build header row"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Attach the newly created sheetId from \"Create sheet\"\n// to each role item produced by \"Code in JavaScript\".\n\n// sheet info: current input (from Create sheet)\nconst sheetInfo = $json;\nconst sheetId = $('Create sheet').first().json.sheetId;\n\n// all role items from the flattening node\nconst roleItems = $items('Code in JavaScript');\n\nif (!roleItems.length) {\n  throw new Error('No role items found from \"Code in JavaScript\".');\n}\n\n// For each role, add sheetId\nconst out = roleItems.map(item => {\n  return {\n    json: {\n      ...item.json,\n      sheetId\n    }\n  };\n});\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2384,
+        0
+      ],
+      "id": "8dc1f810-6dae-4668-8872-fad5c3c6c01d",
+      "name": "Attach sheetID"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Build Project Index Row\n * -----------------------\n * Input: the first role item (all have project_id, project_name, file_name, file_id, sheetId)\n * Output: one item for Project_Index\n */\n\n// get first role item (each has project metadata)\nconst item = $json;\n\n// required fields\nconst project_id   = item.project_id;\nconst project_name = item.project_name;\nconst file_id      = item.file_id;\nconst file_name    = item.file_name;\nconst sheet_id     = item.sheetId;\nconst sheet_name   = `Team1_${file_name}`;\nconst now          = new Date().toISOString();\n\n// output ONE row\nreturn [\n  {\n    json: {\n      project_id,\n      project_name,\n      file_id,\n      file_name,\n      sheet_id,\n      sheet_name,\n      status: \"ACTIVE\",\n      created_at: now,\n      last_shortlist_run_at: \"\"\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2688,
+        272
+      ],
+      "id": "cbbddf42-c0e0-4f2a-ba6a-a5fd21611557",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "list",
+          "cachedResultName": "Expert_Profile_Extended_Source_of_Truth",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1525764996,
+          "mode": "list",
+          "cachedResultName": "Project_Index",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit#gid=1525764996"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "project_id": "={{ $json.project_id }}",
+            "project_name": "={{ $json.project_name }}",
+            "sheet_id": "={{ $json.sheet_id }}",
+            "file_id": "={{ $json.file_id }}",
+            "file_name": "={{ $json.file_name }}",
+            "sheet_name": "={{ $json.sheet_name }}",
+            "status": "={{ $json.status }}",
+            "created_at": "={{ $json.created_at }}",
+            "last_shortlist_run_at": "={{ $json.last_shortlist_run_at }}"
+          },
+          "matchingColumns": [
+            "project_id"
+          ],
+          "schema": [
+            {
+              "id": "project_id",
+              "displayName": "project_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "project_name",
+              "displayName": "project_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "file_id",
+              "displayName": "file_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "file_name",
+              "displayName": "file_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sheet_id",
+              "displayName": "sheet_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sheet_name",
+              "displayName": "sheet_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_shortlist_run_at",
+              "displayName": "last_shortlist_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3136,
+        272
+      ],
+      "id": "625d77a8-0380-4628-8e52-c054bb00672b",
+      "name": "Append or update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"requests\": [\n    {\n      \"setDataValidation\": {\n        \"range\": {\n          \"sheetId\": 0,\n          \"startRowIndex\": 4,\n          \"endRowIndex\": 5,\n          \"startColumnIndex\": 0,\n          \"endColumnIndex\": 4\n        },\n        \"rule\": {\n          \"condition\": {\n            \"type\": \"ONE_OF_LIST\",\n            \"values\": [\n              { \"userEnteredValue\": \"Validated\" },\n              { \"userEnteredValue\": \"Pending Validation\" },\n              { \"userEnteredValue\": \"Expert\" }\n            ]\n          },\n          \"showCustomUi\": true,\n          \"strict\": true\n        }\n      }\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2512,
+        -560
+      ],
+      "id": "bdab22da-3b6c-4985-b323-42241fbf408f",
+      "name": "HTTP Request",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/values/A1:append?valueInputOption=USER_ENTERED",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"values\": [\n    [\"Test\", \"test\", \"test\", \"test\", \"test\", \"\", \"test\"]\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1904,
+        -496
+      ],
+      "id": "adb60788-dcde-46df-888c-8b23c7ae85f2",
+      "name": "fetch row and column index",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"setDataValidation\": {\n        \"range\": {\n          \"sheetId\": 0,\n          \"startRowIndex\": {{ parseInt($json.updates.updatedRange.match(/\\d+/)[0]) - 1 }},\n          \"endRowIndex\": {{ parseInt($json.updates.updatedRange.match(/\\d+/)[0]) }},\n          \"startColumnIndex\": 5,\n          \"endColumnIndex\": 6\n        },\n        \"rule\": {\n          \"condition\": {\n            \"type\": \"ONE_OF_LIST\",\n            \"values\": [\n              { \"userEnteredValue\": \"Validated\" },\n              { \"userEnteredValue\": \"Pending Validation\" },\n              { \"userEnteredValue\": \"Expert\" }\n            ]\n          },\n          \"showCustomUi\": true,\n          \"strict\": true\n        }\n      }\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2208,
+        -400
+      ],
+      "id": "775905d1-b437-4245-88db-21fb7d9a33e5",
+      "name": "append dropdown column",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-09T07:12:10.397Z",
+      "createdAt": "2025-12-09T07:12:10.397Z",
+      "role": "workflow:owner",
+      "workflowId": "DoTJjpS3QDgB7RjH",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-12T06:48:04.286Z",
+  "versionId": "c39e27d8-a4aa-4180-9ef8-13ec54cd981b"
+}
