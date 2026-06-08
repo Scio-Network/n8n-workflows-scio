@@ -1,0 +1,543 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "fetch urls(stakeholders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "URL EXTRACTING AGENT": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Jina Ai Scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetch urls(stakeholders": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "News Verification Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call processNewsUrls": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Call processNewsUrls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "News Verification Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "status code routing": {
+      "main": [
+        [
+          {
+            "node": "Firecrawl Api",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Status Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Firecrawl Api": {
+      "main": [
+        [
+          {
+            "node": "URL EXTRACTING AGENT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Status Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jina Ai Scraper": {
+      "main": [
+        [
+          {
+            "node": "URL EXTRACTING AGENT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "status code routing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status Code": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-23T13:56:33.439Z",
+  "id": "6OlB8wojyaMvRiGm",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_website_Ingestion_stakeholders(C) copy",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "id": "f7da7ed7-dd3c-4340-b528-b05ed51d9380",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1872,
+        3672
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Here is the Noisy Markdown Content for you to analyze:{{ $json.data }}"
+            },
+            {
+              "role": "system",
+              "content": "# 🤖 ROLE: PRECISION DATA AUDITOR & LINK SCOUT\nYour objective is to audit noisy Markdown, strip away all site infrastructure, and extract every valid News/Project/Report URL into a structured JSON list.\n\n# 🎯 THE GOAL\nCreate an exhaustive inventory of all mission-critical links. By \"Mission-Critical,\" I mean anything related to News, Projects, Reports, or Updates.\n\n# 🛠️ AUDIT LOGIC\n1. **IGNORE/DELETE (Noise):** Mentally discard Navigation menus, Language switchers, Social Media links, Privacy/Terms, and the long list of countries in the footer.\n2. **IDENTIFY (Critical Content):** Locate every text cluster that represents a News Posting, a Current Project, or a Publication.\n3. **EXTRACT:** For every item identified, capture:\n   - headline: The original verbatim headline.\n   - url: The exact, absolute URL.\n   - snippet: The original teaser text provided in the input.\n-date: if the url or article has a date extract otherwise default date to 0000-00-00\n\n# 📜 CRITICAL RULES\n- **ZERO LOSS:** You must not skip a single news article or project link found in the content.\n- **VERBATIM:** Headlines and snippets must be 100% identical to the input text.\n- **LIGHTWEIGHT OUTPUT:**  Return ONLY the JSON OBJECT.\n\n# 📥 INPUT\nYou will receive a raw Markdown dump from a website.\n\n# 📤 OUTPUT\nA JSON object containing an array called `news_list`."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"news_list\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"headline\": { \"type\": \"string\" },\n          \"url\": { \"type\": \"string\" },\n          \"snippet\": { \"type\": \"string\" },\n          \"published_date\": { \"type\": \"string\" }\n        },\n        \"required\": [\"headline\", \"url\", \"snippet\",\"published_date\" ],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\"news_list\"],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -528,
+        3264
+      ],
+      "id": "dd15a6b3-7ecd-45e2-928e-41f98c754a32",
+      "name": "URL EXTRACTING AGENT",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1424,
+        3672
+      ],
+      "id": "ca402a0a-328d-4ba3-8632-a1da342abf51",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "stakeholders",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "website_url",
+              "condition": "neq",
+              "keyValue": "\"\""
+            },
+            {
+              "keyName": "err_status",
+              "condition": "is",
+              "keyValue": "null"
+            }
+          ]
+        }
+      },
+      "id": "d35515aa-8214-4906-ba44-5f1dbb28a80a",
+      "name": "fetch urls(stakeholders",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1648,
+        3672
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -176,
+        3264
+      ],
+      "id": "9178edf1-d7fa-42d6-a3c8-e9604466c9f6",
+      "name": "Wait1",
+      "webhookId": "9225a7a5-72b1-45f5-bf96-02b5e0329836"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "1UgLPoBhDLnVCowQ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/1UgLPoBhDLnVCowQ",
+          "cachedResultName": "processNewsUrls"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        3456
+      ],
+      "name": "Call processNewsUrls",
+      "id": "a2534517-c789-49fb-88fd-7069cdad47d8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bdf12f9b-aad5-4799-a76a-7f17b5dc65e8",
+              "name": "news_data",
+              "value": "={{ $('URL EXTRACTING AGENT').item.json.output[0].content[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "3ec6efa7-7154-43d5-8cb2-42b8d9da11ed",
+              "name": "verified_news",
+              "value": "={{ $json.output[0].content[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        3264
+      ],
+      "id": "df188e7c-172f-4f52-8382-f6a5f17526cf",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.2",
+          "mode": "list",
+          "cachedResultName": "GPT-5.2"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "=# Persona\nYou are a News Verification Analyst — a precise, methodical agent that inspects web content \nand determines whether a given article or page represents genuine, time-bound news reporting \nor is simply evergreen/landing page website content.\n\n---\n\n# Task\nYour task is to analyze a list of content items — each containing a headline, URL, snippet, \nand published date — and determine:\n1. Whether the content is actual **news** (a specific, time-bound event or announcement) \n   OR **landing page / general website content** (promotional, static, or evergreen in nature).\n2. Whether a valid **published date** exists for the content. If not, assign a sensible default.\n3. The official English name of the organization or publication providing the content.\n\n---\n\n# Inputs\nYou will receive a JSON array where each item contains:\n- `headline` — the title or heading of the content\n- `url` — the source URL of the content\n- `snippet` — a short excerpt or description of the content\n- `published_date` — the date the content was published (may be missing (set to \"0000-00-00\"))\n\nExample input:\n[\n  {\n    \"headline\": \"Lviv Resilience Hub\",\n    \"url\": \"https://city-institute.org/projects/lviv-resilience-hub\",\n    \"snippet\": \"Lviv Resilience Hub має на меті інституціоналізацію ініціативи...\",\n    \"published_date\": \"0000-00-00\"\n  }\n]\n\n---\n\n# Step-by-Step Procedure\n\n**Step 1 — Fetch and inspect the URL**\nUse the `web_search` tool to search for the given URL or headline. Visit the page and examine:\n- The page structure (is it a project/program page, or an article/post?)\n- The presence of a byline, datestamp, or article metadata\n- Whether the content describes an ongoing initiative vs. a specific event or breaking news\n\n**Step 2 — Classify the content**\nBased on your inspection, determine:\n- **Is it news?** Content qualifies as news if it reports on a specific event, announcement, \n  incident, or development that is time-bound (e.g., \"City launches new program on March 5th\", \n  \"Conference results published\", \"New policy announced\").\n- **Is it a landing page?** Content is NOT news if it describes an ongoing project, service \n  offering, organization overview, or general initiative without a specific triggering event.\n\n**Step 3 — Verify or assign the published date**\n- If a valid date exists in the `published_date` field (format: YYYY-MM-DD), confirm it \n  matches what's shown on the page.\n- If the date is missing, invalid (e.g., \"0000-00-00\"), or cannot be found on the page, \n  assign the default value: `\"2025-01-01\"`.\n\n**Step 4 -  Identify Source Name**\nSource Name: Identify the official name of the organization or website in English (e.g., \"Ministry of Defense of Ukraine\" or \"City Institute of Lviv\").\n\n**Step 5 — Compose your explanation**\nWrite a concise 1–2 sentence explanation describing:\n- What the content actually is (project page, news article, event recap, etc.)\n- Why you classified it as news or not news.\n\n\n---\n\n# Final Output\nReturn a JSON array. Each object must include ALL original input fields unchanged, \nplus this 3  additional fields:\n\n- `explanation` (string) — your reasoning for the classification\n- `is_news` (boolean) — `true` if the content is genuine news, `false` if it is landing page or general website content\n- stakeholder_id- map this directly fron the previous node\n- source_url — map this directly fron the previous node\n- name_en- this is the name you generated in step 4\n\nOutput format:\n[\n  {\n    \"headline\": \"<original value>\",\n    \"url\": \"<original value>\",\n    \"snippet\": \"<original value>\",\n    \"published_date\": \"<verified or default date>\",\n    \"explanation\": \"generated exaaplnation\",\n    \"is_news\": \"Boolean\"\n    \"name_en\": \"Identfied source name\"\n   \"stakeholder_id\": \"{{ $('fetch urls(stakeholders').item.json.id }}\"\n   \"source_url\": \"{{ $('Loop Over Items').item.json.website_url }}\"\n  }\n]\n\n"
+            },
+            {
+              "content": "=Process this news item and return if its valid or not\n{{ JSON.stringify($json.output[0].content[0].text.news_list) }}\n"
+            }
+          ]
+        },
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "medium"
+          }
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        3264
+      ],
+      "id": "cfedd994-f400-4085-a1ec-2dca5e9e66d8",
+      "name": "News Verification Agent",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "990f6268-52a4-4ab2-8d56-c09ffbad9234",
+              "leftValue": "={{ $json.error.status }}",
+              "rightValue": 403,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -976,
+        3456
+      ],
+      "id": "eafd2907-68f8-41cf-b958-690e41dbfebe",
+      "name": "status code routing"
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/x",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-With-Links-Summary",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -752,
+        3384
+      ],
+      "id": "b481f38b-11d3-4889-8e88-093a134541c2",
+      "name": "Firecrawl Api",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $json.website_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-With-Links-Summary",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1200,
+        3384
+      ],
+      "id": "15091bc1-3f33-4d88-b713-a43feeea719f",
+      "name": "Jina Ai Scraper",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "stakeholders",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "err_status",
+              "fieldValue": "={{ $json.error.code }}"
+            },
+            {
+              "fieldId": "error_code",
+              "fieldValue": "={{ $json.error.status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        3528
+      ],
+      "id": "cdf68192-72b3-47af-8349-36e197b19c7c",
+      "name": "Update Status Code",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-23T13:56:33.443Z",
+      "createdAt": "2026-03-23T13:56:33.443Z",
+      "role": "workflow:owner",
+      "workflowId": "6OlB8wojyaMvRiGm",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        0
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-23T14:39:26.000Z",
+  "versionId": "863b9793-0104-40ec-b6d5-a4a156e70a40"
+}
