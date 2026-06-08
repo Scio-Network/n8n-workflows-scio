@@ -1,0 +1,1393 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-05T11:24:15.985Z",
+    "createdAt": "2026-06-05T11:24:15.985Z",
+    "versionId": "c16be764-cfef-4e1b-aea6-73683bc2ccd2",
+    "workflowId": "YLTCE4xXNuGhG4NH",
+    "nodes": [
+      {
+        "parameters": {
+          "fieldToSplitOut": "data",
+          "include": "allOtherFields",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1424,
+          1424
+        ],
+        "id": "87eee8d8-4809-4d66-aa00-f72962c4bea5",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "gpt-4.1-mini",
+            "mode": "list",
+            "cachedResultName": "GPT-4.1-MINI"
+          },
+          "responses": {
+            "values": [
+              {
+                "content": "=# Role\nYou are a multilingual policy and infrastructure analysis assistant with expertise in public-sector news, disaster risk management, infrastructure, housing, and urban resilience.\n\n# Task\nGiven a news article **title** and **content**, perform the following tasks using ONLY the provided input text:\n\n---\n\n## 1. Title Translation\n- Translate the article title into **German** and in **English**\n- Preserve the original meaning\n\n---\n\n## 2. Context Summarization\nGenerate **two short summaries**, each **1–2 sentences**, capturing the main context of the article:\n- One summary in **English**\n- One summary in **German**\n\n## 3. Date Transformation\nConvert the provided Ukrainian date into the ISO standard **YYYY-MM-DD** format.\n\nRules:\n- Be concise, factual, and neutral\n- Do not speculate or introduce external information\n- Use only the provided content\n\n---\n\n## 3. Sector Classification\nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors (STRICT LIST — no other values allowed)\n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- If unclear or ambiguous, **default to \"Basic Infrastructure\"**\n- Do NOT invent categories or infer beyond the text\n\n---\n\n## Input\n- **Article Title:** {{ $json.title }}\n- **Article Content:** {{ $json.content }}\n\n---\n\n## Output Format (STRICT)\nReturn a JSON object with the following fields\n\n{\n  \"title_de\": \"German translation of title\",\n  \"title_en\": \"English translation of title\",\n  \"summary_en\": \"English summary\",\n  \"summary_de\": \"German summary\",\n  \"source_url\":{{ $json.link }} ,\n\"n8n_content_hash\":{{ $json.n8n_content_hash }},\n   \"published_date\": \"{{ $json.date }}\",\n   \"source_id\": {{ $json.source_id }}\n  \"sector_classification\": []\n}\n"
+              }
+            ]
+          },
+          "builtInTools": {},
+          "options": {
+            "textFormat": {
+              "textOptions": {
+                "type": "json_object"
+              }
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.openAi",
+        "typeVersion": 2.1,
+        "position": [
+          3744,
+          1472
+        ],
+        "id": "e2db5202-07e2-40cb-b3fa-5bc427ce985d",
+        "name": "Message a model",
+        "credentials": {
+          "openAiApi": {
+            "id": "a4ja82V4nnlunpii",
+            "name": "openai"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "sources",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "name_en",
+                "keyValue": "Ministry for Development of Communities and Territories of Ukraine - News"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          976,
+          1648
+        ],
+        "id": "76c6acd5-f3d3-43e4-bf90-e6308079c2fd",
+        "name": "Get a row1",
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get the stakeholder ID from the Supabase node\nconst stakeholder = $items(\"Get a row1\")[0]?.json;\n\nif (!stakeholder?.id) {\n  throw new Error(\"Missing stakeholder.id from Supabase node 'Get a row1'\");\n}\n\nconst sourceId = stakeholder.id;\n\n// Transform the items\nreturn $input.all().map((item) => {\n  return {\n    json: {\n      content: item.json.data.content,\n      date: item.json.data.date,\n      link: item.json.data.link,\n      title: item.json.data.title,\n      source_id: sourceId\n    }\n  };\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2112,
+          1440
+        ],
+        "id": "3e677d06-8705-4e72-9256-9af11ceeec07",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "mode": "chooseBranch"
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          1840,
+          1440
+        ],
+        "id": "fd247a14-42f6-4204-8f0b-895f575025c1",
+        "name": "Merge1"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 5
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -144,
+          1440
+        ],
+        "id": "f5360b3f-98f9-4866-abbd-e698d64b868e",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "// Run Once for Each Item ✅\n// Normalizes website-scraped article + computes stable SHA-256 hash for deduping\n\nconst crypto = require('crypto');\n\nfunction normalizeWhitespace(s) {\n  return String(s ?? '')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction canonicalUrl(url) {\n  const raw = String(url ?? '').trim();\n  if (!raw) return raw;\n\n  try {\n    const u = new URL(raw);\n\n    // Drop common tracking params\n    const drop = new Set([\n      'utm_source','utm_medium','utm_campaign','utm_term','utm_content',\n      'at_medium','at_campaign','at_custom1','at_custom2','at_custom3',\n      'fbclid','gclid','igshid','mc_cid','mc_eid'\n    ]);\n\n    for (const k of [...u.searchParams.keys()]) {\n      if (drop.has(k.toLowerCase())) u.searchParams.delete(k);\n    }\n\n    // Sort remaining params for stability\n    const params = [...u.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b));\n    u.search = '';\n    for (const [k, v] of params) u.searchParams.append(k, v);\n\n    // Normalize trailing slashes\n    u.pathname = u.pathname.replace(/\\/+$/, '');\n\n    return u.toString();\n  } catch {\n    return raw;\n  }\n}\n\nfunction sha256Hex(input) {\n  return crypto.createHash('sha256').update(input, 'utf8').digest('hex');\n}\n\n// ---- INPUT MAPPING (current item) ----\nconst source_id = $json.source_id ?? ''; \nconst urlCanon = canonicalUrl($json.link ?? ''); // \nconst titleNorm = normalizeWhitespace($json.title ?? '');\nconst contentNorm = normalizeWhitespace($json.content ?? '');\n\n// Stable hash material (don’t depend on LLM output)\nconst hashMaterial = [\n  'v1',\n  source_id,\n  urlCanon,\n  titleNorm.toLowerCase(),\n  contentNorm.toLowerCase()\n].join('|');\n\nconst n8n_content_hash = sha256Hex(hashMaterial);\n\n// IMPORTANT in per-item mode: return a SINGLE item object\nreturn {\n  json: {\n    ...$json,\n    n8n_content_hash,\n    content_hash: n8n_content_hash // optional mirror\n  },\n};\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2400,
+          1440
+        ],
+        "id": "798f0c18-76ac-49f9-bd26-fca32a18ec79",
+        "name": "Normalize website items",
+        "executeOnce": false,
+        "alwaysOutputData": true,
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "fieldsToMatchString": "n8n_content_hash",
+          "joinMode": "enrichInput1",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          3232,
+          1456
+        ],
+        "id": "26a9f73e-0051-481b-9f0b-348ac3bdc2c7",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "ed594a5d-b9e1-4a47-b1b5-da685b0b0a13",
+                "leftValue": "={{ $json.__is_duplicate }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          3472,
+          1456
+        ],
+        "id": "acb40f42-7633-4468-aec9-d774d9a1a620",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "articles",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "n8n_content_hash",
+                "condition": "eq",
+                "keyValue": "={{ $json.n8n_content_hash }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          2736,
+          1728
+        ],
+        "id": "e55c20cc-f634-487f-a2a7-c066a8761073",
+        "name": "Get many rows",
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          4208,
+          1472
+        ],
+        "id": "032e0c59-c8cf-4a5d-95b6-024452ae1751",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "url": "https://vj9wz3gt-8080.uks1.devtunnels.ms/scrape",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "start",
+                "value": "={{ $json.start.split('T')[0] }}"
+              },
+              {
+                "name": "end",
+                "value": "={{ $json.end.split('T')[0] }}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": false,
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1184,
+          1424
+        ],
+        "id": "4c95f3b4-1b14-4cd3-b760-76e69aff5d82",
+        "name": "Dev of Communities and Territories1"
+      },
+      {
+        "parameters": {
+          "tableId": "articles",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "summary_en",
+                "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+              },
+              {
+                "fieldId": "source_url",
+                "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+              },
+              {
+                "fieldId": "primary_sector",
+                "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+              },
+              {
+                "fieldId": "summary_en",
+                "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+              },
+              {
+                "fieldId": "published_date",
+                "fieldValue": "={{ $json.output[0].content[0].text.published_date }}"
+              },
+              {
+                "fieldId": "source_url",
+                "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+              },
+              {
+                "fieldId": "summary_de",
+                "fieldValue": "={{ $json.output[0].content[0].text.summary_de }}"
+              },
+              {
+                "fieldId": "title_de",
+                "fieldValue": "={{ $json.output[0].content[0].text.title_de }}"
+              },
+              {
+                "fieldId": "title_en",
+                "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+              },
+              {
+                "fieldId": "source_url",
+                "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+              },
+              {
+                "fieldId": "title_uk",
+                "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+              },
+              {
+                "fieldId": "article_type",
+                "fieldValue": "news"
+              },
+              {
+                "fieldId": "source_id",
+                "fieldValue": "={{ $json.output[0].content[0].text.source_id }}"
+              },
+              {
+                "fieldId": "n8n_content_hash",
+                "fieldValue": "={{ $json.output[0].content[0].text.n8n_content_hash }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          4496,
+          1488
+        ],
+        "id": "26a975ee-f13c-4e40-9646-359a281e3359",
+        "name": "Create a row1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "articles",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "source_id",
+                "keyValue": "ef4b6093-56fa-4b73-baee-c8607481424d"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          256,
+          1296
+        ],
+        "id": "74c58c2c-01d2-4b3d-ae81-14701ecac552",
+        "name": "Get a row",
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "MlU51CIejkM7G5Fa",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "55cda4a2-4cbd-4d3b-a35a-f86007759a21",
+                "name": "start",
+                "value": "={{ $json.latestDate }}",
+                "type": "string"
+              },
+              {
+                "id": "139557c9-6495-4345-ae6a-ee17049857e3",
+                "name": "end",
+                "value": "={{ $json.timestamp }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          976,
+          1424
+        ],
+        "id": "39ab4237-c282-43cd-8add-35008a28bc42",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "jsCode": "const dateFields = [\n  'created_at',\n  'updated_at',\n  'ingested_at',\n  'validated_at',\n  'embedded_at',\n  'next_retry_at',\n];\n\nlet latestDate = null;\nlet latestTime = -Infinity;\n\nfor (const item of items) {\n  for (const field of dateFields) {\n    const value = item.json[field];\n    if (!value) continue;\n\n    const time = new Date(value).getTime();\n    if (!isNaN(time) && time > latestTime) {\n      latestTime = time;\n      latestDate = value;\n    }\n  }\n}\n\nreturn [\n  {\n    json: {\n      latestDate,\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          496,
+          1296
+        ],
+        "id": "5b7d372a-9aab-45cb-9a99-2f8d25ebce4c",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          752,
+          1424
+        ],
+        "id": "449b06a7-dbce-4a2b-8f17-b67c04387c0f",
+        "name": "Merge2"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "// 1. Get the result from Supabase (the current node input)\nconst supabaseRow = $json;\n\n// 2. Reach back to get the hash from the \"Normalize website items\" node\n// This ensures the hash is NEVER null, allowing the Merge node to find it.\nconst originalHash = $node[\"Normalize website items\"].json[\"n8n_content_hash\"];\n\n// 3. Determine if it's a duplicate based on whether Supabase returned an ID\nconst isDuplicate = !!(supabaseRow && supabaseRow.id);\n\nreturn {\n  json: {\n    n8n_content_hash: originalHash, // This connects back to the Merge node\n    __is_duplicate: isDuplicate,\n    __dup_row_id: supabaseRow.id || null\n  }\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2928,
+          1728
+        ],
+        "id": "3d2975e8-a8ea-4ad8-9b74-08698b6d2325",
+        "name": "Compute duplication1"
+      }
+    ],
+    "connections": {
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Message a model": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a row1": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Normalize website items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Get a row1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Get a row",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge2",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Normalize website items": {
+        "main": [
+          [
+            {
+              "node": "Get many rows",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Message a model",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many rows": {
+        "main": [
+          [
+            {
+              "node": "Compute duplication1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Create a row1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Dev of Communities and Territories1": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a row1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a row": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Dev of Communities and Territories1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Merge2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge2": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Compute duplication1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      }
+    },
+    "authors": " Scio Network ",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "c16be764-cfef-4e1b-aea6-73683bc2ccd2",
+  "connections": {
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Normalize website items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a row1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Normalize website items": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Compute duplication1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Create a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dev of Communities and Territories1": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Dev of Communities and Territories1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute duplication1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-15T14:41:37.626Z",
+  "id": "YLTCE4xXNuGhG4NH",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_website_Ingestion_MinDev_v1_final",
+  "nodes": [
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        1424
+      ],
+      "id": "87eee8d8-4809-4d66-aa00-f72962c4bea5",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=# Role\nYou are a multilingual policy and infrastructure analysis assistant with expertise in public-sector news, disaster risk management, infrastructure, housing, and urban resilience.\n\n# Task\nGiven a news article **title** and **content**, perform the following tasks using ONLY the provided input text:\n\n---\n\n## 1. Title Translation\n- Translate the article title into **German** and in **English**\n- Preserve the original meaning\n\n---\n\n## 2. Context Summarization\nGenerate **two short summaries**, each **1–2 sentences**, capturing the main context of the article:\n- One summary in **English**\n- One summary in **German**\n\n## 3. Date Transformation\nConvert the provided Ukrainian date into the ISO standard **YYYY-MM-DD** format.\n\nRules:\n- Be concise, factual, and neutral\n- Do not speculate or introduce external information\n- Use only the provided content\n\n---\n\n## 3. Sector Classification\nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors (STRICT LIST — no other values allowed)\n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- If unclear or ambiguous, **default to \"Basic Infrastructure\"**\n- Do NOT invent categories or infer beyond the text\n\n---\n\n## Input\n- **Article Title:** {{ $json.title }}\n- **Article Content:** {{ $json.content }}\n\n---\n\n## Output Format (STRICT)\nReturn a JSON object with the following fields\n\n{\n  \"title_de\": \"German translation of title\",\n  \"title_en\": \"English translation of title\",\n  \"summary_en\": \"English summary\",\n  \"summary_de\": \"German summary\",\n  \"source_url\":{{ $json.link }} ,\n\"n8n_content_hash\":{{ $json.n8n_content_hash }},\n   \"published_date\": \"{{ $json.date }}\",\n   \"source_id\": {{ $json.source_id }}\n  \"sector_classification\": []\n}\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        3744,
+        1472
+      ],
+      "id": "e2db5202-07e2-40cb-b3fa-5bc427ce985d",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "sources",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name_en",
+              "keyValue": "Ministry for Development of Communities and Territories of Ukraine - News"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        976,
+        1648
+      ],
+      "id": "76c6acd5-f3d3-43e4-bf90-e6308079c2fd",
+      "name": "Get a row1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the stakeholder ID from the Supabase node\nconst stakeholder = $items(\"Get a row1\")[0]?.json;\n\nif (!stakeholder?.id) {\n  throw new Error(\"Missing stakeholder.id from Supabase node 'Get a row1'\");\n}\n\nconst sourceId = stakeholder.id;\n\n// Transform the items\nreturn $input.all().map((item) => {\n  return {\n    json: {\n      content: item.json.data.content,\n      date: item.json.data.date,\n      link: item.json.data.link,\n      title: item.json.data.title,\n      source_id: sourceId\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2112,
+        1440
+      ],
+      "id": "3e677d06-8705-4e72-9256-9af11ceeec07",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1840,
+        1440
+      ],
+      "id": "fd247a14-42f6-4204-8f0b-895f575025c1",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        1440
+      ],
+      "id": "f5360b3f-98f9-4866-abbd-e698d64b868e",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Run Once for Each Item ✅\n// Normalizes website-scraped article + computes stable SHA-256 hash for deduping\n\nconst crypto = require('crypto');\n\nfunction normalizeWhitespace(s) {\n  return String(s ?? '')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction canonicalUrl(url) {\n  const raw = String(url ?? '').trim();\n  if (!raw) return raw;\n\n  try {\n    const u = new URL(raw);\n\n    // Drop common tracking params\n    const drop = new Set([\n      'utm_source','utm_medium','utm_campaign','utm_term','utm_content',\n      'at_medium','at_campaign','at_custom1','at_custom2','at_custom3',\n      'fbclid','gclid','igshid','mc_cid','mc_eid'\n    ]);\n\n    for (const k of [...u.searchParams.keys()]) {\n      if (drop.has(k.toLowerCase())) u.searchParams.delete(k);\n    }\n\n    // Sort remaining params for stability\n    const params = [...u.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b));\n    u.search = '';\n    for (const [k, v] of params) u.searchParams.append(k, v);\n\n    // Normalize trailing slashes\n    u.pathname = u.pathname.replace(/\\/+$/, '');\n\n    return u.toString();\n  } catch {\n    return raw;\n  }\n}\n\nfunction sha256Hex(input) {\n  return crypto.createHash('sha256').update(input, 'utf8').digest('hex');\n}\n\n// ---- INPUT MAPPING (current item) ----\nconst source_id = $json.source_id ?? ''; \nconst urlCanon = canonicalUrl($json.link ?? ''); // \nconst titleNorm = normalizeWhitespace($json.title ?? '');\nconst contentNorm = normalizeWhitespace($json.content ?? '');\n\n// Stable hash material (don’t depend on LLM output)\nconst hashMaterial = [\n  'v1',\n  source_id,\n  urlCanon,\n  titleNorm.toLowerCase(),\n  contentNorm.toLowerCase()\n].join('|');\n\nconst n8n_content_hash = sha256Hex(hashMaterial);\n\n// IMPORTANT in per-item mode: return a SINGLE item object\nreturn {\n  json: {\n    ...$json,\n    n8n_content_hash,\n    content_hash: n8n_content_hash // optional mirror\n  },\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        1440
+      ],
+      "id": "798f0c18-76ac-49f9-bd26-fca32a18ec79",
+      "name": "Normalize website items",
+      "executeOnce": false,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "n8n_content_hash",
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3232,
+        1456
+      ],
+      "id": "26a9f73e-0051-481b-9f0b-348ac3bdc2c7",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ed594a5d-b9e1-4a47-b1b5-da685b0b0a13",
+              "leftValue": "={{ $json.__is_duplicate }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3472,
+        1456
+      ],
+      "id": "acb40f42-7633-4468-aec9-d774d9a1a620",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "articles",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "n8n_content_hash",
+              "condition": "eq",
+              "keyValue": "={{ $json.n8n_content_hash }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2736,
+        1728
+      ],
+      "id": "e55c20cc-f634-487f-a2a7-c066a8761073",
+      "name": "Get many rows",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        4208,
+        1472
+      ],
+      "id": "032e0c59-c8cf-4a5d-95b6-024452ae1751",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "url": "https://vj9wz3gt-8080.uks1.devtunnels.ms/scrape",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start",
+              "value": "={{ $json.start.split('T')[0] }}"
+            },
+            {
+              "name": "end",
+              "value": "={{ $json.end.split('T')[0] }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": false,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1184,
+        1424
+      ],
+      "id": "4c95f3b4-1b14-4cd3-b760-76e69aff5d82",
+      "name": "Dev of Communities and Territories1"
+    },
+    {
+      "parameters": {
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.output[0].content[0].text.published_date }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_de }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_de }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "news"
+            },
+            {
+              "fieldId": "source_id",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_id }}"
+            },
+            {
+              "fieldId": "n8n_content_hash",
+              "fieldValue": "={{ $json.output[0].content[0].text.n8n_content_hash }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        4496,
+        1488
+      ],
+      "id": "26a975ee-f13c-4e40-9646-359a281e3359",
+      "name": "Create a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "articles",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "source_id",
+              "keyValue": "ef4b6093-56fa-4b73-baee-c8607481424d"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        256,
+        1296
+      ],
+      "id": "74c58c2c-01d2-4b3d-ae81-14701ecac552",
+      "name": "Get a row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "55cda4a2-4cbd-4d3b-a35a-f86007759a21",
+              "name": "start",
+              "value": "={{ $json.latestDate }}",
+              "type": "string"
+            },
+            {
+              "id": "139557c9-6495-4345-ae6a-ee17049857e3",
+              "name": "end",
+              "value": "={{ $json.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        1424
+      ],
+      "id": "39ab4237-c282-43cd-8add-35008a28bc42",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "const dateFields = [\n  'created_at',\n  'updated_at',\n  'ingested_at',\n  'validated_at',\n  'embedded_at',\n  'next_retry_at',\n];\n\nlet latestDate = null;\nlet latestTime = -Infinity;\n\nfor (const item of items) {\n  for (const field of dateFields) {\n    const value = item.json[field];\n    if (!value) continue;\n\n    const time = new Date(value).getTime();\n    if (!isNaN(time) && time > latestTime) {\n      latestTime = time;\n      latestDate = value;\n    }\n  }\n}\n\nreturn [\n  {\n    json: {\n      latestDate,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        1296
+      ],
+      "id": "5b7d372a-9aab-45cb-9a99-2f8d25ebce4c",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        752,
+        1424
+      ],
+      "id": "449b06a7-dbce-4a2b-8f17-b67c04387c0f",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// 1. Get the result from Supabase (the current node input)\nconst supabaseRow = $json;\n\n// 2. Reach back to get the hash from the \"Normalize website items\" node\n// This ensures the hash is NEVER null, allowing the Merge node to find it.\nconst originalHash = $node[\"Normalize website items\"].json[\"n8n_content_hash\"];\n\n// 3. Determine if it's a duplicate based on whether Supabase returned an ID\nconst isDuplicate = !!(supabaseRow && supabaseRow.id);\n\nreturn {\n  json: {\n    n8n_content_hash: originalHash, // This connects back to the Merge node\n    __is_duplicate: isDuplicate,\n    __dup_row_id: supabaseRow.id || null\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2928,
+        1728
+      ],
+      "id": "3d2975e8-a8ea-4ad8-9b74-08698b6d2325",
+      "name": "Compute duplication1"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-15T14:41:37.631Z",
+      "createdAt": "2026-01-15T14:41:37.631Z",
+      "role": "workflow:owner",
+      "workflowId": "YLTCE4xXNuGhG4NH",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        12
+      ]
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-06-05T11:24:13.835Z",
+      "createdAt": "2026-06-05T11:24:13.835Z",
+      "id": "QoKBB5F8g6736CJQ",
+      "name": "mindev-scraper-wf"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-05T11:24:15.979Z",
+  "versionId": "c16be764-cfef-4e1b-aea6-73683bc2ccd2"
+}
