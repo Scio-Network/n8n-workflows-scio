@@ -1,0 +1,30 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {},
+  "createdAt": "2026-03-17T08:59:34.378Z",
+  "id": "MPmNPvuj31GjkPV1",
+  "isArchived": true,
+  "meta": null,
+  "name": "mindev_new",
+  "nodes": [],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-17T08:59:34.381Z",
+      "createdAt": "2026-03-17T08:59:34.381Z",
+      "role": "workflow:owner",
+      "workflowId": "MPmNPvuj31GjkPV1",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-25T06:52:47.000Z",
+  "versionId": "4072a8ee-c8c9-4ed0-a7f9-3a7d36fa4eb3"
+}
