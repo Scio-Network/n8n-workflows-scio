@@ -1,0 +1,1678 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-05-19T08:40:13.497Z",
+    "createdAt": "2026-05-19T08:40:13.497Z",
+    "versionId": "12007f04-63ff-47dd-9250-9ce4e4edc942",
+    "workflowId": "QglJZiS7fmNgLfsa",
+    "nodes": [
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "triggerOn": "specificFolder",
+          "folderToWatch": {
+            "__rl": true,
+            "value": "https://drive.google.com/drive/folders/1Of9IHd1Kls2NyQEf1o48NfO8rRyoCHOU",
+            "mode": "url"
+          },
+          "event": "fileCreated",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleDriveTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "114d38b7-dfec-4bc8-8674-07a4bf887306",
+        "name": "Google Drive Trigger",
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "qFXNjPFWwXTiV6Sz",
+            "name": "Google Drive account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "download",
+          "fileId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleDrive",
+        "typeVersion": 3,
+        "position": [
+          240,
+          0
+        ],
+        "id": "704422b6-12aa-4604-b038-1c29238b20bb",
+        "name": "Download file",
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "qFXNjPFWwXTiV6Sz",
+            "name": "Google Drive account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          480,
+          0
+        ],
+        "id": "442ea607-f0ab-4aa3-a023-3c4ea0fa50e2",
+        "name": "Extract from File"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=You are an experienced international development project manager and staffing lead.\n\nYou receive the text of a Terms of Reference (ToR) document for a consulting assignment.\nYour task is to extract project metadata and classify the expert roles needed for a rate estimate.\n\nIMPORTANT RULES\n- Output MUST be a single valid JSON object.\n- No markdown. No commentary. No extra keys.\n- Use null when unknown.\n- Use arrays [] for lists when empty.\n- Be conservative. Do not invent facts not present in the ToR.\n- AI classifies roles and provides evidence. It does not decide final rates.\n\nCLASSIFICATION METHOD\nClassify role_level by responsibility, not only years of experience:\n- Junior: supports defined tasks under guidance; no ownership of methodology, client relationship, or final outputs.\n- Intermediate: owns a defined work package independently; prepares client-ready inputs with review.\n- Senior: leads a technical workstream or major deliverable; responsible for technical judgement and quality.\n- Leader: owns the assignment, methodology, client relationship, team leadership, final accountability, or strategic expert role.\n\nUse years of experience as supporting evidence only:\n- 0–3 years often suggests Junior.\n- 3–7 years often suggests Intermediate.\n- 7–15 years often suggests Senior.\n- 15+ years, Team Leader, Lead Expert, Project Director, or overall accountability often suggests Leader.\nBut responsibility language overrides years when clear.\n\nSCARCITY\n- Standard: common consulting capabilities; many suitable experts likely available.\n- Specialist: specific sector, donor, method, geography, or language combination.\n- Niche: rare combination of skills, seniority, language, location, reputation, and availability.\n\nDELIVERY CONTEXT\n- Standard: remote or operationally straightforward; low political/security burden.\n- Complex: travel, multi-stakeholder complexity, weak data, political sensitivity, or high coordination burden.\n- High-risk: fragile/security-sensitive context, difficult access, high reputational risk, or intense political sensitivity.\n\nMOBILISATION SPEED\n- Standard: normal sourcing timeline.\n- Fast: expert must be confirmed within days or timeline is compressed.\n- Immediate: emergency mobilisation or near-immediate start.\n\nCLIENT TYPE\nUse one of: Public, Donor, Foundation, Private, or null.\nClassify commercially, not legally:\n- Public: government/public procurement or public-sector contracting.\n- Donor: bilateral/multilateral donor, UN, GIZ-style technical assistance, INGO if donor-funded.\n- Foundation: philanthropic foundation.\n- Private: company/corporate/private client.\n\nOUTPUT JSON SCHEMA EXACTLY\n{\n  \"project_id\": string | null,\n  \"project_name\": string | null,\n  \"client_name_raw\": string | null,\n  \"client_type\": \"Public\" | \"Donor\" | \"Foundation\" | \"Private\" | null,\n  \"country\": string | null,\n  \"delivery_context\": \"Standard\" | \"Complex\" | \"High-risk\" | null,\n  \"mobilisation_speed\": \"Standard\" | \"Fast\" | \"Immediate\" | null,\n  \"file_id\": string | null,\n  \"file_name\": string | null,\n  \"roles\": [\n    {\n      \"role_id\": string,\n      \"role_title\": string | null,\n      \"role_level\": \"Junior\" | \"Intermediate\" | \"Senior\" | \"Leader\" | null,\n      \"role_days\": number | null,\n      \"years_experience_required\": number | null,\n      \"skill_area\": string | null,\n      \"languages_required\": string[],\n      \"scarcity_level\": \"Standard\" | \"Specialist\" | \"Niche\" | null,\n      \"classification_confidence\": \"High\" | \"Medium\" | \"Low\",\n      \"classification_rationale\": string | null,\n      \"evidence_quotes\": string[]\n    }\n  ]\n}\n\nROLE EXTRACTION RULES\n- Create one role entry per distinct expert position implied or required by the ToR.\n- Ignore purely administrative roles unless clearly part of the expert delivery team.\n- If the ToR specifies role days, extract them. If a range is given, use midpoint.\n- If role days are not stated, use null.\n- Extract minimum years required if explicitly stated. If a range is given, use the lower bound.\n- Keep evidence_quotes short and directly copied from the ToR where possible.\n- If unsure about role_level or scarcity_level, use Medium or Low confidence and explain why.\n\nINPUT\nToR text:\n{{ $json.text }}\n\nFILE_ID: {{ $('Download file').item.json.id }}\nFILE_NAME: {{ $('Download file').item.json.name }}\n\nReturn only the JSON object.",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2.2,
+        "position": [
+          688,
+          0
+        ],
+        "id": "6adb95e8-b043-4bfc-91d4-b0c1a5b368ec",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4.1-mini"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          688,
+          208
+        ],
+        "id": "908ac109-9a04-4d96-be39-71a968bdfcb5",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "a4ja82V4nnlunpii",
+            "name": "openai"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Code node: \"Code in JavaScript\" — SCIO Rate Generator v2\n// Purpose: parse AI JSON, normalise categories, and output role rows with Google Sheets formulas.\n// Requires workbook tabs: Rate_Card, Scarcity_Factors, Delivery_Context_Factors, Mobilisation_Factors, Client_Margins.\n// Bakes in 35% margin protection by setting sell_point to at least buy_max_adjusted / (1 - 35%).\n\nfunction tryParseJson(str) {\n  if (typeof str !== \"string\") return null;\n  try {\n    const obj = JSON.parse(str);\n    if (obj && typeof obj === \"object\") return obj;\n  } catch {}\n  return null;\n}\n\nfunction extractAgentJson(raw) {\n  if (raw && typeof raw === \"object\" && Array.isArray(raw.roles)) return raw;\n\n  const candidates = [];\n  if (typeof raw === \"string\") candidates.push(raw);\n  if (raw?.output) candidates.push(raw.output);\n  if (raw?.text) candidates.push(raw.text);\n  if (raw?.message) candidates.push(raw.message);\n  if (raw?.json) candidates.push(raw.json);\n  if (raw?.data) candidates.push(raw.data);\n  if (raw?.choices) raw.choices.forEach(c => candidates.push(c?.message?.content || \"\"));\n\n  for (const c of candidates) {\n    const parsed = tryParseJson(c);\n    if (parsed?.roles) return parsed;\n  }\n\n  throw new Error(\"Could not parse AI Agent output. Expected JSON object with roles[].\");\n}\n\nfunction normOne(value, allowed, fallback) {\n  if (value == null || value === \"\") return fallback || \"\";\n\n  const s = String(value).trim().toLowerCase();\n\n  for (const a of allowed) {\n    if (s === a.toLowerCase()) return a;\n  }\n\n  // Forgiving aliases\n  if (allowed.includes(\"Leader\") && /leader|lead|principal|director/.test(s)) return \"Leader\";\n  if (allowed.includes(\"Senior\") && /senior|expert/.test(s)) return \"Senior\";\n  if (allowed.includes(\"Intermediate\") && /intermediate|mid|consultant/.test(s)) return \"Intermediate\";\n  if (allowed.includes(\"Junior\") && /junior|assistant|support/.test(s)) return \"Junior\";\n\n  if (allowed.includes(\"High-risk\") && /high.?risk|hardship|fragile|conflict|security/.test(s)) return \"High-risk\";\n  if (allowed.includes(\"Complex\") && /complex|travel|political|multi|stakeholder/.test(s)) return \"Complex\";\n\n  if (allowed.includes(\"Immediate\") && /immediate|emergency|urgent/.test(s)) return \"Immediate\";\n  if (allowed.includes(\"Fast\") && /fast|rapid|compressed|short/.test(s)) return \"Fast\";\n\n  if (allowed.includes(\"Niche\") && /niche|rare|very scarce/.test(s)) return \"Niche\";\n  if (allowed.includes(\"Specialist\") && /special|scarce|specific/.test(s)) return \"Specialist\";\n\n  if (allowed.includes(\"Private\") && /private|corporate|company/.test(s)) return \"Private\";\n  if (allowed.includes(\"Foundation\") && /foundation|philanth/.test(s)) return \"Foundation\";\n  if (allowed.includes(\"Donor\") && /donor|giz|un|eu|ingo|bilateral|multilateral/.test(s)) return \"Donor\";\n  if (allowed.includes(\"Public\") && /public|government|ministry|municipal/.test(s)) return \"Public\";\n\n  return fallback || \"\";\n}\n\nfunction joinList(v) {\n  if (Array.isArray(v)) return v.filter(Boolean).join(\", \");\n  return v || \"\";\n}\n\nfunction joinEvidence(v) {\n  if (Array.isArray(v)) return v.filter(Boolean).join(\" | \");\n  return v || \"\";\n}\n\nconst proj = extractAgentJson($json);\nconst roles = Array.isArray(proj.roles) ? proj.roles : [];\n\nif (!roles.length) {\n  throw new Error(\"No roles[] found in AI output.\");\n}\n\nconst projectDelivery = normOne(\n  proj.delivery_context,\n  [\"Standard\", \"Complex\", \"High-risk\"],\n  \"Standard\"\n);\n\nconst projectMobilisation = normOne(\n  proj.mobilisation_speed,\n  [\"Standard\", \"Fast\", \"Immediate\"],\n  \"Standard\"\n);\n\nconst clientType = normOne(\n  proj.client_type,\n  [\"Public\", \"Donor\", \"Foundation\", \"Private\"],\n  \"Donor\"\n);\n\nfunction f(expr) {\n  return \"=\" + expr;\n}\n\n// Column assumptions in generated team sheet:\n// A project_id\n// B project_name\n// C client_name\n// D client_type\n// E country\n// F file_name\n// G role_id\n// H role_title\n// I skill_area\n// J languages_required\n// K role_days\n// L years_experience_required\n// M role_level\n// N scarcity_level\n// O delivery_context\n// P mobilisation_speed\n// Q classification_confidence\n// R classification_rationale\n// S evidence_quotes\n// T buy_min_base\n// U buy_point_base\n// V buy_max_base\n// W scarcity_factor\n// X delivery_factor\n// Y mobilisation_factor\n// Z target_margin\n// AA margin_floor\n// AB margin_used\n// AC buy_min_adjusted\n// AD buy_point_adjusted\n// AE buy_max_adjusted\n// AF sell_min\n// AG sell_point\n// AH sell_max\n// AI commercial_override_pct\n// AJ final_sell_point\n// AK gross_margin_point\n// AL gross_margin_worst_case\n// AM margin_status\n// AN required_sell_for_35pct\n// AO sell_gap_to_35pct\n// AP review_required\n// AQ approval_status\n// AR approved_by\n// AS review_notes\n\nconst formulas = {\n  buy_min_base: f('IF(INDEX($M:$M,ROW())=\"\",\"\",INDEX(Rate_Card!$B:$B,MATCH(INDEX($M:$M,ROW()),Rate_Card!$A:$A,0)))'),\n  buy_point_base: f('IF(INDEX($M:$M,ROW())=\"\",\"\",INDEX(Rate_Card!$C:$C,MATCH(INDEX($M:$M,ROW()),Rate_Card!$A:$A,0)))'),\n  buy_max_base: f('IF(INDEX($M:$M,ROW())=\"\",\"\",INDEX(Rate_Card!$D:$D,MATCH(INDEX($M:$M,ROW()),Rate_Card!$A:$A,0)))'),\n\n  scarcity_factor: f('IF(INDEX($N:$N,ROW())=\"\",\"\",INDEX(Scarcity_Factors!$B:$B,MATCH(INDEX($N:$N,ROW()),Scarcity_Factors!$A:$A,0)))'),\n  delivery_factor: f('IF(INDEX($O:$O,ROW())=\"\",\"\",INDEX(Delivery_Context_Factors!$B:$B,MATCH(INDEX($O:$O,ROW()),Delivery_Context_Factors!$A:$A,0)))'),\n  mobilisation_factor: f('IF(INDEX($P:$P,ROW())=\"\",\"\",INDEX(Mobilisation_Factors!$B:$B,MATCH(INDEX($P:$P,ROW()),Mobilisation_Factors!$A:$A,0)))'),\n\n  target_margin: f('IF(INDEX($D:$D,ROW())=\"\",\"\",INDEX(Client_Margins!$B:$B,MATCH(INDEX($D:$D,ROW()),Client_Margins!$A:$A,0)))'),\n  margin_floor: f('IF(INDEX($D:$D,ROW())=\"\",\"\",INDEX(Client_Margins!$C:$C,MATCH(INDEX($D:$D,ROW()),Client_Margins!$A:$A,0)))'),\n  margin_used: f('IF(INDEX($D:$D,ROW())=\"\",\"\",MAX(INDEX($Z:$Z,ROW()),INDEX($AA:$AA,ROW())))'),\n\n  buy_min_adjusted: f('IFERROR(INDEX($T:$T,ROW())*INDEX($W:$W,ROW())*INDEX($X:$X,ROW())*INDEX($Y:$Y,ROW()),\"\")'),\n  buy_point_adjusted: f('IFERROR(INDEX($U:$U,ROW())*INDEX($W:$W,ROW())*INDEX($X:$X,ROW())*INDEX($Y:$Y,ROW()),\"\")'),\n  buy_max_adjusted: f('IFERROR(INDEX($V:$V,ROW())*INDEX($W:$W,ROW())*INDEX($X:$X,ROW())*INDEX($Y:$Y,ROW()),\"\")'),\n\n  sell_min: f('IFERROR(INDEX($AC:$AC,ROW())/(1-INDEX($AB:$AB,ROW())),\"\")'),\n\n  // 35% margin protection:\n  // sell_point must cover the point buy rate at the used margin\n  // AND must cover the worst-case adjusted max buy rate at 35%.\n  sell_point: f('IFERROR(MAX(INDEX($AD:$AD,ROW())/(1-INDEX($AB:$AB,ROW())),INDEX($AE:$AE,ROW())/(1-0.35)),\"\")'),\n\n  sell_max: f('IFERROR(MAX(INDEX($AE:$AE,ROW())/(1-INDEX($AB:$AB,ROW())),INDEX($AG:$AG,ROW())),\"\")'),\n\n  commercial_override_pct: 0,\n\n  final_sell_point: f('IFERROR(INDEX($AG:$AG,ROW())*(1+INDEX($AI:$AI,ROW())),\"\")'),\n\n  gross_margin_point: f('IFERROR((INDEX($AJ:$AJ,ROW())-INDEX($AD:$AD,ROW()))/INDEX($AJ:$AJ,ROW()),\"\")'),\n\n  gross_margin_worst_case: f('IFERROR((INDEX($AJ:$AJ,ROW())-INDEX($AE:$AE,ROW()))/INDEX($AJ:$AJ,ROW()),\"\")'),\n\n  margin_status: f('IF(INDEX($AJ:$AJ,ROW())=\"\",\"\",IF(INDEX($AL:$AL,ROW())>=0.35,\"OK ≥35%\",\"Below 35% floor\"))'),\n\n  required_sell_for_35pct: f('IFERROR(INDEX($AE:$AE,ROW())/(1-0.35),\"\")'),\n\n  sell_gap_to_35pct: f('IFERROR(MAX(0,INDEX($AN:$AN,ROW())-INDEX($AJ:$AJ,ROW())),\"\")'),\n\n  review_required: f('IF(OR(INDEX($M:$M,ROW())=\"Leader\",INDEX($Q:$Q,ROW())=\"Low\",INDEX($N:$N,ROW())=\"Niche\",INDEX($O:$O,ROW())=\"High-risk\",INDEX($P:$P,ROW())=\"Immediate\",INDEX($AI:$AI,ROW())<>0,INDEX($AM:$AM,ROW())=\"Below 35% floor\"),\"Yes\",\"No\")'),\n\n  approval_status: \"Pending\"\n};\n\nreturn roles.map((r, i) => {\n  const roleLevel = normOne(\n    r.role_level,\n    [\"Junior\", \"Intermediate\", \"Senior\", \"Leader\"],\n    \"\"\n  );\n\n  const scarcity = normOne(\n    r.scarcity_level,\n    [\"Standard\", \"Specialist\", \"Niche\"],\n    \"Standard\"\n  );\n\n  const confidence = normOne(\n    r.classification_confidence,\n    [\"High\", \"Medium\", \"Low\"],\n    \"Medium\"\n  );\n\n  return {\n    json: {\n      project_id: proj.project_id || null,\n      project_name: proj.project_name || null,\n      client_name: proj.client_name_raw || null,\n      client_type: clientType,\n      country: proj.country || null,\n      file_name: proj.file_name || null,\n\n      role_id: r.role_id || `R${i + 1}`,\n      role_title: r.role_title || null,\n      skill_area: r.skill_area || null,\n      languages_required: joinList(r.languages_required),\n      role_days: r.role_days ?? null,\n      years_experience_required: r.years_experience_required ?? null,\n\n      role_level: roleLevel,\n      scarcity_level: scarcity,\n      delivery_context: normOne(\n        r.delivery_context || proj.delivery_context,\n        [\"Standard\", \"Complex\", \"High-risk\"],\n        projectDelivery\n      ),\n      mobilisation_speed: normOne(\n        r.mobilisation_speed || proj.mobilisation_speed,\n        [\"Standard\", \"Fast\", \"Immediate\"],\n        projectMobilisation\n      ),\n      classification_confidence: confidence,\n      classification_rationale: r.classification_rationale || null,\n      evidence_quotes: joinEvidence(r.evidence_quotes),\n\n      ...formulas,\n\n      approved_by: \"\",\n      review_notes: \"\"\n    }\n  };\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1040,
+          0
+        ],
+        "id": "06078aa3-114e-4671-a8c2-56bf033ae84f",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "documentId": {
+            "__rl": true,
+            "value": "https://docs.google.com/spreadsheets/d/1Eb6VJXlu9jtxJXw1Xb1aFnrT7B-_Sd6Fd7MaXlGQyu0",
+            "mode": "url"
+          },
+          "title": "=Team_{{ $json.project_id }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          1264,
+          0
+        ],
+        "id": "bc77abca-d74c-4fa6-848a-a1ce31319d74",
+        "name": "Create sheet",
+        "executeOnce": true,
+        "alwaysOutputData": false,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "aEc5lPRiYjsh4sIp",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "https://docs.google.com/spreadsheets/d/1Eb6VJXlu9jtxJXw1Xb1aFnrT7B-_Sd6Fd7MaXlGQyu0",
+            "mode": "url"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "={{ $('Create sheet').item.json.sheetId }}",
+            "mode": "id"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "1810405271": "={{ $json.sheetId }}",
+              "project_id": "={{ $json.project_id }}",
+              "project_name": "={{ $json.project_name }}",
+              "client_name": "={{ $json.client_name }}",
+              "client_type": "={{ $json.client_type }}",
+              "country": "={{ $json.country }}",
+              "file_name": "={{ $json.file_name }}",
+              "role_id": "={{ $json.role_id }}",
+              "role_title": "={{ $json.role_title }}",
+              "skill_area": "={{ $json.skill_area }}",
+              "languages_required": "={{ $json.languages_required }}",
+              "role_days": "={{ $json.role_days }}",
+              "years_experience_required": "={{ $json.years_experience_required }}",
+              "role_level": "={{ $json.role_level }}",
+              "scarcity_level": "={{ $json.scarcity_level }}",
+              "delivery_context": "={{ $json.delivery_context }}",
+              "mobilisation_speed": "={{ $json.mobilisation_speed }}",
+              "classification_confidence": "={{ $json.classification_confidence }}",
+              "classification_rationale": "={{ $json.classification_rationale }}",
+              "evidence_quotes": "={{ $json.evidence_quotes }}",
+              "buy_min_base": "={{ $json.buy_min_base }}",
+              "buy_point_base": "={{ $json.buy_point_base }}",
+              "buy_max_base": "={{ $json.buy_max_base }}",
+              "scarcity_factor": "={{ $json.scarcity_factor }}",
+              "delivery_factor": "={{ $json.delivery_factor }}",
+              "mobilisation_factor": "={{ $json.mobilisation_factor }}",
+              "target_margin": "={{ $json.target_margin }}",
+              "margin_floor": "={{ $json.margin_floor }}",
+              "margin_used": "={{ $json.margin_used }}",
+              "buy_min_adjusted": "={{ $json.buy_min_adjusted }}",
+              "buy_point_adjusted": "={{ $json.buy_point_adjusted }}",
+              "buy_max_adjusted": "={{ $json.buy_max_adjusted }}",
+              "sell_min": "={{ $json.sell_min }}",
+              "sell_point": "={{ $json.sell_point }}",
+              "sell_max": "={{ $json.sell_max }}",
+              "commercial_override_pct": "={{ $json.commercial_override_pct }}",
+              "final_sell_point": "={{ $json.final_sell_point }}",
+              "gross_margin_point": "={{ $json.gross_margin_point }}",
+              "gross_margin_worst_case": "={{ $json.gross_margin_worst_case }}",
+              "margin_status": "={{ $json.margin_status }}",
+              "required_sell_for_35pct": "={{ $json.required_sell_for_35pct }}",
+              "sell_gap_to_35pct": "={{ $json.sell_gap_to_35pct }}",
+              "review_required": "={{ $json.review_required }}",
+              "approval_status": "={{ $json.approval_status }}",
+              "approved_by": "={{ $json.approved_by }}",
+              "review_notes": "={{ $json.review_notes }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "project_id",
+                "displayName": "project_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "project_name",
+                "displayName": "project_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "client_name",
+                "displayName": "client_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "client_type",
+                "displayName": "client_type",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "country",
+                "displayName": "country",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "file_name",
+                "displayName": "file_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "role_id",
+                "displayName": "role_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "role_title",
+                "displayName": "role_title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "skill_area",
+                "displayName": "skill_area",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "languages_required",
+                "displayName": "languages_required",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "role_days",
+                "displayName": "role_days",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "years_experience_required",
+                "displayName": "years_experience_required",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "role_level",
+                "displayName": "role_level",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "scarcity_level",
+                "displayName": "scarcity_level",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "delivery_context",
+                "displayName": "delivery_context",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "mobilisation_speed",
+                "displayName": "mobilisation_speed",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "classification_confidence",
+                "displayName": "classification_confidence",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "classification_rationale",
+                "displayName": "classification_rationale",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "evidence_quotes",
+                "displayName": "evidence_quotes",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "buy_min_base",
+                "displayName": "buy_min_base",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "buy_point_base",
+                "displayName": "buy_point_base",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "buy_max_base",
+                "displayName": "buy_max_base",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "scarcity_factor",
+                "displayName": "scarcity_factor",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "delivery_factor",
+                "displayName": "delivery_factor",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "mobilisation_factor",
+                "displayName": "mobilisation_factor",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "target_margin",
+                "displayName": "target_margin",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "margin_floor",
+                "displayName": "margin_floor",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "margin_used",
+                "displayName": "margin_used",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "buy_min_adjusted",
+                "displayName": "buy_min_adjusted",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "buy_point_adjusted",
+                "displayName": "buy_point_adjusted",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "buy_max_adjusted",
+                "displayName": "buy_max_adjusted",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "sell_min",
+                "displayName": "sell_min",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "sell_point",
+                "displayName": "sell_point",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "sell_max",
+                "displayName": "sell_max",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "commercial_override_pct",
+                "displayName": "commercial_override_pct",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "final_sell_point",
+                "displayName": "final_sell_point",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "gross_margin_point",
+                "displayName": "gross_margin_point",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "gross_margin_worst_case",
+                "displayName": "gross_margin_worst_case",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "margin_status",
+                "displayName": "margin_status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "required_sell_for_35pct",
+                "displayName": "required_sell_for_35pct",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "sell_gap_to_35pct",
+                "displayName": "sell_gap_to_35pct",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "review_required",
+                "displayName": "review_required",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "approval_status",
+                "displayName": "approval_status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "approved_by",
+                "displayName": "approved_by",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "review_notes",
+                "displayName": "review_notes",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "1810405271",
+                "displayName": "1810405271",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "TRUE",
+                "displayName": "TRUE",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          1968,
+          0
+        ],
+        "id": "52b2908d-444f-4401-825b-f9f744ca4dbe",
+        "name": "Append row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "aEc5lPRiYjsh4sIp",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Code node: Attach sheetID + prepend header row — SCIO Rate Generator v2\n\nconst columns = [\n  \"project_id\",\n  \"project_name\",\n  \"client_name\",\n  \"client_type\",\n  \"country\",\n  \"file_name\",\n  \"role_id\",\n  \"role_title\",\n  \"skill_area\",\n  \"languages_required\",\n  \"role_days\",\n  \"years_experience_required\",\n  \"role_level\",\n  \"scarcity_level\",\n  \"delivery_context\",\n  \"mobilisation_speed\",\n  \"classification_confidence\",\n  \"classification_rationale\",\n  \"evidence_quotes\",\n  \"buy_min_base\",\n  \"buy_point_base\",\n  \"buy_max_base\",\n  \"scarcity_factor\",\n  \"delivery_factor\",\n  \"mobilisation_factor\",\n  \"target_margin\",\n  \"margin_floor\",\n  \"margin_used\",\n  \"buy_min_adjusted\",\n  \"buy_point_adjusted\",\n  \"buy_max_adjusted\",\n  \"sell_min\",\n  \"sell_point\",\n  \"sell_max\",\n  \"commercial_override_pct\",\n  \"final_sell_point\",\n  \"gross_margin_point\",\n  \"gross_margin_worst_case\",\n  \"margin_status\",\n  \"required_sell_for_35pct\",\n  \"sell_gap_to_35pct\",\n  \"review_required\",\n  \"approval_status\",\n  \"approved_by\",\n  \"review_notes\"\n];\n\nconst sheetId = $(\"Create sheet\").first().json.sheetId;\nconst roleItems = $items(\"Code in JavaScript\");\n\nif (!roleItems.length) {\n  throw new Error('No role items found from \"Code in JavaScript\".');\n}\n\nconst header = {};\nfor (const c of columns) {\n  header[c] = c;\n}\n\nconst headerItem = {\n  json: {\n    ...header,\n    sheetId,\n    __is_header: true\n  }\n};\n\nconst roleRows = roleItems.map(item => ({\n  json: {\n    ...item.json,\n    sheetId,\n    __is_header: false\n  }\n}));\n\nreturn [headerItem, ...roleRows];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1552,
+          0
+        ],
+        "id": "6ef20b3a-8b4b-480d-8718-00cdca9340ef",
+        "name": "Code in JavaScript1"
+      }
+    ],
+    "connections": {
+      "Google Drive Trigger": {
+        "main": [
+          [
+            {
+              "node": "Download file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download file": {
+        "main": [
+          [
+            {
+              "node": "Extract from File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from File": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Create sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create sheet": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append row in sheet": {
+        "main": [
+          []
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": " Scio Network ",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "12007f04-63ff-47dd-9250-9ce4e4edc942",
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Create sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-05-19T06:24:13.607Z",
+  "id": "QglJZiS7fmNgLfsa",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Budget_Calculator_v2_small",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/folders/1Of9IHd1Kls2NyQEf1o48NfO8rRyoCHOU",
+          "mode": "url"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "114d38b7-dfec-4bc8-8674-07a4bf887306",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        240,
+        0
+      ],
+      "id": "704422b6-12aa-4604-b038-1c29238b20bb",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        480,
+        0
+      ],
+      "id": "442ea607-f0ab-4aa3-a023-3c4ea0fa50e2",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an experienced international development project manager and staffing lead.\n\nYou receive the text of a Terms of Reference (ToR) document for a consulting assignment.\nYour task is to extract project metadata and classify the expert roles needed for a rate estimate.\n\nIMPORTANT RULES\n- Output MUST be a single valid JSON object.\n- No markdown. No commentary. No extra keys.\n- Use null when unknown.\n- Use arrays [] for lists when empty.\n- Be conservative. Do not invent facts not present in the ToR.\n- AI classifies roles and provides evidence. It does not decide final rates.\n\nCLASSIFICATION METHOD\nClassify role_level by responsibility, not only years of experience:\n- Junior: supports defined tasks under guidance; no ownership of methodology, client relationship, or final outputs.\n- Intermediate: owns a defined work package independently; prepares client-ready inputs with review.\n- Senior: leads a technical workstream or major deliverable; responsible for technical judgement and quality.\n- Leader: owns the assignment, methodology, client relationship, team leadership, final accountability, or strategic expert role.\n\nUse years of experience as supporting evidence only:\n- 0–3 years often suggests Junior.\n- 3–7 years often suggests Intermediate.\n- 7–15 years often suggests Senior.\n- 15+ years, Team Leader, Lead Expert, Project Director, or overall accountability often suggests Leader.\nBut responsibility language overrides years when clear.\n\nSCARCITY\n- Standard: common consulting capabilities; many suitable experts likely available.\n- Specialist: specific sector, donor, method, geography, or language combination.\n- Niche: rare combination of skills, seniority, language, location, reputation, and availability.\n\nDELIVERY CONTEXT\n- Standard: remote or operationally straightforward; low political/security burden.\n- Complex: travel, multi-stakeholder complexity, weak data, political sensitivity, or high coordination burden.\n- High-risk: fragile/security-sensitive context, difficult access, high reputational risk, or intense political sensitivity.\n\nMOBILISATION SPEED\n- Standard: normal sourcing timeline.\n- Fast: expert must be confirmed within days or timeline is compressed.\n- Immediate: emergency mobilisation or near-immediate start.\n\nCLIENT TYPE\nUse one of: Public, Donor, Foundation, Private, or null.\nClassify commercially, not legally:\n- Public: government/public procurement or public-sector contracting.\n- Donor: bilateral/multilateral donor, UN, GIZ-style technical assistance, INGO if donor-funded.\n- Foundation: philanthropic foundation.\n- Private: company/corporate/private client.\n\nOUTPUT JSON SCHEMA EXACTLY\n{\n  \"project_id\": string | null,\n  \"project_name\": string | null,\n  \"client_name_raw\": string | null,\n  \"client_type\": \"Public\" | \"Donor\" | \"Foundation\" | \"Private\" | null,\n  \"country\": string | null,\n  \"delivery_context\": \"Standard\" | \"Complex\" | \"High-risk\" | null,\n  \"mobilisation_speed\": \"Standard\" | \"Fast\" | \"Immediate\" | null,\n  \"file_id\": string | null,\n  \"file_name\": string | null,\n  \"roles\": [\n    {\n      \"role_id\": string,\n      \"role_title\": string | null,\n      \"role_level\": \"Junior\" | \"Intermediate\" | \"Senior\" | \"Leader\" | null,\n      \"role_days\": number | null,\n      \"years_experience_required\": number | null,\n      \"skill_area\": string | null,\n      \"languages_required\": string[],\n      \"scarcity_level\": \"Standard\" | \"Specialist\" | \"Niche\" | null,\n      \"classification_confidence\": \"High\" | \"Medium\" | \"Low\",\n      \"classification_rationale\": string | null,\n      \"evidence_quotes\": string[]\n    }\n  ]\n}\n\nROLE EXTRACTION RULES\n- Create one role entry per distinct expert position implied or required by the ToR.\n- Ignore purely administrative roles unless clearly part of the expert delivery team.\n- If the ToR specifies role days, extract them. If a range is given, use midpoint.\n- If role days are not stated, use null.\n- Extract minimum years required if explicitly stated. If a range is given, use the lower bound.\n- Keep evidence_quotes short and directly copied from the ToR where possible.\n- If unsure about role_level or scarcity_level, use Medium or Low confidence and explain why.\n\nINPUT\nToR text:\n{{ $json.text }}\n\nFILE_ID: {{ $('Download file').item.json.id }}\nFILE_NAME: {{ $('Download file').item.json.name }}\n\nReturn only the JSON object.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        0
+      ],
+      "id": "6adb95e8-b043-4bfc-91d4-b0c1a5b368ec",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        208
+      ],
+      "id": "908ac109-9a04-4d96-be39-71a968bdfcb5",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code node: \"Code in JavaScript\" — SCIO Rate Generator v2\n// Purpose: parse AI JSON, normalise categories, and output role rows with Google Sheets formulas.\n// Requires workbook tabs: Rate_Card, Scarcity_Factors, Delivery_Context_Factors, Mobilisation_Factors, Client_Margins.\n// Bakes in 35% margin protection by setting sell_point to at least buy_max_adjusted / (1 - 35%).\n\nfunction tryParseJson(str) {\n  if (typeof str !== \"string\") return null;\n  try {\n    const obj = JSON.parse(str);\n    if (obj && typeof obj === \"object\") return obj;\n  } catch {}\n  return null;\n}\n\nfunction extractAgentJson(raw) {\n  if (raw && typeof raw === \"object\" && Array.isArray(raw.roles)) return raw;\n\n  const candidates = [];\n  if (typeof raw === \"string\") candidates.push(raw);\n  if (raw?.output) candidates.push(raw.output);\n  if (raw?.text) candidates.push(raw.text);\n  if (raw?.message) candidates.push(raw.message);\n  if (raw?.json) candidates.push(raw.json);\n  if (raw?.data) candidates.push(raw.data);\n  if (raw?.choices) raw.choices.forEach(c => candidates.push(c?.message?.content || \"\"));\n\n  for (const c of candidates) {\n    const parsed = tryParseJson(c);\n    if (parsed?.roles) return parsed;\n  }\n\n  throw new Error(\"Could not parse AI Agent output. Expected JSON object with roles[].\");\n}\n\nfunction normOne(value, allowed, fallback) {\n  if (value == null || value === \"\") return fallback || \"\";\n\n  const s = String(value).trim().toLowerCase();\n\n  for (const a of allowed) {\n    if (s === a.toLowerCase()) return a;\n  }\n\n  // Forgiving aliases\n  if (allowed.includes(\"Leader\") && /leader|lead|principal|director/.test(s)) return \"Leader\";\n  if (allowed.includes(\"Senior\") && /senior|expert/.test(s)) return \"Senior\";\n  if (allowed.includes(\"Intermediate\") && /intermediate|mid|consultant/.test(s)) return \"Intermediate\";\n  if (allowed.includes(\"Junior\") && /junior|assistant|support/.test(s)) return \"Junior\";\n\n  if (allowed.includes(\"High-risk\") && /high.?risk|hardship|fragile|conflict|security/.test(s)) return \"High-risk\";\n  if (allowed.includes(\"Complex\") && /complex|travel|political|multi|stakeholder/.test(s)) return \"Complex\";\n\n  if (allowed.includes(\"Immediate\") && /immediate|emergency|urgent/.test(s)) return \"Immediate\";\n  if (allowed.includes(\"Fast\") && /fast|rapid|compressed|short/.test(s)) return \"Fast\";\n\n  if (allowed.includes(\"Niche\") && /niche|rare|very scarce/.test(s)) return \"Niche\";\n  if (allowed.includes(\"Specialist\") && /special|scarce|specific/.test(s)) return \"Specialist\";\n\n  if (allowed.includes(\"Private\") && /private|corporate|company/.test(s)) return \"Private\";\n  if (allowed.includes(\"Foundation\") && /foundation|philanth/.test(s)) return \"Foundation\";\n  if (allowed.includes(\"Donor\") && /donor|giz|un|eu|ingo|bilateral|multilateral/.test(s)) return \"Donor\";\n  if (allowed.includes(\"Public\") && /public|government|ministry|municipal/.test(s)) return \"Public\";\n\n  return fallback || \"\";\n}\n\nfunction joinList(v) {\n  if (Array.isArray(v)) return v.filter(Boolean).join(\", \");\n  return v || \"\";\n}\n\nfunction joinEvidence(v) {\n  if (Array.isArray(v)) return v.filter(Boolean).join(\" | \");\n  return v || \"\";\n}\n\nconst proj = extractAgentJson($json);\nconst roles = Array.isArray(proj.roles) ? proj.roles : [];\n\nif (!roles.length) {\n  throw new Error(\"No roles[] found in AI output.\");\n}\n\nconst projectDelivery = normOne(\n  proj.delivery_context,\n  [\"Standard\", \"Complex\", \"High-risk\"],\n  \"Standard\"\n);\n\nconst projectMobilisation = normOne(\n  proj.mobilisation_speed,\n  [\"Standard\", \"Fast\", \"Immediate\"],\n  \"Standard\"\n);\n\nconst clientType = normOne(\n  proj.client_type,\n  [\"Public\", \"Donor\", \"Foundation\", \"Private\"],\n  \"Donor\"\n);\n\nfunction f(expr) {\n  return \"=\" + expr;\n}\n\n// Column assumptions in generated team sheet:\n// A project_id\n// B project_name\n// C client_name\n// D client_type\n// E country\n// F file_name\n// G role_id\n// H role_title\n// I skill_area\n// J languages_required\n// K role_days\n// L years_experience_required\n// M role_level\n// N scarcity_level\n// O delivery_context\n// P mobilisation_speed\n// Q classification_confidence\n// R classification_rationale\n// S evidence_quotes\n// T buy_min_base\n// U buy_point_base\n// V buy_max_base\n// W scarcity_factor\n// X delivery_factor\n// Y mobilisation_factor\n// Z target_margin\n// AA margin_floor\n// AB margin_used\n// AC buy_min_adjusted\n// AD buy_point_adjusted\n// AE buy_max_adjusted\n// AF sell_min\n// AG sell_point\n// AH sell_max\n// AI commercial_override_pct\n// AJ final_sell_point\n// AK gross_margin_point\n// AL gross_margin_worst_case\n// AM margin_status\n// AN required_sell_for_35pct\n// AO sell_gap_to_35pct\n// AP review_required\n// AQ approval_status\n// AR approved_by\n// AS review_notes\n\nconst formulas = {\n  buy_min_base: f('IF(INDEX($M:$M,ROW())=\"\",\"\",INDEX(Rate_Card!$B:$B,MATCH(INDEX($M:$M,ROW()),Rate_Card!$A:$A,0)))'),\n  buy_point_base: f('IF(INDEX($M:$M,ROW())=\"\",\"\",INDEX(Rate_Card!$C:$C,MATCH(INDEX($M:$M,ROW()),Rate_Card!$A:$A,0)))'),\n  buy_max_base: f('IF(INDEX($M:$M,ROW())=\"\",\"\",INDEX(Rate_Card!$D:$D,MATCH(INDEX($M:$M,ROW()),Rate_Card!$A:$A,0)))'),\n\n  scarcity_factor: f('IF(INDEX($N:$N,ROW())=\"\",\"\",INDEX(Scarcity_Factors!$B:$B,MATCH(INDEX($N:$N,ROW()),Scarcity_Factors!$A:$A,0)))'),\n  delivery_factor: f('IF(INDEX($O:$O,ROW())=\"\",\"\",INDEX(Delivery_Context_Factors!$B:$B,MATCH(INDEX($O:$O,ROW()),Delivery_Context_Factors!$A:$A,0)))'),\n  mobilisation_factor: f('IF(INDEX($P:$P,ROW())=\"\",\"\",INDEX(Mobilisation_Factors!$B:$B,MATCH(INDEX($P:$P,ROW()),Mobilisation_Factors!$A:$A,0)))'),\n\n  target_margin: f('IF(INDEX($D:$D,ROW())=\"\",\"\",INDEX(Client_Margins!$B:$B,MATCH(INDEX($D:$D,ROW()),Client_Margins!$A:$A,0)))'),\n  margin_floor: f('IF(INDEX($D:$D,ROW())=\"\",\"\",INDEX(Client_Margins!$C:$C,MATCH(INDEX($D:$D,ROW()),Client_Margins!$A:$A,0)))'),\n  margin_used: f('IF(INDEX($D:$D,ROW())=\"\",\"\",MAX(INDEX($Z:$Z,ROW()),INDEX($AA:$AA,ROW())))'),\n\n  buy_min_adjusted: f('IFERROR(INDEX($T:$T,ROW())*INDEX($W:$W,ROW())*INDEX($X:$X,ROW())*INDEX($Y:$Y,ROW()),\"\")'),\n  buy_point_adjusted: f('IFERROR(INDEX($U:$U,ROW())*INDEX($W:$W,ROW())*INDEX($X:$X,ROW())*INDEX($Y:$Y,ROW()),\"\")'),\n  buy_max_adjusted: f('IFERROR(INDEX($V:$V,ROW())*INDEX($W:$W,ROW())*INDEX($X:$X,ROW())*INDEX($Y:$Y,ROW()),\"\")'),\n\n  sell_min: f('IFERROR(INDEX($AC:$AC,ROW())/(1-INDEX($AB:$AB,ROW())),\"\")'),\n\n  // 35% margin protection:\n  // sell_point must cover the point buy rate at the used margin\n  // AND must cover the worst-case adjusted max buy rate at 35%.\n  sell_point: f('IFERROR(MAX(INDEX($AD:$AD,ROW())/(1-INDEX($AB:$AB,ROW())),INDEX($AE:$AE,ROW())/(1-0.35)),\"\")'),\n\n  sell_max: f('IFERROR(MAX(INDEX($AE:$AE,ROW())/(1-INDEX($AB:$AB,ROW())),INDEX($AG:$AG,ROW())),\"\")'),\n\n  commercial_override_pct: 0,\n\n  final_sell_point: f('IFERROR(INDEX($AG:$AG,ROW())*(1+INDEX($AI:$AI,ROW())),\"\")'),\n\n  gross_margin_point: f('IFERROR((INDEX($AJ:$AJ,ROW())-INDEX($AD:$AD,ROW()))/INDEX($AJ:$AJ,ROW()),\"\")'),\n\n  gross_margin_worst_case: f('IFERROR((INDEX($AJ:$AJ,ROW())-INDEX($AE:$AE,ROW()))/INDEX($AJ:$AJ,ROW()),\"\")'),\n\n  margin_status: f('IF(INDEX($AJ:$AJ,ROW())=\"\",\"\",IF(INDEX($AL:$AL,ROW())>=0.35,\"OK ≥35%\",\"Below 35% floor\"))'),\n\n  required_sell_for_35pct: f('IFERROR(INDEX($AE:$AE,ROW())/(1-0.35),\"\")'),\n\n  sell_gap_to_35pct: f('IFERROR(MAX(0,INDEX($AN:$AN,ROW())-INDEX($AJ:$AJ,ROW())),\"\")'),\n\n  review_required: f('IF(OR(INDEX($M:$M,ROW())=\"Leader\",INDEX($Q:$Q,ROW())=\"Low\",INDEX($N:$N,ROW())=\"Niche\",INDEX($O:$O,ROW())=\"High-risk\",INDEX($P:$P,ROW())=\"Immediate\",INDEX($AI:$AI,ROW())<>0,INDEX($AM:$AM,ROW())=\"Below 35% floor\"),\"Yes\",\"No\")'),\n\n  approval_status: \"Pending\"\n};\n\nreturn roles.map((r, i) => {\n  const roleLevel = normOne(\n    r.role_level,\n    [\"Junior\", \"Intermediate\", \"Senior\", \"Leader\"],\n    \"\"\n  );\n\n  const scarcity = normOne(\n    r.scarcity_level,\n    [\"Standard\", \"Specialist\", \"Niche\"],\n    \"Standard\"\n  );\n\n  const confidence = normOne(\n    r.classification_confidence,\n    [\"High\", \"Medium\", \"Low\"],\n    \"Medium\"\n  );\n\n  return {\n    json: {\n      project_id: proj.project_id || null,\n      project_name: proj.project_name || null,\n      client_name: proj.client_name_raw || null,\n      client_type: clientType,\n      country: proj.country || null,\n      file_name: proj.file_name || null,\n\n      role_id: r.role_id || `R${i + 1}`,\n      role_title: r.role_title || null,\n      skill_area: r.skill_area || null,\n      languages_required: joinList(r.languages_required),\n      role_days: r.role_days ?? null,\n      years_experience_required: r.years_experience_required ?? null,\n\n      role_level: roleLevel,\n      scarcity_level: scarcity,\n      delivery_context: normOne(\n        r.delivery_context || proj.delivery_context,\n        [\"Standard\", \"Complex\", \"High-risk\"],\n        projectDelivery\n      ),\n      mobilisation_speed: normOne(\n        r.mobilisation_speed || proj.mobilisation_speed,\n        [\"Standard\", \"Fast\", \"Immediate\"],\n        projectMobilisation\n      ),\n      classification_confidence: confidence,\n      classification_rationale: r.classification_rationale || null,\n      evidence_quotes: joinEvidence(r.evidence_quotes),\n\n      ...formulas,\n\n      approved_by: \"\",\n      review_notes: \"\"\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "06078aa3-114e-4671-a8c2-56bf033ae84f",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1Eb6VJXlu9jtxJXw1Xb1aFnrT7B-_Sd6Fd7MaXlGQyu0",
+          "mode": "url"
+        },
+        "title": "=Team_{{ $json.project_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1264,
+        0
+      ],
+      "id": "bc77abca-d74c-4fa6-848a-a1ce31319d74",
+      "name": "Create sheet",
+      "executeOnce": true,
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1Eb6VJXlu9jtxJXw1Xb1aFnrT7B-_Sd6Fd7MaXlGQyu0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create sheet').item.json.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "1810405271": "={{ $json.sheetId }}",
+            "project_id": "={{ $json.project_id }}",
+            "project_name": "={{ $json.project_name }}",
+            "client_name": "={{ $json.client_name }}",
+            "client_type": "={{ $json.client_type }}",
+            "country": "={{ $json.country }}",
+            "file_name": "={{ $json.file_name }}",
+            "role_id": "={{ $json.role_id }}",
+            "role_title": "={{ $json.role_title }}",
+            "skill_area": "={{ $json.skill_area }}",
+            "languages_required": "={{ $json.languages_required }}",
+            "role_days": "={{ $json.role_days }}",
+            "years_experience_required": "={{ $json.years_experience_required }}",
+            "role_level": "={{ $json.role_level }}",
+            "scarcity_level": "={{ $json.scarcity_level }}",
+            "delivery_context": "={{ $json.delivery_context }}",
+            "mobilisation_speed": "={{ $json.mobilisation_speed }}",
+            "classification_confidence": "={{ $json.classification_confidence }}",
+            "classification_rationale": "={{ $json.classification_rationale }}",
+            "evidence_quotes": "={{ $json.evidence_quotes }}",
+            "buy_min_base": "={{ $json.buy_min_base }}",
+            "buy_point_base": "={{ $json.buy_point_base }}",
+            "buy_max_base": "={{ $json.buy_max_base }}",
+            "scarcity_factor": "={{ $json.scarcity_factor }}",
+            "delivery_factor": "={{ $json.delivery_factor }}",
+            "mobilisation_factor": "={{ $json.mobilisation_factor }}",
+            "target_margin": "={{ $json.target_margin }}",
+            "margin_floor": "={{ $json.margin_floor }}",
+            "margin_used": "={{ $json.margin_used }}",
+            "buy_min_adjusted": "={{ $json.buy_min_adjusted }}",
+            "buy_point_adjusted": "={{ $json.buy_point_adjusted }}",
+            "buy_max_adjusted": "={{ $json.buy_max_adjusted }}",
+            "sell_min": "={{ $json.sell_min }}",
+            "sell_point": "={{ $json.sell_point }}",
+            "sell_max": "={{ $json.sell_max }}",
+            "commercial_override_pct": "={{ $json.commercial_override_pct }}",
+            "final_sell_point": "={{ $json.final_sell_point }}",
+            "gross_margin_point": "={{ $json.gross_margin_point }}",
+            "gross_margin_worst_case": "={{ $json.gross_margin_worst_case }}",
+            "margin_status": "={{ $json.margin_status }}",
+            "required_sell_for_35pct": "={{ $json.required_sell_for_35pct }}",
+            "sell_gap_to_35pct": "={{ $json.sell_gap_to_35pct }}",
+            "review_required": "={{ $json.review_required }}",
+            "approval_status": "={{ $json.approval_status }}",
+            "approved_by": "={{ $json.approved_by }}",
+            "review_notes": "={{ $json.review_notes }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "project_id",
+              "displayName": "project_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "project_name",
+              "displayName": "project_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "client_type",
+              "displayName": "client_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "file_name",
+              "displayName": "file_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "role_id",
+              "displayName": "role_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "role_title",
+              "displayName": "role_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "skill_area",
+              "displayName": "skill_area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "languages_required",
+              "displayName": "languages_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "role_days",
+              "displayName": "role_days",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "years_experience_required",
+              "displayName": "years_experience_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "role_level",
+              "displayName": "role_level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scarcity_level",
+              "displayName": "scarcity_level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_context",
+              "displayName": "delivery_context",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "mobilisation_speed",
+              "displayName": "mobilisation_speed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "classification_confidence",
+              "displayName": "classification_confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "classification_rationale",
+              "displayName": "classification_rationale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "evidence_quotes",
+              "displayName": "evidence_quotes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "buy_min_base",
+              "displayName": "buy_min_base",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "buy_point_base",
+              "displayName": "buy_point_base",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "buy_max_base",
+              "displayName": "buy_max_base",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scarcity_factor",
+              "displayName": "scarcity_factor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_factor",
+              "displayName": "delivery_factor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "mobilisation_factor",
+              "displayName": "mobilisation_factor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "target_margin",
+              "displayName": "target_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "margin_floor",
+              "displayName": "margin_floor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "margin_used",
+              "displayName": "margin_used",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "buy_min_adjusted",
+              "displayName": "buy_min_adjusted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "buy_point_adjusted",
+              "displayName": "buy_point_adjusted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "buy_max_adjusted",
+              "displayName": "buy_max_adjusted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "sell_min",
+              "displayName": "sell_min",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "sell_point",
+              "displayName": "sell_point",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "sell_max",
+              "displayName": "sell_max",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "commercial_override_pct",
+              "displayName": "commercial_override_pct",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "final_sell_point",
+              "displayName": "final_sell_point",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gross_margin_point",
+              "displayName": "gross_margin_point",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gross_margin_worst_case",
+              "displayName": "gross_margin_worst_case",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "margin_status",
+              "displayName": "margin_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "required_sell_for_35pct",
+              "displayName": "required_sell_for_35pct",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "sell_gap_to_35pct",
+              "displayName": "sell_gap_to_35pct",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "review_required",
+              "displayName": "review_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "approval_status",
+              "displayName": "approval_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "approved_by",
+              "displayName": "approved_by",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "review_notes",
+              "displayName": "review_notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "1810405271",
+              "displayName": "1810405271",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TRUE",
+              "displayName": "TRUE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1968,
+        0
+      ],
+      "id": "52b2908d-444f-4401-825b-f9f744ca4dbe",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code node: Attach sheetID + prepend header row — SCIO Rate Generator v2\n\nconst columns = [\n  \"project_id\",\n  \"project_name\",\n  \"client_name\",\n  \"client_type\",\n  \"country\",\n  \"file_name\",\n  \"role_id\",\n  \"role_title\",\n  \"skill_area\",\n  \"languages_required\",\n  \"role_days\",\n  \"years_experience_required\",\n  \"role_level\",\n  \"scarcity_level\",\n  \"delivery_context\",\n  \"mobilisation_speed\",\n  \"classification_confidence\",\n  \"classification_rationale\",\n  \"evidence_quotes\",\n  \"buy_min_base\",\n  \"buy_point_base\",\n  \"buy_max_base\",\n  \"scarcity_factor\",\n  \"delivery_factor\",\n  \"mobilisation_factor\",\n  \"target_margin\",\n  \"margin_floor\",\n  \"margin_used\",\n  \"buy_min_adjusted\",\n  \"buy_point_adjusted\",\n  \"buy_max_adjusted\",\n  \"sell_min\",\n  \"sell_point\",\n  \"sell_max\",\n  \"commercial_override_pct\",\n  \"final_sell_point\",\n  \"gross_margin_point\",\n  \"gross_margin_worst_case\",\n  \"margin_status\",\n  \"required_sell_for_35pct\",\n  \"sell_gap_to_35pct\",\n  \"review_required\",\n  \"approval_status\",\n  \"approved_by\",\n  \"review_notes\"\n];\n\nconst sheetId = $(\"Create sheet\").first().json.sheetId;\nconst roleItems = $items(\"Code in JavaScript\");\n\nif (!roleItems.length) {\n  throw new Error('No role items found from \"Code in JavaScript\".');\n}\n\nconst header = {};\nfor (const c of columns) {\n  header[c] = c;\n}\n\nconst headerItem = {\n  json: {\n    ...header,\n    sheetId,\n    __is_header: true\n  }\n};\n\nconst roleRows = roleItems.map(item => ({\n  json: {\n    ...item.json,\n    sheetId,\n    __is_header: false\n  }\n}));\n\nreturn [headerItem, ...roleRows];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        0
+      ],
+      "id": "6ef20b3a-8b4b-480d-8718-00cdca9340ef",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-05-19T06:24:13.610Z",
+      "createdAt": "2026-05-19T06:24:13.610Z",
+      "role": "workflow:owner",
+      "workflowId": "QglJZiS7fmNgLfsa",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Google Drive Trigger": {
+      "lastTimeChecked": "2026-06-05T11:24:53Z"
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-05-19T12:39:48.320Z",
+  "versionId": "12007f04-63ff-47dd-9250-9ce4e4edc942"
+}
