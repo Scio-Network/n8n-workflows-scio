@@ -1,0 +1,1346 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-13T08:41:10.415Z",
+    "createdAt": "2025-12-13T08:41:10.414Z",
+    "versionId": "8464b98a-b3f0-4f15-83dc-566a8b52e757",
+    "workflowId": "YZ2f2Ox0TcRn9zBD",
+    "nodes": [
+      {
+        "parameters": {
+          "resource": "databasePage",
+          "databaseId": {
+            "__rl": true,
+            "value": "2a294507-a575-80c5-b03b-e0cf03a21f05",
+            "mode": "list",
+            "cachedResultName": "Invoice Tracker",
+            "cachedResultUrl": "https://www.notion.so/2a294507a57580c5b03be0cf03a21f05"
+          },
+          "title": "={{ $json.body.requesterName }}",
+          "propertiesUi": {
+            "propertyValues": [
+              {
+                "key": "Total Amount|number",
+                "numberValue": "={{ parseFloat($json.body.totalAmount) }}"
+              },
+              {
+                "key": "Type|select",
+                "selectValue": "={{ $json.body.Type }}"
+              },
+              {
+                "key": "Currency|select",
+                "selectValue": "={{ $json.body.currency }}"
+              },
+              {
+                "key": "Requester Email|email",
+                "emailValue": "={{ $json.body.requesterEmail }}"
+              },
+              {
+                "key": "Requester Name|rich_text",
+                "textContent": "={{ $json.body.requesterName }}"
+              },
+              {
+                "key": "Date Submitted|date",
+                "includeTime": false,
+                "date": "={{ $json.body.DateIssued }}"
+              },
+              {
+                "key": "Supporting Docs|url",
+                "urlValue": "={{ $json.body.documentLink }}"
+              },
+              {
+                "key": "Status|select",
+                "selectValue": "Content Check Pending"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.notion",
+        "typeVersion": 2.2,
+        "position": [
+          208,
+          -240
+        ],
+        "id": "6cae813c-1a74-434a-8049-25dea87698dd",
+        "name": "Create a database page",
+        "credentials": {
+          "notionApi": {
+            "id": "wY3pt2r9BEEg2nj9",
+            "name": "Scio Notion"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "fc517589-e979-47e4-af4b-971aff3a4d02",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -240,
+          144
+        ],
+        "id": "bee4c5f0-372e-418e-a70d-f776ce92a9da",
+        "name": "Webhook",
+        "webhookId": "fc517589-e979-47e4-af4b-971aff3a4d02"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.body.Type }}",
+                      "rightValue": "SCIO Invoice",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "b1a2cd20-4dab-46a9-b0ad-e18cb2031c5f"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Scio invoice"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "7c56cd02-507d-4225-8b02-1827e16b310f",
+                      "leftValue": "={{ $json.body.Type }}",
+                      "rightValue": "Client Invoice",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Client invoice"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "41b0e691-aa8c-4a0f-8abb-3c3d2e5f67c1",
+                      "leftValue": "={{ $json.body.data.properties.Status.select.name }}",
+                      "rightValue": "Paid",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "payment status"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "1395bfd4-f974-473e-bc47-ecf2b28b9a0a",
+                      "leftValue": "={{ $json.body.data.properties.Status.select.name }}",
+                      "rightValue": "Declined",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "declined"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "e7b0544e-cca7-47a6-9ad9-fbe0da62299e",
+                      "leftValue": "={{ $json.body.data.properties.Status.select.name }}",
+                      "rightValue": "Financial Review Pending",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "approved finance pending"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.3,
+        "position": [
+          -16,
+          96
+        ],
+        "id": "061b92b0-4a55-4198-8838-09d897af2f37",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "resource": "databasePage",
+          "databaseId": {
+            "__rl": true,
+            "value": "2a294507-a575-80c5-b03b-e0cf03a21f05",
+            "mode": "list",
+            "cachedResultName": "Invoice Tracker",
+            "cachedResultUrl": "https://www.notion.so/2a294507a57580c5b03be0cf03a21f05"
+          },
+          "title": "={{ $json.body.requesterName }}",
+          "propertiesUi": {
+            "propertyValues": [
+              {
+                "key": "Requester Name|rich_text",
+                "textContent": "={{ $json.body.requesterName }}"
+              },
+              {
+                "key": "Date Submitted|date",
+                "includeTime": false,
+                "date": "={{ $json.body.DateIssued }}"
+              },
+              {
+                "key": "Project Name|rich_text",
+                "textContent": "={{ $json.body.projectName }}"
+              },
+              {
+                "key": "Team Lead Email|email",
+                "emailValue": "={{ $json.body.teamLeadEmail }}"
+              },
+              {
+                "key": "Total Amount|number",
+                "numberValue": "={{ parseFloat($json.body.totalAmount) }}"
+              },
+              {
+                "key": "Project ID|rich_text",
+                "textContent": "={{ $json.body.projectID }}"
+              },
+              {
+                "key": "Currency|select",
+                "selectValue": "={{ $json.body.currency }}"
+              },
+              {
+                "key": "Requester Email|email",
+                "emailValue": "={{ $json.body.requesterEmail }}"
+              },
+              {
+                "key": "Type|select",
+                "selectValue": "={{ $json.body.Type }}"
+              },
+              {
+                "key": "Supporting Docs|url",
+                "urlValue": "={{ $json.body.documentLink }}"
+              },
+              {
+                "key": "Payee Information|rich_text",
+                "textContent": "={{ $json.body.payeeInformation }}"
+              },
+              {
+                "key": "Status|select",
+                "selectValue": "Content Check Pending"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.notion",
+        "typeVersion": 2.2,
+        "position": [
+          208,
+          -48
+        ],
+        "id": "b9c5e05d-811b-4857-ae35-2cd64f6ca426",
+        "name": "Create a database page1",
+        "credentials": {
+          "notionApi": {
+            "id": "wY3pt2r9BEEg2nj9",
+            "name": "Scio Notion"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://script.google.com/macros/s/AKfycbz83oKbzO4JpX6H6miLZX6Jk5ILUF9sFUMBwRnKJIecYfdRJDyuOnAzabbU9PLiM-fO/exec",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"action\": \"sendTeamLeadApprovalEmail\",\n  \"payload\": {{ $json.payloadForEmail }}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          656,
+          -48
+        ],
+        "id": "b6ea1a07-76f3-43a0-a23a-7b7fef60a019",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "a73b6878-eb38-41ac-90f3-b45ccebd7482",
+                "name": "payloadForEmail",
+                "value": "={{\n  {\n    \"teamLeadEmail\": $('Webhook').item.json.body.teamLeadEmail,\n    \"requesterName\": $('Webhook').item.json.body.requesterName,\n    \"requesterEmail\": $('Webhook').item.json.body.requesterEmail,\n    \"projectName\": $('Webhook').item.json.body.projectName,\n    \"projectID\": $('Webhook').item.json.body.projectID,\n    \"totalAmount\": $('Webhook').item.json.body.totalAmount,\n    \"currency\": $('Webhook').item.json.body.currency,\n    \"notes\": $('Webhook').item.json.body.notes,\n    \"payeeInformation\": $('Webhook').item.json.body.payeeInformation,\n    \"fileUrl\": $('Webhook').item.json.body.fileUrl,\n    \"pageUrl\": $json.url,\n    \"pageId\": $json.id\n  }\n}}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          432,
+          -48
+        ],
+        "id": "cd616b3e-233d-4323-8efc-c6c58d5b03da",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "f2e58871-45fb-4e96-b14c-882d2e1d649b",
+                "name": "payloadForEmail",
+                "value": "={{   {     \"requesterName\": $('Webhook').item.json.body.requesterName,     \"requesterEmail\": $('Webhook').item.json.body.requesterEmail,     \"totalAmount\": $('Webhook').item.json.body.totalAmount,     \"currency\": $('Webhook').item.json.body.currency,     \"notes\": $('Webhook').item.json.body.notes,     \"fileUrl\": $('Webhook').item.json.body.fileUrl,     \"pageUrl\": $json.url   } }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          432,
+          -240
+        ],
+        "id": "5854104c-2620-4dd3-bfd5-1ef35705afba",
+        "name": "Edit Fields1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://script.google.com/macros/s/AKfycbz83oKbzO4JpX6H6miLZX6Jk5ILUF9sFUMBwRnKJIecYfdRJDyuOnAzabbU9PLiM-fO/exec",
+          "sendBody": true,
+          "specifyBody": "=json",
+          "bodyParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "jsonBody": "={\n  \"action\": \"sendPaidEmail\",\n  \"payload\": {{ $json.payloadForEmail }}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          432,
+          144
+        ],
+        "id": "77a967b0-a208-4a1c-b17a-118ec11a9b1f",
+        "name": "HTTP Request1"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "96f0d61b-d293-4064-b6dc-914aac0deecc",
+                "name": "payloadForEmail",
+                "value": "={{\n  {\n    \"requesterEmail\": $json.body.data.properties[\"Requester Email\"].email,\n    \"requesterName\": $json.body.data.properties[\"Requester Name\"].rich_text[0].text.content\n  }\n}}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          208,
+          144
+        ],
+        "id": "e8d56508-63af-4ae9-b2ac-8dc28030d6cb",
+        "name": "Edit Fields2"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://script.google.com/macros/s/AKfycbz83oKbzO4JpX6H6miLZX6Jk5ILUF9sFUMBwRnKJIecYfdRJDyuOnAzabbU9PLiM-fO/exec",
+          "sendBody": true,
+          "specifyBody": "=json",
+          "bodyParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "jsonBody": "={\n  \"action\": \"sendFinanceDeclinedEmail\",\n  \"payload\": {{ $json.payloadForEmail }}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          432,
+          336
+        ],
+        "id": "dd14083f-758e-42e3-b32f-933aced21370",
+        "name": "HTTP Request2"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "96f0d61b-d293-4064-b6dc-914aac0deecc",
+                "name": "payloadForEmail",
+                "value": "={{\n  {\n    \"requesterEmail\": $json.body.data.properties[\"Requester Email\"].email,\n\"rejectionReason\": $json.body.data.properties.Comments.rich_text[0].text.content,\n    \"requesterName\": $json.body.data.properties[\"Requester Name\"].rich_text[0].text.content\n  }\n}}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          208,
+          336
+        ],
+        "id": "c5a7a56a-d609-4b15-8f64-1aebf7bd3ad1",
+        "name": "Edit Fields4"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://script.google.com/macros/s/AKfycbz83oKbzO4JpX6H6miLZX6Jk5ILUF9sFUMBwRnKJIecYfdRJDyuOnAzabbU9PLiM-fO/exec",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"action\": \"sendInitialSCIOEmail\",\n  \"payload\": {{ $json.payloadForEmail }}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          656,
+          -240
+        ],
+        "id": "62d8a03e-d0da-4c13-a8fb-508ef2cee59c",
+        "name": "HTTP Request3"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "96f0d61b-d293-4064-b6dc-914aac0deecc",
+                "name": "payloadForEmail",
+                "value": "={{\n  {\n    \"requesterEmail\": $json.body.data.properties[\"Requester Email\"].email,\n    \"requesterName\": $json.body.data.properties[\"Requester Name\"].rich_text[0].text.content,\n\"projectName\":$json.body.data.properties['Project Name'].rich_text[0].text.content,\n\"projectID\":$json.body.data.properties['Project ID'].rich_text[0].text.content,\n\"totalAmount\":$json.body.data.properties['Total Amount'].number,\n\"currency\":$json.body.data.properties.Currency.select.name,\n \"payeeInformation\":$json.body.data.properties['Payee Information'].rich_text[0].text.content,\n\"pageUrl\":$json.body.data.url\n  }\n}}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          208,
+          528
+        ],
+        "id": "fa90c248-5cac-4861-a292-384830ffe719",
+        "name": "Edit Fields5"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://script.google.com/macros/s/AKfycbz83oKbzO4JpX6H6miLZX6Jk5ILUF9sFUMBwRnKJIecYfdRJDyuOnAzabbU9PLiM-fO/exec",
+          "sendBody": true,
+          "specifyBody": "=json",
+          "bodyParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "jsonBody": "={\n  \"action\": \"sendFinanceApprovalNotification\",\n  \"payload\": {{ $json.payloadForEmail }}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          432,
+          528
+        ],
+        "id": "7e009fc7-12e8-432b-a105-ef76cfeee041",
+        "name": "HTTP Request4"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Create a database page",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Create a database page1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Edit Fields2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Edit Fields4",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Edit Fields5",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a database page1": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a database page": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields2": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields4": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields5": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "8464b98a-b3f0-4f15-83dc-566a8b52e757",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a database page1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-19T12:52:07.252Z",
+  "id": "YZ2f2Ox0TcRn9zBD",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Google Form → Notion: Payment Requests",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "2a294507-a575-80c5-b03b-e0cf03a21f05",
+          "mode": "list",
+          "cachedResultName": "Invoice Tracker",
+          "cachedResultUrl": "https://www.notion.so/2a294507a57580c5b03be0cf03a21f05"
+        },
+        "title": "={{ $json.body.requesterName }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Total Amount|number",
+              "numberValue": "={{ parseFloat($json.body.totalAmount) }}"
+            },
+            {
+              "key": "Type|select",
+              "selectValue": "={{ $json.body.Type }}"
+            },
+            {
+              "key": "Currency|select",
+              "selectValue": "={{ $json.body.currency }}"
+            },
+            {
+              "key": "Requester Email|email",
+              "emailValue": "={{ $json.body.requesterEmail }}"
+            },
+            {
+              "key": "Requester Name|rich_text",
+              "textContent": "={{ $json.body.requesterName }}"
+            },
+            {
+              "key": "Date Submitted|date",
+              "includeTime": false,
+              "date": "={{ $json.body.DateIssued }}"
+            },
+            {
+              "key": "Supporting Docs|url",
+              "urlValue": "={{ $json.body.documentLink }}"
+            },
+            {
+              "key": "Status|select",
+              "selectValue": "Content Check Pending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        -240
+      ],
+      "id": "6cae813c-1a74-434a-8049-25dea87698dd",
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "wY3pt2r9BEEg2nj9",
+          "name": "Scio Notion"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fc517589-e979-47e4-af4b-971aff3a4d02",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        144
+      ],
+      "id": "bee4c5f0-372e-418e-a70d-f776ce92a9da",
+      "name": "Webhook",
+      "webhookId": "fc517589-e979-47e4-af4b-971aff3a4d02"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.Type }}",
+                    "rightValue": "SCIO Invoice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "b1a2cd20-4dab-46a9-b0ad-e18cb2031c5f"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Scio invoice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7c56cd02-507d-4225-8b02-1827e16b310f",
+                    "leftValue": "={{ $json.body.Type }}",
+                    "rightValue": "Client Invoice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Client invoice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "41b0e691-aa8c-4a0f-8abb-3c3d2e5f67c1",
+                    "leftValue": "={{ $json.body.data.properties.Status.select.name }}",
+                    "rightValue": "Paid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "payment status"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1395bfd4-f974-473e-bc47-ecf2b28b9a0a",
+                    "leftValue": "={{ $json.body.data.properties.Status.select.name }}",
+                    "rightValue": "Declined",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "declined"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e7b0544e-cca7-47a6-9ad9-fbe0da62299e",
+                    "leftValue": "={{ $json.body.data.properties.Status.select.name }}",
+                    "rightValue": "Financial Review Pending",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "approved finance pending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -16,
+        96
+      ],
+      "id": "061b92b0-4a55-4198-8838-09d897af2f37",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "2a294507-a575-80c5-b03b-e0cf03a21f05",
+          "mode": "list",
+          "cachedResultName": "Invoice Tracker",
+          "cachedResultUrl": "https://www.notion.so/2a294507a57580c5b03be0cf03a21f05"
+        },
+        "title": "={{ $json.body.requesterName }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Requester Name|rich_text",
+              "textContent": "={{ $json.body.requesterName }}"
+            },
+            {
+              "key": "Date Submitted|date",
+              "includeTime": false,
+              "date": "={{ $json.body.DateIssued }}"
+            },
+            {
+              "key": "Project Name|rich_text",
+              "textContent": "={{ $json.body.projectName }}"
+            },
+            {
+              "key": "Team Lead Email|email",
+              "emailValue": "={{ $json.body.teamLeadEmail }}"
+            },
+            {
+              "key": "Total Amount|number",
+              "numberValue": "={{ parseFloat($json.body.totalAmount) }}"
+            },
+            {
+              "key": "Project ID|rich_text",
+              "textContent": "={{ $json.body.projectID }}"
+            },
+            {
+              "key": "Currency|select",
+              "selectValue": "={{ $json.body.currency }}"
+            },
+            {
+              "key": "Requester Email|email",
+              "emailValue": "={{ $json.body.requesterEmail }}"
+            },
+            {
+              "key": "Type|select",
+              "selectValue": "={{ $json.body.Type }}"
+            },
+            {
+              "key": "Supporting Docs|url",
+              "urlValue": "={{ $json.body.documentLink }}"
+            },
+            {
+              "key": "Payee Information|rich_text",
+              "textContent": "={{ $json.body.payeeInformation }}"
+            },
+            {
+              "key": "Status|select",
+              "selectValue": "Content Check Pending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        -48
+      ],
+      "id": "b9c5e05d-811b-4857-ae35-2cd64f6ca426",
+      "name": "Create a database page1",
+      "credentials": {
+        "notionApi": {
+          "id": "wY3pt2r9BEEg2nj9",
+          "name": "Scio Notion"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbz83oKbzO4JpX6H6miLZX6Jk5ILUF9sFUMBwRnKJIecYfdRJDyuOnAzabbU9PLiM-fO/exec",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"action\": \"sendTeamLeadApprovalEmail\",\n  \"payload\": {{ $json.payloadForEmail }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        656,
+        -48
+      ],
+      "id": "b6ea1a07-76f3-43a0-a23a-7b7fef60a019",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a73b6878-eb38-41ac-90f3-b45ccebd7482",
+              "name": "payloadForEmail",
+              "value": "={{\n  {\n    \"teamLeadEmail\": $('Webhook').item.json.body.teamLeadEmail,\n    \"requesterName\": $('Webhook').item.json.body.requesterName,\n    \"requesterEmail\": $('Webhook').item.json.body.requesterEmail,\n    \"projectName\": $('Webhook').item.json.body.projectName,\n    \"projectID\": $('Webhook').item.json.body.projectID,\n    \"totalAmount\": $('Webhook').item.json.body.totalAmount,\n    \"currency\": $('Webhook').item.json.body.currency,\n    \"notes\": $('Webhook').item.json.body.notes,\n    \"payeeInformation\": $('Webhook').item.json.body.payeeInformation,\n    \"fileUrl\": $('Webhook').item.json.body.fileUrl,\n    \"pageUrl\": $json.url,\n    \"pageId\": $json.id\n  }\n}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        -48
+      ],
+      "id": "cd616b3e-233d-4323-8efc-c6c58d5b03da",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f2e58871-45fb-4e96-b14c-882d2e1d649b",
+              "name": "payloadForEmail",
+              "value": "={{   {     \"requesterName\": $('Webhook').item.json.body.requesterName,     \"requesterEmail\": $('Webhook').item.json.body.requesterEmail,     \"totalAmount\": $('Webhook').item.json.body.totalAmount,     \"currency\": $('Webhook').item.json.body.currency,     \"notes\": $('Webhook').item.json.body.notes,     \"fileUrl\": $('Webhook').item.json.body.fileUrl,     \"pageUrl\": $json.url   } }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        -240
+      ],
+      "id": "5854104c-2620-4dd3-bfd5-1ef35705afba",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbz83oKbzO4JpX6H6miLZX6Jk5ILUF9sFUMBwRnKJIecYfdRJDyuOnAzabbU9PLiM-fO/exec",
+        "sendBody": true,
+        "specifyBody": "=json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={\n  \"action\": \"sendPaidEmail\",\n  \"payload\": {{ $json.payloadForEmail }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        144
+      ],
+      "id": "77a967b0-a208-4a1c-b17a-118ec11a9b1f",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96f0d61b-d293-4064-b6dc-914aac0deecc",
+              "name": "payloadForEmail",
+              "value": "={{\n  {\n    \"requesterEmail\": $json.body.data.properties[\"Requester Email\"].email,\n    \"requesterName\": $json.body.data.properties[\"Requester Name\"].rich_text[0].text.content\n  }\n}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        144
+      ],
+      "id": "e8d56508-63af-4ae9-b2ac-8dc28030d6cb",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbz83oKbzO4JpX6H6miLZX6Jk5ILUF9sFUMBwRnKJIecYfdRJDyuOnAzabbU9PLiM-fO/exec",
+        "sendBody": true,
+        "specifyBody": "=json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={\n  \"action\": \"sendFinanceDeclinedEmail\",\n  \"payload\": {{ $json.payloadForEmail }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        336
+      ],
+      "id": "dd14083f-758e-42e3-b32f-933aced21370",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96f0d61b-d293-4064-b6dc-914aac0deecc",
+              "name": "payloadForEmail",
+              "value": "={{\n  {\n    \"requesterEmail\": $json.body.data.properties[\"Requester Email\"].email,\n\"rejectionReason\": $json.body.data.properties.Comments.rich_text[0].text.content,\n    \"requesterName\": $json.body.data.properties[\"Requester Name\"].rich_text[0].text.content\n  }\n}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        336
+      ],
+      "id": "c5a7a56a-d609-4b15-8f64-1aebf7bd3ad1",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbz83oKbzO4JpX6H6miLZX6Jk5ILUF9sFUMBwRnKJIecYfdRJDyuOnAzabbU9PLiM-fO/exec",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"action\": \"sendInitialSCIOEmail\",\n  \"payload\": {{ $json.payloadForEmail }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        656,
+        -240
+      ],
+      "id": "62d8a03e-d0da-4c13-a8fb-508ef2cee59c",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96f0d61b-d293-4064-b6dc-914aac0deecc",
+              "name": "payloadForEmail",
+              "value": "={{\n  {\n    \"requesterEmail\": $json.body.data.properties[\"Requester Email\"].email,\n    \"requesterName\": $json.body.data.properties[\"Requester Name\"].rich_text[0].text.content,\n\"projectName\":$json.body.data.properties['Project Name'].rich_text[0].text.content,\n\"projectID\":$json.body.data.properties['Project ID'].rich_text[0].text.content,\n\"totalAmount\":$json.body.data.properties['Total Amount'].number,\n\"currency\":$json.body.data.properties.Currency.select.name,\n \"payeeInformation\":$json.body.data.properties['Payee Information'].rich_text[0].text.content,\n\"pageUrl\":$json.body.data.url\n  }\n}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        528
+      ],
+      "id": "fa90c248-5cac-4861-a292-384830ffe719",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbz83oKbzO4JpX6H6miLZX6Jk5ILUF9sFUMBwRnKJIecYfdRJDyuOnAzabbU9PLiM-fO/exec",
+        "sendBody": true,
+        "specifyBody": "=json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={\n  \"action\": \"sendFinanceApprovalNotification\",\n  \"payload\": {{ $json.payloadForEmail }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        528
+      ],
+      "id": "7e009fc7-12e8-432b-a105-ef76cfeee041",
+      "name": "HTTP Request4"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-09-19T12:52:07.259Z",
+      "createdAt": "2025-09-19T12:52:07.259Z",
+      "role": "workflow:owner",
+      "workflowId": "YZ2f2Ox0TcRn9zBD",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-17T10:51:54.000Z",
+  "versionId": "8464b98a-b3f0-4f15-83dc-566a8b52e757"
+}
