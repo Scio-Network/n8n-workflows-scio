@@ -1,0 +1,324 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-13T08:41:10.415Z",
+    "createdAt": "2025-12-13T08:41:10.414Z",
+    "versionId": "6d78b3f0-5b7d-4071-9c22-f4718ae83550",
+    "workflowId": "kTK7qaNvNpqZ5SDH",
+    "nodes": [
+      {
+        "parameters": {
+          "path": "status",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -256,
+          -32
+        ],
+        "id": "0b283513-80a2-44a3-a0b8-f1390b81bcc1",
+        "name": "Webhook",
+        "webhookId": "c257ca04-966d-4894-9206-ef1a7c3049be"
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "base": {
+            "__rl": true,
+            "value": "appL4IZysxZTkn08g",
+            "mode": "id"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tbl129glCxQEXFZxD",
+            "mode": "list",
+            "cachedResultName": "Jobs",
+            "cachedResultUrl": "https://airtable.com/appL4IZysxZTkn08g/tbl129glCxQEXFZxD"
+          },
+          "filterByFormula": "={jobId} = '{{$json.jobId}}'",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          208,
+          -32
+        ],
+        "id": "cf460c15-950d-4a89-87b3-6ca3aa1f436a",
+        "name": "Search records",
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "JTOlUpWkPDRjR8yC",
+            "name": "Airtable Personal Access Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// n8n Airtable Search returns { records: [ { id, fields: {...} } ] }\nconst recs = $json.records || [];\nif (!recs.length) {\n  // Always return ONE item so the responder has a body\n  return [{\n    json: {\n      error: 'NOT_FOUND',\n      jobId: $node[\"Extract Job ID\"].json.jobId\n    }\n  }];\n}\n\nconst f = recs[0].fields || recs[0];\n\nreturn [{\n  json: {\n    jobId: f.jobId,\n    state: f.state,\n    warningOverLimit: !!f.warningOverLimit,\n    designspecUrl: `https://scionetwork.app.n8n.cloud/webhook/designspec?jobId=${encodeURIComponent(f.jobId)}`\n  }\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          416,
+          -32
+        ],
+        "id": "bb3242cc-91b6-41fd-b0da-7dbfec4e7317",
+        "name": "Shape Status"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "=={{$json}}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4,
+        "position": [
+          608,
+          -32
+        ],
+        "id": "ce61e007-a2d6-44fc-ba08-b4dd0b7fe2bc",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Normalize query param to root so all nodes read $json.jobId\nreturn [{\n  json: {\n    jobId: $json.query?.jobId ?? $json.jobId ?? null\n  }\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -16,
+          -32
+        ],
+        "id": "50449507-d54b-4873-91ee-d5529a0804f4",
+        "name": "Extract Job ID"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Extract Job ID",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search records": {
+        "main": [
+          [
+            {
+              "node": "Shape Status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Shape Status": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Respond to Webhook": {
+        "main": [
+          []
+        ]
+      },
+      "Extract Job ID": {
+        "main": [
+          [
+            {
+              "node": "Search records",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "6d78b3f0-5b7d-4071-9c22-f4718ae83550",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Job ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Shape Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape Status": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "Extract Job ID": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-22T12:48:52.858Z",
+  "id": "kTK7qaNvNpqZ5SDH",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Status",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "status",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -256,
+        -32
+      ],
+      "id": "0b283513-80a2-44a3-a0b8-f1390b81bcc1",
+      "name": "Webhook",
+      "webhookId": "c257ca04-966d-4894-9206-ef1a7c3049be"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appL4IZysxZTkn08g",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl129glCxQEXFZxD",
+          "mode": "list",
+          "cachedResultName": "Jobs",
+          "cachedResultUrl": "https://airtable.com/appL4IZysxZTkn08g/tbl129glCxQEXFZxD"
+        },
+        "filterByFormula": "={jobId} = '{{$json.jobId}}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        -32
+      ],
+      "id": "cf460c15-950d-4a89-87b3-6ca3aa1f436a",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "JTOlUpWkPDRjR8yC",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Airtable Search returns { records: [ { id, fields: {...} } ] }\nconst recs = $json.records || [];\nif (!recs.length) {\n  // Always return ONE item so the responder has a body\n  return [{\n    json: {\n      error: 'NOT_FOUND',\n      jobId: $node[\"Extract Job ID\"].json.jobId\n    }\n  }];\n}\n\nconst f = recs[0].fields || recs[0];\n\nreturn [{\n  json: {\n    jobId: f.jobId,\n    state: f.state,\n    warningOverLimit: !!f.warningOverLimit,\n    designspecUrl: `https://scionetwork.app.n8n.cloud/webhook/designspec?jobId=${encodeURIComponent(f.jobId)}`\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        -32
+      ],
+      "id": "bb3242cc-91b6-41fd-b0da-7dbfec4e7317",
+      "name": "Shape Status"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=={{$json}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        608,
+        -32
+      ],
+      "id": "ce61e007-a2d6-44fc-ba08-b4dd0b7fe2bc",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalize query param to root so all nodes read $json.jobId\nreturn [{\n  json: {\n    jobId: $json.query?.jobId ?? $json.jobId ?? null\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "50449507-d54b-4873-91ee-d5529a0804f4",
+      "name": "Extract Job ID"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-09-22T12:48:52.861Z",
+      "createdAt": "2025-09-22T12:48:52.861Z",
+      "role": "workflow:owner",
+      "workflowId": "kTK7qaNvNpqZ5SDH",
+      "projectId": "Bg5ZL2boMU9uQ3IS"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-09-22T16:35:45.000Z",
+  "versionId": "6d78b3f0-5b7d-4071-9c22-f4718ae83550"
+}
