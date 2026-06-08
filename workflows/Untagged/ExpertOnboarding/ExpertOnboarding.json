@@ -1,0 +1,442 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Google Calendar Trigger": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get an event": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-22T23:01:16.655Z",
+  "id": "u6ChVy9ErF77tCJr",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "ExpertOnboarding",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        },
+        "calendarId": {
+          "__rl": true,
+          "value": "gemini@scio.net",
+          "mode": "id"
+        },
+        "triggerOn": "eventCreated",
+        "options": {
+          "matchTerm": "SCIO Expert Interview"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTrigger",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -96
+      ],
+      "id": "a89d7e7f-61d0-480c-9232-3d8ed1fd4f45",
+      "name": "Google Calendar Trigger",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "tuxN2R8q5S7qlzoL",
+          "name": "Google Calendar Gemini account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1340987310,
+          "mode": "list",
+          "cachedResultName": "Applications",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE/edit#gid=1340987310"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "callScheduledAt": "={{ $json.created }}",
+            "applicantEmail": "={{ $json.attendees[1].email }}",
+            "status": "call-booked"
+          },
+          "matchingColumns": [
+            "applicantEmail"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "applicantName",
+              "displayName": "applicantName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "applicantEmail",
+              "displayName": "applicantEmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "linkedIn",
+              "displayName": "linkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cvUrl",
+              "displayName": "cvUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "workedWithScio",
+              "displayName": "workedWithScio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "agreePrivacy",
+              "displayName": "agreePrivacy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "scioDetails",
+              "displayName": "scioDetails",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "expertise",
+              "displayName": "expertise",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "yearsExperience",
+              "displayName": "yearsExperience",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "submittedAt",
+              "displayName": "submittedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "callScheduledAt",
+              "displayName": "callScheduledAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        -96
+      ],
+      "id": "b79f1d7f-c13a-4072-9280-1edaa3bcd683",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "specificTime",
+        "dateTime": "={{ $json.callScheduledAt }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        -96
+      ],
+      "id": "0896a8c6-3924-4176-a5c0-0239b17135c7",
+      "name": "Wait",
+      "webhookId": "164bdd8a-a5ce-4168-8fcf-05df5c042762"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "calendar": {
+          "__rl": true,
+          "value": "gemini@scio.net",
+          "mode": "list",
+          "cachedResultName": "gemini@scio.net"
+        },
+        "eventId": "={{ $('Google Calendar Trigger').item.json.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        -96
+      ],
+      "id": "d802bd87-9aa6-42c4-8d93-85df0ab891d3",
+      "name": "Get an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "tuxN2R8q5S7qlzoL",
+          "name": "Google Calendar Gemini account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://meet.googleapis.com/v2/spaces/ggr-fywn-yuv",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        848,
+        -96
+      ],
+      "id": "cb450f42-2f02-42eb-a6a7-e5a24d855d3a",
+      "name": "HTTP Request",
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "dNNxQkY5L9YVvhaf",
+          "name": "Gemini Oauth account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Google Calendar Trigger": [
+      {
+        "json": {
+          "kind": "calendar#event",
+          "etag": "\"3533688643362302\"",
+          "id": "3eu1bi4u3lt45qmlf2slsa1bik",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=M2V1MWJpNHUzbHQ0NXFtbGYyc2xzYTFiaWsgZ2VtaW5pQHNjaW8ubmV0",
+          "created": "2025-12-27T14:05:21.000Z",
+          "updated": "2025-12-27T14:05:21.681Z",
+          "summary": "SCIO Expert Interview",
+          "creator": {
+            "email": "gemini@scio.net",
+            "self": true
+          },
+          "organizer": {
+            "email": "gemini@scio.net",
+            "self": true
+          },
+          "start": {
+            "dateTime": "2025-12-24T12:30:00+03:00",
+            "timeZone": "Africa/Nairobi"
+          },
+          "end": {
+            "dateTime": "2025-12-24T13:30:00+03:00",
+            "timeZone": "Africa/Nairobi"
+          },
+          "iCalUID": "3eu1bi4u3lt45qmlf2slsa1bik@google.com",
+          "sequence": 0,
+          "attendees": [
+            {
+              "email": "gemini@scio.net",
+              "organizer": true,
+              "self": true,
+              "responseStatus": "accepted"
+            },
+            {
+              "email": "nyairo@scio.net",
+              "responseStatus": "needsAction"
+            }
+          ],
+          "hangoutLink": "https://meet.google.com/ydf-qnjb-aab",
+          "conferenceData": {
+            "entryPoints": [
+              {
+                "entryPointType": "video",
+                "uri": "https://meet.google.com/ydf-qnjb-aab",
+                "label": "meet.google.com/ydf-qnjb-aab"
+              },
+              {
+                "entryPointType": "more",
+                "uri": "https://tel.meet/ydf-qnjb-aab?pin=5833197170774",
+                "pin": "5833197170774"
+              },
+              {
+                "regionCode": "DE",
+                "entryPointType": "phone",
+                "uri": "tel:+49-40-8081619173",
+                "label": "+49 40 8081619173",
+                "pin": "323162566"
+              }
+            ],
+            "conferenceSolution": {
+              "key": {
+                "type": "hangoutsMeet"
+              },
+              "name": "Google Meet",
+              "iconUri": "https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v6/web-512dp/logo_meet_2020q4_color_2x_web_512dp.png"
+            },
+            "conferenceId": "ydf-qnjb-aab"
+          },
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-22T23:01:16.660Z",
+      "createdAt": "2025-12-22T23:01:16.660Z",
+      "role": "workflow:owner",
+      "workflowId": "u6ChVy9ErF77tCJr",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-03T09:26:18.775Z",
+  "versionId": "c800246c-50ed-4df5-8365-9aeb9d4b8c02"
+}
