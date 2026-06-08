@@ -1,0 +1,30 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {},
+  "createdAt": "2026-01-12T11:25:54.488Z",
+  "id": "rLoVGeFGvnIuKZcB",
+  "isArchived": true,
+  "meta": null,
+  "name": "Feeds Collection",
+  "nodes": [],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-12T11:25:54.493Z",
+      "createdAt": "2026-01-12T11:25:54.493Z",
+      "role": "workflow:owner",
+      "workflowId": "rLoVGeFGvnIuKZcB",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-15T18:30:09.000Z",
+  "versionId": "d26b49b6-9f69-4dec-82f1-b53fd7cfb9bb"
+}
