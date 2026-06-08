@@ -1,0 +1,364 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "download CV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extract data": {
+      "main": [
+        [
+          {
+            "node": "get CV embeddings",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "download CV": {
+      "main": [
+        [
+          {
+            "node": "extract data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get CV embeddings": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-10-23T13:44:40.354Z",
+  "id": "8d1TcyepiCi8Fpf4",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Expert Onboarding",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "new-expert-application",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -48,
+        0
+      ],
+      "id": "e3053f6a-5447-4238-83ab-9533395c1485",
+      "name": "Webhook",
+      "webhookId": "1b394f54-314a-4050-b8a7-0a9998a0091e"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://markitdown-api-slim-85095088607.europe-west3.run.app/extract",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        384,
+        0
+      ],
+      "id": "9e7b32cd-9a5f-48fa-863a-404794984a00",
+      "name": "extract data"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a CV data extractor. Your task is to parse raw text from a CV and return structured data in JSON format. \nExtract as many details as possible and leave missing values as empty strings or empty arrays.\n\nRules for missing data:\n1. If a value is not found, set the field to null (for strings) or [] (for arrays).\n2. You MUST add the property name (key) of any missing field to the \"missing_data_fields\" list.\n\nYour final output MUST be a single, valid JSON object. Do not add any text before or after the JSON.\n\nCV Text:\n---\n{{ $json.markdown }}\n---\n\nExtract the following fields. If a field cannot be found, use null as its value.\n\n{\n  \"date_of_birth\": \"YYYY-MM-DD\",\n  \"highest_degree\": \"The highest academic degree found (e.g., PhD, Master's, Bachelor's)\",\n  \"education_history\": [\n    {\n      \"degree\": \"Full degree name\",\n      \"university\": \"University name\",\n      \"location\": \"City, Country\",\n      \"period\": \"YYYY-YYYY\"\n    }\n  ],\n  \"years_of_experience\": \"Total number of years of professional experience as an integer\",\n  \"fields_of_expertise\": [\"A list of key expertise fields as strings\"],\n  \"regional_expertise\": [\n    {\n      \"region\": \"e.g., East Africa, Southeast Asia\",\n      \"duration\": \"e.g., 5 years\"\n    }\n  ],\n  \"mother_tongue\": \"The single primary language\",\n  \"other_languages\": [\n    {\n      \"language\": \"Language name\",\n      \"proficiency\": \"Proficiency level (e.g., C1, B2, Fluent, Professional)\"\n    }\n  ],\n  \"skills_competencies\": [\"A list of important skills and competencies\"]\n\"missing_data_fields\": [\"A list of the keys from above (e.g., 'date_of_birth') that were not found in the CV\"]\n}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        608,
+        64
+      ],
+      "id": "e600ba40-7746-460b-9177-35cbc3fb7af7",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "iFWZTIW4X2HMAn1v",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "expert_applications",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "email",
+              "condition": "eq",
+              "keyValue": "={{ $('Webhook').item.json.body.record.email }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "date_of_birth",
+              "fieldValue": "={{ $json.message.content.date_of_birth }}"
+            },
+            {
+              "fieldId": "highest_degree",
+              "fieldValue": "={{ $json.message.content.highest_degree }}"
+            },
+            {
+              "fieldId": "education_history",
+              "fieldValue": "={{ $json.message.content.education_history }}"
+            },
+            {
+              "fieldId": "years_of_experience",
+              "fieldValue": "={{ $json.message.content.years_of_experience }}"
+            },
+            {
+              "fieldId": "fields_of_expertise",
+              "fieldValue": "={{ $json.message.content.fields_of_expertise }}"
+            },
+            {
+              "fieldId": "regional_expertise",
+              "fieldValue": "={{ $json.message.content.regional_expertise }}"
+            },
+            {
+              "fieldId": "skills_competencies",
+              "fieldValue": "={{ $json.message.content.skills_competencies }}"
+            },
+            {
+              "fieldId": "mother_tongue",
+              "fieldValue": "={{ $json.message.content.mother_tongue }}"
+            },
+            {
+              "fieldId": "other_languages",
+              "fieldValue": "={{ $json.message.content.other_languages }}"
+            },
+            {
+              "fieldId": "cv_embedding",
+              "fieldValue": "={{ $('get CV embeddings').first().json.data[0].embedding }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        928,
+        -32
+      ],
+      "id": "09aec1ef-29dc-4e5a-bcda-51a876b482f2",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "f2cORh0TXf33nJTO",
+          "name": "Expert Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://pvywobxbuwpybsvegzys.supabase.co/storage/v1/object/cv_submissions/{{ $json.body.record.cv_storage_path }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        160,
+        0
+      ],
+      "id": "650d8a2b-da68-427e-b0ea-f52390f273af",
+      "name": "download CV",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "g084iTX4HgTc0ja6",
+          "name": "Supabase Service Role"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/embeddings",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"input\": {{ JSON.stringify($json.markdown) }},\n  \"model\": \"text-embedding-3-small\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        688,
+        -96
+      ],
+      "id": "5c224b3f-d28b-4c44-8bbc-d22854a96750",
+      "name": "get CV embeddings",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "g084iTX4HgTc0ja6",
+          "name": "Supabase Service Role"
+        },
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "scionetwork.app.n8n.cloud",
+            "user-agent": "pg_net/0.19.5",
+            "content-length": "786",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "2a05:d014:1c06:5f1d:8372:3eee:e7ef:8e4a",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "DE",
+            "cf-ray": "9a4b8801c3ecdcce-FRA",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "2a05:d014:1c06:5f1d:8372:3eee:e7ef:8e4a, 172.71.148.63",
+            "x-forwarded-host": "scionetwork.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-20-65bb84f5c9-g5675",
+            "x-is-trusted": "yes",
+            "x-real-ip": "2a05:d014:1c06:5f1d:8372:3eee:e7ef:8e4a"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "type": "INSERT",
+            "table": "expert_applications",
+            "record": {
+              "id": 22,
+              "email": "she@gmail.com",
+              "full_name": "sheba",
+              "how_heard": "linkedin",
+              "created_at": "2025-11-26T18:43:25.019669+00:00",
+              "cv_embedding": null,
+              "cv_full_text": null,
+              "linkedin_url": "https://www.linkedin.com/in/bathsheba-nyairo-48b23031b",
+              "date_of_birth": null,
+              "mother_tongue": null,
+              "highest_degree": null,
+              "missing_fields": null,
+              "cv_storage_path": "1764182603409_Bathsheba_Nyairo_CV.docx",
+              "other_languages": null,
+              "worked_with_scio": true,
+              "education_history": null,
+              "extraction_status": "Pending",
+              "regional_expertise": null,
+              "consent_ai_analysis": true,
+              "fields_of_expertise": null,
+              "skills_competencies": null,
+              "years_of_experience": null,
+              "consent_data_privacy": true,
+              "scio_project_details": "scio p"
+            }
+          },
+          "webhookUrl": "https://scionetwork.app.n8n.cloud/webhook-test/new-expert-application",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-10-23T13:44:40.356Z",
+      "createdAt": "2025-10-23T13:44:40.356Z",
+      "role": "workflow:owner",
+      "workflowId": "8d1TcyepiCi8Fpf4",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-26T19:01:00.000Z",
+  "versionId": "316df140-eb9b-4e6e-b5f5-ea02a2e3baf4"
+}
