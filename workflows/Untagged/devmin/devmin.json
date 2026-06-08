@@ -1,0 +1,146 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Last Execution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Last Execution": {
+      "main": [
+        [
+          {
+            "node": "Dev of Communities and Territories",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dev of Communities and Territories": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2026-02-03T08:19:03.025Z",
+  "id": "4wxvOAVSThwvaJ7S",
+  "isArchived": true,
+  "meta": null,
+  "name": "devmin",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "181a7669-1830-45cd-ad2f-06201f7f36d1",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "resource": "execution",
+        "limit": 1,
+        "filters": {
+          "workflowId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "={{ $workflow.id }}"
+          }
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "edc30f41-574b-4eda-9b83-54f33cfca306",
+      "name": "Get Last Execution",
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        240,
+        0
+      ],
+      "credentials": {
+        "n8nApi": {
+          "id": "9yLmiRcZZkHzV6Lm",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://devmin-scraper-85095088607.us-central1.run.app/scrape-news",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start_date",
+              "value": "=2026-01-31"
+            },
+            {
+              "name": "end_date",
+              "value": "={{ $json.stoppedAt.toDateTime().toFormat('yyyy-MM-dd') }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": false,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        0
+      ],
+      "id": "5b602f86-179b-4be9-be4a-09d16085e58a",
+      "name": "Dev of Communities and Territories"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-03T08:19:03.029Z",
+      "createdAt": "2026-02-03T08:19:03.029Z",
+      "role": "workflow:owner",
+      "workflowId": "4wxvOAVSThwvaJ7S",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-09T12:11:00.000Z",
+  "versionId": "aaad0233-d29a-4c88-8515-0f815a2c90a7"
+}
