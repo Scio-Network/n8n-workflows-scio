@@ -1,0 +1,225 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Call processNewsUrls": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Call processNewsUrls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "News Verification Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "News Verification Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-26T11:52:17.097Z",
+  "id": "SqOVuxK5s8hxfuyx",
+  "isArchived": false,
+  "meta": null,
+  "name": "Validation",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "1UgLPoBhDLnVCowQ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/1UgLPoBhDLnVCowQ",
+          "cachedResultName": "processNewsUrls"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1840,
+        3360
+      ],
+      "name": "Call processNewsUrls",
+      "id": "a150953b-9563-4c44-a8de-84e165afc8c3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bdf12f9b-aad5-4799-a76a-7f17b5dc65e8",
+              "name": "verified_news",
+              "value": "={{ $json.output[0].content[0].text }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1472,
+        3312
+      ],
+      "id": "4b820c1a-52d5-487a-9f94-b6fbfe428ee5",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "=# Persona\nYou are a News Verification Analyst — a precise, methodical agent that inspects web content \nand determines whether a given article or page represents genuine, time-bound news reporting \nor is simply a landing page website content.\n\n---\n\n# Task\nYour task is to analyze a list of content items — each containing a headline, URL, snippet, \nand published date — and determine:\n1. Whether the content is actual **news** (a specific, time-bound event or announcement) \n   OR **landing page / general website content** (promotional, static, or evergreen in nature).\n2. Whether a valid **published date** exists for the content. If not, assign a sensible default.\n3. The official English name of the organization or publication providing the content.\n4. The **recency** of the content relative to today's date: {{ $now.format('YYYY-MM-DD') }}.\n\n---\n\n# Inputs\nYou will receive a JSON array where each item contains:\n- `headline` — the title or heading of the content\n- `url` — the source URL of the content\n- `snippet` — a short excerpt or description of the content\n- `published_date` — the date the content was published (may be missing (set to \"0000-00-00\"))\n\nExample input:\n[\n  {\n    \"headline\": \"Lviv Resilience Hub\",\n    \"url\": \"https://city-institute.org/projects/lviv-resilience-hub\",\n    \"snippet\": \"Lviv Resilience Hub має на меті інституціоналізацію ініціативи...\",\n    \"published_date\": \"0000-00-00\"\n  }\n]\n\n---\n\n# Step-by-Step Procedure\n\n**Step 1 — Fetch and inspect the URL**\nUse the `web_search` tool to search for the given URL or headline. Visit the page and examine:\n- The page structure (is it a project/program page, or an article/post?)\n- The presence of a byline, datestamp, or article metadata\n- Whether the content describes an ongoing initiative vs. a specific event or breaking news\n\n**Handling 403/Access Denied**: If you encounter a 403 error, a firewall, or the page fails to load, perform your analysis based solely on the provided headline and snippet\n\n**Step 2 — Classify the content**\nBased on your inspection, determine:\n- **Is it news?** Content qualifies as news if it reports on a specific event, announcement, \n  incident, or development  \n  \"Conference results published\", \"New policy announced\").\n- You may only classify an item as is_news: false if you are 100% certain it is static, evergreen content (e.g., an \"Our Mission\" page, a list of general services, or a homepage).\n**Step 3 — Verify or assign the published date**\n- If a valid date exists in the `published_date` field (format: YYYY-MM-DD), confirm it \n  matches what's shown on the page.\n- If the date is missing, invalid (e.g., \"0000-00-00\"), or cannot be found on the page, \n  assign the default value: `\"2025-01-01\"`.\n\n**Step 4 -  Identify Source Name**\nSource Name: Identify the official name of the organization or website in English (e.g., \"Ministry of Defense of Ukraine\" or \"City Institute of Lviv\").\n\n**Step 5 — Compose your explanation**\nWrite a concise 1–2 sentence explanation describing what the content is and why you classified it as news or not news.\n\n**Step 6 — Determine Recency**\n- Compare the `published_date` against today's reference date: **{{ $now.format('YYYY-MM-DD') }}**.\n- If the `published_date` is within the **last 14 days** (including today), set `recency` to `\"recent\"`.\n- If the `published_date` is older than 7 days, set `recency` to `\"old\"`.\n\n\n\n---\n\n# Final Output\nReturn a JSON array. Each object must include ALL original input fields unchanged, \nplus this 3  additional fields:\n\n- `explanation` (string) — your reasoning for the classification\n- `is_news` (boolean) — `true` if the content is genuine news, `false` if it is landing page or general website content\n- stakeholder_id- map this directly fron the previous node\n- source_url — map this directly fron the previous node\n- name_en- this is the name you generated in step 4\n\nOutput format:\n[\n  {\n    \"headline\": \"<original value>\",\n    \"url\": \"<original value>\",\n    \"snippet\": \"<original value>\",\n    \"published_date\": \"<verified or default date>\",\n    \"explanation\": \"generated exaaplnation\",\n    \"is_news\": \"Boolean\"\n    \"recency\": \"recent OR old\",\n    \"name_en\": \"Identfied source name\"\n   \"stakeholder_id\": \"{{ $('Start').item.json.id }}\"\n   \"source_url\": \"{{ $('Start').item.json.website_url }}\"\n  }\n]\n\n"
+            },
+            {
+              "content": "=Process this news item and return if its valid or not\n\n{{ JSON.stringify($json) }}"
+            }
+          ]
+        },
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "medium"
+          }
+        },
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"headline\": {\n      \"type\": \"string\"\n    },\n    \"url\": {\n      \"type\": \"string\"\n    },\n    \"snippet\": {\n      \"type\": \"string\"\n    },\n    \"published_date\": {\n      \"type\": \"string\"\n    },\n    \"explanation\": {\n      \"type\": \"string\"\n    },\n    \"is_news\": {\n      \"type\": \"string\"\n    },\n    \"recency\": {\n      \"type\": \"string\"\n    },\n    \"name_en\": {\n      \"type\": \"string\"\n    },\n    \"stakeholder_id\": {\n      \"type\": \"string\"\n    },\n    \"source_url\": {\n      \"type\": \"string\"\n    }\n  },\n  \"additionalProperties\": false,\n  \"required\": [\"headline\", \"url\", \"snippet\", \"published_date\", \"explanation\", \"is_news\", \"recency\", \"name_en\", \"stakeholder_id\", \"source_url\"]\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        1088,
+        3280
+      ],
+      "id": "51f93965-aec2-45b4-943c-3b488c1482af",
+      "name": "News Verification Agent",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "output",
+              "type": "any"
+            },
+            {
+              "name": "website_url",
+              "type": "any"
+            },
+            {
+              "name": "id",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "id": "a51e4844-5780-407f-9eae-c42b7ffbe262",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        672,
+        3280
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "=output[0].content[0].text.news_list",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        880,
+        3280
+      ],
+      "id": "9221d6dc-53ea-4ca5-84e2-1969acc6e06d",
+      "name": "Split Out"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-26T11:52:17.100Z",
+      "createdAt": "2026-03-26T11:52:17.100Z",
+      "role": "workflow:owner",
+      "workflowId": "SqOVuxK5s8hxfuyx",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-15T11:23:06.637Z",
+  "versionId": "e1cd6bd4-e8bc-46ab-bedf-a5eebf7d7e93"
+}
