@@ -1,0 +1,30 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {},
+  "createdAt": "2026-01-14T13:22:46.982Z",
+  "id": "VWgHcUhTvWljerPV",
+  "isArchived": true,
+  "meta": null,
+  "name": "Ministry Content Scraper",
+  "nodes": [],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-14T13:22:46.997Z",
+      "createdAt": "2026-01-14T13:22:46.997Z",
+      "role": "workflow:owner",
+      "workflowId": "VWgHcUhTvWljerPV",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-14T21:45:38.000Z",
+  "versionId": "13befdc8-7c9d-4b4e-9be1-ca542d99c811"
+}
