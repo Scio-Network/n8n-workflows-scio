@@ -1,0 +1,1114 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-04-16T08:39:29.308Z",
+    "createdAt": "2026-04-16T08:39:29.308Z",
+    "versionId": "997e3ab6-5c50-400b-b897-f2e26a495db3",
+    "workflowId": "lLSt5XHYGee50iyZ",
+    "nodes": [
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-pro",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-pro"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=You are receiving:\n- The **full contents** of a Terms of Reference (TOR)\n- The **document title**\n- A **target role name** (input role)\n\nYour task is to **locate, select, and return ONLY the qualification text EXACTLY AS IT APPEARS in the TOR** for the given role.\n\nThis is a **STRICT EXTRACTION TASK**, not a summarization or rewriting task.\n\n---\n\n## CRITICAL BEHAVIOR RULE (HIGHEST PRIORITY)\n\n### You are NOT allowed to:\n- Summarize\n- Paraphrase\n- Reword\n- Condense\n- Improve language\n- Re-structure sentences\n\n### You MUST:\nCopy qualification text **word-for-word**\nThink of this task as **highlighting text from the TOR and pasting it into JSON**.\n\n---\n\n## Required Processing Flow (Must Follow Exactly)\n\n### Step 1: Identify the Issuing Organization\n- First apply the **Special Title Rule** (see below).\n- If it does not apply, infer the issuing organization from:\n  - Title\n  - Headers\n  - Repeated references in the TOR body\n\n---\n\n### Step 2: Identify the Target Role\n- Use the input role provided in:{{ $('On form submission').item.json['Role(GIZ Proposals)'] }}. Use this field for GIZ roles\n\nThis is the role  for non GIZ proposals: \"{{ $('On form submission').item.json['Role (non GIZ proposals)'] }}\"\"\n\n\nFor GIZ roles, do the followinf\n- Match it against:\n- Explicit role headers\n- Role labels inside qualification sections\n- Resolve minor naming differences via semantic similarity\n(e.g., “Team Lead” ≈ “Team Leader”)\n\n---\n\n### Step 3: Locate the Qualification Section for That Role\n- Scan the TOR for the **exact section(s)** that define qualifications for the target role.\n\n---\n\n### Step 4: Extract Qualifications (VERBATIM)\n\n#### If qualification text exists:\n- Copy the qualification text **exactly as written**\n- Output each qualification as a string\n- Do NOT merge or reinterpret items\n\n#### If qualification text does NOT exist:\n- Infer qualifications (see inference rules below)\n\n---\n\n## 🚨 Special Title Rule (Must Apply First)\n\nIf `{{ $json.metadata }}` contains: Leistungsbeschreibung (ToR) für die Beschaffung von Dienstleistungen unterhalb des EU Schwellenwertes, deutsch\n\n\nThen:\n- Treat the document as a **GIZ TOR**\n- Set `\"title_match_rule_applied\": true`\n- Apply **GIZ-specific extraction rules** below\n\nOtherwise:\n- Set `\"title_match_rule_applied\": false`\n\n---\n\n## 🔎 Extraction & Inference Rules\n\n### If the TOR is from **GIZ**:\n\n- Focus on sections titled or implied as:\n  - `Key Expert 1`\n  - `Key Expert 2`\n  - `Team Leader`\n  - `Short-term Expert Pool`\n- Extract **ONLY the qualifications listed under the section that matches the input role**.\n- Qualifications must be copied **word-for-word**\n- Do NOT normalize language\n- Do NOT translate\n- Do NOT simplify\n  \n\n---\n\n### If the TOR is from **any other organization**:\nUse the role given here and infer qualifications extract qualifications listed for the implied role.\n\nRole = {{ $('On form submission').item.json['Role (non GIZ proposals)'] }}\n- If no explicit qualifications are found for that role:\n  - Infer likely qualifications based on:\n    - Sector\n    - Scope of work\n    - Seniority implied by the role title\n  - Mark inferred qualifications accordingly.\n\n\nDICTIONARY ITEMS YOU CAN REFERENCE\n- Search for sections such as:\n  - `Personnel Requirements`\n  - `Expert Profile`\n  - `Qualifications Required`\n  - `Consultant Profile`\n  - `Minimum Requirements`\n  - `Team Composition`\n---\n\n## Extraction Rules \n\n- Extract **qualifications**, including:\n  - Degrees\n  - Certifications\n  - Skills\n  - Years of experience\n  - Language requirements\n  - Mandatory / desirable indicators\n- Preserve **exact original terminology** where present.\n- Combine multi-part qualifications if they appear as a single logical item.\n- Preserve numeric values exactly (e.g., “minimum 10 years”).\n- If uncertain whether text is a qualification, include it **only if it clearly defines a requirement**.\n\n---\n\n## 📤 Output Format (STRICT JSON — No Extra Text)\n\nReturn **only** the following JSON structure:\n\n{\n  \"issuing_organization\": \"GIZ\",\n  \"title_match_rule_applied\": true,\n  \"role\": {\n    \"role_name\": \"Key Expert 1\",\n    \"qualifications\": [\n      \"extracted quals\"],\n    \"inferred\": false\n  }\n}\n\nTOR Input full content: {{ $json.text }}\n"
+              }
+            ]
+          },
+          "simplify": false,
+          "jsonOutput": true,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          112,
+          -448
+        ],
+        "id": "65379762-a20e-4913-8efd-3ba0e418a833",
+        "name": "QUALS",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineAll",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          464,
+          -352
+        ],
+        "id": "c40fc40e-1cc2-4cb1-aad3-c03c33274136",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-flash",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-flash"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=You are a data normalization engine.\n\nYou will receive input JSON data extracted from CVs. This data may use inconsistent keys, structures, and naming conventions. Your task is to normalize the input into a standardized JSON structure with specific keys provided below.\n\nInstructions:\n\nMatch values from the incoming JSON to the correct keys in the Target JSON Structure.\n\nTHE GOLDEN RULE FOR MISSING DATA\n- If a value for any given field is missing or cannot be confidently matched, the output must retain the placeholder in curly braces, and the value should be enclosed in double quotes; Example: \nOutput → \"Name and Surname\": \"{Name and Surname}\"\nOutput → \"linkedin.com/\": \"{linkedin.com/}\"\nOutput → \"City2 Country2\": \"{City2 Country2}\"\n\nSTRICT NEGATIVE CONSTRAINT: If the location for a specific work/education entry is missing, DO NOT output \"city1, country1\". You MUST output the literal placeholder: \"{City1 Country1}\".\n\n- This rule applies consistently across all fields — no matter the field name — and ensures that placeholders remain visible\n- All keys and values must be enclosed in double quotes (\" \"). \n\nYour output must be a valid JSON string that follows the exact key structure provided below\n\nDo not include any extra text, explanations, or formatting. Return only the final JSON string.\n{\n  \"Name and Surname\": \"string\",\n  \"Street address\": \"string\",\n  \"Postal Code\": \"string\",\n  \"City Country\": \"string\",\n  \"Mobile Phone No\": \"string\",\n  \"email@email.com\": \"string\",\n  \"linkedin.com/\": \"string\",\n  \"Skype ID\": \"string\",\n  \"Sex\": \"string\",\n  \"DateofBirth\": \"string\",\n  \"National\": \"string\",\n  \"date_from1\": \"string\",\n  \"date_to1\": \"string\",\n  \"Position Held1\": \"string\",\n  \"Name of Employer1\": \"string\",\n  \"City1 Country1\": \"string\",\n  \"Responsibilities\": \"JSON array\",\n  \"date_from2\": \"string\",\n  \"date_to2\": \"string\",\n  \"Position Held2\": \"string\",\n  \"Name of Employer2\": \"string\",\n  \"City2 Country2\": \"string\",\n  \"Responsibilities2\": \"JSON array\", \n  \"date_from3\": \"string\",\n  \"date_to3\": \"string\",\n  \"Position Held3\": \"string\",\n  \"Name of Employer3\": \"string\",\n  \"City3 Country3\": \"string\",\n  \"Responsibilities3\": \"JSON array\",\n  \"date_from4\": \"string\",\n  \"date_to4\": \"string\",\n  \"Position Held4\": \"string\",\n  \"Name of Employer4\": \"string\",\n  \"City4 Country4\": \"string\",\n  \"Responsibilities4\": \"JSON array\",\n  \"date_from5\": \"string\",\n  \"date_to5\": \"string\",\n  \"Position Held5\": \"string\",\n  \"Name of Employer5\": \"string\",\n  \"City5 Country5\": \"string\",\n  \"Responsibilities5\": \"JSON array\",\n  \"date_from6\": \"string\",\n  \"date_to6\": \"string\",\n  \"Position Held6\": \"string\",\n  \"Name of Employer6\": \"string\",\n  \"City6 Country6\": \"string\",\n  \"Responsibilities6\": \"JSON array\",\n  \"date_from7\": \"string\",\n  \"date_to7\": \"string\",\n  \"Position Held7\": \"string\",\n  \"Name of Employer7\": \"string\",\n  \"City7 Country7\": \"string\",\n  \"Responsibilities7\": \"JSON array\",\n  \"date_from8\": \"string\",\n  \"date_to8\": \"string\",\n  \"Position Held8\": \"string\",\n  \"Name of Employer8\": \"string\",\n  \"City8 Country8\": \"string\",\n  \"Responsibilities8\": \"JSON array\",\n  \"date_from9\": \"string\",\n  \"date_to9\": \"string\",\n  \"Position Held9\": \"string\",\n  \"Name of Employer9\": \"string\",\n  \"City9 Country9\": \"string\",\n  \"Responsibilities9\": \"JSON array\",\n  \"date_from10\": \"string\",\n  \"date_to10\": \"string\",\n  \"Position Held10\": \"string\",\n  \"Name of Employer10\": \"string\",\n  \"City10 Country10\": \"string\",\n  \"Responsibilities10\": \"JSON array\",\n  \"edate_from1\": \"string\",\n  \"edate_to1\": \"string\", \n  \"Title1 / Qualification1\": \"string\",\n  \"Name of Institution1\": \"string\",\n  \"CityE1 CountryE1\": \"string\",\n  \"edate_from2\": \"string\",\n  \"edate_to2\": \"string\",\n  \"Title2 / Qualification2\": \"string\",\n  \"Name of Institution2\": \"string\",\n  \"CityE2 CountryE2\": \"string\", \n  \"edate_from3\": \"string\",\n  \"edate_to3\": \"string\",\n  \"Title3 / Qualification3\": \"string\",\n  \"Name of Institution3\": \"string\",\n  \"CityE3 CountryE3\": \"string\",\n  \"edate_from4\": \"string\",\n  \"edate_to4\": \"string\",\n  \"Title4 / Qualification4\": \"string\",\n  \"Name of Institution4\": \"string\",\n  \"CityE4 CountryE4\": \"string\",\n  \"Insert your mother tongue\": \"string\",\n  \"Language1_Name\": \"string\",\n  \"proficient_L1\": \"string (CEFR A1-C2)\",\n  \"proficient_R1\": \"string (CEFR A1-C2)\",\n  \"proficient_S1\": \"string (CEFR A1-C2)\",\n  \"proficient_SP1\": \"string (CEFR A1-C2)\",\n  \"proficient_W1\": \"string (CEFR A1-C2)\",\n  \"Language2_Name\": \"string\",\n  \"proficient_L2\": \"string (CEFR A1-C2)\",\n  \"proficient_R2\": \"string (CEFR A1-C2)\",\n  \"proficient_S2\": \"string (CEFR A1-C2)\",\n  \"proficient_SP2\": \"string (CEFR A1-C2)\",\n  \"proficient_W2\": \"string (CEFR A1-C2)\",\n  \"Language3_Name\": \"string\",\n  \"proficient_L3\": \"string (CEFR A1-C2)\",\n  \"proficient_R3\": \"string (CEFR A1-C2)\",\n  \"proficient_S3\": \"string (CEFR A1-C2)\",\n  \"proficient_SP3\": \"string (CEFR A1-C2)\",\n  \"proficient_W3\": \"string (CEFR A1-C2)\",\n  \"Language4_Name\": \"string\",\n  \"proficient_L4\": \"string (CEFR A1-C2)\",\n  \"proficient_R4\": \"string (CEFR A1-C2)\",\n  \"proficient_S4\": \"string (CEFR A1-C2)\",\n  \"proficient_SP4\": \"string (CEFR A1-C2)\",\n  \"proficient_W4\": \"string (CEFR A1-C2)\",\n  \"CommunicationSkills\": \"JSON array\",\n  \"OrganisationalSkills\": \"JSON array\",\n  \"JobRelatedSkills\": \"JSON array\",\n  \"Certifications\": \"JSON array\",\n  \"publications\": \"JSON array\",\n  \"missing_details\": \"string\"\n}\n\nDetailed Instructions & Mapping Guidelines\nIdentify Core Information: Analyze the input JSON for relevant keys (e.g., personal details, 'Professional Experience', 'Skills', 'Education', 'Languages', 'address', 'contactInfo', etc.) and extract data matching the semantic meaning of each standardized output key defined above (e.g., find the candidate's full name and map it to \"Name and Surname\", find the street name/number and map it to \"Street address\").\n\n\nDate Formatting (CRITICAL for date keys like \"date_fromN\", \"date_toN\", \"edate_fromN\", \"edate_toN\"):\nFind date information in the input corresponding to the start and end of each work experience or education period.\nImportant: The target structure lists separate keys for start (\"date_fromN\", \"EduN_date_from\") and end dates (\"date_toN\", \"EduN_date_to\"). You need to extract the corresponding single date for each.\nFormat each individual date as DD Mon YYYY. (e.g., 01 Jan 2020).\nUse 3-letter month abbreviations (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec).\nUse 01 as the default day if only month/year or just year is specified (e.g., 'June 2021' -> 01 Jun 2021, '2022' -> 01 Jan 2022).\nFor current roles/studies, use the string Present for the end date key (e.g., \"date_to1\": \"Present\").\nIf a specific date (start or end) is missing, ambiguous, or cannot be parsed into the required format, the value for that key MUST be the key name itself as a string (e.g., \"date_from1\": {date_from1}).\n\nLanguage Level Inference (CRITICAL):\nFor keys like \"proficient_L1\", \"proficient_R1\", \"proficient_S1\", \"proficient_SP1\", \"proficient_W1\" (and similarly for L2, R2... L4, R4...), find the corresponding language proficiency information in the input.\nInfer the CEFR level (A1, A2, B1, B2, C1, C2) from descriptive terms (e.g., \"fluent\" -> C1 or C2, \"intermediate\" -> B1 or B2, \"basic\" -> A1 or A2, \"native\" -> C2) and populate it across all five fields: proficient_L1, proficient_R1, proficient_S1, proficient_SP1, and proficient_W1.\n\nNOTE: Provided there's an input language and profiency listed, ensure to autopopulate a CEFR across all the 5 fields\n\nExample: Input is \"language\": \"French\",\n  \"proficiency\": \"basic\"\n\nOutput to populate across all the 5 fields WITHOUT leaving out any field: \n{\n  \"proficient_L1\": \"A1\",\n  \"proficient_R1\": \"A1\",\n  \"proficient_S1\": \"A1\",\n  \"proficient_SP1\": \"A1\",\n  \"proficient_W1\": \"A1\"\n}\nAddress Component Mapping:\nIdentify distinct address components in the input (e.g., street name and number, postal or zip code, city, country).\nMap the extracted street information to the \"Street address\" key.\nMap the extracted postal code information to the \"Postal Code\" key.\nMap the extracted city and country information to the \"City (Country)\" key if not found return {City (Country)}.\nIf a specific component cannot be found in the input, the value for its corresponding key MUST be the key name itself as a string enclosed in {} (e.g., \"Postal Code\": {Postal Code}).\n\n\nCRITICAL\n\nIf any publications are listed, ensure the citation is enclosed in single quotes only and not double quotes.\n\n example: \n\n- Test, D. (2001) \"The Land Question and Decentralisation Reforms in German: New Spaces for Local Democracy?\", paper presented at the European Conference on African Studies (EU 4), Maim, 15-19 July 2009.\n\nRemove this double quotes and let it be\n- Test, D. (2001) 'The Land Question and Decentralisation Reforms in German: New Spaces for Local Democracy?', paper presented at the European Conference on African Studies (EU 4), Maim, 15-19 July 2009.\n\nNOTE: Output handling for missing_details\nReturn the missing_details as a single-line JSON-safe string using \\\\n for line breaks instead of actual newlines\n\nExample output\n\"missing_details\": \"- Requirement 1\\\\n- Requirement 2\\\\n- Requirement 3\"\n\nBullet Fields — No Hyphen or Bullet Symbols\nFor the following keys, extract individual items from the input, but do not prefix them with • or -. They should be clean strings in a JSON array format, e.g.:\n\n\"Responsibilities\": [\"Managed logistics\", \"Led project team\"]\nApplies to:\n\n- \"Responsibilities\" to \"Responsibilities10\"\n-\"JobRelatedSkills\"\n- \"CommunicationSkills\"\n- \"OrganisationalSkills\"\n- \"Certifications\"\n- \"publications\"\n\nIMPORTANT: For all Responsibilities fields (Responsibilities to Responsibilities10):\n\nIf the field exists, output it as a JSON array of clean strings, e.g.\n\"Responsibilities3\": [\"Managed logistics\", \"Led project team\"]\n\nIf the field is missing, empty, or cannot be confidently extracted, DO NOT output an empty array (\"[]\") or an empty string (\"\").\nInstead, preserve the placeholder in curly braces and double quotes, like this:\n\"Responsibilities3\": \"{Responsibilities3}\"\n\n\nINPUT:  {{ $json.output }}"
+              }
+            ]
+          },
+          "jsonOutput": true,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          1040,
+          -352
+        ],
+        "id": "d411e75a-b884-4805-b475-ebbef180d45e",
+        "name": "Message a model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://script.google.com/macros/s/AKfycbyoL0-M3981Gtp-xW8X3OeKs_L10gUBYfDL5WWv6NgvX4em849zimXxdir51JE6Q2XKmg/exec",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json.content.parts[0].text }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1392,
+          -352
+        ],
+        "id": "b5294d33-f244-4796-991f-acc3a9614ca3",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "jsCode": "const output = [];\n\nfor (const item of items) {\n  for (const binaryKey of Object.keys(item.binary)) {\n\n    // 1. Get lowercase filename for easier matching\n    const fileName = item.binary[binaryKey].fileName.toLowerCase();\n\n    // 2. Define CV-specific keywords\n    const cvKeywords = ['cv', 'resume', 'vitae', 'bio', 'profile'];\n    \n    // 3. Check if it's a CV\n    const isCV = cvKeywords.some(word => fileName.includes(word));\n\n    output.push({\n      json: {\n        binaryKey,\n        // 4. Set type to 'cv' if matched, otherwise 'tor'\n        documentType: isCV ? 'cv' : 'tor',\n        fileName: item.binary[binaryKey].fileName\n      },\n      binary: {\n        [binaryKey]: item.binary[binaryKey]\n      }\n    });\n  }\n}\n\nreturn output;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -560,
+          -352
+        ],
+        "id": "555f8de1-5814-4ef7-86a7-48713ef4f710",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "binaryPropertyName": "={{$binary.keys()[0]}}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1.1,
+        "position": [
+          -96,
+          -448
+        ],
+        "id": "58851c7e-8ba3-4b7a-9aa6-be34c23a8763",
+        "name": "Extract from File2"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.documentType }}",
+                      "rightValue": "tor",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "d3cb58c3-4c93-4002-a879-42376bd2cfec"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "tor"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "2fa1ff12-d8f1-4b49-aebe-53ee0eea7bda",
+                      "leftValue": "={{ $json.documentType }}",
+                      "rightValue": "cv",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "cv"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          -336,
+          -352
+        ],
+        "id": "80447392-69d4-45ea-ba20-4174fcc13885",
+        "name": "Switch1"
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "binaryPropertyName": "={{$binary.keys()[0]}}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1.1,
+        "position": [
+          16,
+          -128
+        ],
+        "id": "8df5f2ff-cb7f-46f3-aadb-97f874550f39",
+        "name": "Extract from File3"
+      },
+      {
+        "parameters": {
+          "formTitle": "CV BUILDER",
+          "formDescription": "Upload CV, TOR and define the expert role ",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Upload TOR ",
+                "fieldType": "file",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Upload CV",
+                "fieldType": "file",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Role(GIZ Proposals)",
+                "fieldType": "dropdown",
+                "fieldOptions": {
+                  "values": [
+                    {
+                      "option": "Team Leader"
+                    },
+                    {
+                      "option": "Key expert 1"
+                    },
+                    {
+                      "option": "Short term expert pool"
+                    }
+                  ]
+                }
+              },
+              {
+                "fieldLabel": "Role (non GIZ proposals)",
+                "placeholder": "describe the role"
+              }
+            ]
+          },
+          "options": {
+            "path": ""
+          }
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.3,
+        "position": [
+          -784,
+          -352
+        ],
+        "id": "dd77d7a4-d4d1-4c0a-90df-e475089401c9",
+        "name": "On form submission",
+        "webhookId": "88c7b83e-69ab-4edd-ad03-bac5b9fbf586"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=\n\n## PERSONA\n\nYou are a **Senior CV Revamping Specialist** with extensive experience preparing CVs for:\n- Donor-funded projects\n- International consulting assignments\n- GIZ, EU, UN, World Bank, and similar institutions\n\nYou understand:\n- How evaluators interpret CVs\n- How experience is **professionally reframed** without lying\n- How tools, services, and outputs relate in real-world roles\n\nYou do **not** invent experience.  \nYou **interpret and refactor** experience responsibly.\n\n---\n\n## ROLE \n\nYour task is to:\n\n> **Produce a role-optimized CV that is defensible, auditable, and qualification-aligned, without introducing false claims — while allowing reasonable capability expansion from existing experience.**\n\nYou are not summarizing a CV.  \nYou are **professionally restructuring and strengthening it** to match the provided Job Qualifications.\n\n---\n\n## INPUTS\nINPUTS\nJob Qualifications JSON: {{ $json.candidates[0].content.parts[0].text }}\nCV content:{{ $json.text }}\n\n---\n\n## CORE PRINCIPLES\n\n- Reconstruct and optimize: Restructure and rephrase content to make it highly relevant to the qualifications listed in the Job Qualifications JSON.\n- Prioritize relevance: Highlight experiences, projects, and achievements that best match TOR qualifications.\n- Chronological integrity is mandatory:\n    Work experience must always be ordered from most recent to oldest.\n     a)The most recent role must appear first.\n     b)The oldest role must appear last.\n- Within this reverse-chronological order, you may:\n     a)Strengthen or expand bullet points based on relevance\n     b)Reduce or omit low-relevance roles only if they do not contribute to TOR-aligned capabilities\n\n\n## THINKING & OPTIMIZATION LOGIC (HOW YOU SHOULD REASON)\n\nYou must follow this reasoning sequence **exactly**:\n\n### Step 1 — Identify Evidence Anchors\nFrom the CV, identify:\n- Tools (e.g., Looker, Power BI, Google Sheets)\n- Domains (e.g., analytics, reporting, automation)\n- Activities (e.g., reporting, dashboarding, data handling)\n- Experience( could be projects, role specific)\n\nThese are your **anchors**. You cannot leave them.\n\nIMPORTANT RULE: If the CV includes structured project details (e.g., project/assignment name, client, location, main project features, activities performed): Use this information to reconstruct a work experience entry emphasizing the candidate’s role, skills, and contributions. These are the strongest to use, to make the candidate highliy relevant\n\n---\n\n### Step 2 — Understand the Target Role\nFrom the Job Qualifications JSON, identify:\n- Required capabilities (e.g., data analysis, reporting, coordination)\n- Expected services or outputs (not just job titles)\n\nThink like a hiring manager:\n> “What does someone in this role actually *do*?”\n\n---\n\n### Step 3 — Capability Refactoring (CORE LOGIC)\n\nYou are allowed to **expand experience** by answering:\n\n> “Given these tools or experiences, what *realistic services or tasks* would a professional typically perform that match the qualifications?”\n\nYou may approach this from:\n- **Tool → Service** (e.g., Looker → data analysis, reporting)\n- **Experience → Task** (e.g., reporting → trend analysis, insights)\n- **Qualification → Reframing** (e.g., analyst role → analytical outputs)\n\nThis is **professional interpretation**, not fabrication.\n\n---\n\n### Step 4 — Truth Boundary Check (MANDATORY)\n\nBefore including any statement, verify:\n\n✔ Could this reasonably be done using the tools or experience listed?  \n✔ Is this commonly expected in such a role?  \n✔ Does it avoid adding new employers, certifications, seniority, or years?\n\nIf **any answer is NO**, do not include it.\n\n---\n\n## RULES & BOUNDARIES \n\n### You must NOT:\n- Invent new employers, roles, or projects\n- Add certifications or degrees\n- Add years of experience\n\n\n### ✅ You MAY:\n- Rephrase responsibilities\n- Reorder experiences by relevance\n- Add new skills and tools based on relevance\n- Expand tasks logically from tools or activities\n- Describe services, outputs, or value delivered\n- Emphasize analytical or professional aspects relevant to the role\n\nThink:  \n**“Plausible, professional, defensible.”**\n\n---\n\n## 5CRITICAL PROJECT CONTEXT PRESERVATION RULE\n\nCertain CV elements carry **exceptionally high evaluative weight** in donor-funded and international project assessments.  \nThese elements must **always be explicitly preserved and surfaced** in the Work Experience section.\n\n### High-Signal Context Elements (MANDATORY TO PRESERVE)\n\nIf any of the following appear anywhere in the CV, they must be **explicitly included verbatim** in the relevant experience entry:\n\n- Countries (e.g., Kenya, Uganda, Jordan, Germany)\n- Regions (e.g., East Africa, MENA, SSA)\n- Donors or institutions (e.g., GIZ, EU, UN, World Bank)\n- Government bodies, ministries, or public institutions\n- Project-based or country-specific assignments\n- Multi-country or cross-border engagements\n\nThese elements are considered **core qualification signals**, not optional metadata.\n\n---\n\n### Enforcement Logic\n\nWhen refactoring or rewriting experience:\n\n- You must **explicitly mention the country or region** within the experience description\n- You must **not generalize or omit** geographical or institutional context\n- You must **retain original wording** for countries and institutions wherever possible\n\nExample (Correct):\n\n> “Delivered data analytics and reporting solutions for public-sector projects in **Kenya and Uganda**, supporting donor-funded initiatives.”\n\nExample (Incorrect):\n\n> “Delivered data analytics and reporting solutions for public-sector projects.”\n\n---\n\n\n\n## EXECUTION STEPS\n\n### A. Analyze\n- Compare CV content with Job Qualifications JSON\n- Identify:\n  - Direct matches\n  - Indirect matches via refactoring\n  - Missing qualifications\n\n---\n\n### B. Extract & Refactor CV\n\n#### Personal Details\nExtract exactly as stated:\n- Name, email, phone, LinkedIn, address, nationality, date of birth, sex\n\n---\n\n#### Work Experience\n- Include only relevant experiences\n- Sort work experience by end date (or current role): Most recent → Oldest\n- Refactor responsibilities to align with qualifications\n- Expand experience using tool-based and domain-based logic\n\nUse serial location labels:\n- city1, country1, city2, country2, etc.\n\nOutput as bullet points.\n\n---\n\n#### Academic Qualifications\nExtract:\n- Degrees\n- Institutions\n- Dates\n- City, country (cityE1, countryE1, etc.)\n\n---\n\n#### Languages\n- List languages and CEFR levels\n- Separate mother tongue(s)\n\n---\n\n#### Publications\n- Extract up to Top 7 relevant\n- Bullet points only\n\n---\n\n#### Certifications\n- Extract up to Top 7 relevant or recent\n- Bullet points only\n\n---\n\n#### Job-Related Skills\n- Extract or expand from tools and experience\n- Maximum 5\n- Must be defensible\n\n---\n\n#### Communication Skills\n- Extract implied communication competencies\n- Maximum 5\n\n---\n\n#### Organizational & Managerial Skills\n- Extract leadership or coordination skills only if implied\n- Maximum 5\n\n---\n\n#### Mother Tongue\nList separately.\n\n---\n\n### C. Gap Analysis\n\nCreate `missing_details` field:\n- List Job Qualifications that cannot be reasonably supported or refactored from the CV\n\n---\n\n## SPECIAL INSTRUCTIONS (GOOGLE SHEETS)\n\n- Use the Google Sheets tool\n- Filter by candidate email\n- Fetch CEFR levels and skill areas\n- Merge only missing fields\n- Never overwrite CV-provided data\n\n---\n\n## FINAL OUTPUT CONTRACT (STRICT JSON)\n\nReturn a single JSON object with the following fields:\n\n{\n  \"personal_details\": {...},\n  \"work_experience\": [...],  // bullet points\n  \"academic_qualifications\": [...],\n  \"languages\": [...],\n  \"mother_tongue\": [...],\n  \"publications\": [...],      // bullet points\n  \"certifications\": [...],    // bullet points\n  \"job_related_skills\": [...], // bullet points\n  \"communication_skills\": [...], // bullet points\n  \"organizational_managerial_skills\": [...], // bullet points\n  \"missing_details\": [...]   // bullet points\n}\n\n\nWork Experience, Skills, Publications, Certifications must be in bullet points.\n\nFill as many fields as possible using CV content and Google Sheets data, aligned with the TOR qualifications.\n\n\n\n\n",
+          "needsFallback": true,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3,
+        "position": [
+          688,
+          -352
+        ],
+        "id": "7af03779-60d7-403e-aa9d-8a31ff5ec61f",
+        "name": "AI Agent",
+        "retryOnFail": true,
+        "waitBetweenTries": 3000
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          688,
+          -80
+        ],
+        "id": "5e58817c-de88-4ca6-a3a0-c3a436b8d600",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "Consultant_Profile_Plus",
+            "mode": "name"
+          },
+          "filtersUI": {
+            "values": [
+              {
+                "lookupColumn": "Email",
+                "lookupValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values0_Value', `Use the email provided in the CV input data to fetch row data for the profile`, 'string') }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheetsTool",
+        "typeVersion": 4.7,
+        "position": [
+          832,
+          -128
+        ],
+        "id": "5ec49779-0919-4b6e-8f4f-325511868bd4",
+        "name": "Get row(s) in sheet in Google Sheets1",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "aEc5lPRiYjsh4sIp",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-2.5-pro",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          592,
+          96
+        ],
+        "id": "71224351-8f9c-4f65-ad4c-e9448e727d4a",
+        "name": "Google Gemini Chat Model1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "gpt-5.2",
+            "mode": "list",
+            "cachedResultName": "gpt-5.2"
+          },
+          "builtInTools": {},
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.3,
+        "position": [
+          528,
+          -96
+        ],
+        "id": "e97c1c80-26ba-4792-a091-8af41d551735",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "a4ja82V4nnlunpii",
+            "name": "openai"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "QUALS": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Message a model": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Switch1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from File2": {
+        "main": [
+          [
+            {
+              "node": "QUALS",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch1": {
+        "main": [
+          [
+            {
+              "node": "Extract from File2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Extract from File3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from File3": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Get row(s) in sheet in Google Sheets1": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Message a model",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model1": {
+        "ai_languageModel": [
+          []
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": " Scio Network ",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "997e3ab6-5c50-400b-b897-f2e26a495db3",
+  "connections": {
+    "QUALS": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "QUALS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract from File3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-11T17:51:42.886Z",
+  "id": "lLSt5XHYGee50iyZ",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "CV automation",
+  "nodes": [
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are receiving:\n- The **full contents** of a Terms of Reference (TOR)\n- The **document title**\n- A **target role name** (input role)\n\nYour task is to **locate, select, and return ONLY the qualification text EXACTLY AS IT APPEARS in the TOR** for the given role.\n\nThis is a **STRICT EXTRACTION TASK**, not a summarization or rewriting task.\n\n---\n\n## CRITICAL BEHAVIOR RULE (HIGHEST PRIORITY)\n\n### You are NOT allowed to:\n- Summarize\n- Paraphrase\n- Reword\n- Condense\n- Improve language\n- Re-structure sentences\n\n### You MUST:\nCopy qualification text **word-for-word**\nThink of this task as **highlighting text from the TOR and pasting it into JSON**.\n\n---\n\n## Required Processing Flow (Must Follow Exactly)\n\n### Step 1: Identify the Issuing Organization\n- First apply the **Special Title Rule** (see below).\n- If it does not apply, infer the issuing organization from:\n  - Title\n  - Headers\n  - Repeated references in the TOR body\n\n---\n\n### Step 2: Identify the Target Role\n- Use the input role provided in:{{ $('On form submission').item.json['Role(GIZ Proposals)'] }}. Use this field for GIZ roles\n\nThis is the role  for non GIZ proposals: \"{{ $('On form submission').item.json['Role (non GIZ proposals)'] }}\"\"\n\n\nFor GIZ roles, do the followinf\n- Match it against:\n- Explicit role headers\n- Role labels inside qualification sections\n- Resolve minor naming differences via semantic similarity\n(e.g., “Team Lead” ≈ “Team Leader”)\n\n---\n\n### Step 3: Locate the Qualification Section for That Role\n- Scan the TOR for the **exact section(s)** that define qualifications for the target role.\n\n---\n\n### Step 4: Extract Qualifications (VERBATIM)\n\n#### If qualification text exists:\n- Copy the qualification text **exactly as written**\n- Output each qualification as a string\n- Do NOT merge or reinterpret items\n\n#### If qualification text does NOT exist:\n- Infer qualifications (see inference rules below)\n\n---\n\n## 🚨 Special Title Rule (Must Apply First)\n\nIf `{{ $json.metadata }}` contains: Leistungsbeschreibung (ToR) für die Beschaffung von Dienstleistungen unterhalb des EU Schwellenwertes, deutsch\n\n\nThen:\n- Treat the document as a **GIZ TOR**\n- Set `\"title_match_rule_applied\": true`\n- Apply **GIZ-specific extraction rules** below\n\nOtherwise:\n- Set `\"title_match_rule_applied\": false`\n\n---\n\n## 🔎 Extraction & Inference Rules\n\n### If the TOR is from **GIZ**:\n\n- Focus on sections titled or implied as:\n  - `Key Expert 1`\n  - `Key Expert 2`\n  - `Team Leader`\n  - `Short-term Expert Pool`\n- Extract **ONLY the qualifications listed under the section that matches the input role**.\n- Qualifications must be copied **word-for-word**\n- Do NOT normalize language\n- Do NOT translate\n- Do NOT simplify\n  \n\n---\n\n### If the TOR is from **any other organization**:\nUse the role given here and infer qualifications extract qualifications listed for the implied role.\n\nRole = {{ $('On form submission').item.json['Role (non GIZ proposals)'] }}\n- If no explicit qualifications are found for that role:\n  - Infer likely qualifications based on:\n    - Sector\n    - Scope of work\n    - Seniority implied by the role title\n  - Mark inferred qualifications accordingly.\n\n\nDICTIONARY ITEMS YOU CAN REFERENCE\n- Search for sections such as:\n  - `Personnel Requirements`\n  - `Expert Profile`\n  - `Qualifications Required`\n  - `Consultant Profile`\n  - `Minimum Requirements`\n  - `Team Composition`\n---\n\n## Extraction Rules \n\n- Extract **qualifications**, including:\n  - Degrees\n  - Certifications\n  - Skills\n  - Years of experience\n  - Language requirements\n  - Mandatory / desirable indicators\n- Preserve **exact original terminology** where present.\n- Combine multi-part qualifications if they appear as a single logical item.\n- Preserve numeric values exactly (e.g., “minimum 10 years”).\n- If uncertain whether text is a qualification, include it **only if it clearly defines a requirement**.\n\n---\n\n## 📤 Output Format (STRICT JSON — No Extra Text)\n\nReturn **only** the following JSON structure:\n\n{\n  \"issuing_organization\": \"GIZ\",\n  \"title_match_rule_applied\": true,\n  \"role\": {\n    \"role_name\": \"Key Expert 1\",\n    \"qualifications\": [\n      \"extracted quals\"],\n    \"inferred\": false\n  }\n}\n\nTOR Input full content: {{ $json.text }}\n"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        112,
+        -448
+      ],
+      "id": "65379762-a20e-4913-8efd-3ba0e418a833",
+      "name": "QUALS",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        464,
+        -352
+      ],
+      "id": "c40fc40e-1cc2-4cb1-aad3-c03c33274136",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a data normalization engine.\n\nYou will receive input JSON data extracted from CVs. This data may use inconsistent keys, structures, and naming conventions. Your task is to normalize the input into a standardized JSON structure with specific keys provided below.\n\nInstructions:\n\nMatch values from the incoming JSON to the correct keys in the Target JSON Structure.\n\nTHE GOLDEN RULE FOR MISSING DATA\n- If a value for any given field is missing or cannot be confidently matched, the output must retain the placeholder in curly braces, and the value should be enclosed in double quotes; Example: \nOutput → \"Name and Surname\": \"{Name and Surname}\"\nOutput → \"linkedin.com/\": \"{linkedin.com/}\"\nOutput → \"City2 Country2\": \"{City2 Country2}\"\n\nSTRICT NEGATIVE CONSTRAINT: If the location for a specific work/education entry is missing, DO NOT output \"city1, country1\". You MUST output the literal placeholder: \"{City1 Country1}\".\n\n- This rule applies consistently across all fields — no matter the field name — and ensures that placeholders remain visible\n- All keys and values must be enclosed in double quotes (\" \"). \n\nYour output must be a valid JSON string that follows the exact key structure provided below\n\nDo not include any extra text, explanations, or formatting. Return only the final JSON string.\n{\n  \"Name and Surname\": \"string\",\n  \"Street address\": \"string\",\n  \"Postal Code\": \"string\",\n  \"City Country\": \"string\",\n  \"Mobile Phone No\": \"string\",\n  \"email@email.com\": \"string\",\n  \"linkedin.com/\": \"string\",\n  \"Skype ID\": \"string\",\n  \"Sex\": \"string\",\n  \"DateofBirth\": \"string\",\n  \"National\": \"string\",\n  \"date_from1\": \"string\",\n  \"date_to1\": \"string\",\n  \"Position Held1\": \"string\",\n  \"Name of Employer1\": \"string\",\n  \"City1 Country1\": \"string\",\n  \"Responsibilities\": \"JSON array\",\n  \"date_from2\": \"string\",\n  \"date_to2\": \"string\",\n  \"Position Held2\": \"string\",\n  \"Name of Employer2\": \"string\",\n  \"City2 Country2\": \"string\",\n  \"Responsibilities2\": \"JSON array\", \n  \"date_from3\": \"string\",\n  \"date_to3\": \"string\",\n  \"Position Held3\": \"string\",\n  \"Name of Employer3\": \"string\",\n  \"City3 Country3\": \"string\",\n  \"Responsibilities3\": \"JSON array\",\n  \"date_from4\": \"string\",\n  \"date_to4\": \"string\",\n  \"Position Held4\": \"string\",\n  \"Name of Employer4\": \"string\",\n  \"City4 Country4\": \"string\",\n  \"Responsibilities4\": \"JSON array\",\n  \"date_from5\": \"string\",\n  \"date_to5\": \"string\",\n  \"Position Held5\": \"string\",\n  \"Name of Employer5\": \"string\",\n  \"City5 Country5\": \"string\",\n  \"Responsibilities5\": \"JSON array\",\n  \"date_from6\": \"string\",\n  \"date_to6\": \"string\",\n  \"Position Held6\": \"string\",\n  \"Name of Employer6\": \"string\",\n  \"City6 Country6\": \"string\",\n  \"Responsibilities6\": \"JSON array\",\n  \"date_from7\": \"string\",\n  \"date_to7\": \"string\",\n  \"Position Held7\": \"string\",\n  \"Name of Employer7\": \"string\",\n  \"City7 Country7\": \"string\",\n  \"Responsibilities7\": \"JSON array\",\n  \"date_from8\": \"string\",\n  \"date_to8\": \"string\",\n  \"Position Held8\": \"string\",\n  \"Name of Employer8\": \"string\",\n  \"City8 Country8\": \"string\",\n  \"Responsibilities8\": \"JSON array\",\n  \"date_from9\": \"string\",\n  \"date_to9\": \"string\",\n  \"Position Held9\": \"string\",\n  \"Name of Employer9\": \"string\",\n  \"City9 Country9\": \"string\",\n  \"Responsibilities9\": \"JSON array\",\n  \"date_from10\": \"string\",\n  \"date_to10\": \"string\",\n  \"Position Held10\": \"string\",\n  \"Name of Employer10\": \"string\",\n  \"City10 Country10\": \"string\",\n  \"Responsibilities10\": \"JSON array\",\n  \"edate_from1\": \"string\",\n  \"edate_to1\": \"string\", \n  \"Title1 / Qualification1\": \"string\",\n  \"Name of Institution1\": \"string\",\n  \"CityE1 CountryE1\": \"string\",\n  \"edate_from2\": \"string\",\n  \"edate_to2\": \"string\",\n  \"Title2 / Qualification2\": \"string\",\n  \"Name of Institution2\": \"string\",\n  \"CityE2 CountryE2\": \"string\", \n  \"edate_from3\": \"string\",\n  \"edate_to3\": \"string\",\n  \"Title3 / Qualification3\": \"string\",\n  \"Name of Institution3\": \"string\",\n  \"CityE3 CountryE3\": \"string\",\n  \"edate_from4\": \"string\",\n  \"edate_to4\": \"string\",\n  \"Title4 / Qualification4\": \"string\",\n  \"Name of Institution4\": \"string\",\n  \"CityE4 CountryE4\": \"string\",\n  \"Insert your mother tongue\": \"string\",\n  \"Language1_Name\": \"string\",\n  \"proficient_L1\": \"string (CEFR A1-C2)\",\n  \"proficient_R1\": \"string (CEFR A1-C2)\",\n  \"proficient_S1\": \"string (CEFR A1-C2)\",\n  \"proficient_SP1\": \"string (CEFR A1-C2)\",\n  \"proficient_W1\": \"string (CEFR A1-C2)\",\n  \"Language2_Name\": \"string\",\n  \"proficient_L2\": \"string (CEFR A1-C2)\",\n  \"proficient_R2\": \"string (CEFR A1-C2)\",\n  \"proficient_S2\": \"string (CEFR A1-C2)\",\n  \"proficient_SP2\": \"string (CEFR A1-C2)\",\n  \"proficient_W2\": \"string (CEFR A1-C2)\",\n  \"Language3_Name\": \"string\",\n  \"proficient_L3\": \"string (CEFR A1-C2)\",\n  \"proficient_R3\": \"string (CEFR A1-C2)\",\n  \"proficient_S3\": \"string (CEFR A1-C2)\",\n  \"proficient_SP3\": \"string (CEFR A1-C2)\",\n  \"proficient_W3\": \"string (CEFR A1-C2)\",\n  \"Language4_Name\": \"string\",\n  \"proficient_L4\": \"string (CEFR A1-C2)\",\n  \"proficient_R4\": \"string (CEFR A1-C2)\",\n  \"proficient_S4\": \"string (CEFR A1-C2)\",\n  \"proficient_SP4\": \"string (CEFR A1-C2)\",\n  \"proficient_W4\": \"string (CEFR A1-C2)\",\n  \"CommunicationSkills\": \"JSON array\",\n  \"OrganisationalSkills\": \"JSON array\",\n  \"JobRelatedSkills\": \"JSON array\",\n  \"Certifications\": \"JSON array\",\n  \"publications\": \"JSON array\",\n  \"missing_details\": \"string\"\n}\n\nDetailed Instructions & Mapping Guidelines\nIdentify Core Information: Analyze the input JSON for relevant keys (e.g., personal details, 'Professional Experience', 'Skills', 'Education', 'Languages', 'address', 'contactInfo', etc.) and extract data matching the semantic meaning of each standardized output key defined above (e.g., find the candidate's full name and map it to \"Name and Surname\", find the street name/number and map it to \"Street address\").\n\n\nDate Formatting (CRITICAL for date keys like \"date_fromN\", \"date_toN\", \"edate_fromN\", \"edate_toN\"):\nFind date information in the input corresponding to the start and end of each work experience or education period.\nImportant: The target structure lists separate keys for start (\"date_fromN\", \"EduN_date_from\") and end dates (\"date_toN\", \"EduN_date_to\"). You need to extract the corresponding single date for each.\nFormat each individual date as DD Mon YYYY. (e.g., 01 Jan 2020).\nUse 3-letter month abbreviations (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec).\nUse 01 as the default day if only month/year or just year is specified (e.g., 'June 2021' -> 01 Jun 2021, '2022' -> 01 Jan 2022).\nFor current roles/studies, use the string Present for the end date key (e.g., \"date_to1\": \"Present\").\nIf a specific date (start or end) is missing, ambiguous, or cannot be parsed into the required format, the value for that key MUST be the key name itself as a string (e.g., \"date_from1\": {date_from1}).\n\nLanguage Level Inference (CRITICAL):\nFor keys like \"proficient_L1\", \"proficient_R1\", \"proficient_S1\", \"proficient_SP1\", \"proficient_W1\" (and similarly for L2, R2... L4, R4...), find the corresponding language proficiency information in the input.\nInfer the CEFR level (A1, A2, B1, B2, C1, C2) from descriptive terms (e.g., \"fluent\" -> C1 or C2, \"intermediate\" -> B1 or B2, \"basic\" -> A1 or A2, \"native\" -> C2) and populate it across all five fields: proficient_L1, proficient_R1, proficient_S1, proficient_SP1, and proficient_W1.\n\nNOTE: Provided there's an input language and profiency listed, ensure to autopopulate a CEFR across all the 5 fields\n\nExample: Input is \"language\": \"French\",\n  \"proficiency\": \"basic\"\n\nOutput to populate across all the 5 fields WITHOUT leaving out any field: \n{\n  \"proficient_L1\": \"A1\",\n  \"proficient_R1\": \"A1\",\n  \"proficient_S1\": \"A1\",\n  \"proficient_SP1\": \"A1\",\n  \"proficient_W1\": \"A1\"\n}\nAddress Component Mapping:\nIdentify distinct address components in the input (e.g., street name and number, postal or zip code, city, country).\nMap the extracted street information to the \"Street address\" key.\nMap the extracted postal code information to the \"Postal Code\" key.\nMap the extracted city and country information to the \"City (Country)\" key if not found return {City (Country)}.\nIf a specific component cannot be found in the input, the value for its corresponding key MUST be the key name itself as a string enclosed in {} (e.g., \"Postal Code\": {Postal Code}).\n\n\nCRITICAL\n\nIf any publications are listed, ensure the citation is enclosed in single quotes only and not double quotes.\n\n example: \n\n- Test, D. (2001) \"The Land Question and Decentralisation Reforms in German: New Spaces for Local Democracy?\", paper presented at the European Conference on African Studies (EU 4), Maim, 15-19 July 2009.\n\nRemove this double quotes and let it be\n- Test, D. (2001) 'The Land Question and Decentralisation Reforms in German: New Spaces for Local Democracy?', paper presented at the European Conference on African Studies (EU 4), Maim, 15-19 July 2009.\n\nNOTE: Output handling for missing_details\nReturn the missing_details as a single-line JSON-safe string using \\\\n for line breaks instead of actual newlines\n\nExample output\n\"missing_details\": \"- Requirement 1\\\\n- Requirement 2\\\\n- Requirement 3\"\n\nBullet Fields — No Hyphen or Bullet Symbols\nFor the following keys, extract individual items from the input, but do not prefix them with • or -. They should be clean strings in a JSON array format, e.g.:\n\n\"Responsibilities\": [\"Managed logistics\", \"Led project team\"]\nApplies to:\n\n- \"Responsibilities\" to \"Responsibilities10\"\n-\"JobRelatedSkills\"\n- \"CommunicationSkills\"\n- \"OrganisationalSkills\"\n- \"Certifications\"\n- \"publications\"\n\nIMPORTANT: For all Responsibilities fields (Responsibilities to Responsibilities10):\n\nIf the field exists, output it as a JSON array of clean strings, e.g.\n\"Responsibilities3\": [\"Managed logistics\", \"Led project team\"]\n\nIf the field is missing, empty, or cannot be confidently extracted, DO NOT output an empty array (\"[]\") or an empty string (\"\").\nInstead, preserve the placeholder in curly braces and double quotes, like this:\n\"Responsibilities3\": \"{Responsibilities3}\"\n\n\nINPUT:  {{ $json.output }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -352
+      ],
+      "id": "d411e75a-b884-4805-b475-ebbef180d45e",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbyoL0-M3981Gtp-xW8X3OeKs_L10gUBYfDL5WWv6NgvX4em849zimXxdir51JE6Q2XKmg/exec",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.content.parts[0].text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1392,
+        -352
+      ],
+      "id": "b5294d33-f244-4796-991f-acc3a9614ca3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = [];\n\nfor (const item of items) {\n  for (const binaryKey of Object.keys(item.binary)) {\n\n    // 1. Get lowercase filename for easier matching\n    const fileName = item.binary[binaryKey].fileName.toLowerCase();\n\n    // 2. Define CV-specific keywords\n    const cvKeywords = ['cv', 'resume', 'vitae', 'bio', 'profile'];\n    \n    // 3. Check if it's a CV\n    const isCV = cvKeywords.some(word => fileName.includes(word));\n\n    output.push({\n      json: {\n        binaryKey,\n        // 4. Set type to 'cv' if matched, otherwise 'tor'\n        documentType: isCV ? 'cv' : 'tor',\n        fileName: item.binary[binaryKey].fileName\n      },\n      binary: {\n        [binaryKey]: item.binary[binaryKey]\n      }\n    });\n  }\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        -352
+      ],
+      "id": "555f8de1-5814-4ef7-86a7-48713ef4f710",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "={{$binary.keys()[0]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -96,
+        -448
+      ],
+      "id": "58851c7e-8ba3-4b7a-9aa6-be34c23a8763",
+      "name": "Extract from File2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.documentType }}",
+                    "rightValue": "tor",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d3cb58c3-4c93-4002-a879-42376bd2cfec"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "tor"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "2fa1ff12-d8f1-4b49-aebe-53ee0eea7bda",
+                    "leftValue": "={{ $json.documentType }}",
+                    "rightValue": "cv",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "cv"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -336,
+        -352
+      ],
+      "id": "80447392-69d4-45ea-ba20-4174fcc13885",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "={{$binary.keys()[0]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        -128
+      ],
+      "id": "8df5f2ff-cb7f-46f3-aadb-97f874550f39",
+      "name": "Extract from File3"
+    },
+    {
+      "parameters": {
+        "formTitle": "CV BUILDER",
+        "formDescription": "Upload CV, TOR and define the expert role ",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Upload TOR ",
+              "fieldType": "file",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Upload CV",
+              "fieldType": "file",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Role(GIZ Proposals)",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Team Leader"
+                  },
+                  {
+                    "option": "Key expert 1"
+                  },
+                  {
+                    "option": "Short term expert pool"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Role (non GIZ proposals)",
+              "placeholder": "describe the role"
+            }
+          ]
+        },
+        "options": {
+          "path": ""
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -784,
+        -352
+      ],
+      "id": "dd77d7a4-d4d1-4c0a-90df-e475089401c9",
+      "name": "On form submission",
+      "webhookId": "88c7b83e-69ab-4edd-ad03-bac5b9fbf586"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\n\n## PERSONA\n\nYou are a **Senior CV Revamping Specialist** with extensive experience preparing CVs for:\n- Donor-funded projects\n- International consulting assignments\n- GIZ, EU, UN, World Bank, and similar institutions\n\nYou understand:\n- How evaluators interpret CVs\n- How experience is **professionally reframed** without lying\n- How tools, services, and outputs relate in real-world roles\n\nYou do **not** invent experience.  \nYou **interpret and refactor** experience responsibly.\n\n---\n\n## ROLE \n\nYour task is to:\n\n> **Produce a role-optimized CV that is defensible, auditable, and qualification-aligned, without introducing false claims — while allowing reasonable capability expansion from existing experience.**\n\nYou are not summarizing a CV.  \nYou are **professionally restructuring and strengthening it** to match the provided Job Qualifications.\n\n---\n\n## INPUTS\nINPUTS\nJob Qualifications JSON: {{ $json.candidates[0].content.parts[0].text }}\nCV content:{{ $json.text }}\n\n---\n\n## CORE PRINCIPLES\n\n- Reconstruct and optimize: Restructure and rephrase content to make it highly relevant to the qualifications listed in the Job Qualifications JSON.\n- Prioritize relevance: Highlight experiences, projects, and achievements that best match TOR qualifications.\n- Chronological integrity is mandatory:\n    Work experience must always be ordered from most recent to oldest.\n     a)The most recent role must appear first.\n     b)The oldest role must appear last.\n- Within this reverse-chronological order, you may:\n     a)Strengthen or expand bullet points based on relevance\n     b)Reduce or omit low-relevance roles only if they do not contribute to TOR-aligned capabilities\n\n\n## THINKING & OPTIMIZATION LOGIC (HOW YOU SHOULD REASON)\n\nYou must follow this reasoning sequence **exactly**:\n\n### Step 1 — Identify Evidence Anchors\nFrom the CV, identify:\n- Tools (e.g., Looker, Power BI, Google Sheets)\n- Domains (e.g., analytics, reporting, automation)\n- Activities (e.g., reporting, dashboarding, data handling)\n- Experience( could be projects, role specific)\n\nThese are your **anchors**. You cannot leave them.\n\nIMPORTANT RULE: If the CV includes structured project details (e.g., project/assignment name, client, location, main project features, activities performed): Use this information to reconstruct a work experience entry emphasizing the candidate’s role, skills, and contributions. These are the strongest to use, to make the candidate highliy relevant\n\n---\n\n### Step 2 — Understand the Target Role\nFrom the Job Qualifications JSON, identify:\n- Required capabilities (e.g., data analysis, reporting, coordination)\n- Expected services or outputs (not just job titles)\n\nThink like a hiring manager:\n> “What does someone in this role actually *do*?”\n\n---\n\n### Step 3 — Capability Refactoring (CORE LOGIC)\n\nYou are allowed to **expand experience** by answering:\n\n> “Given these tools or experiences, what *realistic services or tasks* would a professional typically perform that match the qualifications?”\n\nYou may approach this from:\n- **Tool → Service** (e.g., Looker → data analysis, reporting)\n- **Experience → Task** (e.g., reporting → trend analysis, insights)\n- **Qualification → Reframing** (e.g., analyst role → analytical outputs)\n\nThis is **professional interpretation**, not fabrication.\n\n---\n\n### Step 4 — Truth Boundary Check (MANDATORY)\n\nBefore including any statement, verify:\n\n✔ Could this reasonably be done using the tools or experience listed?  \n✔ Is this commonly expected in such a role?  \n✔ Does it avoid adding new employers, certifications, seniority, or years?\n\nIf **any answer is NO**, do not include it.\n\n---\n\n## RULES & BOUNDARIES \n\n### You must NOT:\n- Invent new employers, roles, or projects\n- Add certifications or degrees\n- Add years of experience\n\n\n### ✅ You MAY:\n- Rephrase responsibilities\n- Reorder experiences by relevance\n- Add new skills and tools based on relevance\n- Expand tasks logically from tools or activities\n- Describe services, outputs, or value delivered\n- Emphasize analytical or professional aspects relevant to the role\n\nThink:  \n**“Plausible, professional, defensible.”**\n\n---\n\n## 5CRITICAL PROJECT CONTEXT PRESERVATION RULE\n\nCertain CV elements carry **exceptionally high evaluative weight** in donor-funded and international project assessments.  \nThese elements must **always be explicitly preserved and surfaced** in the Work Experience section.\n\n### High-Signal Context Elements (MANDATORY TO PRESERVE)\n\nIf any of the following appear anywhere in the CV, they must be **explicitly included verbatim** in the relevant experience entry:\n\n- Countries (e.g., Kenya, Uganda, Jordan, Germany)\n- Regions (e.g., East Africa, MENA, SSA)\n- Donors or institutions (e.g., GIZ, EU, UN, World Bank)\n- Government bodies, ministries, or public institutions\n- Project-based or country-specific assignments\n- Multi-country or cross-border engagements\n\nThese elements are considered **core qualification signals**, not optional metadata.\n\n---\n\n### Enforcement Logic\n\nWhen refactoring or rewriting experience:\n\n- You must **explicitly mention the country or region** within the experience description\n- You must **not generalize or omit** geographical or institutional context\n- You must **retain original wording** for countries and institutions wherever possible\n\nExample (Correct):\n\n> “Delivered data analytics and reporting solutions for public-sector projects in **Kenya and Uganda**, supporting donor-funded initiatives.”\n\nExample (Incorrect):\n\n> “Delivered data analytics and reporting solutions for public-sector projects.”\n\n---\n\n\n\n## EXECUTION STEPS\n\n### A. Analyze\n- Compare CV content with Job Qualifications JSON\n- Identify:\n  - Direct matches\n  - Indirect matches via refactoring\n  - Missing qualifications\n\n---\n\n### B. Extract & Refactor CV\n\n#### Personal Details\nExtract exactly as stated:\n- Name, email, phone, LinkedIn, address, nationality, date of birth, sex\n\n---\n\n#### Work Experience\n- Include only relevant experiences\n- Sort work experience by end date (or current role): Most recent → Oldest\n- Refactor responsibilities to align with qualifications\n- Expand experience using tool-based and domain-based logic\n\nUse serial location labels:\n- city1, country1, city2, country2, etc.\n\nOutput as bullet points.\n\n---\n\n#### Academic Qualifications\nExtract:\n- Degrees\n- Institutions\n- Dates\n- City, country (cityE1, countryE1, etc.)\n\n---\n\n#### Languages\n- List languages and CEFR levels\n- Separate mother tongue(s)\n\n---\n\n#### Publications\n- Extract up to Top 7 relevant\n- Bullet points only\n\n---\n\n#### Certifications\n- Extract up to Top 7 relevant or recent\n- Bullet points only\n\n---\n\n#### Job-Related Skills\n- Extract or expand from tools and experience\n- Maximum 5\n- Must be defensible\n\n---\n\n#### Communication Skills\n- Extract implied communication competencies\n- Maximum 5\n\n---\n\n#### Organizational & Managerial Skills\n- Extract leadership or coordination skills only if implied\n- Maximum 5\n\n---\n\n#### Mother Tongue\nList separately.\n\n---\n\n### C. Gap Analysis\n\nCreate `missing_details` field:\n- List Job Qualifications that cannot be reasonably supported or refactored from the CV\n\n---\n\n## SPECIAL INSTRUCTIONS (GOOGLE SHEETS)\n\n- Use the Google Sheets tool\n- Filter by candidate email\n- Fetch CEFR levels and skill areas\n- Merge only missing fields\n- Never overwrite CV-provided data\n\n---\n\n## FINAL OUTPUT CONTRACT (STRICT JSON)\n\nReturn a single JSON object with the following fields:\n\n{\n  \"personal_details\": {...},\n  \"work_experience\": [...],  // bullet points\n  \"academic_qualifications\": [...],\n  \"languages\": [...],\n  \"mother_tongue\": [...],\n  \"publications\": [...],      // bullet points\n  \"certifications\": [...],    // bullet points\n  \"job_related_skills\": [...], // bullet points\n  \"communication_skills\": [...], // bullet points\n  \"organizational_managerial_skills\": [...], // bullet points\n  \"missing_details\": [...]   // bullet points\n}\n\n\nWork Experience, Skills, Publications, Certifications must be in bullet points.\n\nFill as many fields as possible using CV content and Google Sheets data, aligned with the TOR qualifications.\n\n\n\n\n",
+        "needsFallback": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        688,
+        -352
+      ],
+      "id": "7af03779-60d7-403e-aa9d-8a31ff5ec61f",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        688,
+        -80
+      ],
+      "id": "5e58817c-de88-4ca6-a3a0-c3a436b8d600",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Kdq6djVIbsIQFb9FFFb4judmQ0B6FYINT4GdIKd1zOE",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Consultant_Profile_Plus",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email",
+              "lookupValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values0_Value', `Use the email provided in the CV input data to fetch row data for the profile`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        -128
+      ],
+      "id": "5ec49779-0919-4b6e-8f4f-325511868bd4",
+      "name": "Get row(s) in sheet in Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        592,
+        96
+      ],
+      "id": "71224351-8f9c-4f65-ad4c-e9448e727d4a",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.2",
+          "mode": "list",
+          "cachedResultName": "gpt-5.2"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        -96
+      ],
+      "id": "e97c1c80-26ba-4792-a091-8af41d551735",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-11T17:51:42.893Z",
+      "createdAt": "2025-12-11T17:51:42.893Z",
+      "role": "workflow:owner",
+      "workflowId": "lLSt5XHYGee50iyZ",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-04-16T08:39:29.306Z",
+  "versionId": "997e3ab6-5c50-400b-b897-f2e26a495db3"
+}
