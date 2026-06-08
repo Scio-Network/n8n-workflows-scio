@@ -1,0 +1,953 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "MoDtr",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MoE",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MoF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MoJ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoDtr": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MoE": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "MoF": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "MoJ": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Message a model2": {
+      "main": [
+        [
+          {
+            "node": "Create a row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge5": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Message a model2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Datasets": {
+      "main": [
+        [],
+        [],
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-13T08:51:18.570Z",
+  "id": "tah065JB1yKIkifL",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SUR_website_Ingestion_v1_UA_Min_v1_Flo_final",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HC1YbOY5bjxXWH2K",
+          "mode": "list",
+          "cachedResultName": "Ministry Websites",
+          "cachedResultUrl": "/projects/cFPhnNmamSW061Vq/datatables/HC1YbOY5bjxXWH2K"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Digital Transformation"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Economy"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Finance"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Energy"
+            },
+            {
+              "keyName": "ministryName",
+              "keyValue": "Ministry of Justice"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -6960,
+        672
+      ],
+      "id": "3ade390e-4e0d-4dcf-b6e3-f51007d9083c",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Digital Transformation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c576bfb2-d416-4180-875f-a5128ccf767e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Digital Transformation"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "15a2c1c2-11a0-4045-ac41-d8c770783837",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Economy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Economy"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4344ca4c-deab-4a2a-8c31-9570d3256971",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Finance",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Finance"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6eed03eb-6bfd-4e38-928c-6f9bd73e5856",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Energy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Energy"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c9040c6d-bee5-4f2f-b4e1-c5847cfb8aff",
+                    "leftValue": "={{ $json.ministryName }}",
+                    "rightValue": "Ministry of Justice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ministry of Justice"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -6560,
+        624
+      ],
+      "id": "e08a3e6c-a49e-4228-9fbd-6b3e72030235",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -5952,
+        864
+      ],
+      "id": "a032b2dd-977e-4a6a-bac5-8f483d9bd1c5",
+      "name": "HTTP Request6",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -5952,
+        672
+      ],
+      "id": "128daa17-3b82-4bcd-9f68-5a6ecf070e18",
+      "name": "MoF",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -5952,
+        480
+      ],
+      "id": "a5374c16-d94a-4fb4-a1b1-e9304f5528a7",
+      "name": "MoE",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -5952,
+        288
+      ],
+      "id": "bc600148-ff64-43e4-9952-0137f46729ec",
+      "name": "MoDtr",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ministry-scraper-85095088607.us-central1.run.app/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"targetUrl\": \"{{ $json.newsURL }}\"\n}\n ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -5952,
+        1056
+      ],
+      "id": "6206a9a2-a86e-4452-9702-eab9d3795915",
+      "name": "MoJ",
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ Array.isArray($json.primary_sector) ? $json.primary_sector : [$json.primary_sector] }}"
+            },
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $json.output[0].content[0].text.published_date }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_de }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_de }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_url }}"
+            },
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "=={{ $json.output[0].content[0].text.title_uk }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "news"
+            },
+            {
+              "fieldId": "summary_uk",
+              "fieldValue": "=={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "n8n_content_hash",
+              "fieldValue": "={{ $json.output[0].content[0].text.n8n_contenthash }}"
+            },
+            {
+              "fieldId": "source_id",
+              "fieldValue": "={{ $json.output[0].content[0].text.source_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2976,
+        656
+      ],
+      "id": "b8bed24e-2bcd-4110-8fc3-82356e2967c0",
+      "name": "Create a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require(\"crypto\");\n\nfunction normalizeWhitespace(input) {\n  return String(input || \"\").replace(/\\s+/g, \" \").trim();\n}\n\nfunction canonicalUrl(url) {\n  try {\n    const u = new URL(String(url || \"\").trim());\n    const DROP_PARAMS = new Set([\n      \"utm_source\",\"utm_medium\",\"utm_campaign\",\"utm_term\",\"utm_content\",\n      \"fbclid\",\"gclid\",\"igshid\",\"mc_cid\",\"mc_eid\"\n    ]);\n\n    // Remove tracking params\n    for (const k of [...u.searchParams.keys()]) {\n      if (DROP_PARAMS.has(String(k).toLowerCase())) u.searchParams.delete(k);\n    }\n\n    // Sort params\n    const entries = [...u.searchParams.entries()].sort(([a],[b]) => a.localeCompare(b));\n    u.search = \"\";\n    for (const [k,v] of entries) u.searchParams.append(k, v);\n\n    // Normalize trailing slash\n    u.pathname = u.pathname.replace(/\\/+$/, \"\");\n    return u.toString();\n  } catch {\n    return String(url || \"\").trim();\n  }\n}\n\nfunction sha256Hex(input) {\n  return crypto.createHash(\"sha256\").update(input, \"utf8\").digest(\"hex\");\n}\n\nfunction must(value, name) {\n  if (value === undefined || value === null || value === \"\") {\n    throw new Error(`Missing required field: ${name}`);\n  }\n  return value;\n}\n\nreturn $input.all().map((item) => {\n  const j = item.json || {};\n\n  // These should already be present from \"Normalize + Reattach source_id\"\n  const source_id = j.source_id ?? null;\n\n  // HARD FAIL if source_id is missing to prevent bad inserts\n  must(source_id, \"source_id\");\n\n  const url = must(j.url, \"url\");\n  const title = must(j.title, \"title\");\n\n  // Your workflow uses $json.content in the model prompt; ensure it exists.\n  const content = normalizeWhitespace(j.content ?? j.summary ?? \"\");\n\n  // published_at: keep as-is (string or null). Model can output published_date if needed.\n  const published_at = j.published_at ?? null;\n\n  const canonical_url = canonicalUrl(url);\n  const normalized_title = normalizeWhitespace(title).toLowerCase();\n  const normalized_content = content.toLowerCase();\n\n  // Source-aware hash so same URL/title/content across different sources doesn't collide\n  const hash_material = [\"v1\", String(source_id), canonical_url, normalized_title, normalized_content].join(\"|\");\n  const content_hash = sha256Hex(hash_material);\n\n  return {\n    json: {\n      ...j,\n      url: canonical_url,\n      title: normalizeWhitespace(title),\n      content,                 // <-- downstream LLM reads this\n      published_at,            // <-- ISO or raw string from scraper\n      content_hash,\n      n8n_content_hash: content_hash,\n      source_id                // <-- guaranteed\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3760,
+        640
+      ],
+      "id": "9cf268eb-aab6-456d-8c33-fbabeb7fb505",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=# Role\nYou are a multilingual policy and infrastructure analysis assistant with expertise in public-sector news, disaster risk management, infrastructure, housing, and urban resilience.\n\nYou can read and translate Ukrainian, English, and other European languages accurately.\n\n---\n\n# Task\nGiven a news article **title** and **content**, perform the following tasks using ONLY the provided input text.\n\nIf the title or content is **not in English**, first translate it internally to English before performing summarization and classification.\n\n---\n\n## 1. Title Translation\n- Translate the article title into **German**\n- If the original title is in **Ukrainian or any non-English language**, accurately translate it\n- Preserve original meaning and professional tone\n- Do NOT add interpretation\n\n---\n\n## 2. Context Summarization\nGenerate **two short summaries**, each **1–2 sentences**, capturing the main context of the article:\n- One summary in **English**\n- One summary in **German**\n\nRules:\n- If the source content is Ukrainian or another language, translate it internally before summarizing\n- Summaries must reflect the **true meaning** of the original content\n- Be concise, factual, and neutral\n- Do not speculate or introduce external information\n\n---\n\n## 3. Sector Classification\nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors (STRICT LIST — no other values allowed)\n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- Classification must be based on the **translated meaning**, not surface keywords\n- If unclear or ambiguous, **default to \"Basic Infrastructure\"**\n- Do NOT invent categories or infer beyond the text\n\n---\n\n## Input\n- Article Title: {{ $json.title }}\n- Article Content: {{ $json.content }}\n- Article URL: {{ $json.url }}\n- published_at: {{ $json.published_at }}\n- n8n_content_hash: {{ $json.n8n_content_hash }}\n- source_id: {{ $json.source_id }}\n---\n\n## Output Format (STRICT)\nReturn a JSON object with the following fields ONLY:\n\n{\n  \"title_de\": \"\",\n  \"title_uk\": \"\",\n  \"title_en\": \"\",\n  \"summary_en\": \"\",\n  \"summary_de\": \"\",\n  \"source_url\": \"\",\n  \"published_date\": \"\",\n  \"n8n_contenthash\": \"\",\n  \"source_id\": \"{{ $json.source_id }}\",\n  \"sector_classification\": []\n}\n\nRules:\n- source_url must equal the input Article URL.\n- n8n_contenthash must equal the input n8n_content_hash.\n- source_id must equal the input source_id.\n- published_date must equal the input published_at if present; otherwise \"\".\n- sector_classification must be an array containing 1+ values from the allowed list.\n- published date MUST be written in DD/MM/YYYY convention and properly categorized. The published date must never be later than {{ $('Schedule Trigger').item.json.timestamp }}\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -3312,
+        656
+      ],
+      "id": "3d7e9817-f0ae-4685-b101-ca2d1ed117e2",
+      "name": "Message a model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -5616,
+        608
+      ],
+      "id": "19e7ecc4-e4f0-41e0-af10-203127c993be",
+      "name": "Merge5"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -3552,
+        640
+      ],
+      "id": "07b37a24-146c-4415-8fd8-c608d7d6ba1a",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 4
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -7264,
+        672
+      ],
+      "id": "a67b3a6c-46c1-415d-88b3-92aa833e5335",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://xzulfjussvbykwnzgdba.supabase.co/rest/v1/rpc/check_articles_urls",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -4672,
+        480
+      ],
+      "id": "7a4a8d4a-ecbd-4801-8115-0408e20fe285",
+      "name": "HTTP Request1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// merge URLs\nconst urls = [...new Set(\n  items\n    .map(item => item.json.url)\n    .filter(Boolean)\n)];\n\nreturn [\n  {\n    json: {\n      p_urls: urls\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4896,
+        480
+      ],
+      "id": "2c97cb33-6294-493f-99b7-cb45ecb9e9dd",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f1485a0b-e84c-4493-be05-ea2e2449d782",
+              "leftValue": "={{ $json.url_exists }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -4448,
+        480
+      ],
+      "id": "dcc9d1fd-ac36-4b2a-bbf6-27eb80458238",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "source_url",
+              "field2": "url"
+            }
+          ]
+        },
+        "resolve": "preferInput2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.compareDatasets",
+      "typeVersion": 2.3,
+      "position": [
+        -4112,
+        592
+      ],
+      "id": "6bddde0e-e6b5-4e3b-af09-a8b4ac604a87",
+      "name": "Compare Datasets"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "function domainFromAnyUrl(u) {\n  if (!u) return \"\";\n  let s = String(u).trim();\n\n  // Support schemeless URLs like //thedigital.gov.ua/news/...\n  if (s.startsWith(\"//\")) s = s.slice(2);\n\n  // Strip protocol if present\n  s = s.replace(/^https?:\\/\\//i, \"\");\n\n  // Domain is everything up to first / ? #\n  const m = s.match(/^([^\\/\\?#]+)/);\n  if (!m) return \"\";\n\n  return m[1].toLowerCase().replace(/^www\\./, \"\");\n}\n\n// 1) Build domain -> source_id map from Get row(s)\nconst rows = $items(\"Get row(s)\", 0) ?? [];\nconst domainToSourceId = {};\n\nfor (const r of rows) {\n  const newsURL = r.json.newsURL;\n  const domain = domainFromAnyUrl(newsURL);\n  if (!domain) continue;\n\n  domainToSourceId[domain] = r.json.source_id;\n}\n\n// 2) Get article url from current item\nconst articleUrl = $json.url;\nconst articleDomain = domainFromAnyUrl(articleUrl);\n\nif (!articleDomain) {\n  throw new Error(`Cannot extract domain from article url: ${articleUrl}`);\n}\n\nconst source_id = domainToSourceId[articleDomain];\nif (!source_id) {\n  const known = Object.keys(domainToSourceId).sort().join(\", \");\n  throw new Error(`No source_id for domain \"${articleDomain}\". Known domains: ${known}`);\n}\n\n// 3) Attach and return\nreturn {\n  ...$json,\n  source_id,\n  __matched_domain: articleDomain, // keep for debugging; remove later if you want\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5392,
+        656
+      ],
+      "id": "c6f3110c-a25d-48b1-b233-866bc46484c0",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "function pad2(n) { return String(n).padStart(2, \"0\"); }\n\nconst UA_MONTHS = {\n  \"січня\": 1, \"січень\": 1,\n  \"лютого\": 2, \"лютий\": 2,\n  \"березня\": 3, \"березень\": 3,\n  \"квітня\": 4, \"квітень\": 4,\n  \"травня\": 5, \"травень\": 5,\n  \"червня\": 6, \"червень\": 6,\n  \"липня\": 7, \"липень\": 7,\n  \"серпня\": 8, \"серпень\": 8,\n  \"вересня\": 9, \"вересень\": 9,\n  \"жовтня\": 10, \"жовтень\": 10,\n  \"листопада\": 11, \"листопад\": 11,\n  \"грудня\": 12, \"грудень\": 12,\n};\n\nfunction toIsoDateOnly(y, m, d) {\n  return `${y}-${pad2(m)}-${pad2(d)}`;\n}\n\nfunction parseDate(raw) {\n  if (!raw) return null;\n  const s = String(raw).trim();\n\n  // ISO already\n  if (/^\\d{4}-\\d{2}-\\d{2}/.test(s)) return s;\n\n  // DD.MM.YYYY or D.M.YYYY\n  let m = s.match(/^(\\d{1,2})\\.(\\d{1,2})\\.(\\d{4})$/);\n  if (m) {\n    const d = parseInt(m[1], 10);\n    const mo = parseInt(m[2], 10);\n    const y = parseInt(m[3], 10);\n    return toIsoDateOnly(y, mo, d);\n  }\n\n  // Ukrainian text: \"7 лютого 2026\"\n  m = s\n    .toLowerCase()\n    .replace(/,/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .match(/^(\\d{1,2})\\s+([а-щьюяіїєґ]+)\\s+(\\d{4})/i);\n\n  if (m) {\n    const d = parseInt(m[1], 10);\n    const monthWord = m[2];\n    const y = parseInt(m[3], 10);\n    const mo = UA_MONTHS[monthWord];\n    if (mo) return toIsoDateOnly(y, mo, d);\n  }\n\n  return null;\n}\n\nconst raw = $json.date ?? $json.published_at ?? $json.published_date ?? null;\nconst iso = parseDate(raw);\n\nif (!iso) {\n  return {\n    ...$json,\n    __date_parse_failed: true,\n    __raw_date_value: raw,\n  };\n}\n\nreturn {\n  ...$json,\n  published_at_iso: iso,\n  // overwrite ambiguous fields so downstream never mis-parses\n  date: iso,\n  published_at: iso,\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5152,
+        656
+      ],
+      "id": "7aafd9f0-b54b-46ec-9117-ada841e605f0",
+      "name": "Code in JavaScript2"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-13T08:51:18.575Z",
+      "createdAt": "2026-02-13T08:51:18.575Z",
+      "role": "workflow:owner",
+      "workflowId": "tah065JB1yKIkifL",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        12
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-11T09:22:30.000Z",
+  "versionId": "9fc75aaa-9c47-4a24-8a4d-a8c7b0a0394d"
+}
