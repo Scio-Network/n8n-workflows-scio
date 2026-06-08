@@ -1,0 +1,1433 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-13T21:09:47.859Z",
+    "createdAt": "2025-12-13T21:09:47.859Z",
+    "versionId": "3afa8038-4a69-4aa8-aa16-1e751a20f0c9",
+    "workflowId": "JfpL1rHsty3HMqql",
+    "nodes": [
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.perplexity.ai/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer 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"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": [\n    \"Youth entrepreneurship OR youth in business (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Startup programs youth OR SME (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) hub OR accelerator OR incubator\",\n    \"Youth enterprise fund (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) government OR ministry\",\n    \"Digital entrepreneurship youth (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Youth employment programs (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) donors OR UN OR EU\"\n  ],\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -128,
+          192
+        ],
+        "id": "e080b99d-2c61-4f14-bfc3-1a547c513731",
+        "name": "YOUTH IN BUSINESS / ENTREPRENEURSHIP"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.perplexity.ai/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer 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"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": [\n    \"Diaspora investment OR diaspora financing (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Remittance costs OR remittance policy (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) World Bank OR AfDB OR IOM\",\n    \"upcoming events remittances (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) 2025 OR 2026\",\n    \n    \"Diaspora engagement OR diaspora programs (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) government OR agency\",\n    \"Digital remittances OR Diaspora remittances trends(Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) M-Pesa OR MTN OR Orange OR Wave OR \\\"Chipper Cash\\\"\"\n  ],\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\",\n  \"search_domain_filter\": [\n    \"worldbank.org\",\n    \"afdb.org\",\n    \"ilo.org\",\n    \"iom.int\",\n    \"mof.go.ke\",\n    \"centralbank.go.ke\",\n    \"gipc.gov.gh\",\n    \"eipa.gov.et\",\n    \"mtn.com\",\n    \"orange.com\",\n    \"wave.com\",\n    \"chippercash.com\",\n    \"remitly.com\"\n  ]\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -128,
+          -192
+        ],
+        "id": "62ada096-d250-4ef1-b3a4-3b3537e67d48",
+        "name": "DIASPORA & REMITTANCES"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.perplexity.ai/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer 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"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": [\n    \"Green SMEs OR green business (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) climate OR cleantech\",\n    \"Green entrepreneurship OR youth green business (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Climate innovation OR green tech startups (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"SME financing green OR climate (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) donors OR bank OR fintech\",\n    \"Green investment (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) AfDB OR EU OR UNDP OR ILO OR GIZ OR AFD\"\n  ],\n  \"search_recency_filter\": \"week\",\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048\n}\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -128,
+          0
+        ],
+        "id": "8bc5a8e7-db5c-4963-8f23-4bd83d5a0014",
+        "name": "GREEN BUSINESS & GREEN SMEs"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.perplexity.ai/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer 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"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": [\n    \"SME report OR SME study (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) WB OR AfDB OR UNDP OR ILO OR EU\",\n    \"Diaspora research OR migration study (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) Observatory OR \\\"think tank\\\"\",\n    \"Green economy report OR climate SME report (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Entrepreneurship ecosystem analysis (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Remittance report central bank OR \\\"World Bank\\\" (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\"\n  ],\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -128,
+          768
+        ],
+        "id": "5f9f37e8-b87d-49ce-97f0-baf78d4b33d6",
+        "name": "RESEARCH, STUDIES & DEVELOPMENT PARTNER REPORTS"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.perplexity.ai/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer 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"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n \"query\": [\n    \"SME finance OR SME funding (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) bank OR microfinance\",\n    \"Mobile money updates (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) M-Pesa OR MTN OR \\\"Orange Money\\\"\",\n    \"Fintech investment OR fintech expansion (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Diaspora investment platform (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Impact investing SMEs green OR youth (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\"\n  ],\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -128,
+          384
+        ],
+        "id": "5c8d4d04-5db1-491a-b8d0-d9e2c44b39ba",
+        "name": "GOVERNMENT POLICIES, LAWS & PROGRAMS"
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-pro",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-pro"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=Role:\nYou are a Research Analyst specializing in Youth Economic Empowerment and SME Development in Africa. Your expertise lies in identifying emerging trends, support systems, and new business ventures driven by young entrepreneurs.\n\nGoal:\nYour primary goal is to process raw, unstructured search results to extract actionable news and insights about youth entrepreneurship in the following countries: Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia. You must focus exclusively on the following topics:\nYouth Business Ventures & Ideas: News highlighting the types of businesses young people are starting, innovative business models, or emerging trends in youth-led enterprises.\nStartup Support Ecosystem: Announcements from incubators, accelerators, or tech hubs launching new programs, cohorts, or competitions for young entrepreneurs.\nFunding and Financial Support: Information on new government initiatives (e.g., Youth Enterprise Funds), donor-backed programs (from the UN, EU, etc.), or grants specifically aimed at financing youth-owned businesses.\nDigital Entrepreneurship: Updates on young entrepreneurs leveraging technology, e-commerce, or the digital economy to build businesses.\nPolicy and Employment Programs: News on government policies or large-scale programs designed to promote youth self-employment and entrepreneurship.\nUpcoming Events: Relevant conferences, summits or forums related to these topics\n\nInput Data:\nI will provide you with a raw JSON of search results containing titles, snippets, URLs, and publication dates.\nFiltering Rules (CRITICAL):\nIgnore Noise: Discard general opinion pieces, broad economic reports that only mention youth briefly, or \"how-to\" guides. Focus on specific events and announcements.\nPrioritize High-Value Sources: Give precedence to official announcements from government ministries, international donors (UN, EU), well-known accelerators, and reputable news outlets covering business and technology.\nRegional Focus: Only include information directly relevant to the target African countries.\nProcessing Instructions:\nFor each relevant item found, analyze the text and extract the key details. If a result contains technical or dense jargon, you must translate it into clear, concise business English.\nTime Filter (CRITICAL):\nToday's date is {{ $now }}. You MUST only include articles whose publishedDate falls within the last seven days from this date. Discard all articles published outside this time frame, unless you judge it to be a critical update to a major, ongoing development.\nOutput Structure:\nYour final output must be a valid JSON object. For each relevant news item, create an entry with the following properties:\nTitle: Extract directly from the snippet\nSource: (Publisher Name)\nPublished: Format the date as YYYY-MM-DD.\nURL: Provide the direct link.\nSummary: Write a 2-3 sentence summary detailing what actually happened. Focus on concrete facts (e.g., a new fund was launched, a program is accepting applications, a report on top youth sectors was published).\nWhy It Matters: In 1-2 sentences, explain the significance of the news. \n\n\nEXAMPLE\nTitle: Senegal Launches 'Digital Lions' Incubator for Tech Startups\nSource: Ministry of Digital Economy, Senegal\nPublished: 2025-11-25\nURL: https://www.economie.gouv.sn/news/digital-lions-launch\nSummary: The Senegalese government, in partnership with the UN, has launched the \"Digital Lions\" incubator. The program will provide 50 youth-led tech startups with seed funding of $10,000 each, mentorship, and co-working space in Dakar over the next 12 months.\nWhy It Matters: This initiative provides a critical early-stage support structure for the Senegalese tech scene, creating a direct pathway for young digital entrepreneurs to access capital and expert guidance.\nInput data\n{{ JSON.stringify($json.results) }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          96,
+          0
+        ],
+        "id": "19483ec4-ce6f-4c62-8c7c-3770154dc850",
+        "name": "Message a model1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-pro",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-pro"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=Role:\nYou are a Research Analyst specializing in Youth Economic Empowerment and SME Development in Africa. Your expertise lies in identifying emerging trends, support systems, and new business ventures driven by young entrepreneurs.\n\nGoal:\nYour primary goal is to process raw, unstructured search results to extract actionable news and insights about youth entrepreneurship in the following countries: Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia. You must focus exclusively on the following topics:\nYouth Business Ventures & Ideas: News highlighting the types of businesses young people are starting, innovative business models, or emerging trends in youth-led enterprises.\nStartup Support Ecosystem: Announcements from incubators, accelerators, or tech hubs launching new programs, cohorts, or competitions for young entrepreneurs.\nFunding and Financial Support: Information on new government initiatives (e.g., Youth Enterprise Funds), donor-backed programs (from the UN, EU, etc.), or grants specifically aimed at financing youth-owned businesses.\nDigital Entrepreneurship: Updates on young entrepreneurs leveraging technology, e-commerce, or the digital economy to build businesses.\nPolicy and Employment Programs: News on government policies or large-scale programs designed to promote youth self-employment and entrepreneurship.\n\nInput Data:\nI will provide you with a raw JSON of search results containing titles, snippets, URLs, and publication dates.\n\nFiltering Rules (CRITICAL):\n1. Extract \"Happenings\" & Activities: Look for specific details about events (Summits, Workshops), infrastructure (New Hubs/Incubators opening), launches (Government Youth Funds starting), or partnerships (UN/EU launching new programs).\n2. Extract Opportunities: Identify active grants, competitions, or training programs that WIDU beneficiaries could apply for.\n3. Target Region: Strictly focus on thecountries listed above.\n4. Source Quality: Prioritize Government Ministries, International Donors (EU, UN, GIZ), and reputable Tech Media.\n\nProcessing Instructions:\nAnalyze the text to provide a clear picture of the youth entrepreneurship landscape this week.\n\nCRITICAL CONSTRAINTS\nNO INVENTION: Do not generate news not present in the input.\nVERBATIM EXTRACTION: Title, URL, and Published must be copied exactly from the source.\nSNIPPET-BASED SUMMARY: Your summary must be derived exclusively from the provided text snippet.\n\nTIME FILTER: Today is {{ $now }}. Only include news published within the last 7 days.\n\nOutput Structure:\nOutput a valid JSON list of objects.\nTitle: (From snippet)\nSource: (Publisher Name)\nPublished: (YYYY-MM-DD)\nURL: (Direct link)\nSummary: (2-3 sentences: Who is doing what? Where is it happening? What are the specific details of the activity/program?).\nWhy It Matters:Why this matters for the ecosystem, business\n\nInput data: {{ JSON.stringify($json.results) }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          96,
+          192
+        ],
+        "id": "04a94d5f-fb7b-4e98-af79-aa3fcb2cdcc9",
+        "name": "Message a model2",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-pro",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-pro"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=Role:\nYou are a Financial Services Analyst with a focus on SME financing and Fintech innovation in Sub-Saharan Africa. Your expertise is in tracking capital flows, financial product development, and the competitive landscape for both traditional and digital financial services.\n\nGoal:\nYour primary goal is to process raw, unstructured search results to extract key news and updates on financial access and technology in the following countries: Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia. You must focus exclusively on the following topics:\n\n1. SME Financing: News about funding opportunities, new loan products, or credit facilities from banks and microfinance institutions for SMEs.\n2. Mobile Money Developments: Key updates, new features, or strategic partnerships from major mobile money providers like M-Pesa, MTN Money, and Orange Money.\n3. Fintech Sector Growth: Reports on investment rounds (fundraising), mergers, acquisitions, or market expansion by fintech companies.\n4. CRITICAL: Diaspora Investment Channels: Announcements of new platforms, bonds, or other vehicles designed to facilitate investment from the diaspora community.\n5. Impact Investing: News about diaspora funding or specific diaspora investments aimed at creating social or environmental impact, particularly for SMEs in the green or youth sectors.\n\nInput Data:\nI will provide you with a raw JSON of search results containing titles, snippets, URLs, and publication dates.\n\n\nFiltering Rules (CRITICAL):\nIgnore Noise: Discard marketing content, opinion pieces, or general economic reports. Focus on specific announcements and events.\nPrioritize High-Value Sources: Give precedence to official announcements from financial institutions, central banks, major fintech companies, and reputable financial news outlets that touch on diaspora involvement.\nRegional Focus: Only include information directly relevant to the target African countries.\n\nProcessing Instructions:\nFor each relevant item found, analyze the text and extract the key details. If a result contains technical or dense jargon, you must translate it into clear, concise business English.\n\nTime Filter (CRITICAL):\nToday's date is {{ $now }}. You MUST only include articles whose publishedDate falls within the last seven days from this date. Discard all articles published outside this time frame, unless you judge it to be a critical update to a major, ongoing development.\n\nVERBATIM EXTRACTION: Title, URL, and Published must be copied exactly from the source.\nSNIPPET-BASED SUMMARY: Your Summary must be derived exclusively from the provided text snippet. Do not infer or add information from outside the text provided.\n\n\nOutput Structure:\nYour final output must be a valid JSON object. For each relevant news item, create an entry with the following properties:\nTitle: (From snippet)\nSource: (Publisher Name)\nPublished: (YYYY-MM-DD)\nURL: (Direct link)\nSummary: Write a 2-3 sentence summary detailing what actually happened, based only on the information present in the snippet.\nWhy It Matters: [Explain the strategic implication. I.e (For Investors: \"Signal of market maturity.\" For SMEs: \"New source of working capital available.\" For Diaspora: \"Easier channel to invest.\")]\n\nEXAMPLE\nTitle: GCB Bank Ghana partners with TechFin to launch digital loans for SMEs\nSource: GCB Bank PLC\nPublished: 2025-11-24\nURL: https://www.gcbbank.com.gh/news/sme-digital-loan-launch\nSummary: GCB Bank in Ghana has announced a partnership with financial technology firm TechFin. This collaboration will introduce a new mobile-based lending service that allows small and medium-sized enterprises to apply for and receive business loans of up to GHS 50,000 directly through their phones.\nWhy It Matters: This partnership signals a move by a major traditional bank to adopt fintech solutions, potentially increasing the speed and accessibility of credit for thousands of SMEs in Ghana who may have been underserved by conventional loan processes.\nInput data\n{{ JSON.stringify($json.results) }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          96,
+          384
+        ],
+        "id": "afc5af5c-7620-476f-b720-9c32b724a9f7",
+        "name": "Message a model3",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-pro",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-pro"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=ole:\nYou are a Research and Policy Analyst specializing in African economic development. Your expertise is in identifying and distilling key findings from complex reports, academic studies, and policy papers into concise, actionable intelligence.\nGoal:\nYour primary goal is to process raw search results to identify and summarize recently published research, reports, studies or anything to do with remmitances, diasporanews, concerning the following countries: Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia. You must focus exclusively on extracting the core insights from:\nSME Sector Reports: Studies on SME performance, challenges, or financing landscapes from multilateral organizations like the World Bank, AfDB, UNDP, ILO, and the EU.\nDiaspora and Migration Research: New analysis, data, or studies on diaspora engagement, remittance trends, or migration patterns from think tanks or research observatories.\nGreen Economy Analysis: Reports detailing the state of the green economy, climate-related business opportunities, or challenges for green SMEs.\nEntrepreneurship Ecosystem Studies: In-depth analyses or mappings of the startup and entrepreneurship ecosystems.\nOfficial Remittance Reports: Data-driven reports on remittance flows and trends published by central banks or the World Bank.\nInput Data:\nI will provide you with a raw JSON of search results containing titles, snippets, URLs, and publication dates.\nFiltering Rules (CRITICAL):\nPrioritize Primary Sources: Focus on direct links to the reports, studies, or their official executive summaries. Deprioritize secondary news articles that are merely reporting about a study.\nIgnore Opinion/Blogs: Discard editorials, opinion pieces, or informal blog posts. The focus is on data-driven, methodical research.\nRegional Focus: Only include information directly relevant to the target African countries.\nProcessing Instructions:\nFor each relevant item found, analyze the text and extract the key findings. The goal is to capture the main conclusion or most important data point from the study as presented in the snippet.\nTime Filter (CRITICAL):\nToday's date is {{ $now }}. You MUST only include articles whose publishedDate falls within the last seven days from this date. Discard all articles published outside this time frame, unless you judge it to be a critical update to a major, ongoing development.\nOutput Structure:\nYour final output must be a valid JSON object. For each relevant report or study, create an entry with the following properties:\nTitle: The title of the report or study.\nSource: Identify the publishing organization (e.g., World Bank, African Development Bank, ILO).\nPublished: The publication date of the report.\nURL: The direct link to the report or its landing page.\nSummary: Write a 2-3 sentence summary of the report's key findings, main conclusion, or most significant data point, based only on the information present in the snippet.\nWhy It Matters: In 1-2 sentences, explain the implication of the report's findings. Answer: \"What does this new data mean for policymakers, investors, or entrepreneurs?\"\nStrict Output Rules:\nVERBATIM EXTRACTION: Title, URL, and Published must be copied exactly from the source.\nSNIPPET-BASED SUMMARY: Your Summary must be derived exclusively from the provided text snippet. Do not infer or add information from outside the text provided.\nEXAMPLE\nTitle: The State of SME Finance in East Africa 2025 Report\nSource: African Development Bank (AfDB)\nPublished: 2025-11-27\nURL: https://www.afdb.org/en/documents/the-state-of-sme-finance-in-east-africa-2025\nSummary: The AfDB's new report finds that the SME financing gap in Kenya and Ethiopia has widened to a combined $45 billion, an increase of 15% since 2022. The study identifies a lack of digital financial literacy as a primary barrier for SMEs seeking to access new credit lines from fintech lenders.\nWhy It Matters: This data provides evidence of a growing credit crisis for small businesses and highlights an urgent need for interventions focused on digital literacy, creating opportunities for both policymakers and ed-tech service providers.\nInput data\n{{ JSON.stringify($json.results) }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          96,
+          768
+        ],
+        "id": "431e047f-baac-4edd-b296-8cdb47e7943c",
+        "name": "Message a model4",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-pro",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-pro"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=Role:\nYou are a Financial Intelligence & Fintech Analyst for the African market.\n\nTask:\nYour task is to review the provided Raw Search Results (JSON) and extract high-value financial intelligence regarding SME funding, mobile money innovations, and capital flows in the target countries (Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, Gambia).\n\nGoal:\nYour primary goal is to process raw, unstructured search results to extract key news and announcements for upcoming events in the following countries: Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia. You must focus exclusively on the following topics:\nSME Financing: News about funding opportunities, new loan products, or credit facilities from banks and microfinance institutions.\nMobile Money Developments: Key updates, new features, or strategic partnerships from major providers like M-Pesa, MTN Money, and Orange Money.\nFintech Sector Growth: Reports on investment rounds (fundraising), mergers, or market expansion by fintech companies.\nDiaspora Investment Channels: Announcements of new platforms or other vehicles designed to facilitate investment from the diaspora.\nImpact Investing: News about funds or investments aimed at SMEs in the green or youth sectors.\nUpcoming Conferences and Events: Announcements for future conferences, summits, or workshops related to diaspora finance, fintech for development, or SME investment. For these, capture the event name, dates, and focus area.\n\nInput Data:\nI will provide you with a list of search results including titles, snippets, dates, and URLs.\n\n\nExtraction Rules:\n2. Extract Product Updates: Identify new features or partnerships from major players (M-Pesa, MTN, Orange, Wave) or banks (e.g., \"New cross-border payment feature,\" \"Interoperability agreement\").\n3. Identify SME Funding: Look for new loan programs, grant facilities, or guarantee schemes available to local businesses.\n4. Discard Generalities: Ignore generic articles. Only keep news of specific events, deals, or launches.\n\nOutput Structure:\nYour final output should be a valid json object containing the following properties\n\nVERBATIM EXTRACTION: Title, URL, and Published must be copied exactly from the source.\nSNIPPET-BASED SUMMARY: Your Summary must be derived exclusively from the provided text snippet. Do not infer or add information from outside the text provided.\n\nTitle: Extract from the snippet\nSource: [Publisher Name]\nPublished: [YYYY-MM-DD]\nSummary:  A 2-3 sentence summary of what actually happened. Focus on the core facts \nWhy It matters: Explain the strategic implication. \nURL: [Insert Link]\n\nExample Output \n\nTitle: Product Launch\nSource: TechCrunch Africa\nPublished: 2025-11-28\nSummary: Safaricom has introduced a standing order feature (\"Ratiba\") allowing M-Pesa users in Kenya to automate recurring bills and rent payments directly from their mobile wallets.\nWhy It Matters: Increases stickiness of the M-Pesa ecosystem; opens new integration opportunities for property management and utility fintechs.\nURL: [Link]\n Input: {{ JSON.stringify($json.results) }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          96,
+          576
+        ],
+        "id": "87e6785d-5986-4a92-a27b-9578933aea85",
+        "name": "Message a model5",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "numberInputs": 6
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          784,
+          128
+        ],
+        "id": "bceb5e3b-7a03-4e0e-9ebe-9dcbce7cda83",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-pro",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-pro"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=Role:\nYou are a Senior Market Intelligence Analyst specializing in African Diaspora Finance. Your expertise covers remittances, diaspora investment flows, and the associated financial policy landscape across key African markets.\n\nGoal:\nYour primary goal is to process raw, unstructured search results to extract significant news and developments. You must focus exclusively on the following topics within the specified countries (Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia):\n\nDiaspora Remittance Trends: Including mobile money, and money transfer operators.\nDiaspora Investment & Financing: News related to diaspora bonds, investment platforms, or direct financing initiatives.\nRemittance Costs & Policy: Updates on regulations, costs, and policies from governments or multilateral organizations like the World Bank or AfDB.\nDigital Remittance Players: Strategic news from companies like M-Pesa, MTN, Orange, Wave, or Chipper Cash.\nGovernment Diaspora Engagement: New programs or policies from governments aimed at their diaspora communities.\nUpcoming Events: Relevant conferences or forums related to these topics\n\nInput Data:\nI will provide you with a raw JSON of search results containing titles, snippets, URLs, and dates.\n\nFiltering Rules (CRITICAL):\nIgnore Noise: Discard generic product landing pages, SEO spam, or \"How-to\" guides.\nSources: Prioritize Central Banks, World Bank/AfDB data, and major Mobile Money Operators (M-Pesa, Orange, MTN, Wave).\nRegional Focus: Only include information relevant to the target African markets. \nProcessing Instructions:\nFor each relevant item found, analyze the text and extract details pertinent to your goal. If a result is technical/jargon-heavy, translate it into plain business English.\n\nTime Filter (CRITICAL)\nToday's date is {{ $now }}. You MUST only include articles whose publishedDate falls within the last seven days from this date. Discard all articles published outside this time frame, unless you judge it to be a critical update to a major, ongoing development. \n\n\nOutput Structure:\nYour final output should be a valid json object containing the following properties:\nTitle: get this from the snippet\nSource: (e.g., World Bank, Central Bank of Kenya, Orange).\nPublished: (YYYY-MM-DD).\nURL: (The direct link).\nSummary: A 2-3 sentence summary of what actually happened. Focus on the facts (numbers, percentages, new laws, new partnerships).\nWhy It Matters (The Story): Explain the strategic implication. Why should a diaspora investor, a fintech CEO, or a policymaker care? Connect this news to the broader trends of remittances or economic stability.\n\n\nEXAMPLE\n \nTitle: Kenya Tightens Rules on Cross-Border Cash\nSource: Central Bank of Kenya (CBK)\nPublished: 2025-11-27\nURL: https://www.centralbank.go.ke/aml-cft-cpf/\nSummary: The CBK has released a new survey and compliance report regarding Anti-Money Laundering (AML) and Terrorism Financing. They are specifically targeting the \"cross-border movement of physical cash\" and strictly enforcing FATF global standards.\nWhy It Matters: This signals a tougher regulatory environment. Fintechs and banks operating in Kenya will face higher compliance costs, and diaspora members moving large sums of capital may face increased scrutiny or delays.\n\n\nInput data\n{{ JSON.stringify($json.results) }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          96,
+          -192
+        ],
+        "id": "2c6c03f2-eae5-43d7-8c54-fbaa6eac9687",
+        "name": "Synthesizing layer 1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://script.google.com/macros/s/AKfycbwi6DUYjyYIXYgwKH8541WUX21KIDx0kEms3NzEE7Xjx5MkQ6-PjaSiPAdE8CKiBARYBA/exec",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json.candidates[0].content.parts[0].text }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1568,
+          176
+        ],
+        "id": "63205a21-b040-42dd-aade-b10e422a40f4",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-pro",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-pro"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=Role: You are the Chief Intelligence Compiler for a specialized African News Economic Brief \n\nInput Context:\nYou are receiving a raw aggregated list (variable: 'data') containing intelligence from 6 streams: Green Economy, SME Policy, Diaspora news, Youth in Business, Research, and Remittances.\n\nYour primary task is to identify the most relevant and credible news from the input. The ideal news item will cover one of our key topics and come from a trusted, high-authority source.\n\n1. Key Topics of Interest:\nYour focus should be on developments directly related to:\nDiaspora & Remittances\nYouth in Business: Covering entrepreneurship, startup programs, and employment initiatives.\nSMEs: Focusing on financing, policy, and support ecosystems.\nGreen Business: Including climate innovation, green finance, and sustainable SMEs.\n\n2. Trusted Source Categories:\nGive the highest priority to news published by the following types of organizations:\nPublic Sector: Ministries (e.g., Finance, Trade, Youth), Central Banks, and National Investment Agencies.\nMultilaterals & Regional Bodies: World Bank, AfDB, EU, GIZ, USAID, UNDP, AU, ECOWAS, etc.\nFinancial Private Sector: Major Banks, Mobile Money Operators (M-Pesa, MTN, Orange), and leading Fintechs (Wave, Chipper Cash).\nEcosystem Enablers: Major Innovation Hubs, large Foundations (Mastercard, Tony Elumelu), and official Diaspora Associations.\n\nHigh-Priority Rule: All news updates concerning upcoming events, conferences, or summits related to remittances, diaspora finance, or access to finance must be treated as high-priority. Ensure these are prominently highlighted in the summary.\n\nYour Task:\nFilter the noise, identify the Top 15 High-Impact items based on the Source List above, and return a single valid JSON object.\n\n###PHASE 1: EVENT EXTRACTION \nBefore any other filtering, you must perform a dedicated scan of the entire raw input to identify and isolate all announcements for upcoming events.\nIdentification: Scan each item's title and summary for keywords indicating a future or upcoming events such as conferences, exhibitions, summits, etc.\nExtraction: For each item identified as an event, create a JSON object with the following structure, using verbatim data from the source:\neventTitle: The original title.\neventDate: The specific date or date range of the event (e.g., \"2026-01-20\").\nlocation: The physical or virtual location (e.g., \"Nairobi, Kenya\", \"Virtual\").\nsummary: The original summary.\npublisher: The original publisher.\nsourceUrl: The original sourceUrl.\nSegregation: All items extracted as events must be placed into a separate list for the final JSON output. These items are now considered processed and must be excluded from all subsequent phases.\n\nIMPORTANT: The current date is {{ $now }}.\nWhen you identify a potential event, you must parse its date from the news content.\nCompare the event's start date to the current date.\nYou must ONLY include events that are scheduled for today or a future date.\nAny event with a date that has already passed must be excluded from the final output.\n\n\n\n### PHASE 2: THE FILTER (Impact & Source Verification)\nScan every remaining item. Keep it ONLY if it meets specific criteria: \n1.  **Source Check:** Does the publisher belong to the \"Priority Source List\" above? (If YES -> High Priority).\n2.  **Thematic Check:** Does it strictly cover: Diaspora/Remittances, Youth Employment/in Business, SMEs, or Green Business?\n3.  **Actionability Check:**\n    *   *Policy:* New Laws, Taxes, or Bilateral Agreements.\n    *   *Money:* Funding/Grants >$500k, Diaspora Bonds, New Credit Lines.\n    *   *Innovation:* Launch of a new cross-border payment rail or Green Tech solution.\n\nIMPORTANT: Discard opinion pieces or general news from unverified blogs.\n\n### PHASE 3: PRIORITIZATION (The Top 15 Cap)\nSelect exactly 15 items. If you have more than 15 valid items, use this \"Survival Hierarchy\" to decide what to keep:\n1.  **Must Keep:** Any News related to Remittances, Diaspora, SMEs and youth in  business.\n2.  **Priority 2:** Major Funding announcements for SMEs or Green Tech.\n3.  **Priority 3:** Policy shifts \n*   *Cut the rest.*\n\n### PHASE 4: CLASSIFICATION\nSort the Top 15 into two arrays:\n\n**List A: \"stakeholderDevelopments\"**\n*   Entities: Governments, Central Banks, Multilaterals (WB, EU, GIZ), and Major Corporations (Telcos, Tier-1 Banks).\n\n**List B: \"generalDevelopments\"**\n*   Entities: Startups, Hubs, NGOs, Foundations, Diaspora Associations, Private VC, and Research/Think Tanks.\n\n### PHASE 5: CONTENT RULES\n1.  **Verbatim Extraction:** Do NOT rewrite the Title, Summary, Publisher, or SourceURL. Copy them byte-for-byte from the input.\n2.  **Executive Summary:** Write one lead paragraph (max 100 words) in an active, news-reporting style.. You must synthesize the biggest development in **Remittances/Diaspora** ** Youth in business ** and the biggest **Green/SME** opportunity mentioned in the filtered list.\n\n### PHASE 5: FINAL OUTPUT\nReturn ONLY raw valid JSON. No Markdown. No conversation.\n\n{\n  \"date\": \"current date in YYYY-MM-DD format\",\n  \"coverage\": \"last 7 days\",\n  \"executiveSummary\": \"[Your Synthesis Paragraph]\",\n  \"upcomingEvents\": [\n    {\n      \"eventTitle\": \"[Original String - Title of the Event]\",\n      \"eventDate\": \"[Extracted Date String, e.g., 2026-02-15]\",\n      \"location\": \"[Extracted Location String, e.g., Addis Ababa or Virtual]\",\n      \"summary\": \"[Original String - Summary of the Event]\",\n      \"sourceUrl\": \"[Original String - URL to the announcement]\"\n    }\n  ],\n  \"stakeholderDevelopments\": [\n    {\n      \"title\": \"[Original String]\",\n      \"summary\": \"[Original String]\",\n      \"publisher\": \"[Map Original Source String]\",\n      \"publishedDate\": \"[Original String]\",\n      \"sourceUrl\": \"[Original String]\",\n      \"whyItMatters\": \"[Original String - Map the 'Why It Matters' text here]\",\n      \"countries\": [\"Kenya\", \"Regional\"]\n    }\n  ],\n  \"generalDevelopments\": [\n    {\n      \"title\": \"[Original String]\",\n      \"summary\": \"[Original String]\",\n      \"publishedDate\": \"[Original String]\",\n      \"sourceUrl\": \"[Original String]\",\n      \"publisher\": \"[Map Original Source String]\",\n      \"whyItMatters\": \"[Original String - Map the 'Why It Matters' text here]\",\n      \"countries\": [\"Ghana\"]\n    }\n  ]\n}\n\nInput Data:\ninput: {{ JSON.stringify($json.data) }}"
+              }
+            ]
+          },
+          "simplify": false,
+          "jsonOutput": true,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          1216,
+          176
+        ],
+        "id": "3104e368-90b3-4c00-8a17-546ad414e910",
+        "name": "Message a model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "MzZo7vfgZSwQjZFi",
+            "name": "Gemini Acc"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          992,
+          176
+        ],
+        "id": "679013b0-6c4c-430e-96f7-c3e18ccedd52",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "weeks",
+                "triggerAtDay": [
+                  1
+                ],
+                "triggerAtHour": 7
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -480,
+          256
+        ],
+        "id": "352552ce-2a41-4f22-8e27-9e0a3761b449",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.perplexity.ai/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer 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"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": [\n    \"SME finance OR SME funding (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) bank OR microfinance\",\n    \"Mobile money updates (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) M-Pesa OR MTN OR \\\"Orange Money\\\"\",\n    \"Fintech investment OR fintech expansion (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"diaspora finance conference OR Diaspora investment platform (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"fintech, remittances, diaspora development events (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\"\n  ],\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -128,
+          576
+        ],
+        "id": "50873942-f142-4375-bd82-a8ce57a040c0",
+        "name": "FINANCE UPDATES"
+      }
+    ],
+    "connections": {
+      "DIASPORA & REMITTANCES": {
+        "main": [
+          [
+            {
+              "node": "Synthesizing layer 1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GREEN BUSINESS & GREEN SMEs": {
+        "main": [
+          [
+            {
+              "node": "Message a model1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "YOUTH IN BUSINESS / ENTREPRENEURSHIP": {
+        "main": [
+          [
+            {
+              "node": "Message a model2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GOVERNMENT POLICIES, LAWS & PROGRAMS": {
+        "main": [
+          [
+            {
+              "node": "Message a model3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RESEARCH, STUDIES & DEVELOPMENT PARTNER REPORTS": {
+        "main": [
+          [
+            {
+              "node": "Message a model4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Message a model1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Message a model2": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "Message a model3": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 3
+            }
+          ]
+        ]
+      },
+      "Message a model5": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 4
+            }
+          ]
+        ]
+      },
+      "Message a model4": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 5
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Synthesizing layer 1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Message a model",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Message a model": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "DIASPORA & REMITTANCES",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "GREEN BUSINESS & GREEN SMEs",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "YOUTH IN BUSINESS / ENTREPRENEURSHIP",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "GOVERNMENT POLICIES, LAWS & PROGRAMS",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "FINANCE UPDATES",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RESEARCH, STUDIES & DEVELOPMENT PARTNER REPORTS",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "FINANCE UPDATES": {
+        "main": [
+          [
+            {
+              "node": "Message a model5",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": " Scio Network ",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "3afa8038-4a69-4aa8-aa16-1e751a20f0c9",
+  "connections": {
+    "DIASPORA & REMITTANCES": {
+      "main": [
+        [
+          {
+            "node": "Synthesizing layer 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GREEN BUSINESS & GREEN SMEs": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YOUTH IN BUSINESS / ENTREPRENEURSHIP": {
+      "main": [
+        [
+          {
+            "node": "Message a model2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GOVERNMENT POLICIES, LAWS & PROGRAMS": {
+      "main": [
+        [
+          {
+            "node": "Message a model3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RESEARCH, STUDIES & DEVELOPMENT PARTNER REPORTS": {
+      "main": [
+        [
+          {
+            "node": "Message a model4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Message a model2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Message a model3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Message a model5": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Message a model4": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Synthesizing layer 1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "DIASPORA & REMITTANCES",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GREEN BUSINESS & GREEN SMEs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "YOUTH IN BUSINESS / ENTREPRENEURSHIP",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GOVERNMENT POLICIES, LAWS & PROGRAMS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "FINANCE UPDATES",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RESEARCH, STUDIES & DEVELOPMENT PARTNER REPORTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FINANCE UPDATES": {
+      "main": [
+        [
+          {
+            "node": "Message a model5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-29T06:38:57.208Z",
+  "id": "JfpL1rHsty3HMqql",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "WIDU News Intelligence Search",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": [\n    \"Youth entrepreneurship OR youth in business (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Startup programs youth OR SME (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) hub OR accelerator OR incubator\",\n    \"Youth enterprise fund (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) government OR ministry\",\n    \"Digital entrepreneurship youth (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Youth employment programs (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) donors OR UN OR EU\"\n  ],\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        192
+      ],
+      "id": "e080b99d-2c61-4f14-bfc3-1a547c513731",
+      "name": "YOUTH IN BUSINESS / ENTREPRENEURSHIP"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": [\n    \"Diaspora investment OR diaspora financing (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Remittance costs OR remittance policy (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) World Bank OR AfDB OR IOM\",\n    \"upcoming events remittances (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) 2025 OR 2026\",\n    \n    \"Diaspora engagement OR diaspora programs (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) government OR agency\",\n    \"Digital remittances OR Diaspora remittances trends(Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) M-Pesa OR MTN OR Orange OR Wave OR \\\"Chipper Cash\\\"\"\n  ],\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\",\n  \"search_domain_filter\": [\n    \"worldbank.org\",\n    \"afdb.org\",\n    \"ilo.org\",\n    \"iom.int\",\n    \"mof.go.ke\",\n    \"centralbank.go.ke\",\n    \"gipc.gov.gh\",\n    \"eipa.gov.et\",\n    \"mtn.com\",\n    \"orange.com\",\n    \"wave.com\",\n    \"chippercash.com\",\n    \"remitly.com\"\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        -192
+      ],
+      "id": "62ada096-d250-4ef1-b3a4-3b3537e67d48",
+      "name": "DIASPORA & REMITTANCES"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": [\n    \"Green SMEs OR green business (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) climate OR cleantech\",\n    \"Green entrepreneurship OR youth green business (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Climate innovation OR green tech startups (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"SME financing green OR climate (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) donors OR bank OR fintech\",\n    \"Green investment (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) AfDB OR EU OR UNDP OR ILO OR GIZ OR AFD\"\n  ],\n  \"search_recency_filter\": \"week\",\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        0
+      ],
+      "id": "8bc5a8e7-db5c-4963-8f23-4bd83d5a0014",
+      "name": "GREEN BUSINESS & GREEN SMEs"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": [\n    \"SME report OR SME study (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) WB OR AfDB OR UNDP OR ILO OR EU\",\n    \"Diaspora research OR migration study (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) Observatory OR \\\"think tank\\\"\",\n    \"Green economy report OR climate SME report (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Entrepreneurship ecosystem analysis (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Remittance report central bank OR \\\"World Bank\\\" (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\"\n  ],\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        768
+      ],
+      "id": "5f9f37e8-b87d-49ce-97f0-baf78d4b33d6",
+      "name": "RESEARCH, STUDIES & DEVELOPMENT PARTNER REPORTS"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n \"query\": [\n    \"SME finance OR SME funding (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) bank OR microfinance\",\n    \"Mobile money updates (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) M-Pesa OR MTN OR \\\"Orange Money\\\"\",\n    \"Fintech investment OR fintech expansion (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Diaspora investment platform (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"Impact investing SMEs green OR youth (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\"\n  ],\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        384
+      ],
+      "id": "5c8d4d04-5db1-491a-b8d0-d9e2c44b39ba",
+      "name": "GOVERNMENT POLICIES, LAWS & PROGRAMS"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Role:\nYou are a Research Analyst specializing in Youth Economic Empowerment and SME Development in Africa. Your expertise lies in identifying emerging trends, support systems, and new business ventures driven by young entrepreneurs.\n\nGoal:\nYour primary goal is to process raw, unstructured search results to extract actionable news and insights about youth entrepreneurship in the following countries: Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia. You must focus exclusively on the following topics:\nYouth Business Ventures & Ideas: News highlighting the types of businesses young people are starting, innovative business models, or emerging trends in youth-led enterprises.\nStartup Support Ecosystem: Announcements from incubators, accelerators, or tech hubs launching new programs, cohorts, or competitions for young entrepreneurs.\nFunding and Financial Support: Information on new government initiatives (e.g., Youth Enterprise Funds), donor-backed programs (from the UN, EU, etc.), or grants specifically aimed at financing youth-owned businesses.\nDigital Entrepreneurship: Updates on young entrepreneurs leveraging technology, e-commerce, or the digital economy to build businesses.\nPolicy and Employment Programs: News on government policies or large-scale programs designed to promote youth self-employment and entrepreneurship.\nUpcoming Events: Relevant conferences, summits or forums related to these topics\n\nInput Data:\nI will provide you with a raw JSON of search results containing titles, snippets, URLs, and publication dates.\nFiltering Rules (CRITICAL):\nIgnore Noise: Discard general opinion pieces, broad economic reports that only mention youth briefly, or \"how-to\" guides. Focus on specific events and announcements.\nPrioritize High-Value Sources: Give precedence to official announcements from government ministries, international donors (UN, EU), well-known accelerators, and reputable news outlets covering business and technology.\nRegional Focus: Only include information directly relevant to the target African countries.\nProcessing Instructions:\nFor each relevant item found, analyze the text and extract the key details. If a result contains technical or dense jargon, you must translate it into clear, concise business English.\nTime Filter (CRITICAL):\nToday's date is {{ $now }}. You MUST only include articles whose publishedDate falls within the last seven days from this date. Discard all articles published outside this time frame, unless you judge it to be a critical update to a major, ongoing development.\nOutput Structure:\nYour final output must be a valid JSON object. For each relevant news item, create an entry with the following properties:\nTitle: Extract directly from the snippet\nSource: (Publisher Name)\nPublished: Format the date as YYYY-MM-DD.\nURL: Provide the direct link.\nSummary: Write a 2-3 sentence summary detailing what actually happened. Focus on concrete facts (e.g., a new fund was launched, a program is accepting applications, a report on top youth sectors was published).\nWhy It Matters: In 1-2 sentences, explain the significance of the news. \n\n\nEXAMPLE\nTitle: Senegal Launches 'Digital Lions' Incubator for Tech Startups\nSource: Ministry of Digital Economy, Senegal\nPublished: 2025-11-25\nURL: https://www.economie.gouv.sn/news/digital-lions-launch\nSummary: The Senegalese government, in partnership with the UN, has launched the \"Digital Lions\" incubator. The program will provide 50 youth-led tech startups with seed funding of $10,000 each, mentorship, and co-working space in Dakar over the next 12 months.\nWhy It Matters: This initiative provides a critical early-stage support structure for the Senegalese tech scene, creating a direct pathway for young digital entrepreneurs to access capital and expert guidance.\nInput data\n{{ JSON.stringify($json.results) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        96,
+        0
+      ],
+      "id": "19483ec4-ce6f-4c62-8c7c-3770154dc850",
+      "name": "Message a model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Role:\nYou are a Research Analyst specializing in Youth Economic Empowerment and SME Development in Africa. Your expertise lies in identifying emerging trends, support systems, and new business ventures driven by young entrepreneurs.\n\nGoal:\nYour primary goal is to process raw, unstructured search results to extract actionable news and insights about youth entrepreneurship in the following countries: Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia. You must focus exclusively on the following topics:\nYouth Business Ventures & Ideas: News highlighting the types of businesses young people are starting, innovative business models, or emerging trends in youth-led enterprises.\nStartup Support Ecosystem: Announcements from incubators, accelerators, or tech hubs launching new programs, cohorts, or competitions for young entrepreneurs.\nFunding and Financial Support: Information on new government initiatives (e.g., Youth Enterprise Funds), donor-backed programs (from the UN, EU, etc.), or grants specifically aimed at financing youth-owned businesses.\nDigital Entrepreneurship: Updates on young entrepreneurs leveraging technology, e-commerce, or the digital economy to build businesses.\nPolicy and Employment Programs: News on government policies or large-scale programs designed to promote youth self-employment and entrepreneurship.\n\nInput Data:\nI will provide you with a raw JSON of search results containing titles, snippets, URLs, and publication dates.\n\nFiltering Rules (CRITICAL):\n1. Extract \"Happenings\" & Activities: Look for specific details about events (Summits, Workshops), infrastructure (New Hubs/Incubators opening), launches (Government Youth Funds starting), or partnerships (UN/EU launching new programs).\n2. Extract Opportunities: Identify active grants, competitions, or training programs that WIDU beneficiaries could apply for.\n3. Target Region: Strictly focus on thecountries listed above.\n4. Source Quality: Prioritize Government Ministries, International Donors (EU, UN, GIZ), and reputable Tech Media.\n\nProcessing Instructions:\nAnalyze the text to provide a clear picture of the youth entrepreneurship landscape this week.\n\nCRITICAL CONSTRAINTS\nNO INVENTION: Do not generate news not present in the input.\nVERBATIM EXTRACTION: Title, URL, and Published must be copied exactly from the source.\nSNIPPET-BASED SUMMARY: Your summary must be derived exclusively from the provided text snippet.\n\nTIME FILTER: Today is {{ $now }}. Only include news published within the last 7 days.\n\nOutput Structure:\nOutput a valid JSON list of objects.\nTitle: (From snippet)\nSource: (Publisher Name)\nPublished: (YYYY-MM-DD)\nURL: (Direct link)\nSummary: (2-3 sentences: Who is doing what? Where is it happening? What are the specific details of the activity/program?).\nWhy It Matters:Why this matters for the ecosystem, business\n\nInput data: {{ JSON.stringify($json.results) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        96,
+        192
+      ],
+      "id": "04a94d5f-fb7b-4e98-af79-aa3fcb2cdcc9",
+      "name": "Message a model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Role:\nYou are a Financial Services Analyst with a focus on SME financing and Fintech innovation in Sub-Saharan Africa. Your expertise is in tracking capital flows, financial product development, and the competitive landscape for both traditional and digital financial services.\n\nGoal:\nYour primary goal is to process raw, unstructured search results to extract key news and updates on financial access and technology in the following countries: Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia. You must focus exclusively on the following topics:\n\n1. SME Financing: News about funding opportunities, new loan products, or credit facilities from banks and microfinance institutions for SMEs.\n2. Mobile Money Developments: Key updates, new features, or strategic partnerships from major mobile money providers like M-Pesa, MTN Money, and Orange Money.\n3. Fintech Sector Growth: Reports on investment rounds (fundraising), mergers, acquisitions, or market expansion by fintech companies.\n4. CRITICAL: Diaspora Investment Channels: Announcements of new platforms, bonds, or other vehicles designed to facilitate investment from the diaspora community.\n5. Impact Investing: News about diaspora funding or specific diaspora investments aimed at creating social or environmental impact, particularly for SMEs in the green or youth sectors.\n\nInput Data:\nI will provide you with a raw JSON of search results containing titles, snippets, URLs, and publication dates.\n\n\nFiltering Rules (CRITICAL):\nIgnore Noise: Discard marketing content, opinion pieces, or general economic reports. Focus on specific announcements and events.\nPrioritize High-Value Sources: Give precedence to official announcements from financial institutions, central banks, major fintech companies, and reputable financial news outlets that touch on diaspora involvement.\nRegional Focus: Only include information directly relevant to the target African countries.\n\nProcessing Instructions:\nFor each relevant item found, analyze the text and extract the key details. If a result contains technical or dense jargon, you must translate it into clear, concise business English.\n\nTime Filter (CRITICAL):\nToday's date is {{ $now }}. You MUST only include articles whose publishedDate falls within the last seven days from this date. Discard all articles published outside this time frame, unless you judge it to be a critical update to a major, ongoing development.\n\nVERBATIM EXTRACTION: Title, URL, and Published must be copied exactly from the source.\nSNIPPET-BASED SUMMARY: Your Summary must be derived exclusively from the provided text snippet. Do not infer or add information from outside the text provided.\n\n\nOutput Structure:\nYour final output must be a valid JSON object. For each relevant news item, create an entry with the following properties:\nTitle: (From snippet)\nSource: (Publisher Name)\nPublished: (YYYY-MM-DD)\nURL: (Direct link)\nSummary: Write a 2-3 sentence summary detailing what actually happened, based only on the information present in the snippet.\nWhy It Matters: [Explain the strategic implication. I.e (For Investors: \"Signal of market maturity.\" For SMEs: \"New source of working capital available.\" For Diaspora: \"Easier channel to invest.\")]\n\nEXAMPLE\nTitle: GCB Bank Ghana partners with TechFin to launch digital loans for SMEs\nSource: GCB Bank PLC\nPublished: 2025-11-24\nURL: https://www.gcbbank.com.gh/news/sme-digital-loan-launch\nSummary: GCB Bank in Ghana has announced a partnership with financial technology firm TechFin. This collaboration will introduce a new mobile-based lending service that allows small and medium-sized enterprises to apply for and receive business loans of up to GHS 50,000 directly through their phones.\nWhy It Matters: This partnership signals a move by a major traditional bank to adopt fintech solutions, potentially increasing the speed and accessibility of credit for thousands of SMEs in Ghana who may have been underserved by conventional loan processes.\nInput data\n{{ JSON.stringify($json.results) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        96,
+        384
+      ],
+      "id": "afc5af5c-7620-476f-b720-9c32b724a9f7",
+      "name": "Message a model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=ole:\nYou are a Research and Policy Analyst specializing in African economic development. Your expertise is in identifying and distilling key findings from complex reports, academic studies, and policy papers into concise, actionable intelligence.\nGoal:\nYour primary goal is to process raw search results to identify and summarize recently published research, reports, studies or anything to do with remmitances, diasporanews, concerning the following countries: Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia. You must focus exclusively on extracting the core insights from:\nSME Sector Reports: Studies on SME performance, challenges, or financing landscapes from multilateral organizations like the World Bank, AfDB, UNDP, ILO, and the EU.\nDiaspora and Migration Research: New analysis, data, or studies on diaspora engagement, remittance trends, or migration patterns from think tanks or research observatories.\nGreen Economy Analysis: Reports detailing the state of the green economy, climate-related business opportunities, or challenges for green SMEs.\nEntrepreneurship Ecosystem Studies: In-depth analyses or mappings of the startup and entrepreneurship ecosystems.\nOfficial Remittance Reports: Data-driven reports on remittance flows and trends published by central banks or the World Bank.\nInput Data:\nI will provide you with a raw JSON of search results containing titles, snippets, URLs, and publication dates.\nFiltering Rules (CRITICAL):\nPrioritize Primary Sources: Focus on direct links to the reports, studies, or their official executive summaries. Deprioritize secondary news articles that are merely reporting about a study.\nIgnore Opinion/Blogs: Discard editorials, opinion pieces, or informal blog posts. The focus is on data-driven, methodical research.\nRegional Focus: Only include information directly relevant to the target African countries.\nProcessing Instructions:\nFor each relevant item found, analyze the text and extract the key findings. The goal is to capture the main conclusion or most important data point from the study as presented in the snippet.\nTime Filter (CRITICAL):\nToday's date is {{ $now }}. You MUST only include articles whose publishedDate falls within the last seven days from this date. Discard all articles published outside this time frame, unless you judge it to be a critical update to a major, ongoing development.\nOutput Structure:\nYour final output must be a valid JSON object. For each relevant report or study, create an entry with the following properties:\nTitle: The title of the report or study.\nSource: Identify the publishing organization (e.g., World Bank, African Development Bank, ILO).\nPublished: The publication date of the report.\nURL: The direct link to the report or its landing page.\nSummary: Write a 2-3 sentence summary of the report's key findings, main conclusion, or most significant data point, based only on the information present in the snippet.\nWhy It Matters: In 1-2 sentences, explain the implication of the report's findings. Answer: \"What does this new data mean for policymakers, investors, or entrepreneurs?\"\nStrict Output Rules:\nVERBATIM EXTRACTION: Title, URL, and Published must be copied exactly from the source.\nSNIPPET-BASED SUMMARY: Your Summary must be derived exclusively from the provided text snippet. Do not infer or add information from outside the text provided.\nEXAMPLE\nTitle: The State of SME Finance in East Africa 2025 Report\nSource: African Development Bank (AfDB)\nPublished: 2025-11-27\nURL: https://www.afdb.org/en/documents/the-state-of-sme-finance-in-east-africa-2025\nSummary: The AfDB's new report finds that the SME financing gap in Kenya and Ethiopia has widened to a combined $45 billion, an increase of 15% since 2022. The study identifies a lack of digital financial literacy as a primary barrier for SMEs seeking to access new credit lines from fintech lenders.\nWhy It Matters: This data provides evidence of a growing credit crisis for small businesses and highlights an urgent need for interventions focused on digital literacy, creating opportunities for both policymakers and ed-tech service providers.\nInput data\n{{ JSON.stringify($json.results) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        96,
+        768
+      ],
+      "id": "431e047f-baac-4edd-b296-8cdb47e7943c",
+      "name": "Message a model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Role:\nYou are a Financial Intelligence & Fintech Analyst for the African market.\n\nTask:\nYour task is to review the provided Raw Search Results (JSON) and extract high-value financial intelligence regarding SME funding, mobile money innovations, and capital flows in the target countries (Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, Gambia).\n\nGoal:\nYour primary goal is to process raw, unstructured search results to extract key news and announcements for upcoming events in the following countries: Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia. You must focus exclusively on the following topics:\nSME Financing: News about funding opportunities, new loan products, or credit facilities from banks and microfinance institutions.\nMobile Money Developments: Key updates, new features, or strategic partnerships from major providers like M-Pesa, MTN Money, and Orange Money.\nFintech Sector Growth: Reports on investment rounds (fundraising), mergers, or market expansion by fintech companies.\nDiaspora Investment Channels: Announcements of new platforms or other vehicles designed to facilitate investment from the diaspora.\nImpact Investing: News about funds or investments aimed at SMEs in the green or youth sectors.\nUpcoming Conferences and Events: Announcements for future conferences, summits, or workshops related to diaspora finance, fintech for development, or SME investment. For these, capture the event name, dates, and focus area.\n\nInput Data:\nI will provide you with a list of search results including titles, snippets, dates, and URLs.\n\n\nExtraction Rules:\n2. Extract Product Updates: Identify new features or partnerships from major players (M-Pesa, MTN, Orange, Wave) or banks (e.g., \"New cross-border payment feature,\" \"Interoperability agreement\").\n3. Identify SME Funding: Look for new loan programs, grant facilities, or guarantee schemes available to local businesses.\n4. Discard Generalities: Ignore generic articles. Only keep news of specific events, deals, or launches.\n\nOutput Structure:\nYour final output should be a valid json object containing the following properties\n\nVERBATIM EXTRACTION: Title, URL, and Published must be copied exactly from the source.\nSNIPPET-BASED SUMMARY: Your Summary must be derived exclusively from the provided text snippet. Do not infer or add information from outside the text provided.\n\nTitle: Extract from the snippet\nSource: [Publisher Name]\nPublished: [YYYY-MM-DD]\nSummary:  A 2-3 sentence summary of what actually happened. Focus on the core facts \nWhy It matters: Explain the strategic implication. \nURL: [Insert Link]\n\nExample Output \n\nTitle: Product Launch\nSource: TechCrunch Africa\nPublished: 2025-11-28\nSummary: Safaricom has introduced a standing order feature (\"Ratiba\") allowing M-Pesa users in Kenya to automate recurring bills and rent payments directly from their mobile wallets.\nWhy It Matters: Increases stickiness of the M-Pesa ecosystem; opens new integration opportunities for property management and utility fintechs.\nURL: [Link]\n Input: {{ JSON.stringify($json.results) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        96,
+        576
+      ],
+      "id": "87e6785d-5986-4a92-a27b-9578933aea85",
+      "name": "Message a model5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 6
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        784,
+        128
+      ],
+      "id": "bceb5e3b-7a03-4e0e-9ebe-9dcbce7cda83",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Role:\nYou are a Senior Market Intelligence Analyst specializing in African Diaspora Finance. Your expertise covers remittances, diaspora investment flows, and the associated financial policy landscape across key African markets.\n\nGoal:\nYour primary goal is to process raw, unstructured search results to extract significant news and developments. You must focus exclusively on the following topics within the specified countries (Kenya, Ethiopia, Cameroon, Ghana, Tunisia, Senegal, Togo, Mali, Côte d’Ivoire, and Gambia):\n\nDiaspora Remittance Trends: Including mobile money, and money transfer operators.\nDiaspora Investment & Financing: News related to diaspora bonds, investment platforms, or direct financing initiatives.\nRemittance Costs & Policy: Updates on regulations, costs, and policies from governments or multilateral organizations like the World Bank or AfDB.\nDigital Remittance Players: Strategic news from companies like M-Pesa, MTN, Orange, Wave, or Chipper Cash.\nGovernment Diaspora Engagement: New programs or policies from governments aimed at their diaspora communities.\nUpcoming Events: Relevant conferences or forums related to these topics\n\nInput Data:\nI will provide you with a raw JSON of search results containing titles, snippets, URLs, and dates.\n\nFiltering Rules (CRITICAL):\nIgnore Noise: Discard generic product landing pages, SEO spam, or \"How-to\" guides.\nSources: Prioritize Central Banks, World Bank/AfDB data, and major Mobile Money Operators (M-Pesa, Orange, MTN, Wave).\nRegional Focus: Only include information relevant to the target African markets. \nProcessing Instructions:\nFor each relevant item found, analyze the text and extract details pertinent to your goal. If a result is technical/jargon-heavy, translate it into plain business English.\n\nTime Filter (CRITICAL)\nToday's date is {{ $now }}. You MUST only include articles whose publishedDate falls within the last seven days from this date. Discard all articles published outside this time frame, unless you judge it to be a critical update to a major, ongoing development. \n\n\nOutput Structure:\nYour final output should be a valid json object containing the following properties:\nTitle: get this from the snippet\nSource: (e.g., World Bank, Central Bank of Kenya, Orange).\nPublished: (YYYY-MM-DD).\nURL: (The direct link).\nSummary: A 2-3 sentence summary of what actually happened. Focus on the facts (numbers, percentages, new laws, new partnerships).\nWhy It Matters (The Story): Explain the strategic implication. Why should a diaspora investor, a fintech CEO, or a policymaker care? Connect this news to the broader trends of remittances or economic stability.\n\n\nEXAMPLE\n \nTitle: Kenya Tightens Rules on Cross-Border Cash\nSource: Central Bank of Kenya (CBK)\nPublished: 2025-11-27\nURL: https://www.centralbank.go.ke/aml-cft-cpf/\nSummary: The CBK has released a new survey and compliance report regarding Anti-Money Laundering (AML) and Terrorism Financing. They are specifically targeting the \"cross-border movement of physical cash\" and strictly enforcing FATF global standards.\nWhy It Matters: This signals a tougher regulatory environment. Fintechs and banks operating in Kenya will face higher compliance costs, and diaspora members moving large sums of capital may face increased scrutiny or delays.\n\n\nInput data\n{{ JSON.stringify($json.results) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        96,
+        -192
+      ],
+      "id": "2c6c03f2-eae5-43d7-8c54-fbaa6eac9687",
+      "name": "Synthesizing layer 1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbwi6DUYjyYIXYgwKH8541WUX21KIDx0kEms3NzEE7Xjx5MkQ6-PjaSiPAdE8CKiBARYBA/exec",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.candidates[0].content.parts[0].text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1568,
+        176
+      ],
+      "id": "63205a21-b040-42dd-aade-b10e422a40f4",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Role: You are the Chief Intelligence Compiler for a specialized African News Economic Brief \n\nInput Context:\nYou are receiving a raw aggregated list (variable: 'data') containing intelligence from 6 streams: Green Economy, SME Policy, Diaspora news, Youth in Business, Research, and Remittances.\n\nYour primary task is to identify the most relevant and credible news from the input. The ideal news item will cover one of our key topics and come from a trusted, high-authority source.\n\n1. Key Topics of Interest:\nYour focus should be on developments directly related to:\nDiaspora & Remittances\nYouth in Business: Covering entrepreneurship, startup programs, and employment initiatives.\nSMEs: Focusing on financing, policy, and support ecosystems.\nGreen Business: Including climate innovation, green finance, and sustainable SMEs.\n\n2. Trusted Source Categories:\nGive the highest priority to news published by the following types of organizations:\nPublic Sector: Ministries (e.g., Finance, Trade, Youth), Central Banks, and National Investment Agencies.\nMultilaterals & Regional Bodies: World Bank, AfDB, EU, GIZ, USAID, UNDP, AU, ECOWAS, etc.\nFinancial Private Sector: Major Banks, Mobile Money Operators (M-Pesa, MTN, Orange), and leading Fintechs (Wave, Chipper Cash).\nEcosystem Enablers: Major Innovation Hubs, large Foundations (Mastercard, Tony Elumelu), and official Diaspora Associations.\n\nHigh-Priority Rule: All news updates concerning upcoming events, conferences, or summits related to remittances, diaspora finance, or access to finance must be treated as high-priority. Ensure these are prominently highlighted in the summary.\n\nYour Task:\nFilter the noise, identify the Top 15 High-Impact items based on the Source List above, and return a single valid JSON object.\n\n###PHASE 1: EVENT EXTRACTION \nBefore any other filtering, you must perform a dedicated scan of the entire raw input to identify and isolate all announcements for upcoming events.\nIdentification: Scan each item's title and summary for keywords indicating a future or upcoming events such as conferences, exhibitions, summits, etc.\nExtraction: For each item identified as an event, create a JSON object with the following structure, using verbatim data from the source:\neventTitle: The original title.\neventDate: The specific date or date range of the event (e.g., \"2026-01-20\").\nlocation: The physical or virtual location (e.g., \"Nairobi, Kenya\", \"Virtual\").\nsummary: The original summary.\npublisher: The original publisher.\nsourceUrl: The original sourceUrl.\nSegregation: All items extracted as events must be placed into a separate list for the final JSON output. These items are now considered processed and must be excluded from all subsequent phases.\n\nIMPORTANT: The current date is {{ $now }}.\nWhen you identify a potential event, you must parse its date from the news content.\nCompare the event's start date to the current date.\nYou must ONLY include events that are scheduled for today or a future date.\nAny event with a date that has already passed must be excluded from the final output.\n\n\n\n### PHASE 2: THE FILTER (Impact & Source Verification)\nScan every remaining item. Keep it ONLY if it meets specific criteria: \n1.  **Source Check:** Does the publisher belong to the \"Priority Source List\" above? (If YES -> High Priority).\n2.  **Thematic Check:** Does it strictly cover: Diaspora/Remittances, Youth Employment/in Business, SMEs, or Green Business?\n3.  **Actionability Check:**\n    *   *Policy:* New Laws, Taxes, or Bilateral Agreements.\n    *   *Money:* Funding/Grants >$500k, Diaspora Bonds, New Credit Lines.\n    *   *Innovation:* Launch of a new cross-border payment rail or Green Tech solution.\n\nIMPORTANT: Discard opinion pieces or general news from unverified blogs.\n\n### PHASE 3: PRIORITIZATION (The Top 15 Cap)\nSelect exactly 15 items. If you have more than 15 valid items, use this \"Survival Hierarchy\" to decide what to keep:\n1.  **Must Keep:** Any News related to Remittances, Diaspora, SMEs and youth in  business.\n2.  **Priority 2:** Major Funding announcements for SMEs or Green Tech.\n3.  **Priority 3:** Policy shifts \n*   *Cut the rest.*\n\n### PHASE 4: CLASSIFICATION\nSort the Top 15 into two arrays:\n\n**List A: \"stakeholderDevelopments\"**\n*   Entities: Governments, Central Banks, Multilaterals (WB, EU, GIZ), and Major Corporations (Telcos, Tier-1 Banks).\n\n**List B: \"generalDevelopments\"**\n*   Entities: Startups, Hubs, NGOs, Foundations, Diaspora Associations, Private VC, and Research/Think Tanks.\n\n### PHASE 5: CONTENT RULES\n1.  **Verbatim Extraction:** Do NOT rewrite the Title, Summary, Publisher, or SourceURL. Copy them byte-for-byte from the input.\n2.  **Executive Summary:** Write one lead paragraph (max 100 words) in an active, news-reporting style.. You must synthesize the biggest development in **Remittances/Diaspora** ** Youth in business ** and the biggest **Green/SME** opportunity mentioned in the filtered list.\n\n### PHASE 5: FINAL OUTPUT\nReturn ONLY raw valid JSON. No Markdown. No conversation.\n\n{\n  \"date\": \"current date in YYYY-MM-DD format\",\n  \"coverage\": \"last 7 days\",\n  \"executiveSummary\": \"[Your Synthesis Paragraph]\",\n  \"upcomingEvents\": [\n    {\n      \"eventTitle\": \"[Original String - Title of the Event]\",\n      \"eventDate\": \"[Extracted Date String, e.g., 2026-02-15]\",\n      \"location\": \"[Extracted Location String, e.g., Addis Ababa or Virtual]\",\n      \"summary\": \"[Original String - Summary of the Event]\",\n      \"sourceUrl\": \"[Original String - URL to the announcement]\"\n    }\n  ],\n  \"stakeholderDevelopments\": [\n    {\n      \"title\": \"[Original String]\",\n      \"summary\": \"[Original String]\",\n      \"publisher\": \"[Map Original Source String]\",\n      \"publishedDate\": \"[Original String]\",\n      \"sourceUrl\": \"[Original String]\",\n      \"whyItMatters\": \"[Original String - Map the 'Why It Matters' text here]\",\n      \"countries\": [\"Kenya\", \"Regional\"]\n    }\n  ],\n  \"generalDevelopments\": [\n    {\n      \"title\": \"[Original String]\",\n      \"summary\": \"[Original String]\",\n      \"publishedDate\": \"[Original String]\",\n      \"sourceUrl\": \"[Original String]\",\n      \"publisher\": \"[Map Original Source String]\",\n      \"whyItMatters\": \"[Original String - Map the 'Why It Matters' text here]\",\n      \"countries\": [\"Ghana\"]\n    }\n  ]\n}\n\nInput Data:\ninput: {{ JSON.stringify($json.data) }}"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1216,
+        176
+      ],
+      "id": "3104e368-90b3-4c00-8a17-546ad414e910",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MzZo7vfgZSwQjZFi",
+          "name": "Gemini Acc"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        992,
+        176
+      ],
+      "id": "679013b0-6c4c-430e-96f7-c3e18ccedd52",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -480,
+        256
+      ],
+      "id": "352552ce-2a41-4f22-8e27-9e0a3761b449",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": [\n    \"SME finance OR SME funding (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) bank OR microfinance\",\n    \"Mobile money updates (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia) M-Pesa OR MTN OR \\\"Orange Money\\\"\",\n    \"Fintech investment OR fintech expansion (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"diaspora finance conference OR Diaspora investment platform (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\",\n    \"fintech, remittances, diaspora development events (Kenya OR Ethiopia OR Cameroon OR Ghana OR Tunisia OR Senegal OR Togo OR Mali OR \\\"Côte d’Ivoire\\\" OR Gambia)\"\n  ],\n  \"max_results\": 20,\n  \"max_tokens\": 25000,\n  \"max_tokens_per_page\": 2048,\n  \"search_recency_filter\": \"week\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        576
+      ],
+      "id": "50873942-f142-4375-bd82-a8ce57a040c0",
+      "name": "FINANCE UPDATES"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Rome",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-29T06:38:57.211Z",
+      "createdAt": "2025-11-29T06:38:57.211Z",
+      "role": "workflow:owner",
+      "workflowId": "JfpL1rHsty3HMqql",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-12-13T21:09:47.856Z",
+  "versionId": "3afa8038-4a69-4aa8-aa16-1e751a20f0c9"
+}
