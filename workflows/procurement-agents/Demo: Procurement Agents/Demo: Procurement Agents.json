@@ -3,17 +3,6 @@
   "activeVersion": null,
   "activeVersionId": null,
   "connections": {
-    "When chat message received": {
-      "main": [
-        [
-          {
-            "node": "Requisition Processing Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "OpenAI Chat Model": {
       "ai_languageModel": [
         [
@@ -244,6 +233,17 @@
           }
         ]
       ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Requisition Processing Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-05-13T10:54:57.353Z",
@@ -254,20 +254,6 @@
   },
   "name": "Demo: Procurement Agents",
   "nodes": [
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
-      "typeVersion": 1.4,
-      "position": [
-        -16848,
-        5760
-      ],
-      "id": "90847ddd-9934-4141-86aa-32fd1e3a44fe",
-      "name": "When chat message received",
-      "webhookId": "40b2b253-0fc4-4e06-9dfb-38e232b79584"
-    },
     {
       "parameters": {
         "model": {
@@ -1032,92 +1018,23 @@
       ],
       "id": "4015e5d2-c6bc-4870-b55c-55ef26170c89",
       "name": "Requisition Processing Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -16768,
+        5680
+      ],
+      "id": "8bee81e0-304c-4292-be86-262d41064c3e",
+      "name": "When chat message received",
+      "webhookId": "2247f24a-86c3-4164-b550-4e4f904314a1"
     }
   ],
   "pinData": {
-    "When chat message received": [
-      {
-        "json": {
-          "sessionId": "e3056ae72afa49968a16afcc6a28eef0",
-          "action": "sendMessage",
-          "chatInput": "We need 80 ergonomic office chairs for the Berlin office by end of next month. Budget is around €18k. Prefer sustainable suppliers."
-        }
-      }
-    ],
-    "Split Out": [
-      {
-        "json": {
-          "supplier_id": "SUP-B",
-          "supplier_name": "GreenWorkplace GmbH",
-          "supplier_email": "rfq@greenworkplace.example",
-          "preferred_supplier": true,
-          "risk_score": 22,
-          "sustainability_score": 94,
-          "selection_reason": "Preferred sustainable supplier with low risk score and high sustainability score, approved to deliver in Berlin."
-        }
-      },
-      {
-        "json": {
-          "supplier_id": "SUP-D",
-          "supplier_name": "OfficeLux GmbH",
-          "supplier_email": "tenders@officelux.example",
-          "preferred_supplier": false,
-          "risk_score": 35,
-          "sustainability_score": 74,
-          "selection_reason": "Approved supplier with good sustainability score and acceptable risk score, able to deliver to Berlin."
-        }
-      },
-      {
-        "json": {
-          "supplier_id": "SUP-A",
-          "supplier_name": "BudgetOffice EU",
-          "supplier_email": "quotes@budgetoffice.example",
-          "preferred_supplier": false,
-          "risk_score": 42,
-          "sustainability_score": 62,
-          "selection_reason": "Approved supplier with acceptable risk and sustainability scores, capable of delivery to Berlin."
-        }
-      }
-    ],
-    "parse json1": [
-      {
-        "json": {
-          "status": "ready_for_rfq",
-          "case_title": "Procurement of 80 Ergonomic Office Chairs for Berlin Office",
-          "selected_suppliers": [
-            {
-              "supplier_id": "SUP-B",
-              "supplier_name": "GreenWorkplace GmbH",
-              "supplier_email": "rfq@greenworkplace.example",
-              "preferred_supplier": true,
-              "risk_score": 22,
-              "sustainability_score": 94,
-              "selection_reason": "Preferred sustainable supplier with low risk score and high sustainability score, approved to deliver in Berlin."
-            },
-            {
-              "supplier_id": "SUP-D",
-              "supplier_name": "OfficeLux GmbH",
-              "supplier_email": "tenders@officelux.example",
-              "preferred_supplier": false,
-              "risk_score": 35,
-              "sustainability_score": 74,
-              "selection_reason": "Approved supplier with good sustainability score and acceptable risk score, able to deliver to Berlin."
-            },
-            {
-              "supplier_id": "SUP-A",
-              "supplier_name": "BudgetOffice EU",
-              "supplier_email": "quotes@budgetoffice.example",
-              "preferred_supplier": false,
-              "risk_score": 42,
-              "sustainability_score": 62,
-              "selection_reason": "Approved supplier with acceptable risk and sustainability scores, capable of delivery to Berlin."
-            }
-          ],
-          "excluded_suppliers": "SUP-E: Not an approved vendor",
-          "message_to_user": "I have successfully validated your request against the office_furniture policy. I have identified 3 eligible suppliers who meet our risk and sustainability requirements. I am now ready to generate the RFQs."
-        }
-      }
-    ],
     "Quote Extraction Agent": [
       {
         "json": {
@@ -1136,13 +1053,6 @@
             "sustainability_info": "FSC-certified wood components, recycled aluminium where applicable, repair and take-back program, CO2-neutral delivery within Germany",
             "exceptions_assumptions": "None. Pricing assumes standard unloading access at Berlin Headquarters during business hours."
           }
-        }
-      }
-    ],
-    "Requisition Processing Agent": [
-      {
-        "json": {
-          "output": "{\n  \"status\": \"ready_for_rfq\",\n  \"case_title\": \"Procurement of 80 Ergonomic Office Chairs for Berlin Office\",\n  \"selected_suppliers\": [\n    {\n      \"supplier_id\": \"SUP-B\",\n      \"supplier_name\": \"GreenWorkplace GmbH\",\n      \"supplier_email\": \"rfq@greenworkplace.example\",\n      \"preferred_supplier\": true,\n      \"risk_score\": 22,\n      \"sustainability_score\": 94,\n      \"selection_reason\": \"Preferred sustainable supplier with low risk score and high sustainability score, approved to deliver in Berlin.\"\n    },\n    {\n      \"supplier_id\": \"SUP-D\",\n      \"supplier_name\": \"OfficeLux GmbH\",\n      \"supplier_email\": \"tenders@officelux.example\",\n      \"preferred_supplier\": false,\n      \"risk_score\": 35,\n      \"sustainability_score\": 74,\n      \"selection_reason\": \"Approved supplier with good sustainability score and acceptable risk score, able to deliver to Berlin.\"\n    },\n    {\n      \"supplier_id\": \"SUP-A\",\n      \"supplier_name\": \"BudgetOffice EU\",\n      \"supplier_email\": \"quotes@budgetoffice.example\",\n      \"preferred_supplier\": false,\n      \"risk_score\": 42,\n      \"sustainability_score\": 62,\n      \"selection_reason\": \"Approved supplier with acceptable risk and sustainability scores, capable of delivery to Berlin.\"\n    }\n  ],\n  \"excluded_suppliers\": \"SUP-E: Not an approved vendor\",\n  \"message_to_user\": \"I have successfully validated your request against the office_furniture policy. I have identified 3 eligible suppliers who meet our risk and sustainability requirements. I am now ready to generate the RFQs.\"\n}"
         }
       }
     ]
@@ -1169,6 +1079,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-06-05T11:15:21.689Z",
-  "versionId": "f86a7766-8afa-4844-a1ab-2bbfc29956bf"
+  "updatedAt": "2026-07-21T17:15:08.012Z",
+  "versionId": "f2188b86-1bd7-4f8d-84ba-6f8da7fbc8a4"
 }
