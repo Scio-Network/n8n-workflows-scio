@@ -189,14 +189,14 @@
       "main": [
         [
           {
-            "node": "Merge Items",
-            "type": "main",
-            "index": 1
-          },
-          {
             "node": "Globals vars",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Merge Items",
+            "type": "main",
+            "index": 1
           }
         ]
       ]
@@ -474,13 +474,13 @@
         "operation": "edit",
         "owner": {
           "__rl": true,
-          "mode": "name",
-          "value": "={{ $('Globals vars').item.json.repo.owner }}"
+          "value": "={{ $('Globals vars').first().json.repo.owner }}",
+          "mode": "name"
         },
         "repository": {
           "__rl": true,
-          "mode": "name",
-          "value": "={{ $('Globals vars').item.json.repo.name }}"
+          "value": "={{ $('Globals vars').first().json.repo.name }}",
+          "mode": "name"
         },
         "filePath": "={{ $('Globals vars').first().json.repo.path }}{{ $node[\"Execute Workflow Trigger\"].json.name.replace(/\\//g, '-') }}.json",
         "fileContent": "={{$('isDiffOrNew').item.json[\"n8n_data_stringy\"]}}",
@@ -497,8 +497,8 @@
       "webhookId": "c816b3f6-489a-4ff5-a5bd-ee25ce3c7a46",
       "credentials": {
         "githubApi": {
-          "id": "jcMaYseSkZR9iGzh",
-          "name": "GitHub"
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
         }
       }
     },
@@ -580,7 +580,7 @@
           "mode": "name",
           "value": "={{ $json.repo.name }}"
         },
-        "filePath": "={{ $json.repo.path }}{{ $('Execute Workflow Trigger').item.json.id }}.json",
+        "filePath": "={{ $json.repo.path }}{{ $json.repo.path.split('/').filter(Boolean).pop() }}.json",
         "asBinaryProperty": false,
         "additionalParameters": {}
       },
@@ -596,8 +596,8 @@
       "webhookId": "9eef4fd3-5087-4590-828a-f3b16b9e4e76",
       "credentials": {
         "githubApi": {
-          "id": "yMFJuL28NcBsvMYQ",
-          "name": "GitHub account"
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
         }
       },
       "continueOnFail": true,
@@ -721,13 +721,13 @@
               "id": "6cf546c5-5737-4dbd-851b-17d68e0a3780",
               "name": "repo.owner",
               "type": "string",
-              "value": "nyairo-k"
+              "value": "Scio-Network"
             },
             {
               "id": "452efa28-2dc6-4ea3-a7a2-c35d100d0382",
               "name": "repo.name",
               "type": "string",
-              "value": "n8n-workflows"
+              "value": "n8n-workflows-scio"
             },
             {
               "id": "81c4dc54-86bf-4432-a23f-22c7ea831e74",
@@ -782,8 +782,8 @@
       "webhookId": "5d6058e8-e6af-4d74-893c-31fe9571fa60",
       "credentials": {
         "githubApi": {
-          "id": "yMFJuL28NcBsvMYQ",
-          "name": "GitHub account"
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
         }
       }
     },
@@ -815,8 +815,8 @@
       "webhookId": "ee0de4e0-5e80-40e3-b122-758bddbd0890",
       "credentials": {
         "githubApi": {
-          "id": "yMFJuL28NcBsvMYQ",
-          "name": "GitHub account"
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
         }
       }
     }
@@ -844,6 +844,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-06-08T13:05:15.179Z",
-  "versionId": "2c43c30a-0fa6-46dd-9478-d0206bb5ca88"
+  "updatedAt": "2026-07-21T09:15:34.774Z",
+  "versionId": "20c9de4c-c54e-409a-b88b-2a23ac9b82a3"
 }
