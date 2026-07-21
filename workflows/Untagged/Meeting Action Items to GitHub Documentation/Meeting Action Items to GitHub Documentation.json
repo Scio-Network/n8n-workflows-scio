@@ -1,0 +1,998 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-07-15T15:39:04.716Z",
+    "createdAt": "2026-07-15T15:39:04.716Z",
+    "versionId": "5e20a513-6eeb-400f-a6a7-83c6e929b877",
+    "workflowId": "5nR7DRdU7huAr7xi",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "c3434bb1-0754-4513-bfbb-101b528a3a31",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -80,
+          -176
+        ],
+        "id": "0c2a87d2-4a8b-446a-ae52-585e676f4227",
+        "name": "meetings-autotmation",
+        "webhookId": "c3434bb1-0754-4513-bfbb-101b528a3a31"
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "gpt-4o-mini",
+            "mode": "list",
+            "cachedResultName": "GPT-4O-MINI"
+          },
+          "responses": {
+            "values": [
+              {
+                "role": "system",
+                "content": "You are an information extraction assistant.\n\nYour task is to convert Google Meet Gemini meeting notes into structured JSON.\n\nExtract only the information that exists in the meeting notes.\n\nDo not summarize beyond what is already provided.\n\nIf a section does not exist, return an empty string or an empty array.\n\nReturn valid JSON only that matches the required schema."
+              },
+              {
+                "content": "=Convert the following Google Meet Gemini meeting notes into structured JSON.\n\nReturn ONLY valid JSON using the following schema:\n\n{\n  \"meeting\": {\n    \"title\": \"\",\n    \"meeting_type\": \"AI & Digitalization Weekly Sync\",\n    \"date\": \"\",\n    \"quarter\": \"\",\n    \"summary\": \"\",\n    \"source_document\": \"\"\n  },\n  \"decisions\": [],\n  \"action_items\": [\n    {\n      \"owners\": [],\n      \"task\": \"\"\n    }\n  ]\n}\n\nRules:\n\n1. Set meeting.title using the provided Meeting Title.\n\n2. Set meeting.date using the provided Meeting Date.\n\n3. Determine meeting.quarter from the meeting date using the following rules:\n   - January to April → Q1\n   - May to August → Q2\n   - September to December → Q3\n   Return only the quarter (for example: \"Q2\").\n\n4. Set meeting.summary using only the Summary section.\n\n5. Populate decisions with every item listed under the Decisions section.\n\n6. Populate action_items using only the Next steps section.\n\n7. Each action item begins with one or more owners enclosed in square brackets.\n\n   Example:\n   [Nyairo Kemunto] Populate prompt library\n\n   becomes\n\n   {\n     \"owners\": [\"Nyairo Kemunto\"],\n     \"task\": \"Populate prompt library\"\n   }\n\n   Example:\n\n   [Florian Döbler, Nyairo Kemunto] Project check in\n\n   becomes\n\n   {\n     \"owners\": [\n       \"Florian Döbler\",\n       \"Nyairo Kemunto\"\n     ],\n     \"task\": \"Project check in\"\n   }\n\n8. Set meeting.source_document using the Google Docs URL below, replacing {FILE_ID} with the provided File ID.\nFormat:\n\nhttps://docs.google.com/document/d/{FILE_ID}/edit\n\n9. Return valid JSON only.\n\nMeeting Title:\n{{ $json.body.meetingTitle }}\n\nMeeting Date:\n{{ $json.body.date }}\n\nMeeting Notes:\n{{ $json.body.notesContent }}\n\nFile ID:\n{{ $json.body.fileId }}"
+              }
+            ]
+          },
+          "builtInTools": {},
+          "options": {
+            "textFormat": {
+              "textOptions": {
+                "type": "json_schema",
+                "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"meeting\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"title\": {\n          \"type\": \"string\"\n        },\n        \"date\": {\n          \"type\": \"string\"\n        },\n        \"quarter\": {\n          \"type\": \"string\"\n        },\n        \"summary\": {\n          \"type\": \"string\"\n        },\n        \"source_document\": {\n          \"type\": \"string\"\n        }\n      },\n      \"required\": [\n        \"title\",\n        \"date\",\n        \"quarter\",\n        \"summary\",\n        \"source_document\"\n      ],\n      \"additionalProperties\": false\n    },\n    \"decisions\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"action_items\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"owners\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          },\n          \"task\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"owners\",\n          \"task\"\n        ],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\n    \"meeting\",\n    \"decisions\",\n    \"action_items\"\n  ],\n  \"additionalProperties\": false\n}"
+              }
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.openAi",
+        "typeVersion": 2.1,
+        "position": [
+          96,
+          -160
+        ],
+        "id": "55eb4688-c46e-40f3-8f90-0f6939a87d38",
+        "name": "Message a model",
+        "credentials": {
+          "openAiApi": {
+            "id": "a4ja82V4nnlunpii",
+            "name": "openai"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "owner": {
+            "__rl": true,
+            "value": "Scio-Network",
+            "mode": "name"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "digital-footprint",
+            "mode": "list",
+            "cachedResultName": "digital-footprint",
+            "cachedResultUrl": "https://github.com/Scio-Network/digital-footprint"
+          },
+          "title": "=AI & Digitalization Team Meeting - {{ $json.output[0].content[0].text.meeting.date.substring(0.10) }}",
+          "body": "=# AI & Digitalization Team Meeting\n\n**Meeting**\n\n{{ $json.output[0].content[0].text.meeting.title }}\n\n**Date**\n\n{{ $json.output[0].content[0].text.meeting.date }}\n\n---\n\n## Summary\n\n{{ $json.output[0].content[0].text.meeting.summary }}\n\n---\n\n## Decisions\n\n{{ $json.output[0].content[0].text.decisions\n.map(d => `- ${d}`)\n.join('\\n') }}\n\n---\n\n## Action Items\n\n{{ $json.output[0].content[0].text.action_items\n.map(a =>\n`- [ ] ${a.task}\n  - Owners: ${a.owners.join(', ')}`\n)\n.join('\\n\\n') }}\n\n---\n\n## Meeting Notes\n\n{{ $json.output[0].content[0].text.meeting.source_document }}",
+          "labels": [],
+          "assignees": []
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          432,
+          -16
+        ],
+        "id": "bba87bcc-a2f0-4876-87ff-3290efd19bd4",
+        "name": "Create an issue",
+        "webhookId": "478aa9c2-fcee-4853-a38f-74cb7a9bf2f2",
+        "credentials": {
+          "githubApi": {
+            "id": "SZYHQ2VAQfsrE9bT",
+            "name": "GitHu-Scio"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "c1c201ee-b44a-4375-a518-669e32ceefa5",
+                "name": "parent_issue_id",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "1a26034d-05cf-4844-abdd-473c623c3cb0",
+                "name": "parent_issue_number",
+                "value": "={{ $json.number }}",
+                "type": "number"
+              },
+              {
+                "id": "6655fae3-41e3-4526-a2d7-830ddebb3831",
+                "name": "action_items",
+                "value": "={{ $('Message a model').item.json.output[0].content[0].text.action_items }}",
+                "type": "array"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          640,
+          80
+        ],
+        "id": "05dba06a-1c28-4bbe-a875-530a6f7b8f9a",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "action_items",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          880,
+          112
+        ],
+        "id": "82b5748c-30b4-43f2-a640-0661e71c6937",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "owner": {
+            "__rl": true,
+            "value": "Scio-Network",
+            "mode": "name"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "digital-footprint",
+            "mode": "list",
+            "cachedResultName": "digital-footprint",
+            "cachedResultUrl": "https://github.com/Scio-Network/digital-footprint"
+          },
+          "title": "=={{ $json.task }}",
+          "body": "=Parent Meeting: {{ $('Edit Fields').item.json.parent_issue_number }}\n\nOwner:\n{{ $json.owners.join(\", \") }}\n\nSource Meeting:\n{{ $('Message a model').item.json.output[0].content[0].text.meeting.source_document }}",
+          "labels": [],
+          "assignees": [
+            {
+              "assignee": "={{ $json.owners.includes(\"Nyairo Kemunto\") ? \"nyairo-k\" : \"flo-doe\" }}"
+            }
+          ]
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          1088,
+          80
+        ],
+        "id": "b769fdf3-6336-4f41-9572-43747eb87b05",
+        "name": "Create an issue1",
+        "webhookId": "6a44f277-2657-444c-9c86-7029d3bc6c7c",
+        "credentials": {
+          "githubApi": {
+            "id": "SZYHQ2VAQfsrE9bT",
+            "name": "GitHu-Scio"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.github.com/orgs/Scio-Network/projectsV2/5/items",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "githubApi",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "2026-03-10"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"type\": \"Issue\",\n  \"id\": {{ $json.id }}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          672,
+          -208
+        ],
+        "id": "170a379e-e5e1-4d53-82fe-3a90e833fd00",
+        "name": "add-to-projects",
+        "credentials": {
+          "githubApi": {
+            "id": "SZYHQ2VAQfsrE9bT",
+            "name": "GitHu-Scio"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://api.github.com/repos/Scio-Network/digital-footprint/issues/{{ $('Edit Fields').item.json.parent_issue_number }}/sub_issues",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "githubApi",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"sub_issue_id\": {{ $json.id }}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1296,
+          64
+        ],
+        "id": "cb2c68c9-7af8-434a-ac49-60885298498f",
+        "name": "child-parent-link",
+        "credentials": {
+          "githubApi": {
+            "id": "SZYHQ2VAQfsrE9bT",
+            "name": "GitHu-Scio"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.github.com/graphql",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "githubApi",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Accept",
+                "value": "application/vnd.github+json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": \"query { node(id: \\\"PVT_kwDOEJdS884BdZ-q\\\") { ... on ProjectV2 { items(first: 20) { nodes { id content { __typename ... on Issue { id number title } } } } } } }\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          880,
+          -208
+        ],
+        "id": "e03cf465-c05b-452e-aa9b-a84d973e506d",
+        "name": "get_project_id",
+        "credentials": {
+          "githubApi": {
+            "id": "SZYHQ2VAQfsrE9bT",
+            "name": "GitHu-Scio"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.github.com/graphql",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "githubApi",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Accept",
+                "value": "application/vnd.github+json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": \"query { organization(login: \\\"Scio-Network\\\") { projectV2(number: 5) { id title } } }\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          720,
+          -464
+        ],
+        "id": "43f96eb5-d27a-498b-b2d1-af48f5dc57ee",
+        "name": "get_project_id1",
+        "credentials": {
+          "githubApi": {
+            "id": "SZYHQ2VAQfsrE9bT",
+            "name": "GitHu-Scio"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const issueNumber = $('Create an issue').first().json.number;\n\nconst items = $input.first().json.data.node.items.nodes;\n\nconst match = items.find(item =>\n    item.content &&\n    item.content.number === issueNumber\n);\n\nreturn [{\n    json: match\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1088,
+          -208
+        ],
+        "id": "ba167796-06ca-4323-8d66-df8cc55f0110",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.github.com/graphql",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "githubApi",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Accept",
+                "value": "application/vnd.github+json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"query\": \"query { node(id: \\\"PVT_kwDOEJdS884BdZ-q\\\") { ... on ProjectV2 { fields(first: 20) { nodes { __typename ... on ProjectV2FieldConfiguration { id name } } } } }\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          960,
+          -448
+        ],
+        "id": "7cc6fe95-d5a0-4dd3-ac59-b6103764e528",
+        "name": "get_project_metadata",
+        "credentials": {
+          "githubApi": {
+            "id": "SZYHQ2VAQfsrE9bT",
+            "name": "GitHu-Scio"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "meetings-autotmation": {
+        "main": [
+          [
+            {
+              "node": "Message a model",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Message a model": {
+        "main": [
+          [
+            {
+              "node": "Create an issue",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create an issue": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "add-to-projects",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Create an issue1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create an issue1": {
+        "main": [
+          [
+            {
+              "node": "child-parent-link",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "child-parent-link": {
+        "main": [
+          []
+        ]
+      },
+      "add-to-projects": {
+        "main": [
+          [
+            {
+              "node": "get_project_id",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get_project_id": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": " Scio Network ",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "5e20a513-6eeb-400f-a6a7-83c6e929b877",
+  "connections": {
+    "meetings-autotmation": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Create an issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an issue": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "add-to-projects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Create an issue1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an issue1": {
+      "main": [
+        [
+          {
+            "node": "child-parent-link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "child-parent-link": {
+      "main": [
+        []
+      ]
+    },
+    "add-to-projects": {
+      "main": [
+        [
+          {
+            "node": "get_project_id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_project_id": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-07-13T11:19:27.531Z",
+  "id": "5nR7DRdU7huAr7xi",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Meeting Action Items to GitHub Documentation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "c3434bb1-0754-4513-bfbb-101b528a3a31",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -80,
+        -176
+      ],
+      "id": "0c2a87d2-4a8b-446a-ae52-585e676f4227",
+      "name": "meetings-autotmation",
+      "webhookId": "c3434bb1-0754-4513-bfbb-101b528a3a31"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an information extraction assistant.\n\nYour task is to convert Google Meet Gemini meeting notes into structured JSON.\n\nExtract only the information that exists in the meeting notes.\n\nDo not summarize beyond what is already provided.\n\nIf a section does not exist, return an empty string or an empty array.\n\nReturn valid JSON only that matches the required schema."
+            },
+            {
+              "content": "=Convert the following Google Meet Gemini meeting notes into structured JSON.\n\nReturn ONLY valid JSON using the following schema:\n\n{\n  \"meeting\": {\n    \"title\": \"\",\n    \"meeting_type\": \"AI & Digitalization Weekly Sync\",\n    \"date\": \"\",\n    \"quarter\": \"\",\n    \"summary\": \"\",\n    \"source_document\": \"\"\n  },\n  \"decisions\": [],\n  \"action_items\": [\n    {\n      \"owners\": [],\n      \"task\": \"\"\n    }\n  ]\n}\n\nRules:\n\n1. Set meeting.title using the provided Meeting Title.\n\n2. Set meeting.date using the provided Meeting Date.\n\n3. Determine meeting.quarter from the meeting date using the following rules:\n   - January to April → Q1\n   - May to August → Q2\n   - September to December → Q3\n   Return only the quarter (for example: \"Q2\").\n\n4. Set meeting.summary using only the Summary section.\n\n5. Populate decisions with every item listed under the Decisions section.\n\n6. Populate action_items using only the Next steps section.\n\n7. Each action item begins with one or more owners enclosed in square brackets.\n\n   Example:\n   [Nyairo Kemunto] Populate prompt library\n\n   becomes\n\n   {\n     \"owners\": [\"Nyairo Kemunto\"],\n     \"task\": \"Populate prompt library\"\n   }\n\n   Example:\n\n   [Florian Döbler, Nyairo Kemunto] Project check in\n\n   becomes\n\n   {\n     \"owners\": [\n       \"Florian Döbler\",\n       \"Nyairo Kemunto\"\n     ],\n     \"task\": \"Project check in\"\n   }\n\n8. Set meeting.source_document using the Google Docs URL below, replacing {FILE_ID} with the provided File ID.\nFormat:\n\nhttps://docs.google.com/document/d/{FILE_ID}/edit\n\n9. Return valid JSON only.\n\nMeeting Title:\n{{ $json.body.meetingTitle }}\n\nMeeting Date:\n{{ $json.body.date }}\n\nMeeting Notes:\n{{ $json.body.notesContent }}\n\nFile ID:\n{{ $json.body.fileId }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"meeting\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"title\": {\n          \"type\": \"string\"\n        },\n        \"date\": {\n          \"type\": \"string\"\n        },\n        \"quarter\": {\n          \"type\": \"string\"\n        },\n        \"summary\": {\n          \"type\": \"string\"\n        },\n        \"source_document\": {\n          \"type\": \"string\"\n        }\n      },\n      \"required\": [\n        \"title\",\n        \"date\",\n        \"quarter\",\n        \"summary\",\n        \"source_document\"\n      ],\n      \"additionalProperties\": false\n    },\n    \"decisions\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"action_items\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"owners\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          },\n          \"task\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"owners\",\n          \"task\"\n        ],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\n    \"meeting\",\n    \"decisions\",\n    \"action_items\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        96,
+        -160
+      ],
+      "id": "55eb4688-c46e-40f3-8f90-0f6939a87d38",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "owner": {
+          "__rl": true,
+          "value": "Scio-Network",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "digital-footprint",
+          "mode": "list",
+          "cachedResultName": "digital-footprint",
+          "cachedResultUrl": "https://github.com/Scio-Network/digital-footprint"
+        },
+        "title": "=AI & Digitalization Team Meeting - {{ $json.output[0].content[0].text.meeting.date.substring(0.10) }}",
+        "body": "=# AI & Digitalization Team Meeting\n\n**Meeting**\n\n{{ $json.output[0].content[0].text.meeting.title }}\n\n**Date**\n\n{{ $json.output[0].content[0].text.meeting.date }}\n\n---\n\n## Summary\n\n{{ $json.output[0].content[0].text.meeting.summary }}\n\n---\n\n## Decisions\n\n{{ $json.output[0].content[0].text.decisions\n.map(d => `- ${d}`)\n.join('\\n') }}\n\n---\n\n## Action Items\n\n{{ $json.output[0].content[0].text.action_items\n.map(a =>\n`- [ ] ${a.task}\n  - Owners: ${a.owners.join(', ')}`\n)\n.join('\\n\\n') }}\n\n---\n\n## Meeting Notes\n\n{{ $json.output[0].content[0].text.meeting.source_document }}",
+        "labels": [],
+        "assignees": []
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        -16
+      ],
+      "id": "bba87bcc-a2f0-4876-87ff-3290efd19bd4",
+      "name": "Create an issue",
+      "webhookId": "478aa9c2-fcee-4853-a38f-74cb7a9bf2f2",
+      "credentials": {
+        "githubApi": {
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1c201ee-b44a-4375-a518-669e32ceefa5",
+              "name": "parent_issue_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "1a26034d-05cf-4844-abdd-473c623c3cb0",
+              "name": "parent_issue_number",
+              "value": "={{ $json.number }}",
+              "type": "number"
+            },
+            {
+              "id": "6655fae3-41e3-4526-a2d7-830ddebb3831",
+              "name": "action_items",
+              "value": "={{ $('Message a model').item.json.output[0].content[0].text.action_items }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        640,
+        80
+      ],
+      "id": "05dba06a-1c28-4bbe-a875-530a6f7b8f9a",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "action_items",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        880,
+        112
+      ],
+      "id": "82b5748c-30b4-43f2-a640-0661e71c6937",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "owner": {
+          "__rl": true,
+          "value": "Scio-Network",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "digital-footprint",
+          "mode": "list",
+          "cachedResultName": "digital-footprint",
+          "cachedResultUrl": "https://github.com/Scio-Network/digital-footprint"
+        },
+        "title": "=={{ $json.task }}",
+        "body": "=Parent Meeting: {{ $('Edit Fields').item.json.parent_issue_number }}\n\nOwner:\n{{ $json.owners.join(\", \") }}\n\nSource Meeting:\n{{ $('Message a model').item.json.output[0].content[0].text.meeting.source_document }}",
+        "labels": [],
+        "assignees": [
+          {
+            "assignee": "={{ $json.owners.includes(\"Nyairo Kemunto\") ? \"nyairo-k\" : \"flo-doe\" }}"
+          }
+        ]
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        1088,
+        80
+      ],
+      "id": "b769fdf3-6336-4f41-9572-43747eb87b05",
+      "name": "Create an issue1",
+      "webhookId": "6a44f277-2657-444c-9c86-7029d3bc6c7c",
+      "credentials": {
+        "githubApi": {
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/orgs/Scio-Network/projectsV2/5/items",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "X-GitHub-Api-Version",
+              "value": "2026-03-10"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"type\": \"Issue\",\n  \"id\": {{ $json.id }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        672,
+        -208
+      ],
+      "id": "170a379e-e5e1-4d53-82fe-3a90e833fd00",
+      "name": "add-to-projects",
+      "credentials": {
+        "githubApi": {
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.github.com/repos/Scio-Network/digital-footprint/issues/{{ $('Edit Fields').item.json.parent_issue_number }}/sub_issues",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"sub_issue_id\": {{ $json.id }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1296,
+        64
+      ],
+      "id": "cb2c68c9-7af8-434a-ac49-60885298498f",
+      "name": "child-parent-link",
+      "credentials": {
+        "githubApi": {
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/graphql",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": \"query { node(id: \\\"PVT_kwDOEJdS884BdZ-q\\\") { ... on ProjectV2 { items(first: 20) { nodes { id content { __typename ... on Issue { id number title } } } } } } }\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        880,
+        -208
+      ],
+      "id": "e03cf465-c05b-452e-aa9b-a84d973e506d",
+      "name": "get_project_id",
+      "credentials": {
+        "githubApi": {
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/graphql",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": \"query { organization(login: \\\"Scio-Network\\\") { projectV2(number: 5) { id title } } }\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        720,
+        -464
+      ],
+      "id": "43f96eb5-d27a-498b-b2d1-af48f5dc57ee",
+      "name": "get_project_id1",
+      "credentials": {
+        "githubApi": {
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const issueNumber = $('Create an issue').first().json.number;\n\nconst items = $input.first().json.data.node.items.nodes;\n\nconst match = items.find(item =>\n    item.content &&\n    item.content.number === issueNumber\n);\n\nreturn [{\n    json: match\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        -208
+      ],
+      "id": "ba167796-06ca-4323-8d66-df8cc55f0110",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/graphql",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": \"query { node(id: \\\"PVT_kwDOEJdS884BdZ-q\\\") { ... on ProjectV2 { fields(first: 20) { nodes { __typename ... on ProjectV2FieldConfiguration { id name } } } } }\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        960,
+        -448
+      ],
+      "id": "7cc6fe95-d5a0-4dd3-ac59-b6103764e528",
+      "name": "get_project_metadata",
+      "credentials": {
+        "githubApi": {
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-07-13T11:19:27.536Z",
+      "createdAt": "2026-07-13T11:19:27.536Z",
+      "role": "workflow:owner",
+      "workflowId": "5nR7DRdU7huAr7xi",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-07-15T15:39:11.176Z",
+  "versionId": "5e20a513-6eeb-400f-a6a7-83c6e929b877"
+}
