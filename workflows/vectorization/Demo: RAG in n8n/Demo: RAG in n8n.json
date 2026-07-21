@@ -190,7 +190,7 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -128,
+        -80,
         0
       ],
       "id": "f7a656ec-83fc-4ed2-a089-57a9def662b7",
@@ -268,8 +268,9 @@
       "parameters": {
         "model": {
           "__rl": true,
+          "value": "gpt-4.1",
           "mode": "list",
-          "value": "gpt-4o-mini"
+          "cachedResultName": "gpt-4.1"
         },
         "options": {}
       },
@@ -461,7 +462,7 @@
         "responses": {
           "values": [
             {
-              "content": "=You are a risk classification assistant for ministry and chamber workflows.\n\nClassify the case as LOW, MEDIUM, or HIGH.\n\nMark HIGH if:\n- the query involves customs, import/export, licensing enforcement, regulatory penalties, deadlines, or legal/compliance exposure\n- the answer mentions uncertainty, recent changes, new updates, or missing confirmation\n- the case may need review by a ministry or chamber officer\n\nMark MEDIUM if:\n- the case is not clearly risky, but may still require caution or follow-up\n\nMark LOW if:\n- the query is routine and informational with no obvious compliance or enforcement risk\n\nReturn valid JSON only in this format:\n{\n  \"risk_level\": \"LOW | MEDIUM | HIGH\",\n  \"reason\": \"short explanation\",\n  \"needs_email\": true,\n  \"recommended_team\": \"licensing | customs | chamber_advisory | investment | general\"\n}\n\nUser query:\n{{ $json.output }}\n\nAgent answer:\n{{ $('When chat message received').item.json.chatInput }}"
+              "content": "=You are a risk classification assistant for ministry and chamber workflows.\n\nClassify the case as LOW, MEDIUM, or HIGH.\n\nMark HIGH if:\n- the query involves customs, import/export, licensing enforcement, regulatory penalties, deadlines, or legal/compliance exposure\n- the answer mentions uncertainty, recent changes, new updates, or missing confirmation\n- the case may need review by a ministry or chamber officer\n\nMark MEDIUM if:\n- the case is not clearly risky, but may still require caution or follow-up\n\nMark LOW if:\n- the query is routine and informational with no obvious compliance or enforcement risk\n\nReturn valid JSON only in this format:\n{\n  \"risk_level\": \"LOW | MEDIUM | HIGH\",\n  \"reason\": \"short explanation\",\n  \"needs_email\": \"true\",\n  \"recommended_team\": \"licensing | customs | chamber_advisory | investment | general\"\n}\n\nUser query:\n{{ $json.output }}\n\nAgent answer:\n{{ $('When chat message received').item.json.chatInput }}"
             }
           ]
         },
@@ -627,6 +628,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-06-05T11:16:11.623Z",
-  "versionId": "b34df868-c79c-434d-87f3-38bcfe29cfaf"
+  "updatedAt": "2026-07-21T14:26:35.942Z",
+  "versionId": "86cc4ff4-991d-4488-afc1-8afdc6c2ad6d"
 }
