@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-05T14:32:36.854Z",
-    "createdAt": "2026-02-05T14:32:36.854Z",
-    "versionId": "5e0bb6cd-9e31-43e2-8fdd-8553e0795b21",
+    "updatedAt": "2026-07-29T11:29:58.021Z",
+    "createdAt": "2026-07-29T11:29:58.021Z",
+    "versionId": "6b930e15-a0ab-48a1-9eda-b5394152bc3c",
     "workflowId": "V9bqgDpzw6sh6ICc",
     "nodes": [
       {
@@ -292,34 +292,6 @@
       },
       {
         "parameters": {
-          "messages": {
-            "message": [
-              {
-                "content": "Find 5 upcoming events regarding the reconstruction of Ukraine"
-              }
-            ]
-          },
-          "options": {},
-          "requestOptions": {}
-        },
-        "type": "n8n-nodes-base.perplexity",
-        "typeVersion": 1,
-        "position": [
-          448,
-          464
-        ],
-        "id": "8486bfec-21a8-4c6d-ab81-89b6fd476348",
-        "name": "Message a model",
-        "credentials": {
-          "perplexityApi": {
-            "id": "tuqtaFOroht6JjEE",
-            "name": "Perplexity account"
-          }
-        },
-        "disabled": true
-      },
-      {
-        "parameters": {
           "conditions": {
             "options": {
               "caseSensitive": true,
@@ -555,11 +527,6 @@
           ]
         ]
       },
-      "Message a model": {
-        "main": [
-          []
-        ]
-      },
       "If": {
         "main": [
           [],
@@ -626,7 +593,7 @@
     "name": null,
     "description": null
   },
-  "activeVersionId": "5e0bb6cd-9e31-43e2-8fdd-8553e0795b21",
+  "activeVersionId": "6b930e15-a0ab-48a1-9eda-b5394152bc3c",
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -747,11 +714,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Message a model": {
-      "main": [
-        []
       ]
     },
     "If": {
@@ -1110,34 +1072,6 @@
     },
     {
       "parameters": {
-        "messages": {
-          "message": [
-            {
-              "content": "Find 5 upcoming events regarding the reconstruction of Ukraine"
-            }
-          ]
-        },
-        "options": {},
-        "requestOptions": {}
-      },
-      "type": "n8n-nodes-base.perplexity",
-      "typeVersion": 1,
-      "position": [
-        448,
-        464
-      ],
-      "id": "8486bfec-21a8-4c6d-ab81-89b6fd476348",
-      "name": "Message a model",
-      "credentials": {
-        "perplexityApi": {
-          "id": "tuqtaFOroht6JjEE",
-          "name": "Perplexity account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
         "conditions": {
           "options": {
             "caseSensitive": true,
@@ -1273,6 +1207,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-02-05T14:32:36.851Z",
-  "versionId": "5e0bb6cd-9e31-43e2-8fdd-8553e0795b21"
+  "updatedAt": "2026-07-29T11:29:58.019Z",
+  "versionId": "6b930e15-a0ab-48a1-9eda-b5394152bc3c"
 }
