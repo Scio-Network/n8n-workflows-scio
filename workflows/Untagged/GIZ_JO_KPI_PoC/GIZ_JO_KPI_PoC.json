@@ -1,0 +1,827 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Parse_Perplexity_Discovery",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Normalize_GDELT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Normalize_RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Parse_Perplexity_Discovery": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Normalize_GDELT": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize_RSS": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "canon_dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS Petra-AR",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS Read1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS Read2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Petra-AR": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-08-11T11:48:15.260Z",
+  "id": "7L5oUGj480jAfPCu",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "GIZ_JO_KPI_PoC",
+  "nodes": [
+    {
+      "parameters": {
+        "messages": {
+          "message": [
+            {
+              "content": "You are the media-discovery component of a public media monitoring system for GIZ Jordan.\n\nYour ONLY task is to discover potentially relevant publicly accessible news articles and blog posts. You are not the final sentiment classifier.\n\nGIZ refers to Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH.\n\nSearch for meaningful coverage using naming variants including:\n\nEnglish / German:\n- GIZ\n- GIZ Jordan\n- Deutsche Gesellschaft für Internationale Zusammenarbeit\n- Deutsche Gesellschaft für Internationale Zusammenarbeit GmbH\n- German Agency for International Cooperation\n- German Society for International Cooperation\n\nArabic:\n- الوكالة الألمانية للتعاون الدولي\n- المؤسسة الألمانية للتعاون الدولي\n\nSCOPE\n\nPrioritize:\n1. Jordanian Arabic-language media\n2. Jordanian English-language media\n3. Regional MENA media relevant to Jordan\n4. International media mentioning GIZ activities in Jordan\n5. Other significant international GIZ coverage\n\nExclude where possible:\n- GIZ-owned corporate webpages\n- job vacancies\n- procurement notices\n- tenders\n- event listings with no substantive editorial content\n- duplicate or syndicated copies of the same article\n- social-media posts\n- pages that merely contain \"GIZ\" without referring to Deutsche Gesellschaft für Internationale Zusammenarbeit\n\nCOMPLIANCE\n\nOnly identify material available through normal public web search.\n\nNever attempt to:\n- bypass a paywall\n- bypass authentication\n- circumvent access controls\n- reproduce substantial copyrighted article text\n\nFor restricted sources, it is acceptable to identify the headline, publisher and publicly visible metadata.\n\nOUTPUT\n\nReturn ONLY valid JSON.\n\nDo not include Markdown.\nDo not wrap the JSON in ``` fences.\nDo not include explanatory text before or after the JSON.\n\nReturn exactly this structure:\n\n{\n  \"articles\": [\n    {\n      \"title\": \"string\",\n      \"publisher\": \"string\",\n      \"published_at\": \"ISO date/time if known, otherwise empty string\",\n      \"language\": \"ar | en | de | other\",\n      \"country\": \"string\",\n      \"citation_index\": 1,\n      \"giz_alias_matched\": \"string\",\n      \"jordan_relevance_hint\": true,\n      \"relevance_reason\": \"short paraphrased explanation\",\n      \"access_status\": \"public | restricted | unknown\"\n    }\n  ]\n}\n\nIMPORTANT:\n\n- citation_index refers to the numbered source/citation supporting that article in your search results.\n- Do NOT invent URLs in the JSON.\n- Only return articles supported by an actual search citation.\n- relevance_reason must be your own short paraphrase, not copied article text.\n- Return at most 25 articles.\n- If no relevant articles are found, return {\"articles\":[]}.",
+              "role": "system"
+            },
+            {
+              "content": "Find recent news and blog coverage mentioning GIZ.\n\nPrioritize material published within approximately the last 48 hours.\n\nFocus primarily on Jordan, including Arabic and English Jordanian sources, but also identify relevant regional and international coverage.\n\nSearch broadly enough to capture different spelling and language variants of GIZ.\n\nReturn only the JSON structure specified in the system instructions."
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexity",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "a3d7abf8-9a54-4591-95ea-df2f2f03c17b",
+      "name": "Message a model",
+      "credentials": {
+        "perplexityApi": {
+          "id": "tuqtaFOroht6JjEE",
+          "name": "Perplexity account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "projectId": {
+          "__rl": true,
+          "value": "bigquery-test-505214",
+          "mode": "list",
+          "cachedResultName": "BigQuery Test",
+          "cachedResultUrl": "https://console.cloud.google.com/bigquery?project=bigquery-test-505214"
+        },
+        "sqlQuery": "CREATE TEMP FUNCTION titleunescape(title STRING)\nRETURNS STRING\nLANGUAGE js AS '''\n  if (!title) return null;\n\n  return title\n    .replace(/(&#x)([a-fA-F0-9]+)(;)/gu, function(whole, prefix, hex) {\n      return String.fromCodePoint(parseInt(hex, 16));\n    })\n    .replace(/(&#)([0-9]+)(;)/gu, function(whole, prefix, dec) {\n      return String.fromCodePoint(parseInt(dec, 10));\n    });\n''';\n\nWITH candidates AS (\n  SELECT\n    GKGRECORDID AS gdelt_record_id,\n\n    COALESCE(\n      SAFE.PARSE_TIMESTAMP(\n        '%Y%m%d%H%M%S',\n        REGEXP_EXTRACT(\n          Extras,\n          r'<PAGE_PRECISEPUBTIMESTAMP>(\\d{14})</PAGE_PRECISEPUBTIMESTAMP>'\n        )\n      ),\n      SAFE.PARSE_TIMESTAMP(\n        '%Y%m%d%H%M%S',\n        CAST(DATE AS STRING)\n      )\n    ) AS published_at,\n\n    SourceCommonName AS publisher,\n    DocumentIdentifier AS url,\n\n    titleunescape(\n      REGEXP_EXTRACT(\n        Extras,\n        r'<PAGE_TITLE>(.*?)</PAGE_TITLE>'\n      )\n    ) AS title,\n\n    titleunescape(\n      REGEXP_EXTRACT(\n        Extras,\n        r'<PAGE_AUTHORS>(.*?)</PAGE_AUTHORS>'\n      )\n    ) AS authors,\n\n    COALESCE(\n      REGEXP_EXTRACT(\n        TranslationInfo,\n        r'srclc:([a-z]{3})'\n      ),\n      'eng'\n    ) AS gdelt_language,\n\n    SAFE_CAST(\n      SPLIT(V2Tone, ',')[SAFE_OFFSET(0)]\n      AS FLOAT64\n    ) AS gdelt_document_tone,\n\n    V2Locations,\n    V2Organizations,\n    AllNames\n\n  FROM `gdelt-bq.gdeltv2.gkg_partitioned`\n\n  WHERE\n    _PARTITIONTIME >= TIMESTAMP_SUB(\n      CURRENT_TIMESTAMP(),\n      INTERVAL 48 HOUR\n    )\n\n    AND (\n\n      -- GDELT-recognized organizations\n      REGEXP_CONTAINS(\n        LOWER(COALESCE(V2Organizations, '')),\n        r'(^|;)(giz|giz jordan|deutsche gesellschaft für internationale zusammenarbeit|deutsche gesellschaft fur internationale zusammenarbeit|german agency for international cooperation|german society for international cooperation),'\n      )\n\n      OR\n\n      -- Capitalized / other names GDELT found in the document\n      REGEXP_CONTAINS(\n        LOWER(COALESCE(AllNames, '')),\n        r'(^|;)(giz|giz jordan|deutsche gesellschaft für internationale zusammenarbeit|deutsche gesellschaft fur internationale zusammenarbeit|german agency for international cooperation|german society for international cooperation),'\n      )\n\n      OR\n\n      -- Arabic naming variants commonly used in Jordanian coverage\n      REGEXP_CONTAINS(\n        COALESCE(AllNames, ''),\n        r'(^|;)(الوكالة الألمانية للتعاون الدولي|المؤسسة الألمانية للتعاون الدولي),'\n      )\n    )\n)\n\nSELECT\n  gdelt_record_id,\n  published_at,\n  publisher,\n  url,\n  title,\n  authors,\n  gdelt_language,\n  gdelt_document_tone,\n\n  REGEXP_CONTAINS(\n    LOWER(COALESCE(V2Locations, '')),\n    r'jordan'\n  ) AS jordan_relevance_hint,\n\n  V2Locations AS gdelt_locations,\n  V2Organizations AS gdelt_organizations\n\nFROM candidates\n\nWHERE url IS NOT NULL\n\nQUALIFY ROW_NUMBER() OVER (\n  PARTITION BY url\n  ORDER BY published_at DESC\n) = 1\n\nORDER BY published_at DESC\n\nLIMIT 150;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleBigQuery",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        -192
+      ],
+      "id": "40cced5c-036a-4780-ab24-e3e4ccf8a417",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "googleApi": {
+          "id": "AEaUcHSU4cNhdzwW",
+          "name": "Google BigQuery account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function toBoolean(value) {\n  if (typeof value === 'boolean') return value;\n\n  return ['true', '1', 'yes', 'y'].includes(\n    String(value ?? '').toLowerCase().trim()\n  );\n}\n\nfunction normalizeLanguage(value) {\n  const v = String(value || '').toLowerCase().trim();\n\n  if (['en', 'eng', 'english'].includes(v)) return 'en';\n  if (['ar', 'ara', 'arabic'].includes(v)) return 'ar';\n  if (['de', 'deu', 'ger', 'german'].includes(v)) return 'de';\n\n  return v || 'other';\n}\n\nreturn items.map(({ json }) => {\n\n  const jordanHint =\n    toBoolean(json.jordan_relevance_hint);\n\n  return {\n    json: {\n      source_channel: 'gdelt',\n      source_feed: 'gdelt_gkg_v2',\n\n      title: json.title || '',\n      url: json.url || '',\n      publisher: json.publisher || '',\n      published_at: json.published_at || null,\n\n      language:\n        normalizeLanguage(json.gdelt_language),\n\n      country_hint:\n        jordanHint ? 'Jordan' : '',\n\n      jordan_relevance_hint:\n        jordanHint,\n\n      snippet: '',\n\n      author:\n        json.authors || '',\n\n      // Keep for diagnostics only.\n      // Never use this directly as GIZ sentiment.\n      gdelt_document_tone:\n        json.gdelt_document_tone ?? null,\n\n      access_status:\n        'metadata_only',\n\n      raw_metadata: {\n        gdelt_record_id:\n          json.gdelt_record_id || null,\n\n        gdelt_locations:\n          json.gdelt_locations || '',\n\n        gdelt_organizations:\n          json.gdelt_organizations || ''\n      }\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        -192
+      ],
+      "id": "f26fbea0-92a4-4ad9-ac24-b2db30a2f549",
+      "name": "Normalize_GDELT"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        800,
+        336
+      ],
+      "id": "6f521f6a-ac30-4705-b766-a8a40e9f15c5",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "function stripHtml(value = '') {\n  return String(value)\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, ' ')\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, ' ')\n    .replace(/<[^>]+>/g, ' ')\n    .replace(/&nbsp;/gi, ' ')\n    .replace(/&amp;/gi, '&')\n    .replace(/&quot;/gi, '\"')\n    .replace(/&#39;/gi, \"'\")\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction normalizeLanguage(value) {\n  const v = String(value || '')\n    .toLowerCase()\n    .trim();\n\n  if (['en', 'eng', 'english'].includes(v)) return 'en';\n  if (['ar', 'ara', 'arabic'].includes(v)) return 'ar';\n  if (['de', 'deu', 'ger', 'german'].includes(v)) return 'de';\n\n  return v || 'other';\n}\n\nfunction detectLanguage(text, fallback = 'other') {\n  const value = String(text || '').trim();\n\n  if (!value) {\n    return normalizeLanguage(fallback);\n  }\n\n  // Arabic Unicode ranges\n  const arabicChars =\n    (value.match(/[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF]/g) || []).length;\n\n  // Latin alphabet characters\n  const latinChars =\n    (value.match(/[A-Za-zÀ-ÖØ-öø-ÿ]/g) || []).length;\n\n  const relevantChars =\n    arabicChars + latinChars;\n\n  if (relevantChars > 0) {\n    const arabicRatio =\n      arabicChars / relevantChars;\n\n    // If a substantial amount of the visible text is Arabic,\n    // classify it as Arabic regardless of which Google News feed\n    // discovered it.\n    if (arabicRatio >= 0.35) {\n      return 'ar';\n    }\n  }\n\n  // For the POC, use the configured feed hint for Latin-script content.\n  return normalizeLanguage(fallback);\n}\n\nfunction parseDate(value) {\n  if (!value) return null;\n\n  const date = new Date(value);\n\n  if (Number.isNaN(date.getTime())) {\n    return null;\n  }\n\n  return date;\n}\n\nreturn items\n  .map(({ json }) => {\n\n    const rawTitle =\n      String(json.title || '').trim();\n\n    let title = rawTitle;\n\n    let publisher =\n      json.creator ||\n      json.author ||\n      '';\n\n    /*\n     * Google News often returns:\n     *\n     * Headline - Publisher\n     *\n     * Only strip this when it is present.\n     */\n    const titleMatch =\n      rawTitle.match(/^(.*)\\s+-\\s+([^-]+)$/);\n\n    if (titleMatch) {\n      title = titleMatch[1].trim();\n\n      if (!publisher) {\n        publisher =\n          titleMatch[2].trim();\n      }\n    }\n\n    const snippet =\n      stripHtml(\n        json.contentSnippet ||\n        json.content ||\n        json.description ||\n        ''\n      ).slice(0, 1500);\n\n    const combinedText =\n      `${title} ${snippet}`;\n\n    const language =\n      detectLanguage(\n        combinedText,\n        json.language_hint\n      );\n\n    const publishedDate =\n      parseDate(\n        json.isoDate ||\n        json.pubDate ||\n        json.pubdate\n      );\n\n    const rawUrl =\n      json.link ||\n      json.guid ||\n      '';\n\n    const isGoogleNewsUrl =\n      String(rawUrl).includes(\n        'news.google.com/'\n      );\n\n    return {\n      json: {\n        source_channel:\n          'rss',\n\n        source_feed:\n          json.source_feed ||\n          'rss_unknown',\n\n        title,\n\n        url:\n          rawUrl,\n\n        publisher,\n\n        published_at:\n          publishedDate\n            ? publishedDate.toISOString()\n            : null,\n\n        /*\n         * Important:\n         *\n         * language is inferred from the actual article metadata,\n         * NOT simply inherited from the discovery feed.\n         */\n        language,\n\n        feed_language_hint:\n          normalizeLanguage(\n            json.language_hint\n          ),\n\n        country_hint:\n          json.country_hint || '',\n\n        jordan_relevance_hint:\n          String(\n            json.country_hint || ''\n          ).toLowerCase() === 'jordan',\n\n        snippet,\n\n        author:\n          json.creator ||\n          json.author ||\n          '',\n\n        gdelt_document_tone:\n          null,\n\n        access_status:\n          'rss_metadata',\n\n        url_type:\n          isGoogleNewsUrl\n            ? 'google_news_redirect'\n            : 'publisher_url',\n\n        raw_metadata: {\n          original_feed_title:\n            rawTitle,\n\n          original_feed_url:\n            rawUrl\n        }\n      }\n    };\n  });"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        352
+      ],
+      "id": "848e54c3-2d2d-4f60-be22-cb628826b67d",
+      "name": "Normalize_RSS"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        352
+      ],
+      "id": "2b85266b-140a-4fef-8a45-33aae81c2eb7",
+      "name": "RSS Read1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        528
+      ],
+      "id": "79116c11-5f09-4f1e-bdf6-83d54083a78d",
+      "name": "RSS Read2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7b98a2fe-f71b-4290-8086-a6224c2539a1",
+              "name": "source_feed",
+              "value": "google_news_petra_ar",
+              "type": "string"
+            },
+            {
+              "id": "8e959884-d951-4522-ac38-9274ec1e77f9",
+              "name": "language_hint",
+              "value": "ar",
+              "type": "string"
+            },
+            {
+              "id": "198cb50d-3215-4cf6-87c4-81d47e9cac00",
+              "name": "country_hint",
+              "value": "Jordan",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        192
+      ],
+      "id": "2601bab4-cd4f-4cc9-8f3a-e9a76c74663d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7b98a2fe-f71b-4290-8086-a6224c2539a1",
+              "name": "source_feed",
+              "value": "1",
+              "type": "string"
+            },
+            {
+              "id": "8e959884-d951-4522-ac38-9274ec1e77f9",
+              "name": "language_hint",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "198cb50d-3215-4cf6-87c4-81d47e9cac00",
+              "name": "country_hint",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        352
+      ],
+      "id": "d4aab265-2e4f-4210-8c3b-4f4a9875ce66",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7b98a2fe-f71b-4290-8086-a6224c2539a1",
+              "name": "source_feed",
+              "value": "1",
+              "type": "string"
+            },
+            {
+              "id": "8e959884-d951-4522-ac38-9274ec1e77f9",
+              "name": "language_hint",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "198cb50d-3215-4cf6-87c4-81d47e9cac00",
+              "name": "country_hint",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        528
+      ],
+      "id": "a75f0d67-4c7e-4680-bd78-a0add29d2f2c",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = items[0]?.json || {};\n\nfunction firstDefined(values) {\n  for (const value of values) {\n    if (\n      value !== undefined &&\n      value !== null &&\n      value !== ''\n    ) {\n      return value;\n    }\n  }\n\n  return '';\n}\n\nfunction cleanModelText(value) {\n  if (\n    typeof value === 'object' &&\n    value !== null\n  ) {\n    return value;\n  }\n\n  let text =\n    String(value || '').trim();\n\n  text = text\n    .replace(/<think>[\\s\\S]*?<\\/think>/gi, '')\n    .replace(/^```json\\s*/i, '')\n    .replace(/^```\\s*/i, '')\n    .replace(/\\s*```$/i, '')\n    .trim();\n\n  const firstBrace =\n    text.indexOf('{');\n\n  const lastBrace =\n    text.lastIndexOf('}');\n\n  if (\n    firstBrace > -1 &&\n    lastBrace > firstBrace\n  ) {\n    text =\n      text.slice(\n        firstBrace,\n        lastBrace + 1\n      );\n  }\n\n  return text;\n}\n\nfunction extractUrl(value) {\n  if (!value) return '';\n\n  if (typeof value === 'string') {\n    return value;\n  }\n\n  if (typeof value === 'object') {\n    return (\n      value.url ||\n      value.link ||\n      value.href ||\n      ''\n    );\n  }\n\n  return '';\n}\n\nfunction normalizeLanguage(value) {\n  const v =\n    String(value || '')\n      .toLowerCase()\n      .trim();\n\n  if (['en', 'eng', 'english'].includes(v)) return 'en';\n  if (['ar', 'ara', 'arabic'].includes(v)) return 'ar';\n  if (['de', 'deu', 'ger', 'german'].includes(v)) return 'de';\n\n  return v || 'other';\n}\n\nfunction toBoolean(value) {\n  if (typeof value === 'boolean') {\n    return value;\n  }\n\n  return [\n    'true',\n    '1',\n    'yes',\n    'y'\n  ].includes(\n    String(value ?? '')\n      .toLowerCase()\n      .trim()\n  );\n}\n\nconst rawContent = firstDefined([\n  response.choices?.[0]?.message?.content,\n  response.message?.content,\n  response.output,\n  response.text,\n  response.content\n]);\n\nif (!rawContent) {\n  throw new Error(\n    'Perplexity returned no usable model content.'\n  );\n}\n\nlet parsed;\n\ntry {\n\n  const cleaned =\n    cleanModelText(rawContent);\n\n  parsed =\n    typeof cleaned === 'string'\n      ? JSON.parse(cleaned)\n      : cleaned;\n\n} catch (error) {\n\n  throw new Error(\n    `Perplexity JSON parse error: ${error.message}`\n  );\n}\n\nif (!Array.isArray(parsed?.articles)) {\n  throw new Error(\n    'Perplexity result has no articles array.'\n  );\n}\n\nconst citations =\n  Array.isArray(response.citations)\n    ? response.citations\n    : [];\n\nconst searchResults =\n  Array.isArray(response.search_results)\n    ? response.search_results\n    : Array.isArray(response.searchResults)\n      ? response.searchResults\n      : [];\n\nconst output = [];\n\nfor (const article of parsed.articles) {\n\n  const citationIndex =\n    Number(article.citation_index || 0);\n\n  const citation =\n    citationIndex > 0\n      ? citations[citationIndex - 1]\n      : null;\n\n  const searchResult =\n    citationIndex > 0\n      ? searchResults[citationIndex - 1]\n      : null;\n\n  const resolvedUrl =\n    extractUrl(searchResult) ||\n    extractUrl(citation) ||\n    extractUrl(article.url);\n\n  if (!resolvedUrl) {\n    continue;\n  }\n\n  /*\n   * Important change:\n   *\n   * Use actual search-result date if Perplexity's\n   * generated JSON omitted published_at.\n   */\n  const publishedAt =\n    article.published_at ||\n    searchResult?.date ||\n    null;\n\n  const title =\n    String(\n      article.title ||\n      searchResult?.title ||\n      ''\n    ).trim();\n\n  const snippet =\n    String(\n      article.relevance_reason ||\n      searchResult?.snippet ||\n      ''\n    ).slice(0, 1500);\n\n  output.push({\n    json: {\n\n      source_channel:\n        'perplexity',\n\n      source_feed:\n        'perplexity_builtin_sonar',\n\n      source_type:\n        'web_candidate',\n\n      title,\n\n      url:\n        resolvedUrl,\n\n      publisher:\n        String(\n          article.publisher || ''\n        ).trim(),\n\n      published_at:\n        publishedAt,\n\n      language:\n        normalizeLanguage(\n          article.language\n        ),\n\n      country_hint:\n        String(\n          article.country || ''\n        ).trim(),\n\n      jordan_relevance_hint:\n        toBoolean(\n          article.jordan_relevance_hint\n        ),\n\n      snippet,\n\n      author: '',\n\n      gdelt_document_tone:\n        null,\n\n      access_status:\n        article.access_status ||\n        'unknown',\n\n      perplexity_citation_index:\n        citationIndex,\n\n      perplexity_url_grounded:\n        true,\n\n      raw_metadata: {\n\n        giz_alias_matched:\n          article.giz_alias_matched || '',\n\n        citation_index:\n          citationIndex,\n\n        citation:\n          citation || null,\n\n        search_result:\n          searchResult || null\n      }\n    }\n  });\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        0
+      ],
+      "id": "d2c94854-83d4-41b2-8554-98e7f92b49a7",
+      "name": "Parse_Perplexity_Discovery"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1392,
+        -16
+      ],
+      "id": "aa5a8608-2c61-40aa-bc95-14300037c651",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "function canonicalizeUrl(raw = '') {\n\n  if (!raw) return '';\n\n  try {\n\n    const url =\n      new URL(raw);\n\n    for (\n      const param of [\n        'utm_source',\n        'utm_medium',\n        'utm_campaign',\n        'utm_term',\n        'utm_content',\n        'gclid',\n        'fbclid',\n        'mc_cid',\n        'mc_eid'\n      ]\n    ) {\n\n      url.searchParams.delete(\n        param\n      );\n    }\n\n    url.hash = '';\n\n    url.hostname =\n      url.hostname\n        .toLowerCase()\n        .replace(\n          /^www\\./,\n          ''\n        );\n\n    let result =\n      url.toString();\n\n    if (\n      result.endsWith('/')\n    ) {\n\n      result =\n        result.slice(\n          0,\n          -1\n        );\n    }\n\n    return result;\n\n  } catch {\n\n    return String(\n      raw || ''\n    ).trim();\n  }\n}\n\nfunction normalizeText(\n  value = ''\n) {\n\n  return String(value)\n\n    .toLowerCase()\n\n    .normalize(\n      'NFKD'\n    )\n\n    .replace(\n      /[\\u0300-\\u036f]/g,\n      ''\n    )\n\n    .replace(\n      /[^\\p{L}\\p{N}]+/gu,\n      ' '\n    )\n\n    .replace(\n      /\\s+/g,\n      ' '\n    )\n\n    .trim();\n}\n\nfunction hostname(\n  raw = ''\n) {\n\n  try {\n\n    return new URL(raw)\n\n      .hostname\n\n      .toLowerCase()\n\n      .replace(\n        /^www\\./,\n        ''\n      );\n\n  } catch {\n\n    return '';\n  }\n}\n\nconst seenUrls =\n  new Set();\n\nconst seenMetadata =\n  new Set();\n\nconst output =\n  [];\n\nfor (\n  const item of items\n) {\n\n  const json =\n    {\n      ...item.json\n    };\n\n  json.url =\n    canonicalizeUrl(\n      json.url\n    );\n\n  const titleKey =\n    normalizeText(\n      json.title\n    ).slice(\n      0,\n      240\n    );\n\n  const publisherKey =\n    normalizeText(\n      json.publisher\n    ).slice(\n      0,\n      100\n    );\n\n  if (!titleKey) {\n    continue;\n  }\n\n  let publicationDay =\n    '';\n\n  if (\n    json.published_at\n  ) {\n\n    const d =\n      new Date(\n        json.published_at\n      );\n\n    if (\n      !Number.isNaN(\n        d.getTime()\n      )\n    ) {\n\n      json.published_at =\n        d.toISOString();\n\n      publicationDay =\n        json.published_at\n          .slice(\n            0,\n            10\n          );\n    }\n  }\n\n  // Helps dedupe when different\n  // discovery sources give us\n  // different URLs for the same article.\n  const metadataKey =\n    [\n      titleKey,\n      publisherKey,\n      publicationDay\n    ].join('|');\n\n  if (\n    json.url &&\n    seenUrls.has(\n      json.url\n    )\n  ) {\n    continue;\n  }\n\n  if (\n    seenMetadata.has(\n      metadataKey\n    )\n  ) {\n    continue;\n  }\n\n  if (json.url) {\n\n    seenUrls.add(\n      json.url\n    );\n  }\n\n  seenMetadata.add(\n    metadataKey\n  );\n\n  const host =\n    hostname(\n      json.url\n    );\n\n  json.is_owned =\n    host === 'giz.de' ||\n    host.endsWith(\n      '.giz.de'\n    );\n\n  json.dedupe_key =\n    metadataKey;\n\n  json.story_cluster_key =\n    titleKey;\n\n  json.ingested_at =\n    new Date()\n      .toISOString();\n\n  output.push({\n    json\n  });\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1712,
+        0
+      ],
+      "id": "b206d2de-40a3-47e2-be15-fbc9ef4e6fcf",
+      "name": "canon_dedupe"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7894a156-98d1-4e13-aee7-dab478e82a7b",
+              "name": "lookback_hours",
+              "value": "720",
+              "type": "string"
+            },
+            {
+              "id": "c14d7fd3-9d38-4bd2-9423-4b23cf64d8c2",
+              "name": "kpi_window_days",
+              "value": "30",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -208,
+        192
+      ],
+      "id": "0fea1bae-1f27-4cb1-9e5b-29a7b2aa3c54",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        192
+      ],
+      "id": "60d52879-9deb-40ab-8f2e-cd893fa39ce0",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://news.google.com/rss/search?q=%28%22GIZ%22+OR+%22%D8%A7%D9%84%D9%88%D9%83%D8%A7%D9%84%D8%A9+%D8%A7%D9%84%D8%A3%D9%84%D9%85%D8%A7%D9%86%D9%8A%D8%A9+%D9%84%D9%84%D8%AA%D8%B9%D8%A7%D9%88%D9%86+%D8%A7%D9%84%D8%AF%D9%88%D9%84%D9%8A%22%29+site%3Apetra.gov.jo+when%3A30d&hl=ar&gl=JO&ceid=JO%3Aar",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        192
+      ],
+      "id": "e8cf4fc7-40f3-46ca-8c4e-39f3a89e063d",
+      "name": "RSS Petra-AR"
+    }
+  ],
+  "pinData": {
+    "Execute a SQL query": [
+      {
+        "json": {
+          "gdelt_record_id": "20260812061500-T1048",
+          "published_at": "2026-08-12T09:38:00.000+02:00",
+          "publisher": "ksta.de",
+          "url": "https://www.ksta.de:443/region/oberberg/lindlar/ukrainer-wollen-von-lindlar-lernen-1346573",
+          "title": "Ukrainer wollen von Lindlar lernen | Kölner Stadt-Anzeiger",
+          "authors": "Beatrix Schmittgen",
+          "gdelt_language": "deu",
+          "gdelt_document_tone": "0.813008130081301",
+          "jordan_relevance_hint": "false",
+          "gdelt_locations": "1#Ukrainian#UP#UP##49#32#UP#9;1#Ukrainian#UP#UP##49#32#UP#70;1#German#GM#GM##51.5#10.5#GM#425;1#German#GM#GM##51.5#10.5#GM#1105;1#German#GM#GM##51.5#10.5#GM#1226",
+          "gdelt_organizations": "German Society For International Cooperation,1143;Leader Of Department,223;German Local Company,1240;City Council,294;City Council,343;Program Point,813;Center Point,1357"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "gdelt_record_id": "20260812061500-T1105",
+          "published_at": "2026-08-12T09:38:00.000+02:00",
+          "publisher": "rundschau-online.de",
+          "url": "https://www.rundschau-online.de:443/region/oberberg/lindlar/ukrainer-wollen-von-lindlar-lernen-1346573",
+          "title": "Ukrainer wollen von Lindlar lernen - Rundschau Online",
+          "authors": "Beatrix Schmittgen",
+          "gdelt_language": "deu",
+          "gdelt_document_tone": "0.823045267489711",
+          "jordan_relevance_hint": "false",
+          "gdelt_locations": "1#Ukrainian#UP#UP##49#32#UP#9;1#Ukrainian#UP#UP##49#32#UP#50;1#German#GM#GM##51.5#10.5#GM#405;1#German#GM#GM##51.5#10.5#GM#1085;1#German#GM#GM##51.5#10.5#GM#1206",
+          "gdelt_organizations": "German Society For International Cooperation,1123;Leader Of Department,203;German Local Company,1220;Center Point,1337;Program Point,793;City Council,274;City Council,323"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Message a model": [
+      {
+        "json": {
+          "choices": [
+            {
+              "delta": {
+                "content": "",
+                "role": "assistant"
+              },
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "content": "{\"articles\":[{\"title\":\"Jordan launches public sector reform projects with EU and GIZ support\",\"publisher\":\"Petra\",\"published_at\":\"2026-03-17\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":2,\"giz_alias_matched\":\"GIZ\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"Reports Jordan’s launch of public sector reform projects supported by the EU and GIZ, with direct involvement from GIZ officials in Amman.\",\"access_status\":\"public\"},{\"title\":\"Jordan, GIZ discuss youth role in implementing UN Security Council Resolution 2250\",\"publisher\":\"Petra\",\"published_at\":\"2026-03-16\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":3,\"giz_alias_matched\":\"GIZ\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"Covers a meeting in Amman between the Jordanian Minister of Youth and a GIZ delegation on youth, peace and security work.\",\"access_status\":\"public\"},{\"title\":\"ASEZA, GIZ Explore Expanded Development Cooperation in Aqaba, Wadi Rum\",\"publisher\":\"Petra\",\"published_at\":\"2026-06-28\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":4,\"giz_alias_matched\":\"GIZ\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"Describes development cooperation talks in Aqaba and Wadi Rum involving GIZ and Jordan’s special economic zone authority.\",\"access_status\":\"public\"},{\"title\":\"Consultancies tapped by German state agency for development project in Jordan\",\"publisher\":\"Consultancy-me.com\",\"published_at\":\"\",\"language\":\"en\",\"country\":\"International\",\"citation_index\":5,\"giz_alias_matched\":\"Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ)\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"Mentions GIZ hiring consultancies to support Jordan’s Economic Modernisation Vision through a private-sector development project.\",\"access_status\":\"public\"},{\"title\":\"Gov't, GIZ partner to enhance energy efficiency for public workers\",\"publisher\":\"Petra\",\"published_at\":\"2026-06-03\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":6,\"giz_alias_matched\":\"GIZ\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"Covers GIZ-backed energy efficiency workshops for Jordanian public institutions under a national capacity-building program.\",\"access_status\":\"public\"},{\"title\":\"Agreement signed to support for micro-, small- and medium-sized businesses in Jordan\",\"publisher\":\"Zawya\",\"published_at\":\"\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":7,\"giz_alias_matched\":\"German Agency for International Cooperation (GIZ)\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"Reports a Jordanian loan guarantee agreement tied to a GIZ-implemented SME support program.\",\"access_status\":\"restricted\"},{\"title\":\"int@j, GIZ join forces to empower women in ICT sector\",\"publisher\":\"Jordan Times\",\"published_at\":\"\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":8,\"giz_alias_matched\":\"GIZ\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"Covers a Jordan ICT association partnership with a GIZ employment-oriented MSME project focused on women in ICT.\",\"access_status\":\"restricted\"},{\"title\":\"GIZ Jordan Supports Youth in Peace and Security Agenda\",\"publisher\":\"LinkedIn\",\"published_at\":\"\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":9,\"giz_alias_matched\":\"GIZ Jordan\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"A GIZ Jordan post about youth and peace-and-security programming in Jordan.\",\"access_status\":\"restricted\"},{\"title\":\"Strengthening public sector collaboration\",\"publisher\":\"LinkedIn\",\"published_at\":\"\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":10,\"giz_alias_matched\":\"GIZ Jordan\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"A GIZ Jordan post about the launch of a knowledge-exchange programme with Jordanian public-sector bodies.\",\"access_status\":\"restricted\"},{\"title\":\"A Milestone for Climate Action in Jordan!\",\"publisher\":\"LinkedIn\",\"published_at\":\"2026-08-12\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":11,\"giz_alias_matched\":\"GIZ Jordan\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"A GIZ Jordan post describing support for an emissions-reduction contract in Aqaba involving a Jordanian industrial plant.\",\"access_status\":\"restricted\"},{\"title\":\"US$97mn financing secured for Jordan’s mega water project\",\"publisher\":\"LinkedIn\",\"published_at\":\"\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":12,\"giz_alias_matched\":\"GIZ Jordan\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"A GIZ Jordan post referencing major financing for Jordan’s National Water Carrier project.\",\"access_status\":\"restricted\"},{\"title\":\"Celebrating key milestones halfway: public sectormodernisation thrives in Jordan!\",\"publisher\":\"LinkedIn\",\"published_at\":\"\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":13,\"giz_alias_matched\":\"GIZ Jordan\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"A GIZ Jordan post about public-sector modernisation work with Jordanian partners.\",\"access_status\":\"restricted\"},{\"title\":\"Jordan News - GIZ\",\"publisher\":\"GIZ\",\"published_at\":\"2026-06-28\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":1,\"giz_alias_matched\":\"GIZ Jordan\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"Official GIZ Jordan news page showing a recent item about billing-process implementation support.\",\"access_status\":\"public\"},{\"title\":\"Hashemite University, GIZ launch women green jobs platform\",\"publisher\":\"Petra\",\"published_at\":\"2026-07-01\",\"language\":\"en\",\"country\":\"Jordan\",\"citation_index\":16,\"giz_alias_matched\":\"GIZ\",\"jordan_relevance_hint\":true,\"relevance_reason\":\"Covers a Jordanian university partnership with GIZ on women’s participation in green jobs.\",\"access_status\":\"public\"}]}",
+                "role": "assistant"
+              }
+            }
+          ],
+          "citations": [
+            "https://www.giz.de/en/regions/asia/jordan/news",
+            "https://petra.gov.jo/gweb/index.php/en/news/jordan-launches-public-sector-reform-projects-with-eu-and-giz-support",
+            "https://petra.gov.jo/en/news/jordan-giz-discuss-youth-role-in-implementing-un-security-council-resolution-2250",
+            "https://petra.gov.jo/en/news/aseza-giz-explore-expanded-development-cooperation-in-aqaba-wadi-rum",
+            "https://www.consultancy-me.com/news/13877/consultancies-tapped-by-german-state-agency-for-development-project-in-jordan",
+            "https://petra.gov.jo/en/news/govt-giz-partner-to-enhance-energy-efficiency-for-public-workers",
+            "https://www.zawya.com/en/business/agreement-signed-to-support-for-micro-small-and-medium-sized-businesses-in-jordan-vm8qdmfg",
+            "https://jordantimes.com/news/local/intj-giz-join-forces-empower-women-ict-sector",
+            "https://www.linkedin.com/posts/giz-jordan_through-its-continued-support-to-the-youth-activity-7426582293374377984-aYxM",
+            "https://www.linkedin.com/posts/giz-jordan_strengthening-public-sector-collaboration-activity-7291794809952825344-PZHp",
+            "https://www.linkedin.com/posts/giz-jordan_climateaction-sustainability-partnerships-activity-7362059197292670976-vTq-",
+            "https://www.linkedin.com/posts/giz-jordan_germanjordanianpartnership-governmentnegotiations-activity-7479930448085835776-MH0w",
+            "https://www.linkedin.com/posts/giz-jordan_publicsectormodernisation-partner-partner-activity-7188487390401875968-1IGr",
+            "https://www.giz.de/en/regions/asia/jordan",
+            "https://weepros.com/news/wee-pros-lead-digitally-integrated-nrw-process-transformation-jordan",
+            "https://petra.gov.jo/en/index.php/en/news/hashemite-university-giz-launch-women-green-jobs-platform",
+            "https://erc-jordan.org/listing/giz-2/",
+            "https://jedco.gov.jo/EN/ListDetails/GIZ/49/1",
+            "https://www.camecon.com/case-studies/giz-modelling-current-and-potential-green-jobs-in-jordan",
+            "https://www.gju.edu.jo/content/giz-16324"
+          ],
+          "created": 1786629962,
+          "id": "823dac1e-92c8-4799-a876-1c93843bb807",
+          "model": "sonar",
+          "object": "chat.completion",
+          "search_results": [
+            {
+              "date": "2026-06-28",
+              "last_updated": "2026-07-13",
+              "place_metadata": null,
+              "snippet": "Jordan Democracy and the rule of law Peace and security Sustainable infrastructure Overview News News 28.06.2026 Two instructional videos support implementation of the LERF billing process GIZ Jordan has developed two instructional videos to support business partners and staff in applying the billin...",
+              "source": "web",
+              "title": "Jordan News - GIZ",
+              "url": "https://www.giz.de/en/regions/asia/jordan/news"
+            },
+            {
+              "date": "2026-03-17",
+              "last_updated": "2026-08-11",
+              "place_metadata": null,
+              "snippet": "# Jordan launches public sector reform projects with EU and GIZ support\n...\nAmman, March 17 (Petra) -- Minister of State for Public Sector\nDevelopment Badriya Al Balbisi announced the launch of two projects:\nthe development of integrated business-related services and the\nenhancement of the National ...",
+              "source": "web",
+              "title": "Jordan launches public sector reform projects with EU and ...",
+              "url": "https://petra.gov.jo/gweb/index.php/en/news/jordan-launches-public-sector-reform-projects-with-eu-and-giz-support"
+            },
+            {
+              "date": "2026-03-16",
+              "last_updated": "2026-05-24",
+              "place_metadata": null,
+              "snippet": "Amman, March 16 (Petra) -- Minister of Youth Raed Adwan met with a\ndelegation from the German Agency for International Cooperation (GIZ)\nto discuss enhancing youth participation in implementing UN Security\nCouncil Resolution 2250 on Youth, Peace, and Security.",
+              "source": "web",
+              "title": "Jordan, GIZ discuss youth role in implementing UN Security Council ...",
+              "url": "https://petra.gov.jo/en/news/jordan-giz-discuss-youth-role-in-implementing-un-security-council-resolution-2250"
+            },
+            {
+              "date": "2026-06-28",
+              "last_updated": "2026-07-13",
+              "place_metadata": null,
+              "snippet": "Aqaba, June 28 (Petra) -- Aqaba Special Economic Zone Authority\n(ASEZA) Commissioner for Tourism and Youth Thabet Nabulsi discussed\nwith a delegation from the German Agency for International\nCooperation (GIZ) ways to expand cooperation on development programs\nand projects that support local communit...",
+              "source": "web",
+              "title": "ASEZA, GIZ Explore Expanded Development Cooperation in Aqaba, Wadi Rum",
+              "url": "https://petra.gov.jo/en/news/aseza-giz-explore-expanded-development-cooperation-in-aqaba-wadi-rum"
+            },
+            {
+              "date": "2026-07-27",
+              "last_updated": "2026-08-03",
+              "place_metadata": null,
+              "snippet": "***International consultancy firm Ecorys and local player Manafeth have been tapped by the Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) to support Jordan’s Economic Modernisation Vision, which is part of the Innovation in Private Sector Development (I-PSD) project.* ** ** **",
+              "source": "web",
+              "title": "Consultancies tapped by German state agency for ...",
+              "url": "https://www.consultancy-me.com/news/13877/consultancies-tapped-by-german-state-agency-for-development-project-in-jordan"
+            },
+            {
+              "date": "2026-06-03",
+              "last_updated": "2026-08-13",
+              "place_metadata": null,
+              "snippet": "Amman, June 3 (Petra) –With support from German Agency for\nInternational Cooperation (GIZ), Ministry of Energy and Mineral\nResources, in coordination with the Ministry of Industry, Trade and\nSupply and the German Energy Academy in Jordan, held ad hoc awareness\nworkshops as part of the National Capac...",
+              "source": "web",
+              "title": "Gov't, GIZ partner to enhance energy efficiency for public workers",
+              "url": "https://petra.gov.jo/en/news/govt-giz-partner-to-enhance-energy-efficiency-for-public-workers"
+            },
+            {
+              "date": "2021-06-20",
+              "last_updated": "2025-05-13",
+              "place_metadata": null,
+              "snippet": "AMMAN — The Jordan Loan Guarantee Corporation (JLGC) on Saturday signed a cooperation agreement with “Support for micro-, small- and medium-sized businesses” programme, implemented by the German Agency for International Cooperation (GIZ) on behalf of the Federal Ministry for Economic Cooperation and...",
+              "source": "web",
+              "title": "Agreement signed to support for micro-, small- and medium-sized businesses in Jordan",
+              "url": "https://www.zawya.com/en/business/agreement-signed-to-support-for-micro-small-and-medium-sized-businesses-in-jordan-vm8qdmfg"
+            },
+            {
+              "date": "2021-10-11",
+              "last_updated": "2025-07-14",
+              "place_metadata": null,
+              "snippet": "AMMAN — The Information and Communication Technology Association of Jordan (int@j) has signed a cooperation agreement with the “Employment-oriented MSME Promotion” Project (MSME).\nThe project has been implemented by the German Agency for International Cooperation (GIZ) on behalf of the German Federa...",
+              "source": "web",
+              "title": "int@j, GIZ join forces to empower women in ICT sector | Jordan Times",
+              "url": "https://jordantimes.com/news/local/intj-giz-join-forces-empower-women-ict-sector"
+            },
+            {
+              "date": "2026-02-09",
+              "last_updated": "2026-02-10",
+              "place_metadata": null,
+              "snippet": "",
+              "source": "web",
+              "title": "GIZ Jordan Supports Youth in Peace and Security Agenda - LinkedIn",
+              "url": "https://www.linkedin.com/posts/giz-jordan_through-its-continued-support-to-the-youth-activity-7426582293374377984-aYxM"
+            },
+            {
+              "date": "2025-02-02",
+              "last_updated": "2026-04-12",
+              "place_metadata": null,
+              "snippet": "The Service and Public Administration Commission (SPAC) has launched the \"Knowledge Exchange\" programme, bringing together 100 employees from various public sector entities, universities, and King Abdullah II Center for Excellence.\n...\nأطلقت هيئة الخدمة والادارة العامة اليوم الثلاثاء، مشروع \"التبادل...",
+              "source": "web",
+              "title": "GIZ Jordan's Post",
+              "url": "https://www.linkedin.com/posts/giz-jordan_strengthening-public-sector-collaboration-activity-7291794809952825344-PZHp"
+            },
+            {
+              "date": "2025-08-15",
+              "last_updated": "2026-08-07",
+              "place_metadata": null,
+              "snippet": "🚨 A Milestone for Climate Action in Jordan!\n🌍\nOn August 12, KEMAPCO - Arab Fertilizers and Chemicals Ltd.® signed a contract with Steinmüller Engineering GmbH to install an advanced nitrous oxide (N₂O) abatement system at its nitric acid plant in Aqaba.\nThis step is supported by GIZ Jordan on behalf...",
+              "source": "web",
+              "title": "GIZ Jordan posted on the topic",
+              "url": "https://www.linkedin.com/posts/giz-jordan_climateaction-sustainability-partnerships-activity-7362059197292670976-vTq-"
+            },
+            {
+              "date": "2026-07-06",
+              "last_updated": "2026-08-06",
+              "place_metadata": null,
+              "snippet": "US$97mn financing secured for Jordan’s mega water project\nJordan has approved a US$97mn financing agreement with the French Development Agency for the $5.8bn National Water Carrier project.",
+              "source": "web",
+              "title": "GIZ Jordan",
+              "url": "https://www.linkedin.com/posts/giz-jordan_germanjordanianpartnership-governmentnegotiations-activity-7479930448085835776-MH0w"
+            },
+            {
+              "date": "2024-04-23",
+              "last_updated": "2026-03-31",
+              "place_metadata": null,
+              "snippet": "🌟 Celebrating key milestones halfway: #publicsectormodernisation thrives in Jordan!\nIn a strategic meeting for our #PARtner project, we shared joint achievements and reaffirmed our commitment to citizen-oriented public service with our esteemed partners.\nThe Jordanian-German cooperation continues to...",
+              "source": "web",
+              "title": "GIZ Jordan's Post - LinkedIn",
+              "url": "https://www.linkedin.com/posts/giz-jordan_publicsectormodernisation-partner-partner-activity-7188487390401875968-1IGr"
+            },
+            {
+              "date": "2024-11-18",
+              "last_updated": "2026-08-12",
+              "place_metadata": null,
+              "snippet": "**Lorenz Petersen\n...\nCountry Director\nSend mail\n**GIZ Office Jordan**\nMohamed Baseem Al-Khammash St.13, Sweifieh\n11190 Amman\nJordan\nSend mail\n+ 962-6-5868090\n+ 962-6-5819863\n**Postal address**\nP.O.\nBox 926238\n11190 Amman\nJordan",
+              "source": "web",
+              "title": "Jordan | GIZ",
+              "url": "https://www.giz.de/en/regions/asia/jordan"
+            },
+            {
+              "date": "2025-12-30",
+              "last_updated": "2026-06-20",
+              "place_metadata": null,
+              "snippet": "WEE Pros is proud to launch a new strategic project under the GIZ “Strong Water Utilities” (SWU) program, focusing on the design and implementation of five digitally integrated processes aimed at reducing Non-Revenue Water (NRW) across several governorates in Jordan.",
+              "source": "web",
+              "title": "WEE Pros to Lead Digitally Integrated NRW Process Transformation ...",
+              "url": "https://weepros.com/news/wee-pros-lead-digitally-integrated-nrw-process-transformation-jordan"
+            },
+            {
+              "date": "2026-07-01",
+              "last_updated": "2026-07-15",
+              "place_metadata": null,
+              "snippet": "Zarqa, July 1 (Petra) -- The Hashemite University signed a memorandum\nof understanding with the German International Cooperation Agency\n(GIZ) to strengthen women’s participation in green jobs and align\nhigher education outcomes with labor market needs, according to a\nstatement.\nThe agreement, signed...",
+              "source": "web",
+              "title": "Hashemite University, GIZ launch women green jobs platform",
+              "url": "https://petra.gov.jo/en/index.php/en/news/hashemite-university-giz-launch-women-green-jobs-platform"
+            },
+            {
+              "date": "2024-12-28",
+              "last_updated": "2026-06-21",
+              "place_metadata": null,
+              "snippet": "9626586809096265819863\ngiz-jordanien@giz.d\n**",
+              "source": "web",
+              "title": "GIZ - ERC Jordan",
+              "url": "https://erc-jordan.org/listing/giz-2/"
+            },
+            {
+              "date": "2026-06-14",
+              "last_updated": "2026-06-30",
+              "place_metadata": null,
+              "snippet": "",
+              "source": "web",
+              "title": "GIZ Programs - Jordan Enterprise Development Corporation JEDCO",
+              "url": "https://jedco.gov.jo/EN/ListDetails/GIZ/49/1"
+            },
+            {
+              "date": "2023-11-16",
+              "last_updated": "2026-06-11",
+              "place_metadata": null,
+              "snippet": "The German Federal Ministry for Economic Cooperation and Development commissioned GIZ (Deutsche Gesellschaft für Internationale Zusammenarbeit GmBH) and Cambridge Econometrics to produce the first-ever green jobs assessment for Jordan.",
+              "source": "web",
+              "title": "GIZ: Modelling Current and Potential Green Jobs in Jordan",
+              "url": "https://www.camecon.com/case-studies/giz-modelling-current-and-potential-green-jobs-in-jordan"
+            },
+            {
+              "date": "2014-01-01",
+              "last_updated": "2025-09-07",
+              "place_metadata": null,
+              "snippet": "",
+              "source": "web",
+              "title": "GIZ | German Jordanian University",
+              "url": "https://www.gju.edu.jo/content/giz-16324"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 1240,
+            "cost": {
+              "input_tokens_cost": 0.00063,
+              "output_tokens_cost": 0.00124,
+              "request_cost": 0.005,
+              "total_cost": 0.00687
+            },
+            "prompt_tokens": 626,
+            "search_context_size": "low",
+            "total_tokens": 1866
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-08-11T11:48:15.263Z",
+      "createdAt": "2026-08-11T11:48:15.263Z",
+      "role": "workflow:owner",
+      "workflowId": "7L5oUGj480jAfPCu",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-08-13T15:04:46.725Z",
+  "versionId": "3450e468-1bd9-4bf2-be42-1c45603e4335"
+}
