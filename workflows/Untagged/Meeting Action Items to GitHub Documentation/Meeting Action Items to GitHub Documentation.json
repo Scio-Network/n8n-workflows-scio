@@ -1,43 +1,27 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-07-15T15:39:04.716Z",
-    "createdAt": "2026-07-15T15:39:04.716Z",
-    "versionId": "5e20a513-6eeb-400f-a6a7-83c6e929b877",
+    "updatedAt": "2026-08-18T06:15:31.959Z",
+    "createdAt": "2026-08-18T06:15:31.959Z",
+    "versionId": "23b0cbb8-2bc7-4c31-8b34-fa643d5676ff",
     "workflowId": "5nR7DRdU7huAr7xi",
     "nodes": [
       {
         "parameters": {
-          "httpMethod": "POST",
-          "path": "c3434bb1-0754-4513-bfbb-101b528a3a31",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.webhook",
-        "typeVersion": 2.1,
-        "position": [
-          -80,
-          -176
-        ],
-        "id": "0c2a87d2-4a8b-446a-ae52-585e676f4227",
-        "name": "meetings-autotmation",
-        "webhookId": "c3434bb1-0754-4513-bfbb-101b528a3a31"
-      },
-      {
-        "parameters": {
           "modelId": {
             "__rl": true,
-            "value": "gpt-4o-mini",
+            "value": "gpt-5-mini",
             "mode": "list",
-            "cachedResultName": "GPT-4O-MINI"
+            "cachedResultName": "GPT-5-MINI"
           },
           "responses": {
             "values": [
               {
                 "role": "system",
-                "content": "You are an information extraction assistant.\n\nYour task is to convert Google Meet Gemini meeting notes into structured JSON.\n\nExtract only the information that exists in the meeting notes.\n\nDo not summarize beyond what is already provided.\n\nIf a section does not exist, return an empty string or an empty array.\n\nReturn valid JSON only that matches the required schema."
+                "content": "You are the Scio Digital Ops Intelligence Agent. Your task is to extract structured action items from raw meeting transcripts.\n\n### OBJECTIVES\n1. Summarize the meeting and list all key decisions made.\n2. Identify all Action Items (tasks).\n3. PERFORM DEDUPLICATION: \n   - Compare every identified action item against the 'EXISTING_GITHUB_ISSUES' list.\n   - If a task is already represented by an existing issue title, mark it as 'UPDATE'.\n   - If a task is entirely new, mark it as 'NEW'.\n\n### RULES\n- OWNERS: Only assign to \"nyairo-k\" or \"flo-doe\". If unsure, default to \"nyairo-k\".\n- DECISIONS: These are agreements made, not tasks to perform.\n- NEW TASKS: Provide a clear, actionable title and a 2-sentence description.\n- UPDATES: Provide the specific 'issue_number' from the input list and a summary of what was updated during this meeting.\n- FORMAT: You must return valid, strict JSON. No conversational text.\n\n### OUTPUT SCHEMA\n{\n  \"meeting_metadata\": {\n    \"title\": \"Clean Title of the Meeting\",\n    \"date\": \"YYYY-MM-DD\"\n  },\n  \"summary\": \"A 3-4 sentence executive summary of the discussion.\",\n  \"decisions\": [\n    \"Decision 1\",\n    \"Decision 2\"\n  ],\n  \"actions\": [\n    {\n      \"status\": \"NEW\",\n      \"title\": \"Task Title\",\n      \"owner\": \"nyairo-k\",\n      \"description\": \"Context about the task from the transcript.\"\n    },\n    {\n      \"status\": \"UPDATE\",\n      \"issue_number\": 81,\n      \"title\": \"Existing Task Title\",\n      \"update_summary\": \"Summary of the update mentioned in the meeting.\"\n    }\n  ]\n}"
               },
               {
-                "content": "=Convert the following Google Meet Gemini meeting notes into structured JSON.\n\nReturn ONLY valid JSON using the following schema:\n\n{\n  \"meeting\": {\n    \"title\": \"\",\n    \"meeting_type\": \"AI & Digitalization Weekly Sync\",\n    \"date\": \"\",\n    \"quarter\": \"\",\n    \"summary\": \"\",\n    \"source_document\": \"\"\n  },\n  \"decisions\": [],\n  \"action_items\": [\n    {\n      \"owners\": [],\n      \"task\": \"\"\n    }\n  ]\n}\n\nRules:\n\n1. Set meeting.title using the provided Meeting Title.\n\n2. Set meeting.date using the provided Meeting Date.\n\n3. Determine meeting.quarter from the meeting date using the following rules:\n   - January to April → Q1\n   - May to August → Q2\n   - September to December → Q3\n   Return only the quarter (for example: \"Q2\").\n\n4. Set meeting.summary using only the Summary section.\n\n5. Populate decisions with every item listed under the Decisions section.\n\n6. Populate action_items using only the Next steps section.\n\n7. Each action item begins with one or more owners enclosed in square brackets.\n\n   Example:\n   [Nyairo Kemunto] Populate prompt library\n\n   becomes\n\n   {\n     \"owners\": [\"Nyairo Kemunto\"],\n     \"task\": \"Populate prompt library\"\n   }\n\n   Example:\n\n   [Florian Döbler, Nyairo Kemunto] Project check in\n\n   becomes\n\n   {\n     \"owners\": [\n       \"Florian Döbler\",\n       \"Nyairo Kemunto\"\n     ],\n     \"task\": \"Project check in\"\n   }\n\n8. Set meeting.source_document using the Google Docs URL below, replacing {FILE_ID} with the provided File ID.\nFormat:\n\nhttps://docs.google.com/document/d/{FILE_ID}/edit\n\n9. Return valid JSON only.\n\nMeeting Title:\n{{ $json.body.meetingTitle }}\n\nMeeting Date:\n{{ $json.body.date }}\n\nMeeting Notes:\n{{ $json.body.notesContent }}\n\nFile ID:\n{{ $json.body.fileId }}"
+                "content": "=### INPUT DATA:\n1. RAW TRANSCRIPT: {{ $('meetings-autotmation1').first().json.body.transcriptContent }}\n\n2. EXISTING OPEN TASKS (FOR DEDUPLICATION): {{ JSON.stringify($json.current_open_tasks) }}\n3. FILE METADATA:\nTitle: {{ $('meetings-autotmation1').first().json.body.meetingTitle }}\nDate: {{ $('meetings-autotmation1').first().json.body.date }}\nURL: https://docs.google.com/document/d/{{ $('meetings-autotmation1').first().json.body.fileId }}/edit\n\n\n### INSTRUCTION:\nConvert the transcript above into the required JSON schema. Analyze the \"EXISTING OPEN TASKS\" carefully to ensure we do not create duplicate issues for work already in progress."
               }
             ]
           },
@@ -46,7 +30,7 @@
             "textFormat": {
               "textOptions": {
                 "type": "json_schema",
-                "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"meeting\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"title\": {\n          \"type\": \"string\"\n        },\n        \"date\": {\n          \"type\": \"string\"\n        },\n        \"quarter\": {\n          \"type\": \"string\"\n        },\n        \"summary\": {\n          \"type\": \"string\"\n        },\n        \"source_document\": {\n          \"type\": \"string\"\n        }\n      },\n      \"required\": [\n        \"title\",\n        \"date\",\n        \"quarter\",\n        \"summary\",\n        \"source_document\"\n      ],\n      \"additionalProperties\": false\n    },\n    \"decisions\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"action_items\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"owners\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          },\n          \"task\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"owners\",\n          \"task\"\n        ],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\n    \"meeting\",\n    \"decisions\",\n    \"action_items\"\n  ],\n  \"additionalProperties\": false\n}"
+                "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"meeting\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"title\": { \"type\": \"string\" },\n        \"date\": { \"type\": \"string\" },\n        \"quarter\": { \"type\": \"string\" },\n        \"summary\": { \"type\": \"string\" },\n        \"source_document\": { \"type\": \"string\" }\n      },\n      \"required\": [\"title\", \"date\", \"quarter\", \"summary\", \"source_document\"],\n      \"additionalProperties\": false\n    },\n    \"decisions\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"action_items\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"status\": { \"type\": \"string\", \"enum\": [\"NEW\", \"UPDATE\"] },\n          \"issue_number\": { \"type\": [\"number\", \"null\"] },\n          \"owners\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } },\n          \"task\": { \"type\": \"string\" },\n          \"update_summary\": { \"type\": \"string\" }\n        },\n        \"required\": [\"status\", \"issue_number\", \"owners\", \"task\", \"update_summary\"],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\"meeting\", \"decisions\", \"action_items\"],\n  \"additionalProperties\": false\n}"
               }
             }
           }
@@ -54,8 +38,8 @@
         "type": "@n8n/n8n-nodes-langchain.openAi",
         "typeVersion": 2.1,
         "position": [
-          96,
-          -160
+          464,
+          -528
         ],
         "id": "55eb4688-c46e-40f3-8f90-0f6939a87d38",
         "name": "Message a model",
@@ -81,15 +65,15 @@
             "cachedResultUrl": "https://github.com/Scio-Network/digital-footprint"
           },
           "title": "=AI & Digitalization Team Meeting - {{ $json.output[0].content[0].text.meeting.date.substring(0.10) }}",
-          "body": "=# AI & Digitalization Team Meeting\n\n**Meeting**\n\n{{ $json.output[0].content[0].text.meeting.title }}\n\n**Date**\n\n{{ $json.output[0].content[0].text.meeting.date }}\n\n---\n\n## Summary\n\n{{ $json.output[0].content[0].text.meeting.summary }}\n\n---\n\n## Decisions\n\n{{ $json.output[0].content[0].text.decisions\n.map(d => `- ${d}`)\n.join('\\n') }}\n\n---\n\n## Action Items\n\n{{ $json.output[0].content[0].text.action_items\n.map(a =>\n`- [ ] ${a.task}\n  - Owners: ${a.owners.join(', ')}`\n)\n.join('\\n\\n') }}\n\n---\n\n## Meeting Notes\n\n{{ $json.output[0].content[0].text.meeting.source_document }}",
+          "body": "=# {{ $json.output[0].content[0].text.meeting.title }} - {{ $json.output[0].content[0].text.meeting.quarter }}\n**Date:** {{ $json.output[0].content[0].text.meeting.date }}\n**Source Document:** [Google Meet Transcript]{{ $json.output[0].content[0].text.meeting.source_document }}\n\n## Summary\n{{ $json.output[0].content[0].text.meeting.summary }}\n\n## Decisions\n{{ $json.output[0].content[0].text.decisions.map(d => `- ${d}`).join('\\n') }}",
           "labels": [],
           "assignees": []
         },
         "type": "n8n-nodes-base.github",
         "typeVersion": 1.1,
         "position": [
-          432,
-          -16
+          784,
+          -544
         ],
         "id": "bba87bcc-a2f0-4876-87ff-3290efd19bd4",
         "name": "Create an issue",
@@ -130,8 +114,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          640,
-          80
+          1008,
+          -528
         ],
         "id": "05dba06a-1c28-4bbe-a875-530a6f7b8f9a",
         "name": "Edit Fields"
@@ -144,8 +128,8 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          880,
-          112
+          1184,
+          -528
         ],
         "id": "82b5748c-30b4-43f2-a640-0661e71c6937",
         "name": "Split Out"
@@ -165,62 +149,23 @@
             "cachedResultUrl": "https://github.com/Scio-Network/digital-footprint"
           },
           "title": "=={{ $json.task }}",
-          "body": "=Parent Meeting: {{ $('Edit Fields').item.json.parent_issue_number }}\n\nOwner:\n{{ $json.owners.join(\", \") }}\n\nSource Meeting:\n{{ $('Message a model').item.json.output[0].content[0].text.meeting.source_document }}",
+          "body": "=### 📝 Task Description\n{{ $json.update_summary }}\n\n---\n**Context:**\n- **Parent Meeting:** #{{ $('Edit Fields').item.json.parent_issue_number }}\n- **Owner:** {{ $json.owners.join(\", \") }}",
           "labels": [],
           "assignees": [
             {
-              "assignee": "={{ $json.owners.includes(\"Nyairo Kemunto\") ? \"nyairo-k\" : \"flo-doe\" }}"
+              "assignee": "={{ $json.owners[0] }}"
             }
           ]
         },
         "type": "n8n-nodes-base.github",
         "typeVersion": 1.1,
         "position": [
-          1088,
-          80
+          1600,
+          -400
         ],
         "id": "b769fdf3-6336-4f41-9572-43747eb87b05",
         "name": "Create an issue1",
         "webhookId": "6a44f277-2657-444c-9c86-7029d3bc6c7c",
-        "credentials": {
-          "githubApi": {
-            "id": "SZYHQ2VAQfsrE9bT",
-            "name": "GitHu-Scio"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "method": "POST",
-          "url": "https://api.github.com/orgs/Scio-Network/projectsV2/5/items",
-          "authentication": "predefinedCredentialType",
-          "nodeCredentialType": "githubApi",
-          "sendHeaders": true,
-          "headerParameters": {
-            "parameters": [
-              {
-                "name": "Accept",
-                "value": "application/vnd.github+json"
-              },
-              {
-                "name": "X-GitHub-Api-Version",
-                "value": "2026-03-10"
-              }
-            ]
-          },
-          "sendBody": true,
-          "specifyBody": "json",
-          "jsonBody": "={\n  \"type\": \"Issue\",\n  \"id\": {{ $json.id }}\n}",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.3,
-        "position": [
-          672,
-          -208
-        ],
-        "id": "170a379e-e5e1-4d53-82fe-3a90e833fd00",
-        "name": "add-to-projects",
         "credentials": {
           "githubApi": {
             "id": "SZYHQ2VAQfsrE9bT",
@@ -242,8 +187,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1296,
-          64
+          1824,
+          -384
         ],
         "id": "cb2c68c9-7af8-434a-ac49-60885298498f",
         "name": "child-parent-link",
@@ -256,108 +201,155 @@
       },
       {
         "parameters": {
-          "method": "POST",
-          "url": "https://api.github.com/graphql",
-          "authentication": "predefinedCredentialType",
-          "nodeCredentialType": "githubApi",
-          "sendHeaders": true,
-          "headerParameters": {
-            "parameters": [
-              {
-                "name": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "name": "Accept",
-                "value": "application/vnd.github+json"
-              }
-            ]
-          },
-          "sendBody": true,
-          "specifyBody": "json",
-          "jsonBody": "{\n  \"query\": \"query { node(id: \\\"PVT_kwDOEJdS884BdZ-q\\\") { ... on ProjectV2 { items(first: 20) { nodes { id content { __typename ... on Issue { id number title } } } } } } }\"\n}",
+          "httpMethod": "POST",
+          "path": "c3434bb1-0754-4513-bfbb-101b528a3a31",
           "options": {}
         },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.3,
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
         "position": [
-          880,
-          -208
+          -352,
+          -400
         ],
-        "id": "e03cf465-c05b-452e-aa9b-a84d973e506d",
-        "name": "get_project_id",
-        "credentials": {
-          "githubApi": {
-            "id": "SZYHQ2VAQfsrE9bT",
-            "name": "GitHu-Scio"
-          }
-        }
+        "id": "950a9544-0182-4f27-8d7f-4b18f08c2048",
+        "name": "meetings-autotmation1",
+        "webhookId": "c3434bb1-0754-4513-bfbb-101b528a3a31"
       },
       {
         "parameters": {
-          "method": "POST",
-          "url": "https://api.github.com/graphql",
-          "authentication": "predefinedCredentialType",
-          "nodeCredentialType": "githubApi",
-          "sendHeaders": true,
-          "headerParameters": {
-            "parameters": [
-              {
-                "name": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "name": "Accept",
-                "value": "application/vnd.github+json"
-              }
-            ]
-          },
-          "sendBody": true,
-          "specifyBody": "json",
-          "jsonBody": "{\n  \"query\": \"query { organization(login: \\\"Scio-Network\\\") { projectV2(number: 5) { id title } } }\"\n}",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.3,
-        "position": [
-          720,
-          -464
-        ],
-        "id": "43f96eb5-d27a-498b-b2d1-af48f5dc57ee",
-        "name": "get_project_id1",
-        "credentials": {
-          "githubApi": {
-            "id": "SZYHQ2VAQfsrE9bT",
-            "name": "GitHu-Scio"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "jsCode": "const issueNumber = $('Create an issue').first().json.number;\n\nconst items = $input.first().json.data.node.items.nodes;\n\nconst match = items.find(item =>\n    item.content &&\n    item.content.number === issueNumber\n);\n\nreturn [{\n    json: match\n}];"
+          "jsCode": "// fetch titles only\nconst issues = $input.all();\n\nconst cleanList = issues.map(item => {\n  return {\n    number: item.json.number,\n    title: item.json.title\n  };\n});\n\nreturn [{ json: { current_open_tasks: cleanList } }];"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1088,
-          -208
+          256,
+          -544
         ],
-        "id": "ba167796-06ca-4323-8d66-df8cc55f0110",
-        "name": "Code in JavaScript"
+        "id": "b1af36f1-dff9-4256-ab3b-f80951468b89",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "url": "https://api.github.com/repos/Scio-Network/digital-footprint/issues",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "githubApi",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "state",
+                "value": "open"
+              },
+              {
+                "name": "per_page",
+                "value": "100"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "2022-11-28"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          64,
+          -512
+        ],
+        "id": "c9e4556d-632e-4ca6-b7e9-8007390fa610",
+        "name": "fetchIssues",
+        "credentials": {
+          "githubApi": {
+            "id": "SZYHQ2VAQfsrE9bT",
+            "name": "GitHu-Scio"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.status }}",
+                      "rightValue": "UPDATE",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "bdeb18e0-ba47-4422-a351-d4eadffb1d01"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "update"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "0dd0c5da-d720-42fc-b920-e68c17ff95c2",
+                      "leftValue": "={{ $json.status }}",
+                      "rightValue": "NEW",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "new"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          1392,
+          -528
+        ],
+        "id": "d4f5a4b5-18f0-4c9d-8db9-383dde777109",
+        "name": "Switch"
       },
       {
         "parameters": {
           "method": "POST",
-          "url": "https://api.github.com/graphql",
+          "url": "=https://api.github.com/repos/Scio-Network/digital-footprint/issues/{{ $json.issue_number }}/comments",
           "authentication": "predefinedCredentialType",
           "nodeCredentialType": "githubApi",
           "sendHeaders": true,
           "headerParameters": {
             "parameters": [
-              {
-                "name": "Content-Type",
-                "value": "application/json"
-              },
               {
                 "name": "Accept",
                 "value": "application/vnd.github+json"
@@ -366,37 +358,79 @@
           },
           "sendBody": true,
           "specifyBody": "json",
-          "jsonBody": "{\n  \"query\": \"query { node(id: \\\"PVT_kwDOEJdS884BdZ-q\\\") { ... on ProjectV2 { fields(first: 20) { nodes { __typename ... on ProjectV2FieldConfiguration { id name } } } } }\"\n}",
+          "jsonBody": "={\n  \"body\": \"### 🔄 Meeting Update: {{ $json.task }}\\n\\n**Progress/Update:**\\n{{ $json.update_summary }}\\n\\n---\\n*Context: Updated during [Meeting #{{ $('Edit Fields').item.json.parent_issue_number }}](https://github.com/Scio-Network/digital-footprint/issues/{{ $('Edit Fields').item.json.parent_issue_number }})*\"\n}",
           "options": {}
         },
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          960,
-          -448
+          1616,
+          -640
         ],
-        "id": "7cc6fe95-d5a0-4dd3-ac59-b6103764e528",
-        "name": "get_project_metadata",
+        "id": "74d9e338-54a1-43b7-9686-8b8055106dcb",
+        "name": "HTTP Request",
         "credentials": {
           "githubApi": {
             "id": "SZYHQ2VAQfsrE9bT",
             "name": "GitHu-Scio"
           }
         }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "885b2cf9-465a-4648-9c65-2b4f1e9abfba",
+                "leftValue": "={{ $json.body.transcriptFound }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -144,
+          -400
+        ],
+        "id": "f3f5c6c7-2747-4e4a-97fc-33c123bf8589",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "select": "channel",
+          "channelId": {
+            "__rl": true,
+            "mode": "list",
+            "value": ""
+          },
+          "otherOptions": {}
+        },
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.4,
+        "position": [
+          64,
+          -304
+        ],
+        "id": "dfa19d89-cf40-4718-b065-5e6dd7ebd69d",
+        "name": "Send a message",
+        "webhookId": "a52f52af-8652-4e6e-a1ac-130756590031"
       }
     ],
     "connections": {
-      "meetings-autotmation": {
-        "main": [
-          [
-            {
-              "node": "Message a model",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Message a model": {
         "main": [
           [
@@ -413,11 +447,6 @@
           [
             {
               "node": "Edit Fields",
-              "type": "main",
-              "index": 0
-            },
-            {
-              "node": "add-to-projects",
               "type": "main",
               "index": 0
             }
@@ -439,7 +468,7 @@
         "main": [
           [
             {
-              "node": "Create an issue1",
+              "node": "Switch",
               "type": "main",
               "index": 0
             }
@@ -462,22 +491,69 @@
           []
         ]
       },
-      "add-to-projects": {
+      "meetings-autotmation1": {
         "main": [
           [
             {
-              "node": "get_project_id",
+              "node": "If",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "get_project_id": {
+      "fetchIssues": {
         "main": [
           [
             {
-              "node": "Code in JavaScript",
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Message a model",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Create an issue1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "fetchIssues",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send a message",
               "type": "main",
               "index": 0
             }
@@ -489,19 +565,8 @@
     "name": null,
     "description": null
   },
-  "activeVersionId": "5e20a513-6eeb-400f-a6a7-83c6e929b877",
+  "activeVersionId": "23b0cbb8-2bc7-4c31-8b34-fa643d5676ff",
   "connections": {
-    "meetings-autotmation": {
-      "main": [
-        [
-          {
-            "node": "Message a model",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Message a model": {
       "main": [
         [
@@ -518,11 +583,6 @@
         [
           {
             "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "add-to-projects",
             "type": "main",
             "index": 0
           }
@@ -544,7 +604,7 @@
       "main": [
         [
           {
-            "node": "Create an issue1",
+            "node": "Switch",
             "type": "main",
             "index": 0
           }
@@ -567,22 +627,69 @@
         []
       ]
     },
-    "add-to-projects": {
+    "meetings-autotmation1": {
       "main": [
         [
           {
-            "node": "get_project_id",
+            "node": "If",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "get_project_id": {
+    "fetchIssues": {
       "main": [
         [
           {
-            "node": "Code in JavaScript",
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create an issue1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "fetchIssues",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message",
             "type": "main",
             "index": 0
           }
@@ -600,36 +707,20 @@
   "nodes": [
     {
       "parameters": {
-        "httpMethod": "POST",
-        "path": "c3434bb1-0754-4513-bfbb-101b528a3a31",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "position": [
-        -80,
-        -176
-      ],
-      "id": "0c2a87d2-4a8b-446a-ae52-585e676f4227",
-      "name": "meetings-autotmation",
-      "webhookId": "c3434bb1-0754-4513-bfbb-101b528a3a31"
-    },
-    {
-      "parameters": {
         "modelId": {
           "__rl": true,
-          "value": "gpt-4o-mini",
+          "value": "gpt-5-mini",
           "mode": "list",
-          "cachedResultName": "GPT-4O-MINI"
+          "cachedResultName": "GPT-5-MINI"
         },
         "responses": {
           "values": [
             {
               "role": "system",
-              "content": "You are an information extraction assistant.\n\nYour task is to convert Google Meet Gemini meeting notes into structured JSON.\n\nExtract only the information that exists in the meeting notes.\n\nDo not summarize beyond what is already provided.\n\nIf a section does not exist, return an empty string or an empty array.\n\nReturn valid JSON only that matches the required schema."
+              "content": "You are the Scio Digital Ops Intelligence Agent. Your task is to extract structured action items from raw meeting transcripts.\n\n### OBJECTIVES\n1. Summarize the meeting and list all key decisions made.\n2. Identify all Action Items (tasks).\n3. PERFORM DEDUPLICATION: \n   - Compare every identified action item against the 'EXISTING_GITHUB_ISSUES' list.\n   - If a task is already represented by an existing issue title, mark it as 'UPDATE'.\n   - If a task is entirely new, mark it as 'NEW'.\n\n### RULES\n- OWNERS: Only assign to \"nyairo-k\" or \"flo-doe\". If unsure, default to \"nyairo-k\".\n- DECISIONS: These are agreements made, not tasks to perform.\n- NEW TASKS: Provide a clear, actionable title and a 2-sentence description.\n- UPDATES: Provide the specific 'issue_number' from the input list and a summary of what was updated during this meeting.\n- FORMAT: You must return valid, strict JSON. No conversational text.\n\n### OUTPUT SCHEMA\n{\n  \"meeting_metadata\": {\n    \"title\": \"Clean Title of the Meeting\",\n    \"date\": \"YYYY-MM-DD\"\n  },\n  \"summary\": \"A 3-4 sentence executive summary of the discussion.\",\n  \"decisions\": [\n    \"Decision 1\",\n    \"Decision 2\"\n  ],\n  \"actions\": [\n    {\n      \"status\": \"NEW\",\n      \"title\": \"Task Title\",\n      \"owner\": \"nyairo-k\",\n      \"description\": \"Context about the task from the transcript.\"\n    },\n    {\n      \"status\": \"UPDATE\",\n      \"issue_number\": 81,\n      \"title\": \"Existing Task Title\",\n      \"update_summary\": \"Summary of the update mentioned in the meeting.\"\n    }\n  ]\n}"
             },
             {
-              "content": "=Convert the following Google Meet Gemini meeting notes into structured JSON.\n\nReturn ONLY valid JSON using the following schema:\n\n{\n  \"meeting\": {\n    \"title\": \"\",\n    \"meeting_type\": \"AI & Digitalization Weekly Sync\",\n    \"date\": \"\",\n    \"quarter\": \"\",\n    \"summary\": \"\",\n    \"source_document\": \"\"\n  },\n  \"decisions\": [],\n  \"action_items\": [\n    {\n      \"owners\": [],\n      \"task\": \"\"\n    }\n  ]\n}\n\nRules:\n\n1. Set meeting.title using the provided Meeting Title.\n\n2. Set meeting.date using the provided Meeting Date.\n\n3. Determine meeting.quarter from the meeting date using the following rules:\n   - January to April → Q1\n   - May to August → Q2\n   - September to December → Q3\n   Return only the quarter (for example: \"Q2\").\n\n4. Set meeting.summary using only the Summary section.\n\n5. Populate decisions with every item listed under the Decisions section.\n\n6. Populate action_items using only the Next steps section.\n\n7. Each action item begins with one or more owners enclosed in square brackets.\n\n   Example:\n   [Nyairo Kemunto] Populate prompt library\n\n   becomes\n\n   {\n     \"owners\": [\"Nyairo Kemunto\"],\n     \"task\": \"Populate prompt library\"\n   }\n\n   Example:\n\n   [Florian Döbler, Nyairo Kemunto] Project check in\n\n   becomes\n\n   {\n     \"owners\": [\n       \"Florian Döbler\",\n       \"Nyairo Kemunto\"\n     ],\n     \"task\": \"Project check in\"\n   }\n\n8. Set meeting.source_document using the Google Docs URL below, replacing {FILE_ID} with the provided File ID.\nFormat:\n\nhttps://docs.google.com/document/d/{FILE_ID}/edit\n\n9. Return valid JSON only.\n\nMeeting Title:\n{{ $json.body.meetingTitle }}\n\nMeeting Date:\n{{ $json.body.date }}\n\nMeeting Notes:\n{{ $json.body.notesContent }}\n\nFile ID:\n{{ $json.body.fileId }}"
+              "content": "=### INPUT DATA:\n1. RAW TRANSCRIPT: {{ $('meetings-autotmation1').first().json.body.transcriptContent }}\n\n2. EXISTING OPEN TASKS (FOR DEDUPLICATION): {{ JSON.stringify($json.current_open_tasks) }}\n3. FILE METADATA:\nTitle: {{ $('meetings-autotmation1').first().json.body.meetingTitle }}\nDate: {{ $('meetings-autotmation1').first().json.body.date }}\nURL: https://docs.google.com/document/d/{{ $('meetings-autotmation1').first().json.body.fileId }}/edit\n\n\n### INSTRUCTION:\nConvert the transcript above into the required JSON schema. Analyze the \"EXISTING OPEN TASKS\" carefully to ensure we do not create duplicate issues for work already in progress."
             }
           ]
         },
@@ -638,7 +729,7 @@
           "textFormat": {
             "textOptions": {
               "type": "json_schema",
-              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"meeting\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"title\": {\n          \"type\": \"string\"\n        },\n        \"date\": {\n          \"type\": \"string\"\n        },\n        \"quarter\": {\n          \"type\": \"string\"\n        },\n        \"summary\": {\n          \"type\": \"string\"\n        },\n        \"source_document\": {\n          \"type\": \"string\"\n        }\n      },\n      \"required\": [\n        \"title\",\n        \"date\",\n        \"quarter\",\n        \"summary\",\n        \"source_document\"\n      ],\n      \"additionalProperties\": false\n    },\n    \"decisions\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"action_items\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"owners\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          },\n          \"task\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"owners\",\n          \"task\"\n        ],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\n    \"meeting\",\n    \"decisions\",\n    \"action_items\"\n  ],\n  \"additionalProperties\": false\n}"
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"meeting\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"title\": { \"type\": \"string\" },\n        \"date\": { \"type\": \"string\" },\n        \"quarter\": { \"type\": \"string\" },\n        \"summary\": { \"type\": \"string\" },\n        \"source_document\": { \"type\": \"string\" }\n      },\n      \"required\": [\"title\", \"date\", \"quarter\", \"summary\", \"source_document\"],\n      \"additionalProperties\": false\n    },\n    \"decisions\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"action_items\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"status\": { \"type\": \"string\", \"enum\": [\"NEW\", \"UPDATE\"] },\n          \"issue_number\": { \"type\": [\"number\", \"null\"] },\n          \"owners\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } },\n          \"task\": { \"type\": \"string\" },\n          \"update_summary\": { \"type\": \"string\" }\n        },\n        \"required\": [\"status\", \"issue_number\", \"owners\", \"task\", \"update_summary\"],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"required\": [\"meeting\", \"decisions\", \"action_items\"],\n  \"additionalProperties\": false\n}"
             }
           }
         }
@@ -646,8 +737,8 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2.1,
       "position": [
-        96,
-        -160
+        464,
+        -528
       ],
       "id": "55eb4688-c46e-40f3-8f90-0f6939a87d38",
       "name": "Message a model",
@@ -673,15 +764,15 @@
           "cachedResultUrl": "https://github.com/Scio-Network/digital-footprint"
         },
         "title": "=AI & Digitalization Team Meeting - {{ $json.output[0].content[0].text.meeting.date.substring(0.10) }}",
-        "body": "=# AI & Digitalization Team Meeting\n\n**Meeting**\n\n{{ $json.output[0].content[0].text.meeting.title }}\n\n**Date**\n\n{{ $json.output[0].content[0].text.meeting.date }}\n\n---\n\n## Summary\n\n{{ $json.output[0].content[0].text.meeting.summary }}\n\n---\n\n## Decisions\n\n{{ $json.output[0].content[0].text.decisions\n.map(d => `- ${d}`)\n.join('\\n') }}\n\n---\n\n## Action Items\n\n{{ $json.output[0].content[0].text.action_items\n.map(a =>\n`- [ ] ${a.task}\n  - Owners: ${a.owners.join(', ')}`\n)\n.join('\\n\\n') }}\n\n---\n\n## Meeting Notes\n\n{{ $json.output[0].content[0].text.meeting.source_document }}",
+        "body": "=# {{ $json.output[0].content[0].text.meeting.title }} - {{ $json.output[0].content[0].text.meeting.quarter }}\n**Date:** {{ $json.output[0].content[0].text.meeting.date }}\n**Source Document:** [Google Meet Transcript]{{ $json.output[0].content[0].text.meeting.source_document }}\n\n## Summary\n{{ $json.output[0].content[0].text.meeting.summary }}\n\n## Decisions\n{{ $json.output[0].content[0].text.decisions.map(d => `- ${d}`).join('\\n') }}",
         "labels": [],
         "assignees": []
       },
       "type": "n8n-nodes-base.github",
       "typeVersion": 1.1,
       "position": [
-        432,
-        -16
+        784,
+        -544
       ],
       "id": "bba87bcc-a2f0-4876-87ff-3290efd19bd4",
       "name": "Create an issue",
@@ -722,8 +813,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        640,
-        80
+        1008,
+        -528
       ],
       "id": "05dba06a-1c28-4bbe-a875-530a6f7b8f9a",
       "name": "Edit Fields"
@@ -736,8 +827,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        880,
-        112
+        1184,
+        -528
       ],
       "id": "82b5748c-30b4-43f2-a640-0661e71c6937",
       "name": "Split Out"
@@ -757,62 +848,23 @@
           "cachedResultUrl": "https://github.com/Scio-Network/digital-footprint"
         },
         "title": "=={{ $json.task }}",
-        "body": "=Parent Meeting: {{ $('Edit Fields').item.json.parent_issue_number }}\n\nOwner:\n{{ $json.owners.join(\", \") }}\n\nSource Meeting:\n{{ $('Message a model').item.json.output[0].content[0].text.meeting.source_document }}",
+        "body": "=### 📝 Task Description\n{{ $json.update_summary }}\n\n---\n**Context:**\n- **Parent Meeting:** #{{ $('Edit Fields').item.json.parent_issue_number }}\n- **Owner:** {{ $json.owners.join(\", \") }}",
         "labels": [],
         "assignees": [
           {
-            "assignee": "={{ $json.owners.includes(\"Nyairo Kemunto\") ? \"nyairo-k\" : \"flo-doe\" }}"
+            "assignee": "={{ $json.owners[0] }}"
           }
         ]
       },
       "type": "n8n-nodes-base.github",
       "typeVersion": 1.1,
       "position": [
-        1088,
-        80
+        1600,
+        -400
       ],
       "id": "b769fdf3-6336-4f41-9572-43747eb87b05",
       "name": "Create an issue1",
       "webhookId": "6a44f277-2657-444c-9c86-7029d3bc6c7c",
-      "credentials": {
-        "githubApi": {
-          "id": "SZYHQ2VAQfsrE9bT",
-          "name": "GitHu-Scio"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.github.com/orgs/Scio-Network/projectsV2/5/items",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "githubApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Accept",
-              "value": "application/vnd.github+json"
-            },
-            {
-              "name": "X-GitHub-Api-Version",
-              "value": "2026-03-10"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"type\": \"Issue\",\n  \"id\": {{ $json.id }}\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        672,
-        -208
-      ],
-      "id": "170a379e-e5e1-4d53-82fe-3a90e833fd00",
-      "name": "add-to-projects",
       "credentials": {
         "githubApi": {
           "id": "SZYHQ2VAQfsrE9bT",
@@ -834,8 +886,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1296,
-        64
+        1824,
+        -384
       ],
       "id": "cb2c68c9-7af8-434a-ac49-60885298498f",
       "name": "child-parent-link",
@@ -848,108 +900,155 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.github.com/graphql",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "githubApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            },
-            {
-              "name": "Accept",
-              "value": "application/vnd.github+json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"query\": \"query { node(id: \\\"PVT_kwDOEJdS884BdZ-q\\\") { ... on ProjectV2 { items(first: 20) { nodes { id content { __typename ... on Issue { id number title } } } } } } }\"\n}",
+        "httpMethod": "POST",
+        "path": "c3434bb1-0754-4513-bfbb-101b528a3a31",
         "options": {}
       },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
       "position": [
-        880,
-        -208
+        -352,
+        -400
       ],
-      "id": "e03cf465-c05b-452e-aa9b-a84d973e506d",
-      "name": "get_project_id",
-      "credentials": {
-        "githubApi": {
-          "id": "SZYHQ2VAQfsrE9bT",
-          "name": "GitHu-Scio"
-        }
-      }
+      "id": "950a9544-0182-4f27-8d7f-4b18f08c2048",
+      "name": "meetings-autotmation1",
+      "webhookId": "c3434bb1-0754-4513-bfbb-101b528a3a31"
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.github.com/graphql",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "githubApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            },
-            {
-              "name": "Accept",
-              "value": "application/vnd.github+json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"query\": \"query { organization(login: \\\"Scio-Network\\\") { projectV2(number: 5) { id title } } }\"\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        720,
-        -464
-      ],
-      "id": "43f96eb5-d27a-498b-b2d1-af48f5dc57ee",
-      "name": "get_project_id1",
-      "credentials": {
-        "githubApi": {
-          "id": "SZYHQ2VAQfsrE9bT",
-          "name": "GitHu-Scio"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const issueNumber = $('Create an issue').first().json.number;\n\nconst items = $input.first().json.data.node.items.nodes;\n\nconst match = items.find(item =>\n    item.content &&\n    item.content.number === issueNumber\n);\n\nreturn [{\n    json: match\n}];"
+        "jsCode": "// fetch titles only\nconst issues = $input.all();\n\nconst cleanList = issues.map(item => {\n  return {\n    number: item.json.number,\n    title: item.json.title\n  };\n});\n\nreturn [{ json: { current_open_tasks: cleanList } }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1088,
-        -208
+        256,
+        -544
       ],
-      "id": "ba167796-06ca-4323-8d66-df8cc55f0110",
-      "name": "Code in JavaScript"
+      "id": "b1af36f1-dff9-4256-ab3b-f80951468b89",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/repos/Scio-Network/digital-footprint/issues",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "state",
+              "value": "open"
+            },
+            {
+              "name": "per_page",
+              "value": "100"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "X-GitHub-Api-Version",
+              "value": "2022-11-28"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        64,
+        -512
+      ],
+      "id": "c9e4556d-632e-4ca6-b7e9-8007390fa610",
+      "name": "fetchIssues",
+      "credentials": {
+        "githubApi": {
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "UPDATE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "bdeb18e0-ba47-4422-a351-d4eadffb1d01"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "update"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "0dd0c5da-d720-42fc-b920-e68c17ff95c2",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "NEW",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "new"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1392,
+        -528
+      ],
+      "id": "d4f5a4b5-18f0-4c9d-8db9-383dde777109",
+      "name": "Switch"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.github.com/graphql",
+        "url": "=https://api.github.com/repos/Scio-Network/digital-footprint/issues/{{ $json.issue_number }}/comments",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "githubApi",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            },
             {
               "name": "Accept",
               "value": "application/vnd.github+json"
@@ -958,26 +1057,241 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n  \"query\": \"query { node(id: \\\"PVT_kwDOEJdS884BdZ-q\\\") { ... on ProjectV2 { fields(first: 20) { nodes { __typename ... on ProjectV2FieldConfiguration { id name } } } } }\"\n}",
+        "jsonBody": "={\n  \"body\": \"### 🔄 Meeting Update: {{ $json.task }}\\n\\n**Progress/Update:**\\n{{ $json.update_summary }}\\n\\n---\\n*Context: Updated during [Meeting #{{ $('Edit Fields').item.json.parent_issue_number }}](https://github.com/Scio-Network/digital-footprint/issues/{{ $('Edit Fields').item.json.parent_issue_number }})*\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        960,
-        -448
+        1616,
+        -640
       ],
-      "id": "7cc6fe95-d5a0-4dd3-ac59-b6103764e528",
-      "name": "get_project_metadata",
+      "id": "74d9e338-54a1-43b7-9686-8b8055106dcb",
+      "name": "HTTP Request",
       "credentials": {
         "githubApi": {
           "id": "SZYHQ2VAQfsrE9bT",
           "name": "GitHu-Scio"
         }
       }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "885b2cf9-465a-4648-9c65-2b4f1e9abfba",
+              "leftValue": "={{ $json.body.transcriptFound }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -144,
+        -400
+      ],
+      "id": "f3f5c6c7-2747-4e4a-97fc-33c123bf8589",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        64,
+        -304
+      ],
+      "id": "dfa19d89-cf40-4718-b065-5e6dd7ebd69d",
+      "name": "Send a message",
+      "webhookId": "a52f52af-8652-4e6e-a1ac-130756590031"
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "meetings-autotmation1": [
+      {
+        "json": {
+          "headers": {
+            "host": "scionetwork.app.n8n.cloud",
+            "user-agent": "Mozilla/5.0 (compatible; Google-Apps-Script; beanserver; +https://script.google.com; id: UAEmdDd-kQP2OF_D8_zKbbZEC4y9cC_XOSDw)",
+            "content-length": "16734",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "107.178.197.33",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "FI",
+            "cf-ray": "a2ca8ca2d8c45cf6-FRA",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "107.178.197.33, 162.158.86.85",
+            "x-forwarded-host": "scionetwork.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-20-76b98d8c9d-d49wp",
+            "x-is-trusted": "yes",
+            "x-real-ip": "107.178.197.33"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "transcriptFound": true,
+            "fileId": "1SPA-D5XKMf3XMMcNY059zx7FlqaSi7MUk0uONXkhg2I",
+            "meetingTitle": "Sheba - Flo - 2026/08/04 08:30 CEST – Transcript",
+            "transcriptContent": "Sheba - Flo - 2026/08/04 08:30 CEST – Transcript\nAttendees\nFlorian Döbler, Nyairo Kemunto\nTranscript\nFlorian Döbler: we will have 90day sprint.\nFlorian Döbler: So I just wanted to bring it back up.\nNyairo Kemunto: Yes. Yes,…\nFlorian Döbler: I think we've quite a lot from what is here, but I just wanted to bring it up again with you to make sure that we finish things off.\nNyairo Kemunto: that's right. All right.\nFlorian Döbler: And maybe what my goal would be for the next let's say 30 days that we bring the different things that you've built together,…\nNyairo Kemunto: Mhm. You're right. Yeah.\nFlorian Döbler: and turned it more into a let's say operating system and that would also include for me some things are automations some things are documentation that we need to give to others right we already have a couple of guidelines on\nFlorian Döbler: what kind of data can go into what kind of tool etc but honestly that's mostly on me, but I'm not super happy about how we're doing it as a firm right now.\nNyairo Kemunto: Mh All right.\nFlorian Döbler: Like that that is mostly between me and the operations department to be a bit better on that. but then there's also let's say an element that I would ask you to look into…\nNyairo Kemunto: Mhm. Okay.\nFlorian Döbler: which is also some of the let's say more human checks right ideally I would like to move to a space where you also have a bit more responsibility for the Google workspace and so that doesn't all need to be automated,…\nNyairo Kemunto: Yes. Jesus.\nFlorian Döbler: but just like some let's say standard operating procedures for for our team to check things regularly, So making sure that all of our deployments on Google Cloud are up to date. sometimes I get emails from Google. I think you're also maybe on the admin at CEO mailing list still.\nFlorian Döbler: So I sometimes get mails like we are changing this in our policy and…\nFlorian Döbler: therefore you need to rotate this service key for example right I want to have an overview into these things and…\nNyairo Kemunto: Mhm.\nFlorian Döbler: just be better structured so that would be one thing that I think what we're missing here a little bit is maybe the mapping right of everything that we have on the digital front right now.\nNyairo Kemunto: Mhm.\nFlorian Döbler: And so even starting with things maybe from some old automations we have some app scripts still running. I'm not sure if they still needed so that would be one of the priorities for me.\nNyairo Kemunto: Mhm. Thank you.\nFlorian Döbler: So basically just bringing together what you've done already with in terms of the ticket system knowledge base prompt library we do have most of these things bring them together with let's say some standard operating procedures i.e. Every Tuesday you spend half an hour checking how our search performance looks like for examp like it took me two or…\nFlorian Döbler: three weeks to realize that we're not being indexed by Google search was fully my mistake right these are the types of things I want to avoid by just having more standard practice for checking up on …\nNyairo Kemunto: Yeah.\nFlorian Döbler: so if you could maybe do by the way, do you want to turn on the transcription or…\nNyairo Kemunto: Yes. Yes.\nFlorian Döbler: is it being transcribed already?\nNyairo Kemunto: I had to.\nFlorian Döbler: Yeah. So, if you could do that mapping of our digital tools a little bit. if you have questions do not hesitate to ask me. That would be super cool.\nNyairo Kemunto: right.\nFlorian Döbler: And then just describing a little bit almost like a checklist right…\nFlorian Döbler: where we can say we have a monthly checklist and…\nNyairo Kemunto: Mh All right.\nFlorian Döbler: once a month we go through it and make sure that let's say our digital house is tidy. and then I think what would be important to me that that's all on that front. and I look forward if you have ideas you can very much go ahead independently.\n00:05:00\nNyairo Kemunto: Another one.\nFlorian Döbler: One thing which I'm not super happy about and I want both of us as a team to do better at is that right now I'm missing a little bit of the transparency in…\nNyairo Kemunto: Mhm. yeah.\nFlorian Döbler: what you're doing and how you're spending your time. So I want to keep it in the fashion that …\nNyairo Kemunto: Mhm. Yeah.\nFlorian Döbler: if you are feeling under the weather or you have a graduation I'll always try to make it pleasant and easy for you to switch times but I find it a bit difficult…\nFlorian Döbler: because after the last couple of weeks now I have zero visibility how much time you've actually worked, right? You told me that there's a bit of time that is still open or that you're going to work full-time until that time is recouped. So I would be really grateful if we could start using the QuickBooks time tracking system a little bit.\nNyairo Kemunto: Yes.\nNyairo Kemunto: Mhm. Yeah.\nFlorian Döbler: it would be really important to me and…\nFlorian Döbler: also it's not so much my decision as I said that there's just generally in the company more stress on profitability and so we also need to make sure that we hold up our end of the equation and make sure that we have that transparency visibility like I love working with you I trust you a lot but it's also important for me to the minimum transparency so I can stand up for our team internally and…\nNyairo Kemunto: All right,…\nFlorian Döbler: that would yeah and…\nNyairo Kemunto: Mhm. Really?\nFlorian Döbler: so that would basically also entail for me as we've discussed earlier to just get a better understanding from you a few bullet points is enough but just what was the last thing you achieved last week for example, what are the plans for next week and…\nFlorian Döbler: proactively communicating the times that you're working or when you are working. I hope that's okay for you.\nNyairo Kemunto: Yes.\nNyairo Kemunto: Yeah, that's totally And my apologies for that. it's been a while since I updated the time sheet.\nFlorian Döbler: \nFlorian Döbler: All good.\nNyairo Kemunto: Yes.\nFlorian Döbler: Yeah, let's just try to improve on that. because as I said it's just all of us are under more scrutiny internally and…\nNyairo Kemunto: Yes, that's right.\nFlorian Döbler: so firstly I want the time tracking to be transparent because that also gives me the opportunity to give you the flexibility and be very hands-off in many ways. and the other let's say aspect of the time tracking would be that in some sense and…\nFlorian Döbler: that is not you problem but an us problem I want to be better also specifically with the time that we've agreed on for your research right those four hours every week I need them to be somehow documented and…\nNyairo Kemunto: Yeah.\nNyairo Kemunto: Mhm. yeah.\nFlorian Döbler: let's say tie back into our day-to-day a little bit, and so that doesn't have to be always very fancy things. but we can think a little bit about the demo platform and how we want to leverage that more but maybe even for you to use the demo platform as something…\nFlorian Döbler: where you can integrate let's say small PC's based on your research right so if there's a new agent framework for example I don't think it's super important…\nNyairo Kemunto: Yeah. Mhm.\nFlorian Döbler: but the one we looked at a few weeks ago for the agent orchestration. if you find something that's interesting, let's think of a use case that is relevant for CEO and then documented for now I honestly do have the feeling that these four hours are not so useful for\nNyairo Kemunto: Mhm.\n00:10:00\nFlorian Döbler: because I don't really have the insights into where we are applying them. And once more, it doesn't have to be super sophisticated. it should be more exploratory for you to have fun to spend the time on things that you find interesting and…\nNyairo Kemunto: Mhm. Yeah.\nFlorian Döbler: that are also helpful for your professional development. but in order to have that flexibility, I also need to sometimes let's say see a little bit more of what these things are. and even if I don't have prescribed ideas or very fixed prescriptions it could be anything right I don't know I don't think we have the right license but now there is this thing with u claw tag where you can include claw directly in slack conversations there's just so much happening\nFlorian Döbler: in AI all the time. that I think there's always something cool and…\nNyairo Kemunto: Yeah. Yeah.\nFlorian Döbler: interesting to look into. And sometimes, if you want to just read up on something and spend two or three hours reading it, then you have all the freedom to do that. But my expectation would be to document your learnings on just two to three slides, even with bullet points, there's a lot of talk online about topic XYZ. I've looked into it. here's a potential use case how we could use it for our internal operations or on client projects. because all of these things I want to be and that is me giving\nFlorian Döbler: giving feedback to myself. I want to be better at creating more additionality.\nFlorian Döbler: So for example, last week I gave this super brief workshop, And so for each workshop I need to update a couple of slides.\nNyairo Kemunto: Yes. Mhm.\nFlorian Döbler: I also need to bring in a few new slides all the time. the workshop six months ago we didn't talk about claude skills. We only talked about N8N. right now everyone is using skill speed in chat GPT or…\nNyairo Kemunto: Mhm.\nFlorian Döbler: in cloud or people are much more prone to using MCP now even if MCP is often running under the hood. so if we just sort of continuously make sure that the things that you spend time on for the research are also just documented somewhere in a format that makes it easy to use them for client presentations to have a demonstration of them.\nNyairo Kemunto: Yeah.\nNyairo Kemunto: Mhm. Yes. Yes.\nFlorian Döbler: And I know this is all not so well defined in all senses. but I have tremendous trust in your abilities as a recent graduate even more so. these would be things that are important to me but how we get there you have full autonomy and just I would like to move to an operating system and an operating cadence that gives us as a small team more structure without hindering you.\nFlorian Döbler: you can have a lot of the responsibility for the topics we discussed and it's also part of me having a solid foundation to even in difficult times argue internally for increasing your monthly rates in the next round.\nFlorian Döbler: So all to say you have creative freedom in how you want to go about this. for me it's just important to have the transparency and…\nNyairo Kemunto: All right.\nFlorian Döbler: and have the results somewhat available to us. Perfect.\nNyairo Kemunto: Yeah, I totally get your vision and I'm going to do my best to bring it to reality. yes, but I do get the vision and I'm actively going to work towards it for the hours and the transparency. I'm going to make it now a routine. My apologies.\nNyairo Kemunto: I stopped doing it half way through. But moving forward, I'll try and update the weeks that I have not covered. And yes, I'll try and…\n00:15:00\nNyairo Kemunto: put all these things together and they become more visible. Yes. Mhm.\nFlorian Döbler: That sounds fantastic.\nFlorian Döbler: I mean the way I think about it and also let me be super transparent on my end. I'm also not great at these things. Neither in my job for CEO, not with my other company that I own. But as a let's say vision, let's also try to think more in loops,…\nFlorian Döbler: almost like agents. Let's design a couple of loops from one loop is once a month check how we're doing on Google search console and…\nNyairo Kemunto: Okay. Mhm.\nFlorian Döbler: depending on how we're doing that do xyz to a quick daily loop where in the morning we write on slack what we want to do and in the evening we update our hours accordingly. and …\nNyairo Kemunto: Yeah. Yeah.\nFlorian Döbler: what we've achieved and what goes to the next working day. as I said, I'm not great at this. I know that it's easier said than done because it's ultimately about habits but yeah these loops is basically the operating model I want us to think about and…\nNyairo Kemunto: All Yeah, that's totally okay. And it will be h.\nFlorian Döbler: the and…\nNyairo Kemunto: Sorry. Mhm.\nFlorian Döbler: no and the other part is and that is also just on both of us let's do more check-ins right like we want to be efficient…\nNyairo Kemunto: Yeah. Mhm.\nFlorian Döbler: but if you have any questions just do not hesitate to reach out to me hold me accountable if you don't get an answer from me you can be rough and say Flo I've asked you for the second time to review this please finally do it like you don't have to sugarcoat it if I'm also lacking in giving you feedback or anything that you need but let's just try to have at least this check-in on Tuesday and then a quick check-in on Thursday or…\nFlorian Döbler: Friday before you wrap up to just have a little bit of that transparency also.\nNyairo Kemunto: All right.\nFlorian Döbler: So that I know basically Thursday or…\nNyairo Kemunto: Yeah. All right,…\nFlorian Döbler: Friday the week before your availabilities for Next week.\nNyairo Kemunto: I think that will be super great. we can add a second check in or alternatively I don't know if you've seen the tech review channel.\nFlorian Döbler: Yes, I did.\nNyairo Kemunto: Sometimes you get held up or our times may not sync. But if maybe I complete a task here or you want to add me more task or you can always create an issue or…\nNyairo Kemunto: comment on something. Yeah. Yeah. work on this or I can keep you updated through this thread. Mhm.\nFlorian Döbler: That would be super cool.\nFlorian Döbler: And that could be one of the first questions for you to look into after our call. I don't know GitHub very well, can you create recurring issues on GitHub?\nNyairo Kemunto: recurring an issue that Mhm.\nFlorian Döbler: But basically what I'm thinking about is there might also be more complicated ways of doing it manually but for some of the loops that we were discussing right I would find it super cool for example every month without doing anything we just get a quick reminder to\nNyairo Kemunto: Mhm.\nFlorian Döbler: one of these do a quick review of the Google search performance and have that fire let's say every month on the first and if it's not done by the seventh sort of send a reminder but that would be super useful I think to basically have these loops and the operating system we just discussed also supported by a task tracking system and I know that we are trying to put a lot onto GitHub that GitHub maybe wasn't originally built for because it's more let's say also manual workflows that aren't so code related. but yeah once again you have full creative freedom in implementing these things.\n00:20:00\nFlorian Döbler: But this would just be one idea from me to let's say automate a couple of the reminders of the things that we just need to do on a recurring basis.\nNyairo Kemunto: All right. Yeah, no worries.\nNyairo Kemunto: That makes sense. I can't. set up a milestone that sends out reminders maybe monthly. Amazing.\nFlorian Döbler: That would be super cool.\nFlorian Döbler: I got to thank you so much. and let's be in touch if you have any questions. Do not hesitate to reach out to me. We also wrapped up the client project. So we can also do a deep dive… if you want. also next week we could maybe sit together for I don't know two hours and have a proper workshop together where we look at these things from the internal systems and operations do talk that we looked at earlier today.\nFlorian Döbler: \nNyairo Kemunto: All right,…\nFlorian Döbler: just go through it in detail together and think about what we still have to do until the beginning of September to sort of meet our 90-day plan.\nNyairo Kemunto: that will be amazing.\nFlorian Döbler: Thank you so much and speak soon.\nNyairo Kemunto: All right, thank you Good day. Bye.\nFlorian Döbler: Take care. Bye-bye.\nMeeting ended after 00:22:22 👋\nThis editable transcript was computer generated and might contain errors. People can also change the text after it was created.\n",
+            "date": "2026-08-04T07:02:38.377Z",
+            "source": "E-01 Precision Loader"
+          },
+          "webhookUrl": "https://scionetwork.app.n8n.cloud/webhook-test/c3434bb1-0754-4513-bfbb-101b528a3a31",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Message a model": [
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_030e935598affa9b006a83e805ad40819f925e2ec3b3a338ed",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "meeting": {
+                      "title": "Sheba - Flo 2026-08-04 Meeting",
+                      "date": "2026-08-04",
+                      "quarter": "Q3",
+                      "summary": "Flo and Nyairo aligned on converting existing digital work into an operating-system style setup over the next 30–90 days. They agreed Nyairo will map current digital tools, create standard operating procedures and recurring checks, and consolidate repositories and documentation. Flo requested improved time-tracking transparency via QuickBooks and clearer documentation of the 4h/week research time (short slide summaries). They also agreed to regular check-ins (Tuesday and a late-week wrap-up) and to explore automating recurring reminders (e.g., monthly Google Search Console review).",
+                      "source_document": "https://docs.google.com/document/d/1SPA-D5XKMf3XMMcNY059zx7FlqaSi7MUk0uONXkhg2I/edit"
+                    },
+                    "decisions": [
+                      "Adopt a 90-day sprint focus with concrete 30-day goals to consolidate digital tooling into an operating system.",
+                      "Nyairo will map all digital tools, identify legacy automations (e.g., app scripts) and create standard operating procedures and recurring checklists for upkeep.",
+                      "Start using QuickBooks time tracking consistently and document the agreed 4 hours/week of research with short deliverables.",
+                      "Establish a cadence of check-ins (primary on Tuesday and a short wrap-up Thursday/Friday) and run a deep-dive workshop before September to align on the 90-day plan."
+                    ],
+                    "action_items": [
+                      {
+                        "status": "UPDATE",
+                        "issue_number": 74,
+                        "owners": [
+                          "nyairo-k"
+                        ],
+                        "task": "Review operations documentation and map digital tools",
+                        "update_summary": "Meeting decision: perform a full mapping of digital tools (ticket system, knowledge base, prompt library, app scripts, Google Cloud deployments) and evaluate the internal operations document for completeness. Nyairo will identify deprecated automations and surface gaps so the runbook/documentation can be updated."
+                      },
+                      {
+                        "status": "NEW",
+                        "issue_number": null,
+                        "owners": [
+                          "nyairo-k"
+                        ],
+                        "task": "Create SOPs and recurring checklists for digital operations",
+                        "update_summary": "Draft a set of standard operating procedures and a recurrent checklist (weekly, monthly) for maintaining the 'digital house' including Google Workspace/GCP checks and rotation of sensitive keys. The checklist should include concrete routines (e.g., Tuesday 30-min search-performance check, monthly Google Search Console review) and clear owner responsibilities."
+                      },
+                      {
+                        "status": "UPDATE",
+                        "issue_number": 79,
+                        "owners": [
+                          "nyairo-k"
+                        ],
+                        "task": "Update work hours: Record all hours worked in QuickBooks.",
+                        "update_summary": "Agreement to consistently use QuickBooks time tracking going forward and to update missed weeks. Also agreed to explicitly document the 4 hours/week research time with short summaries of work done and plans for the next week to provide visibility."
+                      },
+                      {
+                        "status": "UPDATE",
+                        "issue_number": 60,
+                        "owners": [
+                          "nyairo-k"
+                        ],
+                        "task": "Push repository: Push the repository containing work on the prompt library for testing and feedback.",
+                        "update_summary": "Nyairo will consolidate the prompt library, ticket system snippets and knowledge-base links into the repository and push it for Flo's review. This consolidation is intended to support the operating-system goal and enable easier reuse for client demos and internal processes."
+                      },
+                      {
+                        "status": "UPDATE",
+                        "issue_number": 76,
+                        "owners": [
+                          "nyairo-k"
+                        ],
+                        "task": "Back up N8N flows: Create recurring backups of N8N flows to ensure operational continuity.",
+                        "update_summary": "Meeting action: prioritize an audit of legacy automations (including app scripts and N8N flows) and implement recurring backups or archival for critical flows. Identify any app scripts still running and either deprecate them or incorporate them into the new backup/process list."
+                      },
+                      {
+                        "status": "NEW",
+                        "issue_number": null,
+                        "owners": [
+                          "nyairo-k"
+                        ],
+                        "task": "Implement recurring task reminders/automation for operational loops",
+                        "update_summary": "Investigate and implement a solution (GitHub recurring issues, GitHub Actions, or alternative) to create automated monthly/weekly reminders for operational checks (e.g., Google Search Console review) and overdue alerts. Integrate notifications into Slack or the team's chosen channel to surface outstanding recurring tasks."
+                      },
+                      {
+                        "status": "NEW",
+                        "issue_number": null,
+                        "owners": [
+                          "nyairo-k"
+                        ],
+                        "task": "Document weekly research outputs for demo and internal use",
+                        "update_summary": "For each research session (including the agreed 4 hours/week), produce a 2–3 slide summary with key learnings, a proposed internal or client use case, and brief notes on how it could be demonstrated on the demo platform. These summaries should be stored in the knowledge base and linked to the repo for reuse in workshops and client materials."
+                      },
+                      {
+                        "status": "NEW",
+                        "issue_number": null,
+                        "owners": [
+                          "nyairo-k"
+                        ],
+                        "task": "Establish recurring team check-ins and daily update habit",
+                        "update_summary": "Set up recurring calendar invites or issues for a 30-minute Tuesday check and a short Thursday/Friday wrap-up to report achievements and next-week availability. Encourage a lightweight daily loop in Slack (morning intent, evening update) to improve visibility and time reporting."
+                      },
+                      {
+                        "status": "NEW",
+                        "issue_number": null,
+                        "owners": [
+                          "nyairo-k"
+                        ],
+                        "task": "Plan internal systems deep-dive workshop before September",
+                        "update_summary": "Coordinate a ~2-hour workshop with Flo to review internal systems, walk through the mapped tools and SOPs, and produce a prioritized list of tasks to meet the 90-day plan. Prepare materials (repo links, checklists, and research summaries) in advance to make the session actionable."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "settings": {
     "executionOrder": "v1"
   },
@@ -993,6 +1307,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-07-15T15:39:11.176Z",
-  "versionId": "5e20a513-6eeb-400f-a6a7-83c6e929b877"
+  "updatedAt": "2026-08-18T06:15:31.957Z",
+  "versionId": "23b0cbb8-2bc7-4c31-8b34-fa643d5676ff"
 }
