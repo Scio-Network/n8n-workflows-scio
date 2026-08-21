@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-05T11:24:15.985Z",
-    "createdAt": "2026-06-05T11:24:15.985Z",
-    "versionId": "c16be764-cfef-4e1b-aea6-73683bc2ccd2",
+    "updatedAt": "2026-08-18T14:50:37.291Z",
+    "createdAt": "2026-08-18T14:50:37.291Z",
+    "versionId": "f43ca480-3dc6-4a2d-962b-bc50656f7c02",
     "workflowId": "YLTCE4xXNuGhG4NH",
     "nodes": [
       {
@@ -15,8 +15,8 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          1424,
-          1424
+          1664,
+          1232
         ],
         "id": "87eee8d8-4809-4d66-aa00-f72962c4bea5",
         "name": "Split Out"
@@ -68,7 +68,7 @@
             "conditions": [
               {
                 "keyName": "name_en",
-                "keyValue": "Ministry for Development of Communities and Territories of Ukraine - News"
+                "keyValue": "Ministry for Recovery, Infrastructure and Transport of Ukraine - News"
               }
             ]
           }
@@ -128,7 +128,7 @@
         "type": "n8n-nodes-base.scheduleTrigger",
         "typeVersion": 1.3,
         "position": [
-          -144,
+          -224,
           1440
         ],
         "id": "f5360b3f-98f9-4866-abbd-e698d64b868e",
@@ -246,40 +246,6 @@
       },
       {
         "parameters": {
-          "url": "https://vj9wz3gt-8080.uks1.devtunnels.ms/scrape",
-          "sendQuery": true,
-          "queryParameters": {
-            "parameters": [
-              {
-                "name": "start",
-                "value": "={{ $json.start.split('T')[0] }}"
-              },
-              {
-                "name": "end",
-                "value": "={{ $json.end.split('T')[0] }}"
-              }
-            ]
-          },
-          "options": {
-            "allowUnauthorizedCerts": false,
-            "response": {
-              "response": {
-                "responseFormat": "json"
-              }
-            }
-          }
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.3,
-        "position": [
-          1184,
-          1424
-        ],
-        "id": "4c95f3b4-1b14-4cd3-b760-76e69aff5d82",
-        "name": "Dev of Communities and Territories1"
-      },
-      {
-        "parameters": {
           "tableId": "articles",
           "fieldsUi": {
             "fieldValues": [
@@ -374,8 +340,8 @@
         "type": "n8n-nodes-base.supabase",
         "typeVersion": 1,
         "position": [
-          256,
-          1296
+          128,
+          1168
         ],
         "id": "74c58c2c-01d2-4b3d-ae81-14701ecac552",
         "name": "Get a row",
@@ -410,8 +376,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          976,
-          1424
+          816,
+          1376
         ],
         "id": "39ab4237-c282-43cd-8add-35008a28bc42",
         "name": "Edit Fields"
@@ -423,8 +389,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          496,
-          1296
+          448,
+          1120
         ],
         "id": "5b7d372a-9aab-45cb-9a99-2f8d25ebce4c",
         "name": "Code in JavaScript1"
@@ -438,8 +404,8 @@
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2,
         "position": [
-          752,
-          1424
+          640,
+          1360
         ],
         "id": "449b06a7-dbce-4a2b-8f17-b67c04387c0f",
         "name": "Merge2"
@@ -457,6 +423,85 @@
         ],
         "id": "3d2975e8-a8ea-4ad8-9b74-08698b6d2325",
         "name": "Compute duplication1"
+      },
+      {
+        "parameters": {
+          "url": "https://63gxn6bf-8081.uks1.devtunnels.ms/scrape",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "start",
+                "value": "=2026-08-01"
+              },
+              {
+                "name": "end",
+                "value": "2026-08-18"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": false,
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1232,
+          1008
+        ],
+        "id": "4c95f3b4-1b14-4cd3-b760-76e69aff5d82",
+        "name": "Min Recovery, Infra and Transport-uk"
+      },
+      {
+        "parameters": {
+          "url": "https://63gxn6bf-8080.uks1.devtunnels.ms/scrape",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "start",
+                "value": "={{ $json.start.split('T')[0] }}"
+              },
+              {
+                "name": "end",
+                "value": "={{ $json.end.split('T')[0] }}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": false,
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1264,
+          1424
+        ],
+        "id": "57fa4bbd-e3b5-4a57-9ca9-a3e3502f233d",
+        "name": "Min Recovery, Infra and Transport"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          1424,
+          1232
+        ],
+        "id": "102a752d-defa-412a-8c79-f3e1a925d593",
+        "name": "Merge3"
       }
     ],
     "connections": {
@@ -598,17 +643,6 @@
           ]
         ]
       },
-      "Dev of Communities and Territories1": {
-        "main": [
-          [
-            {
-              "node": "Split Out",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Create a row1": {
         "main": [
           [
@@ -635,7 +669,12 @@
         "main": [
           [
             {
-              "node": "Dev of Communities and Territories1",
+              "node": "Min Recovery, Infra and Transport-uk",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Min Recovery, Infra and Transport",
               "type": "main",
               "index": 0
             }
@@ -674,13 +713,46 @@
             }
           ]
         ]
+      },
+      "Min Recovery, Infra and Transport-uk": {
+        "main": [
+          [
+            {
+              "node": "Merge3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Min Recovery, Infra and Transport": {
+        "main": [
+          [
+            {
+              "node": "Merge3",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Merge3": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": " Scio Network ",
     "name": null,
     "description": null
   },
-  "activeVersionId": "c16be764-cfef-4e1b-aea6-73683bc2ccd2",
+  "activeVersionId": "f43ca480-3dc6-4a2d-962b-bc50656f7c02",
   "connections": {
     "Split Out": {
       "main": [
@@ -820,17 +892,6 @@
         ]
       ]
     },
-    "Dev of Communities and Territories1": {
-      "main": [
-        [
-          {
-            "node": "Split Out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Create a row1": {
       "main": [
         [
@@ -857,7 +918,12 @@
       "main": [
         [
           {
-            "node": "Dev of Communities and Territories1",
+            "node": "Min Recovery, Infra and Transport-uk",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Min Recovery, Infra and Transport",
             "type": "main",
             "index": 0
           }
@@ -896,6 +962,39 @@
           }
         ]
       ]
+    },
+    "Min Recovery, Infra and Transport-uk": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Min Recovery, Infra and Transport": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-01-15T14:41:37.626Z",
@@ -915,8 +1014,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1424,
-        1424
+        1664,
+        1232
       ],
       "id": "87eee8d8-4809-4d66-aa00-f72962c4bea5",
       "name": "Split Out"
@@ -968,7 +1067,7 @@
           "conditions": [
             {
               "keyName": "name_en",
-              "keyValue": "Ministry for Development of Communities and Territories of Ukraine - News"
+              "keyValue": "Ministry for Recovery, Infrastructure and Transport of Ukraine - News"
             }
           ]
         }
@@ -1028,7 +1127,7 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        -144,
+        -224,
         1440
       ],
       "id": "f5360b3f-98f9-4866-abbd-e698d64b868e",
@@ -1146,40 +1245,6 @@
     },
     {
       "parameters": {
-        "url": "https://vj9wz3gt-8080.uks1.devtunnels.ms/scrape",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "start",
-              "value": "={{ $json.start.split('T')[0] }}"
-            },
-            {
-              "name": "end",
-              "value": "={{ $json.end.split('T')[0] }}"
-            }
-          ]
-        },
-        "options": {
-          "allowUnauthorizedCerts": false,
-          "response": {
-            "response": {
-              "responseFormat": "json"
-            }
-          }
-        }
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        1184,
-        1424
-      ],
-      "id": "4c95f3b4-1b14-4cd3-b760-76e69aff5d82",
-      "name": "Dev of Communities and Territories1"
-    },
-    {
-      "parameters": {
         "tableId": "articles",
         "fieldsUi": {
           "fieldValues": [
@@ -1274,8 +1339,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        256,
-        1296
+        128,
+        1168
       ],
       "id": "74c58c2c-01d2-4b3d-ae81-14701ecac552",
       "name": "Get a row",
@@ -1310,8 +1375,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        976,
-        1424
+        816,
+        1376
       ],
       "id": "39ab4237-c282-43cd-8add-35008a28bc42",
       "name": "Edit Fields"
@@ -1323,8 +1388,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        496,
-        1296
+        448,
+        1120
       ],
       "id": "5b7d372a-9aab-45cb-9a99-2f8d25ebce4c",
       "name": "Code in JavaScript1"
@@ -1338,8 +1403,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        752,
-        1424
+        640,
+        1360
       ],
       "id": "449b06a7-dbce-4a2b-8f17-b67c04387c0f",
       "name": "Merge2"
@@ -1357,6 +1422,85 @@
       ],
       "id": "3d2975e8-a8ea-4ad8-9b74-08698b6d2325",
       "name": "Compute duplication1"
+    },
+    {
+      "parameters": {
+        "url": "https://63gxn6bf-8081.uks1.devtunnels.ms/scrape",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start",
+              "value": "=2026-08-01"
+            },
+            {
+              "name": "end",
+              "value": "2026-08-18"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": false,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1232,
+        1008
+      ],
+      "id": "4c95f3b4-1b14-4cd3-b760-76e69aff5d82",
+      "name": "Min Recovery, Infra and Transport-uk"
+    },
+    {
+      "parameters": {
+        "url": "https://63gxn6bf-8080.uks1.devtunnels.ms/scrape",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start",
+              "value": "={{ $json.start.split('T')[0] }}"
+            },
+            {
+              "name": "end",
+              "value": "={{ $json.end.split('T')[0] }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": false,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1264,
+        1424
+      ],
+      "id": "57fa4bbd-e3b5-4a57-9ca9-a3e3502f233d",
+      "name": "Min Recovery, Infra and Transport"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1424,
+        1232
+      ],
+      "id": "102a752d-defa-412a-8c79-f3e1a925d593",
+      "name": "Merge3"
     }
   ],
   "pinData": {},
@@ -1388,6 +1532,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-06-05T11:24:15.979Z",
-  "versionId": "c16be764-cfef-4e1b-aea6-73683bc2ccd2"
+  "updatedAt": "2026-08-18T14:50:37.287Z",
+  "versionId": "f43ca480-3dc6-4a2d-962b-bc50656f7c02"
 }
