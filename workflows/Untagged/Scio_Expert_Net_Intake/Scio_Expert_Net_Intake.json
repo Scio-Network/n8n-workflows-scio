@@ -1,0 +1,1511 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Upload_CV",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload_Image",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a contact1": {
+      "main": [
+        [
+          {
+            "node": "Delete a contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intake_Google_Sheet": {
+      "main": [
+        [
+          {
+            "node": "Create a contact1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload_CV": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload_Image": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Intake_Google_Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Intake_Google_Sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-08-24T08:18:26.005Z",
+  "id": "iCvjH1MoeWhHtKMd",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Scio_Expert_Net_Intake",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Expert Network",
+        "formDescription": "This is a test",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "First Name",
+              "placeholder": "Max Mustermann",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Last Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Middle Name"
+            },
+            {
+              "fieldLabel": "Date of Birth",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Gender"
+            },
+            {
+              "fieldLabel": "Nationality"
+            },
+            {
+              "fieldLabel": "Country of residence"
+            },
+            {
+              "fieldLabel": "Email"
+            },
+            {
+              "fieldLabel": "Mobile"
+            },
+            {
+              "fieldLabel": "LinkedIn"
+            },
+            {
+              "fieldLabel": "Native Language"
+            },
+            {
+              "fieldLabel": "Languages (Ability)",
+              "placeholder": "English (C2); French (B1)"
+            },
+            {
+              "fieldLabel": "Highest academic degree"
+            },
+            {
+              "fieldLabel": "Total years of experience (full time only)"
+            },
+            {
+              "fieldLabel": "Regional Experience (Years worked))",
+              "placeholder": "MENA (3 years), SSA (2 years)"
+            },
+            {
+              "fieldLabel": "Core Expertise"
+            },
+            {
+              "fieldLabel": "Current Employment Status",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Employed (Full Time)"
+                  },
+                  {
+                    "option": "Employed (Part Time)"
+                  },
+                  {
+                    "option": "Freelancer"
+                  },
+                  {
+                    "option": "Founder / Managing Director"
+                  },
+                  {
+                    "option": "Unemployed"
+                  },
+                  {
+                    "option": "Other"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Minimum Daily Rate (incl. Taxes)"
+            },
+            {
+              "fieldLabel": "Open to work in the next 6 months?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "yes"
+                  },
+                  {
+                    "option": "no"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Upload your CV",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".pdf .docx",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Profile Picture",
+              "fieldType": "file",
+              "multipleFiles": false
+            },
+            {
+              "fieldLabel": "GDPR Consent",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "yes"
+                  },
+                  {
+                    "option": "no"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "customCss": "/* ==========================================================\n   SCIO EXPERT NETWORK\n   n8n Form — Full Custom Theme\n   ========================================================== */\n\n\n/* ==========================================================\n   1. GLOBAL VARIABLES\n   ========================================================== */\n\n:root {\n\n  /* Scio palette */\n  --scio-navy: #272b43;\n  --scio-navy-hover: #343952;\n\n  --scio-orange: #e58b45;\n  --scio-orange-hover: #d77b36;\n\n  --scio-bg: #f6f6f3;\n  --scio-white: #ffffff;\n\n  --scio-text: #292d41;\n  --scio-muted: #747786;\n\n  --scio-border: #dedfe4;\n  --scio-border-hover: #bfc1ca;\n\n  --scio-error: #c83f49;\n\n\n  /* n8n form variables */\n  --font-family:\n    \"Avenir Next\",\n    Inter,\n    \"Segoe UI\",\n    Helvetica,\n    Arial,\n    sans-serif;\n\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n\n  --font-size-body: 14px;\n  --font-size-label: 14px;\n  --font-size-input: 15px;\n\n  --font-size-header: 34px;\n  --font-size-paragraph: 15px;\n  --font-size-subheader: 15px;\n\n  --font-size-link: 13px;\n  --font-size-error: 12px;\n  --font-size-test-notice: 12px;\n\n  --font-size-html-h1: 34px;\n  --font-size-html-h2: 25px;\n  --font-size-html-h3: 20px;\n  --font-size-html-h4: 17px;\n  --font-size-html-h5: 15px;\n  --font-size-html-h6: 13px;\n\n\n  /* Background / card */\n  --color-background: #f6f6f3;\n\n  --color-card-bg: #ffffff;\n  --color-card-border: #e7e7e3;\n  --color-card-shadow: rgba(28, 32, 50, 0.10);\n\n\n  /* Header */\n  --color-header: #272b43;\n  --color-header-subtext: #747786;\n\n\n  /* Inputs */\n  --color-label: #34384d;\n\n  --color-input-bg: #ffffff;\n  --color-input-border: #dedfe4;\n  --color-input-text: #292d41;\n\n  --color-focus-border: #e58b45;\n\n\n  /* Submit */\n  --color-submit-btn-bg: #e58b45;\n  --color-submit-btn-text: #ffffff;\n\n\n  /* Links */\n  --color-link: #d47834;\n  --color-html-link: #d47834;\n  --color-html-text: #464a5c;\n\n\n  /* Misc */\n  --color-error: #c83f49;\n  --color-required: #e58b45;\n  --color-clear-button-bg: #777a89;\n\n  --color-test-notice-text: #86531d;\n  --color-test-notice-bg: #fff8ee;\n  --color-test-notice-border: #f0d2a7;\n\n\n  /* Radius */\n  --border-radius-card: 20px;\n  --card-border-radius: 20px;\n\n  --border-radius-input: 10px;\n  --border-radius-clear-btn: 50%;\n\n\n  /* Layout */\n  --container-width: 660px;\n\n  --padding-container-top: 52px;\n\n  --padding-card: 44px;\n  --card-padding: 44px;\n\n  --padding-form-input: 14px;\n\n  --margin-bottom-card: 20px;\n  --card-margin-bottom: 20px;\n\n  --padding-test-notice-vertical: 12px;\n  --padding-test-notice-horizontal: 18px;\n\n\n  /* Controls */\n  --submit-btn-height: 56px;\n  --checkbox-size: 20px;\n\n  --opacity-placeholder: 0.5;\n\n\n  /* Shadow */\n  --box-shadow-card:\n    0 2px 4px rgba(28, 32, 50, 0.025),\n    0 18px 55px rgba(28, 32, 50, 0.09);\n}\n\n\n\n/* ==========================================================\n   2. PAGE BACKGROUND\n   ========================================================== */\n\nhtml {\n  min-height: 100%;\n  background: var(--scio-bg);\n}\n\n\nbody {\n  min-height: 100vh;\n\n  margin: 0;\n  padding: 0 16px 64px;\n\n  font-family: var(--font-family);\n\n  color: var(--scio-text);\n\n  background:\n    radial-gradient(\n      circle at 10% 0%,\n      rgba(229, 139, 69, 0.10),\n      transparent 32%\n    ),\n    radial-gradient(\n      circle at 100% 90%,\n      rgba(39, 43, 67, 0.06),\n      transparent 36%\n    ),\n    var(--scio-bg);\n\n  -webkit-font-smoothing: antialiased;\n  text-rendering: optimizeLegibility;\n}\n\n\n\n/* ==========================================================\n   3. CONTAINER\n   ========================================================== */\n\n.container {\n  width: min(var(--container-width), 100%);\n\n  margin-left: auto;\n  margin-right: auto;\n\n  padding-top: 52px;\n}\n\n\n\n/* ==========================================================\n   4. MAIN CARD\n   ========================================================== */\n\n.card {\n  position: relative;\n\n  overflow: hidden;\n\n  background: var(--scio-white);\n\n  border: 1px solid rgba(39, 43, 67, 0.07);\n\n  border-radius: 20px;\n\n  box-shadow:\n    0 2px 4px rgba(28, 32, 50, 0.025),\n    0 18px 55px rgba(28, 32, 50, 0.09);\n\n  text-align: left;\n}\n\n\n/* Scio orange line across top */\n\n.card::before {\n  content: \"\";\n\n  position: absolute;\n\n  top: 0;\n  left: 0;\n\n  width: 100%;\n  height: 4px;\n\n  background: var(--scio-orange);\n\n  z-index: 5;\n}\n\n\n\n/* ==========================================================\n   5. HEADER + SCIO LOGO\n   ========================================================== */\n\n.form-header {\n  position: relative;\n\n  text-align: left;\n\n  padding-top: 94px;\n}\n\n\n/*\n   Logo is loaded directly from Scio's CDN.\n   No extra HTML element is required.\n*/\n\n.form-header::before {\n  content: \"\";\n\n  position: absolute;\n\n  top: 5px;\n  right: 0;\n\n  width: 145px;\n  height: 65px;\n\n  background-image:\n    url(\"https://cdn.prod.website-files.com/65a109e99c150dee93f0a5c3/6a8c16c49db9087ca3ce322b_SCIO%20logo%20full%20dark%20(2)%20(5).png\");\n\n  background-repeat: no-repeat;\n  background-position: right center;\n  background-size: contain;\n}\n\n\n.form-header h1 {\n  margin-top: 0;\n  margin-bottom: 0;\n\n  max-width: 540px;\n\n  color: var(--scio-navy);\n\n  font-size: 34px;\n\n  font-weight: 650;\n\n  line-height: 1.08;\n\n  letter-spacing: -0.035em;\n}\n\n\n.form-header p {\n  max-width: 54ch;\n\n  margin-top: 15px;\n  margin-bottom: 0;\n\n  color: var(--scio-muted);\n\n  font-size: 15px;\n\n  line-height: 1.65;\n}\n\n\n\n/* ==========================================================\n   6. FORM BODY\n   ========================================================== */\n\n.inputs-wrapper {\n  padding-top: 34px;\n  padding-bottom: 28px;\n}\n\n\n.form-group {\n  margin-bottom: 10px;\n}\n\n\n\n/* ==========================================================\n   7. LABELS\n   ========================================================== */\n\nform label {\n  display: block;\n\n  padding-bottom: 8px;\n\n  color: #34384d;\n\n  font-weight: 600;\n\n  line-height: 1.4;\n\n  letter-spacing: -0.005em;\n}\n\n\n\n/* Required marker */\n\nform label span,\n.required {\n  color: var(--scio-orange);\n}\n\n\n\n/* ==========================================================\n   8. TEXT INPUTS / EMAIL / NUMBER\n   ========================================================== */\n\nform .form-input,\nform select,\n.select-input {\n  box-sizing: border-box;\n\n  transition:\n    border-color 160ms ease,\n    box-shadow 160ms ease,\n    background-color 160ms ease,\n    transform 160ms ease;\n}\n\n\nform .form-input {\n  min-height: 50px;\n\n  background: var(--scio-white);\n\n  border: 1px solid var(--scio-border);\n\n  border-radius: 10px;\n\n  color: var(--scio-text);\n\n  box-shadow:\n    0 1px 2px rgba(25, 28, 44, 0.025);\n}\n\n\nform .form-input:hover,\n.select-input:hover {\n  border-color: var(--scio-border-hover);\n}\n\n\nform .form-input:focus,\nform textarea:focus,\nform input:focus,\nform select:focus {\n  outline: none;\n\n  border-color: var(--scio-orange);\n\n  box-shadow:\n    0 0 0 4px rgba(229, 139, 69, 0.12),\n    0 1px 2px rgba(25, 28, 44, 0.03);\n}\n\n\n.select-input:focus-within {\n  border-color: var(--scio-orange);\n\n  box-shadow:\n    0 0 0 4px rgba(229, 139, 69, 0.12);\n}\n\n\n\n/* ==========================================================\n   9. PLACEHOLDERS\n   ========================================================== */\n\n::placeholder {\n  color: #989aa6;\n\n  opacity: 1;\n}\n\n\n\n/* ==========================================================\n   10. TEXTAREA\n   ========================================================== */\n\nform textarea.form-input {\n  min-height: 120px;\n\n  line-height: 1.55;\n\n  resize: vertical;\n}\n\n\n\n/* ==========================================================\n   11. SELECT / DROPDOWN\n   ========================================================== */\n\nform select,\n.select-input {\n  cursor: pointer;\n}\n\n\n\n/* ==========================================================\n   12. CV / FILE UPLOAD\n   ========================================================== */\n\n.file-input-wrapper .form-input {\n  min-height: 70px;\n\n  padding: 10px;\n\n  background: #fafaf8;\n\n  border: 1px dashed #c6c7ce;\n\n  border-radius: 11px;\n\n  transition:\n    border-color 160ms ease,\n    background-color 160ms ease,\n    box-shadow 160ms ease;\n}\n\n\n.file-input-wrapper .form-input:hover {\n  background: #fffaf6;\n\n  border-color: rgba(229, 139, 69, 0.75);\n}\n\n\n.file-input-wrapper .form-input:focus-within {\n  border-color: var(--scio-orange);\n\n  box-shadow:\n    0 0 0 4px rgba(229, 139, 69, 0.10);\n}\n\n\ninput[type=\"file\"] {\n  cursor: pointer;\n\n  color: #737685;\n\n  font-family: var(--font-family);\n}\n\n\ninput[type=\"file\"]::file-selector-button {\n  border: 0;\n\n  border-radius: 8px;\n\n  background: var(--scio-navy);\n\n  color: #ffffff;\n\n  padding: 11px 16px;\n\n  margin-right: 14px;\n\n  font-family: var(--font-family);\n\n  font-size: 13px;\n  font-weight: 600;\n\n  cursor: pointer;\n\n  transition:\n    background-color 150ms ease,\n    transform 150ms ease,\n    box-shadow 150ms ease;\n}\n\n\ninput[type=\"file\"]::file-selector-button:hover {\n  background: var(--scio-navy-hover);\n\n  transform: translateY(-1px);\n\n  box-shadow:\n    0 5px 14px rgba(39, 43, 67, 0.20);\n}\n\n\n\n/* ==========================================================\n   13. CHECKBOXES\n   ========================================================== */\n\ninput[type=\"checkbox\"] {\n  width: 20px;\n  height: 20px;\n\n  margin-right: 9px;\n\n  accent-color: var(--scio-orange);\n\n  cursor: pointer;\n}\n\n\ninput[type=\"checkbox\"]:focus {\n  outline: none;\n\n  box-shadow:\n    0 0 0 4px rgba(229, 139, 69, 0.12);\n}\n\n\n\n/* ==========================================================\n   14. RADIO BUTTONS\n   ========================================================== */\n\ninput[type=\"radio\"] {\n  width: 19px;\n  height: 19px;\n\n  margin-right: 8px;\n\n  accent-color: var(--scio-orange);\n\n  cursor: pointer;\n}\n\n\n\n/* ==========================================================\n   15. CHECKBOX / RADIO OPTION TEXT\n   ========================================================== */\n\n.form-group label:has(input[type=\"checkbox\"]),\n.form-group label:has(input[type=\"radio\"]) {\n  color: #464a5c;\n\n  font-weight: 400;\n\n  line-height: 1.55;\n}\n\n\n\n/* ==========================================================\n   16. LINKS\n   ========================================================== */\n\na {\n  color: var(--scio-orange-hover);\n\n  text-decoration-line: underline;\n  text-decoration-thickness: 1px;\n  text-underline-offset: 3px;\n\n  transition: color 150ms ease;\n}\n\n\na:hover {\n  color: #b85f24;\n}\n\n\n\n/* ==========================================================\n   17. SUBMIT BUTTON\n   ========================================================== */\n\n#submit-btn {\n  min-height: 56px;\n\n  border: 0;\n\n  border-radius: 11px;\n\n  background: var(--scio-orange);\n\n  color: #ffffff;\n\n  font-family: var(--font-family);\n\n  font-size: 15px;\n  font-weight: 650;\n\n  letter-spacing: 0.005em;\n\n  cursor: pointer;\n\n  box-shadow:\n    0 8px 22px rgba(229, 139, 69, 0.24);\n\n  transition:\n    transform 160ms ease,\n    box-shadow 160ms ease,\n    background-color 160ms ease,\n    opacity 160ms ease;\n}\n\n\n#submit-btn:hover {\n  opacity: 1;\n\n  background: var(--scio-orange-hover);\n\n  transform: translateY(-1px);\n\n  box-shadow:\n    0 12px 28px rgba(229, 139, 69, 0.30);\n}\n\n\n#submit-btn:active {\n  transform: translateY(0);\n\n  box-shadow:\n    0 5px 14px rgba(229, 139, 69, 0.20);\n}\n\n\n#submit-btn:focus {\n  outline: none;\n\n  box-shadow:\n    0 0 0 4px rgba(229, 139, 69, 0.18),\n    0 8px 22px rgba(229, 139, 69, 0.24);\n}\n\n\n\n/* ==========================================================\n   18. ERRORS\n   ========================================================== */\n\n.error-show,\n.error-message {\n  color: var(--scio-error);\n\n  padding-top: 7px;\n\n  font-size: 12px;\n\n  line-height: 1.4;\n}\n\n\n\n/* ==========================================================\n   19. TEST MODE NOTICE\n   ========================================================== */\n\n.test-notice {\n  border-radius: 12px;\n\n  border: 1px solid var(--color-test-notice-border);\n\n  background: var(--color-test-notice-bg);\n\n  color: var(--color-test-notice-text);\n\n  box-shadow: none;\n}\n\n\n\n/* ==========================================================\n   20. CUSTOM HTML SECTIONS\n   Useful later for privacy text / \"what happens next\"\n   ========================================================== */\n\n.html-wrapper {\n  color: #535768;\n\n  line-height: 1.65;\n}\n\n\n.html-wrapper h2,\n.html-wrapper h3 {\n  color: var(--scio-navy);\n\n  letter-spacing: -0.02em;\n}\n\n\n.html-wrapper p {\n  color: #656978;\n\n  line-height: 1.65;\n}\n\n\n\n/* ==========================================================\n   21. OPTIONAL \"INFO BOX\" CLASS\n   If you later add Custom HTML:\n   <div class=\"scio-info\">...</div>\n   ========================================================== */\n\n.scio-info {\n  margin: 12px 0 22px;\n\n  padding: 18px 20px;\n\n  background: #f7f7f5;\n\n  border: 1px solid #e5e5e1;\n\n  border-left: 4px solid var(--scio-orange);\n\n  border-radius: 10px;\n\n  color: #565a69;\n\n  font-size: 13px;\n\n  line-height: 1.6;\n}\n\n\n.scio-info strong {\n  color: var(--scio-navy);\n\n  font-weight: 650;\n}\n\n\n\n/* ==========================================================\n   22. OPTIONAL SECTION TITLE\n   Custom HTML example:\n   <div class=\"scio-section-title\">Your experience</div>\n   ========================================================== */\n\n.scio-section-title {\n  margin:\n    28px\n    0\n    18px;\n\n  padding-top: 25px;\n\n  border-top: 1px solid #ecece8;\n\n  color: var(--scio-navy);\n\n  font-size: 18px;\n\n  font-weight: 650;\n\n  letter-spacing: -0.02em;\n}\n\n\n\n/* ==========================================================\n   23. SUCCESS / THANK-YOU AREA\n   ========================================================== */\n\n.success,\n.success-message {\n  color: var(--scio-text);\n\n  line-height: 1.6;\n}\n\n\n\n/* ==========================================================\n   24. MOBILE\n   ========================================================== */\n\n@media (max-width: 680px) {\n\n  :root {\n    --font-size-header: 28px;\n\n    --padding-card: 25px;\n    --card-padding: 25px;\n\n    --padding-container-top: 22px;\n  }\n\n\n  body {\n    padding:\n      0\n      10px\n      30px;\n  }\n\n\n  .container {\n    padding-top: 22px;\n  }\n\n\n  .card {\n    border-radius: 17px;\n  }\n\n\n  .form-header {\n    padding-top: 78px;\n  }\n\n\n  .form-header::before {\n    width: 115px;\n    height: 52px;\n\n    top: 3px;\n  }\n\n\n  .form-header h1 {\n    font-size: 28px;\n\n    line-height: 1.12;\n\n    letter-spacing: -0.03em;\n  }\n\n\n  .form-header p {\n    font-size: 14px;\n\n    line-height: 1.6;\n  }\n\n\n  .inputs-wrapper {\n    padding-top: 28px;\n  }\n\n\n  form .form-input {\n    min-height: 50px;\n  }\n\n\n  input[type=\"file\"]::file-selector-button {\n    padding: 10px 12px;\n\n    margin-right: 8px;\n  }\n\n\n  #submit-btn {\n    min-height: 54px;\n\n    font-size: 15px;\n  }\n\n}\n\n\n\n/* ==========================================================\n   25. VERY SMALL PHONES\n   ========================================================== */\n\n@media (max-width: 420px) {\n\n  .form-header {\n    padding-top: 68px;\n  }\n\n\n  .form-header::before {\n    width: 102px;\n    height: 45px;\n  }\n\n\n  .form-header h1 {\n    font-size: 26px;\n  }\n\n\n  input[type=\"file\"] {\n    font-size: 12px;\n  }\n\n}"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -144,
+        0
+      ],
+      "id": "e2cb2972-e06e-464c-b5e1-70362b8cd442",
+      "name": "On form submission",
+      "webhookId": "14ce3069-d83c-4910-9148-79e04b003505"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=Profile_Picture",
+        "name": "={{ $json['Last Name'] }}",
+        "driveId": {
+          "__rl": true,
+          "value": "0AEyUxyOV0vVTUk9PVA",
+          "mode": "list",
+          "cachedResultName": "11_AI & Digital",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/0AEyUxyOV0vVTUk9PVA"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "16kyjOGckU-V4pqdiYi5H1YhLV7GrU_Vt",
+          "mode": "list",
+          "cachedResultName": "Raw_Expert_Images",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/16kyjOGckU-V4pqdiYi5H1YhLV7GrU_Vt"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        496,
+        336
+      ],
+      "id": "10efaae3-8400-4450-b2bf-2523dd035e5d",
+      "name": "Upload_Image",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1KsdLJ4UnCuNSJshdaJeAXRTif6hR7Ed1WiSeYa0ip-k",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 264460688,
+          "mode": "list",
+          "cachedResultName": "Expert Intake",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KsdLJ4UnCuNSJshdaJeAXRTif6hR7Ed1WiSeYa0ip-k/edit#gid=264460688"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "First Name": "={{ $json[\"First Name\"] }}",
+            "Last Name": "={{ $json[\"Last Name\"] }}",
+            "Middle Name": "={{ $json[\"Middle Name\"] }}",
+            "Date of Birth": "={{ $json[\"Date of Birth\"] }}",
+            "Gender": "={{ $json.Gender }}",
+            "Nationality": "={{ $json.Nationality }}",
+            "Country of residence": "={{ $json[\"Country of residence\"] }}",
+            "Email": "={{ $json.Email }}",
+            "Mobile": "={{ $json.Mobile }}",
+            "LinkedIn": "={{ $json.LinkedIn }}",
+            "Native Language": "={{ $json[\"Native Language\"] }}",
+            "Languages (Ability)": "={{ $json[\"Languages (Ability)\"] }}",
+            "Highest academic degree": "={{ $json[\"Highest academic degree\"] }}",
+            "Total years of experience (full time only)": "={{ $json[\"Total years of experience (full time only)\"] }}",
+            "Regional Experience (Years worked))": "={{ $json[\"Regional Experience (Years worked))\"] }}",
+            "Core Expertise": "={{ $json[\"Core Expertise\"] }}",
+            "Current Employment Status": "={{ $json[\"Current Employment Status\"] }}",
+            "Minimum Daily Rate (incl. Taxes)": "={{ $json[\"Minimum Daily Rate (incl. Taxes)\"] }}",
+            "Open to work in the next 6 months?": "=",
+            "Photo_Raw_Link": "={{ $json.photo_raw }}",
+            "CV_Raw_Link": "={{ $json.CV_Raw_Link }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Middle Name",
+              "displayName": "Middle Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date of Birth",
+              "displayName": "Date of Birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nationality",
+              "displayName": "Nationality",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Country of residence",
+              "displayName": "Country of residence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Native Language",
+              "displayName": "Native Language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Languages (Ability)",
+              "displayName": "Languages (Ability)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Highest academic degree",
+              "displayName": "Highest academic degree",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total years of experience (full time only)",
+              "displayName": "Total years of experience (full time only)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Regional Experience (Years worked))",
+              "displayName": "Regional Experience (Years worked))",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Core Expertise",
+              "displayName": "Core Expertise",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current Employment Status",
+              "displayName": "Current Employment Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Minimum Daily Rate (incl. Taxes)",
+              "displayName": "Minimum Daily Rate (incl. Taxes)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Open to work in the next 6 months?",
+              "displayName": "Open to work in the next 6 months?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CV_Raw_Link",
+              "displayName": "CV_Raw_Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Photo_Raw_Link",
+              "displayName": "Photo_Raw_Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "GDPR Consent",
+              "displayName": "GDPR Consent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Submitted At",
+              "displayName": "Submitted At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Form Mode",
+              "displayName": "Form Mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "submittedAt",
+              "displayName": "submittedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "formMode",
+              "displayName": "formMode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI_Short_Bio",
+              "displayName": "AI_Short_Bio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI_Tags",
+              "displayName": "AI_Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI_Expertise",
+              "displayName": "AI_Expertise",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI_Profile",
+              "displayName": "AI_Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Comment",
+              "displayName": "Comment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1456,
+        32
+      ],
+      "id": "c2a5fd72-8e47-4101-b9be-a338ff6f5eae",
+      "name": "Intake_Google_Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=Upload_your_CV",
+        "name": "=CV_{{ $json['Last Name'] }}_RAW",
+        "driveId": {
+          "__rl": true,
+          "value": "0AEyUxyOV0vVTUk9PVA",
+          "mode": "list",
+          "cachedResultName": "11_AI & Digital",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/0AEyUxyOV0vVTUk9PVA"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "10ZyT_Eisxg9_cZUHe5hn_zy4Z1a69zPr",
+          "mode": "list",
+          "cachedResultName": "Raw_Expert_CVs",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/10ZyT_Eisxg9_cZUHe5hn_zy4Z1a69zPr"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        480,
+        144
+      ],
+      "id": "24a738a2-5791-4804-bb87-5c8225340173",
+      "name": "Upload_CV",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "contact",
+        "lastname": "={{ $json[\"Last Name\"] }}",
+        "additionalFields": {
+          "customFieldsUi": {
+            "customFieldsValues": [
+              {
+                "fieldId": "Mother_Tongue__c",
+                "value": "={{ $json.Nationality }}"
+              },
+              {
+                "fieldId": "CV_Link__c",
+                "value": "={{ $json.CV_Raw_Link }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.salesforce",
+      "typeVersion": 1,
+      "position": [
+        3472,
+        304
+      ],
+      "id": "c1e68636-6510-4572-b43c-42e8f263fe78",
+      "name": "Create a contact1",
+      "credentials": {
+        "salesforceOAuth2Api": {
+          "id": "1JVUQfvBt7AbBSQM",
+          "name": "Salesforce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1136,
+        16
+      ],
+      "id": "a6e4821b-d18b-4683-96ef-5c59597bfeae",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "00edc5af-c525-47ae-bb08-08301add0ebf",
+              "name": "CV_Raw_Link",
+              "value": "={{ $json.webViewLink }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        704,
+        144
+      ],
+      "id": "3833e053-fbbe-49ff-b89f-5d7505ca47b6",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "72f5ea14-26d7-403d-b240-11d21d93232d",
+              "name": "photo_raw",
+              "value": "={{ $json.webContentLink }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        688,
+        336
+      ],
+      "id": "8723a1f5-aa01-44c6-a313-463a03e72f18",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=EXPERT REGISTRATION DATA\n\nFirst name: {{ $json[\"First Name\"] }}\nMiddle name: {{ $json[\"Middle Name\"] }}\nLast name: {{ $json[\"Last Name\"] }}\n\nNative language: {{ $json[\"Native Language\"] }}\nOther languages: {{ $json[\"Languages (Ability)\"] }}\nHighest academic degree: {{ $json[\"Highest academic degree\"] }}\nTotal full-time professional experience:\n{{ $json[\"Total years of experience (full time only)\"] }} years\n\nRegional professional experience:\n{{ $json[\"Regional Experience (Years worked))\"] }}\n\nExpert-declared core expertise:\n{{ $json[\"Core Expertise\"] }}\n\nCurrent employment status:\n{{ $json[\"Current Employment Status\"] }}\n\nCV TEXT\n\n{{ $json.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Scio Expert Profile Enrichment Agent\n\nYou are an expert-profile enrichment agent for Scio's internal Expert Network.\n\nYour task is to analyse the information the previous node, supplied about one expert, including their CV and structured registration data, and produce exactly three AI-generated fields:\n\nai_short_bio\nai_tags\nai_expertise\n\nThese fields will be used for:\n\ninternal expert search and matching;\nidentifying suitable experts for bids and projects;\npreparing expert shortlists;\nsupporting future proposal drafting.\n\nThe structured expert record and source CV remain the source of truth. Your role is to enrich the record, not to invent or infer unsupported facts.\n\nCore rule: never invent information\n\nOnly include information that is directly supported by the provided expert data or CV.\n\nDo not invent:\n\nemployers;\nclients;\ndonors;\nprojects;\ncountries;\nlanguages;\nqualifications;\nyears of experience;\njob titles;\nachievements;\nmethodologies;\nsectors;\nsoftware skills;\ncertifications;\nnumerical results.\n\nReasonable normalization is allowed.\n\nFor example:\n\n\"monitoring and evaluation\" may be normalized to \"Monitoring & Evaluation\";\n\"M&E\" may additionally produce the tag \"Monitoring & Evaluation\";\n\"digitalisation\" and \"digital transformation\" may be normalized where clearly appropriate;\n\"EU\" experience may be represented as \"European Union\" where the underlying meaning is clear.\n\nDo not turn an implication into a fact.\n\nFor example:\n\nworking on a donor-funded programme does not necessarily mean the donor was the expert's direct client;\nliving in a country does not necessarily mean the expert has professional experience there;\nmentioning software does not necessarily mean advanced proficiency;\nparticipating in a project does not necessarily mean the expert led the project.\n\nWhen evidence is ambiguous, omit the claim.\n\n1. ai_short_bio\n\nCreate a concise professional profile of the expert.\n\nThe bio must:\n\nbe 45–75 words;\nuse third-person language;\nbe factual and proposal-friendly;\ndescribe the expert's strongest professional positioning;\nprioritize areas of expertise, relevant sectors, geographic experience, types of work, and seniority where supported;\nmention particularly relevant organisations, donors or clients only where explicitly evidenced;\navoid generic promotional language;\navoid subjective claims such as \"outstanding\", \"world-class\", \"highly accomplished\" or \"exceptional\";\nnot mention personal contact information;\nnot mention daily rates;\nnot mention gender, age, date of birth or other irrelevant personal attributes.\n\nGood style:\n\n\"Digital development specialist with eight years of experience working across technology, digital transformation and international development. His background includes designing and implementing digital solutions, advising development organisations and working across European contexts. He combines technical understanding with project management and stakeholder engagement experience.\"\n\nBad style:\n\n\"Florian is an exceptional and highly talented digital development expert who would be an excellent addition to any project.\"\n\nThe second example is subjective and unsupported.\n\n2. ai_tags\n\nProduce normalized search tags that help colleagues retrieve this expert.\n\nReturn between 8 and 25 tags.\n\nTags should represent concepts such as:\n\ntechnical expertise;\nprofessional functions;\nsectors;\nmethodologies;\nproject types;\ntechnologies;\ninstitutional experience;\ndonor/client experience;\ngeographic expertise;\nrole types;\nrelevant specialist terminology.\n\nTags must be:\n\nconcise;\nreusable across experts;\nnormally 1–4 words long;\nwritten in Title Case;\ndeduplicated;\nspecific enough to improve search.\n\nPrefer normalized professional terminology.\n\nFor example:\n\nGOOD:\n\n\"Digital Development\"\n\"Digital Transformation\"\n\"ICT4D\"\n\"Project Management\"\n\"International Development\"\n\"Monitoring & Evaluation\"\n\"Data Governance\"\n\"GIZ\"\n\"European Union\"\n\nAVOID:\n\n\"Very Experienced\"\n\"Good Communicator\"\n\"Expert\"\n\"Various Projects\"\n\"Technology Stuff\"\n\nDo not create a tag for information already present solely as administrative data unless it improves professional retrieval.\n\nFor example, do not create tags for:\n\nGDPR consent;\navailability;\ndaily rate;\ndate of birth;\nemail;\nphone number.\n\nLanguages may be included as tags only when professionally relevant, such as:\n\n\"French C1\"\n\"Arabic Native\"\n\"English C2\"\n\nDo not downgrade or upgrade stated CEFR levels.\n\n3. ai_expertise\n\nProduce the expert's principal areas of professional expertise.\n\nReturn between 3 and 10 expertise areas.\n\nEach entry must contain:\n\narea: normalized name of the expertise;\nstrength: one of \"primary\", \"secondary\" or \"supporting\";\nevidence: a short explanation of why the expertise is supported.\n\nDefinitions:\n\nprimary\n\nA central and repeatedly evidenced part of the expert's professional profile.\n\nsecondary\n\nClearly demonstrated expertise, but not the dominant professional specialization.\n\nsupporting\n\nA complementary capability that may be useful for matching but is not a principal specialization.\n\nThe evidence must be concise and based only on the supplied data.\n\nExample:\n\n{\n\"area\": \"Digital Transformation\",\n\"strength\": \"primary\",\n\"evidence\": \"Repeated professional experience in digital development and digital transformation assignments.\"\n}\n\nDo not fabricate evidence.\n\nDo not use vague expertise areas such as:\n\n\"Consulting\"\n\"General Management\"\n\"Business\"\n\"Expert\"\n\"Development\"\n\nwhen a more precise supported term exists.\n\nPrefer:\n\n\"Digital Development\"\n\"Monitoring & Evaluation\"\n\"Climate Finance\"\n\"Public Financial Management\"\n\"Institutional Capacity Building\"\n\"Data Governance\"\nRelationship between tags and expertise\n\nai_expertise should contain the most important professional capabilities.\n\nai_tags should be broader and may include:\n\nexpertise;\nsectors;\nmethodologies;\nregions;\norganisations;\ntechnologies;\nrole types;\nspecialist terminology.\n\nIt is therefore acceptable for an expertise term to also appear as a tag.\n\nSearch optimization\n\nThink about how a Scio colleague may search for experts.\n\nUseful searches may contain combinations such as:\n\n\"French-speaking evaluation expert with GIZ experience\"\n\"digital development specialist in Africa\"\n\"team leader with EU project experience\"\n\"MEL expert in health\"\n\"public finance expert familiar with World Bank projects\"\n\"data governance consultant\"\n\"climate specialist with policy experience\"\n\nInclude terminology that helps legitimate searches of this type succeed, but only when supported by the source material.\n\nInclude common professional synonyms where they materially improve retrieval.\n\nFor example, if the source clearly establishes Monitoring & Evaluation expertise, tags may include:\n\n\"Monitoring & Evaluation\"\n\"M&E\"\n\nDo not create large numbers of speculative synonyms.\n\nProposal-writing optimization\n\nThe bio should contain the facts most useful when introducing the expert in a proposal.\n\nPrioritize:\n\nprimary professional specialization;\nyears or depth of experience, if explicitly available;\nsectors;\nrelevant geographic experience;\nimportant methodologies or technical skills;\nrelevant donor/client/institution experience;\nleadership or management experience where evidenced.\n\nDo not attempt to tailor the bio to a specific tender unless tender information is provided.\n\nHandling conflicting information\n\nIf the structured form and CV conflict:\n\nprefer explicit, detailed CV evidence for professional experience;\ndo not silently resolve important factual contradictions;\nomit the disputed detail when it cannot safely be determined.\n\nDo not correct spelling or factual errors by guessing.\n\nNormalization of obvious terminology is allowed, but factual correction is not.\n\nOutput requirements\n\nReturn valid JSON only.\n\nDo not include:\n\nMarkdown;\ncode fences;\nexplanations;\nintroductory text;\ncomments;\ntrailing commas.\n\nThe output must follow exactly this structure:\n\n{\n\"ai_short_bio\": \"string\",\n\"ai_tags\": [\n\"string\"\n],\n\"ai_expertise\": [\n{\n\"area\": \"string\",\n\"strength\": \"primary\",\n\"evidence\": \"string\"\n}\n]\n}\n\nstrength must contain exactly one of:\n\n\"primary\"\n\"secondary\"\n\"supporting\"\n\nIf the supplied information is unusually limited, return fewer tags or expertise entries rather than inventing information.\n\nNever return null for any of the three top-level fields.\n\nIf there is insufficient information for a bio, return a conservative factual bio using only the available information.\n\nThe response must always be parseable JSON."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        2448,
+        -272
+      ],
+      "id": "cce35459-7af1-4dd8-a4de-a24c5c0a3a01",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        2448,
+        -96
+      ],
+      "id": "54bea6d2-6dd6-4181-97df-0f2c457a9282",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "Upload_your_CV",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        608,
+        -256
+      ],
+      "id": "8e76d44c-4a67-4128-95cc-ca891ab49ab9",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1952,
+        -272
+      ],
+      "id": "8bd8c745-519a-4cc7-97fa-5ef7c1a2fff0",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bf080f9f-05fa-4a04-9625-35def8b78234",
+              "name": "",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "7ac54d7e-b554-4d2a-baa9-8a054b08f998",
+              "name": "First Name",
+              "value": "={{ $json[\"First Name\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "cbd5a761-157c-4543-87c8-03e1a304be67",
+              "name": "Last Name",
+              "value": "={{ $json[\"Last Name\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "dc84b1ef-6968-4627-94a8-e5c1f891bc84",
+              "name": "Middle Name",
+              "value": "={{ $json[\"Middle Name\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "c2f9cd5d-fa05-4955-a91c-2fa35c0c3ff4",
+              "name": "Date of Birth",
+              "value": "={{ $json[\"Date of Birth\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "610a7280-2316-4784-a645-1d442d29b998",
+              "name": "Nationality",
+              "value": "={{ $json.Nationality }}",
+              "type": "string"
+            },
+            {
+              "id": "effc4411-47ba-4008-b0a8-805251cb05c7",
+              "name": "Country of residence",
+              "value": "={{ $json[\"Country of residence\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "7d4e53db-c61f-4af1-87f7-96e0863b182e",
+              "name": "Native Language",
+              "value": "={{ $json[\"Native Language\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "34675285-0474-4894-b62e-bd8312b3d476",
+              "name": "Languages (Ability)",
+              "value": "={{ $json[\"Languages (Ability)\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "5687419b-5115-43f1-9907-2a051175bf04",
+              "name": "Total years of experience (full time only)",
+              "value": "={{ $json[\"Total years of experience (full time only)\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "83a1baad-99c6-469c-bea1-fb341780f75b",
+              "name": "Regional Experience (Years worked))",
+              "value": "={{ $json[\"Regional Experience (Years worked))\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "8c484725-e75b-4de2-89a7-5349c2f55c2f",
+              "name": "Core Expertise",
+              "value": "={{ $json[\"Core Expertise\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "2a5b4831-5d53-411e-b65f-b3d2430d05b9",
+              "name": "text",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2160,
+        -272
+      ],
+      "id": "da3baa61-6727-4a0f-8386-18ccfc62a28b",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"ai_short_bio\": \"...\",\n  \"ai_tags\": [],\n  \"ai_expertise\": []\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2592,
+        -96
+      ],
+      "id": "a181b171-faa6-49b0-b162-dc79c5eb01ae",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d1d7629f-5de4-41db-a465-1e6b3afd4dba",
+              "name": "ai_short_bio",
+              "value": "={{ $json.output.ai_short_bio }}",
+              "type": "string"
+            },
+            {
+              "id": "b845954a-938c-4244-98c2-9548f1301409",
+              "name": "ai_tags",
+              "value": "={{ $json.output.ai_tags }}",
+              "type": "array"
+            },
+            {
+              "id": "9ad5c4ea-2c94-46a7-81c5-03617c5eeb02",
+              "name": "ai_expertise",
+              "value": "={{ $json.output.ai_expertise }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2800,
+        -272
+      ],
+      "id": "031c9040-51fd-418e-84f4-e60de8829056",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1KsdLJ4UnCuNSJshdaJeAXRTif6hR7Ed1WiSeYa0ip-k",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 264460688,
+          "mode": "list",
+          "cachedResultName": "Expert Intake",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KsdLJ4UnCuNSJshdaJeAXRTif6hR7Ed1WiSeYa0ip-k/edit#gid=264460688"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Last Name": "={{ $json[\"Last Name\"] }}",
+            "AI_Short_Bio": "={{ $json.ai_short_bio }}",
+            "AI_Tags": "={{ $json.ai_tags }}",
+            "AI_Expertise": "={{ $json.ai_expertise }}"
+          },
+          "matchingColumns": [
+            "Last Name"
+          ],
+          "schema": [
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Middle Name",
+              "displayName": "Middle Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Date of Birth",
+              "displayName": "Date of Birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nationality",
+              "displayName": "Nationality",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Country of residence",
+              "displayName": "Country of residence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Native Language",
+              "displayName": "Native Language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Languages (Ability)",
+              "displayName": "Languages (Ability)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Highest academic degree",
+              "displayName": "Highest academic degree",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Total years of experience (full time only)",
+              "displayName": "Total years of experience (full time only)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Regional Experience (Years worked))",
+              "displayName": "Regional Experience (Years worked))",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Core Expertise",
+              "displayName": "Core Expertise",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Current Employment Status",
+              "displayName": "Current Employment Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Minimum Daily Rate (incl. Taxes)",
+              "displayName": "Minimum Daily Rate (incl. Taxes)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Open to work in the next 6 months?",
+              "displayName": "Open to work in the next 6 months?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CV_Raw_Link",
+              "displayName": "CV_Raw_Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Photo_Raw_Link",
+              "displayName": "Photo_Raw_Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "GDPR Consent",
+              "displayName": "GDPR Consent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Submitted At",
+              "displayName": "Submitted At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Form Mode",
+              "displayName": "Form Mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "submittedAt",
+              "displayName": "submittedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "formMode",
+              "displayName": "formMode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "AI_Short_Bio",
+              "displayName": "AI_Short_Bio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI_Tags",
+              "displayName": "AI_Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI_Expertise",
+              "displayName": "AI_Expertise",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI_Profile",
+              "displayName": "AI_Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Comment",
+              "displayName": "Comment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3760,
+        16
+      ],
+      "id": "e570a665-133f-4bb8-bd8b-4bd01a0aaf6b",
+      "name": "Intake_Google_Sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3456,
+        16
+      ],
+      "id": "cd4268e5-fbf4-4933-80e2-91622d4776ba",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "resource": "contact",
+        "operation": "delete",
+        "contactId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.salesforce",
+      "typeVersion": 1,
+      "position": [
+        3776,
+        304
+      ],
+      "id": "aa15988e-98ab-4ab6-b616-5484c8a69e4b",
+      "name": "Delete a contact",
+      "credentials": {
+        "salesforceOAuth2Api": {
+          "id": "1JVUQfvBt7AbBSQM",
+          "name": "Salesforce account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-08-24T08:18:26.014Z",
+      "createdAt": "2026-08-24T08:18:26.014Z",
+      "role": "workflow:owner",
+      "workflowId": "iCvjH1MoeWhHtKMd",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-08-25T07:54:03.280Z",
+  "versionId": "f8e47c00-9a03-4f25-b915-f1a267caf672"
+}
