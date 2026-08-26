@@ -1,0 +1,383 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Webhook Intake": {
+      "main": [
+        [
+          {
+            "node": "PO: Decompose BRD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PO: Decompose BRD": {
+      "main": [
+        [
+          {
+            "node": "Manifest: Load Experts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manifest: Load Experts": {
+      "main": [
+        [
+          {
+            "node": "Loop Stories",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Stories": {
+      "main": [
+        [
+          {
+            "node": "Explode: Story x Persona",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Explode: Story x Persona": {
+      "main": [
+        [
+          {
+            "node": "Expert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consensus Calculator": {
+      "main": [
+        [
+          {
+            "node": "Loop Stories",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Combine All Stories",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine All Stories": {
+      "main": [
+        [
+          {
+            "node": "Final SOW Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "PO: Decompose BRD",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Expert",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Final SOW Output",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expert": {
+      "main": [
+        [
+          {
+            "node": "Consensus Calculator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-08-24T21:14:35.001Z",
+  "id": "FBzp5rRPfj54BvuV",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Preflight_SOW_Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sow-engine",
+        "options": {}
+      },
+      "id": "ea2fd3ff-61c0-4be1-92bc-d50049911fc6",
+      "name": "Webhook Intake",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        32,
+        -48
+      ],
+      "webhookId": "cd429fda-60b1-49f2-ac87-a4346f742c23"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.brd_text }}",
+        "options": {
+          "systemMessage": "=You are a Senior Product Owner. Your job is to extract 3-5 high-level User Stories from the provided BRD. \n\nOutput ONLY a JSON array of objects with the following schema:\n[\n  { \"id\": 1, \"title\": \"string\", \"story\": \"As a... I want... so that...\", \"domain\": \"Frontend/Backend/Security\" }\n]"
+        }
+      },
+      "id": "984a4961-1ca6-49ad-b527-c0f433a1d892",
+      "name": "PO: Decompose BRD",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        288,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    \"personas\": [\n      {\n        \"id\": \"architect\",\n        \"name\": \"Senior Architect\",\n        \"instructions\": \"Evaluate for system design and integration risk. Rate 1-13 Fibonacci.\",\n        \"weight\": 1.5\n      },\n      {\n        \"id\": \"dev\",\n        \"name\": \"Lead Developer\",\n        \"instructions\": \"Evaluate for coding effort and technical complexity. Rate 1-13 Fibonacci.\",\n        \"weight\": 1.0\n      },\n      {\n        \"id\": \"security\",\n        \"name\": \"Security Lead\",\n        \"instructions\": \"Evaluate for PII, data hygiene, and backup risk. Rate 1-13 Fibonacci.\",\n        \"weight\": 1.3\n      }\n    ]\n  }\n];"
+      },
+      "id": "9a380fd5-f7e5-4264-bd23-f9a48a220a0f",
+      "name": "Manifest: Load Experts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -208
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "dc699942-1c18-467a-9129-ccd64ae97daf",
+      "name": "Loop Stories",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        704,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const story = items[0].json;\nconst personas = $node[\"Manifest: Load Experts\"].json.personas;\n\nreturn personas.map(p => ({\n  json: {\n    story: story,\n    persona: p\n  }\n}));"
+      },
+      "id": "8271db6f-add6-4454-9387-3153abb5d83e",
+      "name": "Explode: Story x Persona",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Aggregate the 3 expert opinions for 1 story\nconst items = $input.all();\nconst story = items[0].json.story;\n\nconst totalWeightedPoints = items.reduce((acc, curr) => {\n  return acc + (curr.json.output.story_points * curr.json.persona.weight);\n}, 0);\n\nconst totalWeights = items.reduce((acc, curr) => acc + curr.json.persona.weight, 0);\nconst finalPoints = Math.ceil(totalWeightedPoints / totalWeights);\n\nreturn {\n  story_id: story.id,\n  story_text: story.story,\n  aggregated_points: finalPoints,\n  consensus_confidence: items.reduce((acc, c) => acc + c.json.output.confidence, 0) / items.length,\n  total_risks: [...new Set(items.flatMap(i => i.json.output.risks))]\n};"
+      },
+      "id": "edfa3571-887c-4838-aec3-79ac30972898",
+      "name": "Consensus Calculator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "aggregateItems"
+      },
+      "id": "43f3fc0a-e0c0-4539-bc71-85377810843b",
+      "name": "Combine All Stories",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3,
+      "position": [
+        1584,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a professional SOW Drafter. Take the aggregated project estimates and create a final Statement of Work (SOW). Include Total Points, Estimated Timeline (assume 5 points per week), and a summary of Technical Risks."
+        }
+      },
+      "id": "6940d017-a2ab-4229-bee3-d519f834e8e1",
+      "name": "Final SOW Output",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1808,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        192
+      ],
+      "id": "77caf7a0-9a83-42de-a2b1-2a8ddf34ff91",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1024,
+        160
+      ],
+      "id": "544d0fbf-2c56-49a7-bc96-f2a4655d3051",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1680,
+        160
+      ],
+      "id": "3f06fb97-25c2-4c08-90d8-396a42bfb4a5",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.story }}",
+        "options": {
+          "systemMessage": "={{$json.persona.instructions}}\n\nYou must respond ONLY in JSON format:\n{\n  \"story_points\": number,\n  \"confidence\": 0.0-1.0,\n  \"risks\": [\"string\"]\n}"
+        }
+      },
+      "id": "512c012f-0f46-4b2b-a039-68bcda0a5e4a",
+      "name": "Expert",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1152,
+        -48
+      ]
+    }
+  ],
+  "pinData": {
+    "Webhook Intake": [
+      {
+        "json": {
+          "headers": {
+            "host": "localhost",
+            "user-agent": "insomnia/2023.5.8",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "brd_text": "Project: SecureHealth Connect. We need a web-based platform where patients can upload sensitive medical records (PII). The system must integrate with 3rd-party insurance APIs for real-time coverage verification. It requires a dashboard for doctors to review records and a secure Supabase backend for data persistence. All data must be encrypted at rest, and we need a full audit trail of who accessed which record for HIPAA compliance. The frontend should be a responsive React application with biometrics-enabled login via Clerk or Auth0."
+          }
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-08-24T21:14:35.007Z",
+      "createdAt": "2026-08-24T21:14:35.007Z",
+      "role": "workflow:owner",
+      "workflowId": "FBzp5rRPfj54BvuV",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-08-24T21:20:16.428Z",
+  "versionId": "0a0a0896-7efc-428d-940f-ab4a6bb6ebf2"
+}
