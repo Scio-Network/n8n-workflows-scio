@@ -1,0 +1,930 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Webhook Intake": {
+      "main": [
+        [
+          {
+            "node": "Agile PO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PO: Decompose BRD": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "PO: Decompose BRD",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        []
+      ]
+    },
+    "Agile PO": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Persona-panel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persona-panel": {
+      "main": [
+        [
+          {
+            "node": "split x stories",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "split x stories": {
+      "main": [
+        [
+          {
+            "node": "Config Base url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Stories": {
+      "main": [
+        [
+          {
+            "node": "Compile SOW Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Materialize task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Simulation": {
+      "main": [
+        [
+          {
+            "node": "Get Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Job Status": {
+      "main": [
+        [
+          {
+            "node": "Finished?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finished?": {
+      "main": [
+        [
+          {
+            "node": "Get Results",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for Simulation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Results": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Stories",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config Base url": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Stories",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Materialize task": {
+      "main": [
+        [
+          {
+            "node": "Launch a job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Launch a job": {
+      "main": [
+        [
+          {
+            "node": "Wait for Simulation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-08-24T21:14:35.001Z",
+  "id": "FBzp5rRPfj54BvuV",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Scio_MatrAIx_Estimation_Loop_FINAL",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sow-engine",
+        "options": {}
+      },
+      "id": "ea2fd3ff-61c0-4be1-92bc-d50049911fc6",
+      "name": "Webhook Intake",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        784,
+        144
+      ],
+      "webhookId": "cd429fda-60b1-49f2-ac87-a4346f742c23"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.brd_text }}",
+        "options": {
+          "systemMessage": "=You are the Scio Compliance & Triage Agent. Your goal is to analyze the provided Business Requirement Document (BRD) and generate a Triage Report based on the Scio Delivery System\n\n### 1. The 6-Point Screen:\nAssess the project on:\n1. **Personal data:** Does it process names, CVs, health, or voice?\n2. **People-impacting:** Does the AI make decisions about individuals?\n3. **Risk class:** Green (Internal/Clean), Yellow (Business Data), Red (Sensitive/Human Impact).\n4. **AI Act posture:** Is output user-facing? Any prohibited practices (emotion inference, etc.)?\n5. **DPIA trigger:** Is there a high risk to individuals?\n6. **Client constraints:** Any hosting or residency requirements?\n\n### 2. Tier Determination:\nBased on the Screen and the complexity, assign a Tier:\n- **T1 Spike:**  A Proof of Concept/MVP focusing on a core skill.\n- **T2 Prototype:** A functional, end-to-end model for user testing.\n- **T3 Pilot:** A production-ready, fully integrated digital product.\n\n### Output Format\n> {\n  \"project_name\": \"string\",\n  \"assigned_tier\": \"T1 | T2 | T3\",\n  \"compliance_screen\": {\n    \"risk_class\": \"Green | Yellow | Red\",\n    \"has_personal_data\": boolean,\n    \"is_people_impacting\": boolean,\n    \"dpia_required\": boolean,\n    \"labeling_required\": boolean,\n    \"constraints\": [\"list of strings\"]\n },\n  \"triage_summary\": \"string explaining why this tier and risk class were chosen.\"\n }\n\n\n"
+        }
+      },
+      "id": "984a4961-1ca6-49ad-b527-c0f433a1d892",
+      "name": "PO: Decompose BRD",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        288,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        192
+      ],
+      "id": "77caf7a0-9a83-42de-a2b1-2a8ddf34ff91",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Screening Traige results{{ $json.output }}\n\nRaw BRD: {{ $('Webhook Intake').item.json.body.summary }}"
+            },
+            {
+              "role": "system",
+              "content": "You are the **Scio Senior Security Architect & AI Compliance Consultant**. Your task is to perform a rigorous technical audit of a project proposal to ensure it meets the **Scio Delivery System** standards for security and privacy.\n\n### YOUR INPUTS:\nYou will receive the raw BRD content and a json output containing the triage screening results\n\n ### YOUR OBJECTIVE:\n Analyze the BRD and design three specific pillars of compliance. You must \"see through\" the business language to find hidden technical risks.\n\n #### PILLAR A: Data & Privacy Screen\n - **Inventory:** Identify exactly what PII (Personally Identifiable Information) or sensitive business data will be handled.\n - **Data Subjects:** Who does this data belong to?\n - **LLM Leakage Assessment:** Evaluate the risk of this specific data being leaked to a third-party LLM provider.\n\n #### PILLAR B: AI Feasibility (Technical & Ethical)\nIf the project invovles use of an LLM\n - **Technical Viability:** Is the AI actually capable of performing this task with high accuracy?\n - **Ethical & Legal Audit:** Check for \"Prohibited Practices\" under the EU AI Act  \n - **Failure Impact:** What happens if the AI makes a wrong decision?\n\n #### PILLAR C: Privacy-Preserving Setup (The Technical Fence)\n - **Required Strategy:**  Propose a technical mitigation strategy and a set of security controls (e.g., PII Redaction, Local LLM deployment, Synthetic Data only). This strategy must be calibrated specifically to the Project Tier assigned in Phase 1 and the technical risks you identified in Pillars A and B. You must decide what level of infrastructure, encryption, or data-handling logic is necessary to make this project viable for Scio to build.\n\n ### OUTPUT INSTRUCTIONS:\n\n{\n  \"pillar_a_privacy_screen\": {\n    \"detected_data_categories\": [\"list of strings\"],\n    \"data_subjects\": [\"list of strings\"],\n    \"leakage_risk_score\": \"High | Medium | Low\",\n    \"leakage_rationale\": \"string\"\n  },\n  \"pillar_b_ai_feasibility\": {\n    \"technical_viability_score\": \"0.0 to 1.0\",\n    \"ethical_red_flags\": [\"list of strings or empty\"],\n    \"legal_posture\": \"Compliant | High-Risk | Prohibited\",\n    \"viability_notes\": \"string\"\n  },\n  \n  \"pillar_c_recommendations\": {\n    \"proposed_technical_mitigation_strategy\": \"string\",\n    \"mandatory_security_controls\": [\"string\"],\n    \"infrastructure_and_hosting_requirements\": \"string\",\n    \"architectural_justification\": \"string\"\n}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        384,
+        -240
+      ],
+      "id": "6fb7f5ff-232c-4a70-8d4d-f94c65ae38d6",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "=You are a Senior Agile Product Owner. Analyze the provided Business Requirement\nDocument (BRD) and decompose it into a technical backlog that will be effort-\nestimated by a panel of engineers.\n\n## Requirements\n\n1. EXTRACTION — Identify every distinct functional requirement in the BRD.\n   Extract only what the BRD states or directly implies. Do not invent scope.\n   If the BRD is silent on something important, that belongs in the story's\n   acceptance criteria as an open question, not as a fabricated requirement.\n\n2. STANDARDIZATION — Rewrite each requirement as a Canonical User Story:\n   \"As a [User Role], I want [Action/Feature], so that [Value/Benefit].\"\n\n3. ACCEPTANCE CRITERIA — Give each story 2-5 concrete, checkable criteria.\n   This is what makes a story estimable. \"The user can reset their password\"\n   is not estimable; \"the reset link expires after a set period\" is.\n\n4. SIZING — Each story must be small enough for one team to complete in a\n   single sprint. If a requirement is larger than that, split it into several\n   stories. A story nobody can size teaches you nothing.\n\n5. DOMAIN TAGGING — Assign exactly one primary domain per story, drawn only\n   from this list:\n   Frontend, Backend, Security, Database, DevOps, AI/ML, Integration, Mobile\n\n6. PROJECT CONTEXT — Separately, write 3-6 sentences describing the technical\n   environment the work lands in: existing stack, platforms, integrations, and\n   constraints stated in the BRD. This is shared background for every story,\n   so keep it free of story-specific detail.\n\n## Input\n\nRaw BRD Text: {{ $json.body.summary }}\n\n## Output\n\nRespond ONLY with a single JSON object. No markdown fences, no commentary.\n\n{\n  \"project_context\": \"string\",\n  \"stories\": [\n    {\n      \"id\": \"story-01-short-slug\",\n      \"user_story\": \"As a ..., I want ..., so that ...\",\n      \"acceptance_criteria\": [\"string\", \"string\"],\n      \"domain\": \"string\"\n    }\n  ]\n}\n\nThe \"id\" field must be lowercase, hyphenated, ASCII only, numbered in sequence\n(story-01-…, story-02-…), and derived from the story's subject. It is used as a\nfilesystem path and as a join key, so it must be unique and stable.\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"project_context\": { \"type\": \"string\" },\n    \"stories\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"id\": { \"type\": \"string\" },\n          \"user_story\": { \"type\": \"string\" },\n          \"acceptance_criteria\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" }\n          },\n          \"domain\": {\n            \"type\": \"string\",\n            \"enum\": [\"Frontend\", \"Backend\", \"Security\", \"Database\", \"DevOps\", \"AI/ML\", \"Integration\", \"Mobile\"]\n          }\n        },\n        \"additionalProperties\": false,\n        \"required\": [\"id\", \"user_story\", \"acceptance_criteria\", \"domain\"]\n      }\n    }\n  },\n  \"additionalProperties\": false,\n  \"required\": [\"project_context\", \"stories\"]\n}\n"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        -112
+      ],
+      "id": "2e7940f8-c75d-47a0-a43b-4debfeb63cbb",
+      "name": "Agile PO",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Here is the Business Requirement Document and the user stories derived from it.\nSelect the estimation panel.\n\n# Business Requirement Document\n{{ $('Webhook Intake').item.json.body.summary }}\n\n\n# Project Context\n{{ $json.output[0].content[0].text.project_context }}\n\n# User Stories ({{ $json.output[0].content[0].text.stories.length }})\n{{ $json.output[0].content[0].text.stories.map((s, i) => `${i+1}. [${s.domain}] ${s.user_story}`).join('\\n') }}\n"
+            },
+            {
+              "role": "system",
+              "content": "You are recruiting an expert panel to estimate the effort of a technical product project.\n\nYou will receive a Business Requirement Document and the user stories derived\nfrom it. Your job is to decide WHICH KINDS OF ENGINEERS should sit on the\neffort estimation panel, then return that decision as JSON.\n\nYou are not estimating anything. You are choosing who is qualified to estimate.\n\n## How to choose\n\nRead the BRD and the stories, and identify the technical surfaces the work\nactually touches — not the ones the BRD claims. Then select the developer\narchetypes whose daily work covers those surfaces.\n\nApply these rules:\n\n- Select between 3 and 6 archetypes. Fewer than 3 gives you no disagreement\n  to learn from; more than 6 dilutes the panel with people who cannot judge\n  the work.\n- Always include the archetype that owns the dominant technical surface.\n- Include \"Security engineer\" if the work touches authentication, payments,\n  personal data, permissions, or regulated information.\n- Include \"DevOps / SRE / infrastructure\" if the work touches deployment,\n  environments, pipelines, monitoring, or scaling.\n- Include \"Engineering manager / lead\" whenever there are 5 or more stories —\n  someone must judge sequencing and coordination cost.\n- Do NOT include an archetype merely because the technology is mentioned in\n  passing. A single email notification does not require a Back-end developer\n  if the story is otherwise front-end work.\n\n## Allowed values — copy these EXACTLY\n\ndev_role_archetype must be drawn only from this list. Do not invent values,\ndo not reword them.\n\n  \"Front-end developer\"\n  \"Back-end developer\"\n  \"Full-stack developer\"\n  \"Mobile developer\"\n  \"Data / ML developer\"\n  \"DevOps / SRE / infrastructure\"\n  \"Security engineer\"\n  \"Game developer\"\n  \"Embedded / systems developer\"\n  \"Engineering manager / lead\"\n  \"Product / UX technical role\"\n\n## Panel size\n\nSet sampleSize to roughly 2 people per archetype you selected, between 6 and\n12 total. Two per archetype means that when they disagree you can tell a real\ndifference of opinion from one person's quirk.\n\n## Output\n\nReturn ONE JSON object\n\n{\n  \"dimensionFilters\": {\n    \"dev_role_archetype\": [\"<selected archetypes>\"],\n    \"dev_professional_status\": [\"Professional developer\"]\n  },\n  \"sampleSize\": <integer 6-12>,\n  \"rationale\": \"<2-3 sentences: which technical surfaces you found in the\n                 stories, and why these archetypes cover them>\"\n}\n\n\"dev_professional_status\" is always exactly [\"Professional developer\"] —\nnever change it. It keeps hobbyists and inactive developers off the panel.\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"dimensionFilters\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"dev_role_archetype\": {\n          \"type\": \"array\",\n          \"items\": {\n            \"type\": \"string\",\n            \"enum\": [\"Front-end developer\", \"Back-end developer\", \"Full-stack developer\", \"Mobile developer\", \"Data / ML developer\", \"DevOps / SRE / infrastructure\", \"Security engineer\", \"Game developer\", \"Embedded / systems developer\", \"Engineering manager / lead\", \"Product / UX technical role\"]\n          }\n        },\n        \"dev_professional_status\": {\n          \"type\": \"array\",\n          \"items\": { \"type\": \"string\", \"enum\": [\"Professional developer\"] }\n        }\n      },\n      \"additionalProperties\": false,\n      \"required\": [\"dev_role_archetype\", \"dev_professional_status\"]\n    },\n    \"sampleSize\": { \"type\": \"integer\" },\n    \"rationale\": { \"type\": \"string\" }\n  },\n  \"additionalProperties\": false,\n  \"required\": [\"dimensionFilters\", \"sampleSize\", \"rationale\"]\n}\n"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        848,
+        -176
+      ],
+      "id": "fc34062d-675c-4026-8363-c93bb42fc1be",
+      "name": "Message a model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://magnificent-usgs-considerations-bowl.trycloudflare.com/api/persona-pool/sample",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"pool\": \"persona/datasets/matraix-persona-dev-sample\",\n  \"seed\": 42,\n  \"includePersonaIds\": true,\n  \"sampleSize\": 6,\n  \"dimensionFilters\":\n{{ JSON.stringify($json.output[0].content[0].text.dimensionFilters) }}\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1200,
+        -176
+      ],
+      "id": "6a15e0b7-8a24-4090-897f-cf3d311e2fb3",
+      "name": "Persona-panel"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nconst po = $('Agile PO').first().json.output[0].content[0].text;\nreturn po.stories.map(s => ({\n  json: { ...s, projectContext: po.project_context }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        -352
+      ],
+      "id": "bf421c00-9c49-4dd3-a86b-919b4ea3754a",
+      "name": "split x stories"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "18e9157b-30ca-4cbb-a30b-6b7e91b8141f",
+      "name": "Loop Over Stories",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2112,
+        -352
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "id": "ba87bf9b-bebd-4cf9-9025-1d4fa70760a7",
+      "name": "Wait for Simulation",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2864,
+        -224
+      ],
+      "webhookId": "8236895c-be00-44d9-a9d2-78585ec01821"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config Base url').first().json.baseUrl }}/api/harbor/jobs/{{ $json.jobName }}/status",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "id": "2daa5d60-d083-4ca0-85c2-251343eebedc",
+      "name": "Get Job Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3040,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "leftValue": "=={{ $json.counts.done + $json.counts.error }}",
+              "rightValue": "finished",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "3eaf92ed-b60a-4025-b01a-4ae90827660d"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b0bdb220-ab01-49ef-bd50-46a9795e0c36",
+      "name": "Finished?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3264,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config Base url').first().json.baseUrl }}/api/harbor/jobs/{{ $('Materialize task').first().json.jobName }}/aggregation",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"taskPath\": \"{{ $json.taskPath }}\",\n  \"personaIds\": {{ JSON.stringify($('Recruit Panel').first().json.personaIds) }},\n  \"personaPool\": \"{{ $('Config Base url').first().json.personaPool }}\",\n  \"personaModel\": \"openai/gpt-4o-mini\",\n  \"nConcurrentTrials\": 2,\n  \"mode\": \"auto\"\n}\n",
+        "options": {}
+      },
+      "id": "4ab17b48-3169-4bdf-b394-efb435f5fed9",
+      "name": "Get Results",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3504,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $input.all().map(i => i.json);\nreturn [{\n  json: {\n    summary: \"SOW Estimation Complete\",\n    full_backlog: results\n  }\n}];"
+      },
+      "id": "b837bbdc-6d8b-4239-87b5-9e252a5d0dbf",
+      "name": "Compile SOW Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2592,
+        -528
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const CONFIG = {\n  baseUrl: \"https://magnificent-usgs-considerations-bowl.trycloudflare.com\",\n  personaPool: \"persona/datasets/matraix-persona-dev-sample\"\n};\n\nreturn $input.all().map(item => ({\n  json: { ...item.json, ...CONFIG }\n}));\n"
+      },
+      "id": "61e827a7-613b-40b0-8a1a-ecd9800060a1",
+      "name": "Config Base url",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        -352
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.baseUrl }}/api/tasks/materialize",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"runId\": \"{{ $execution.id }}\",\n  \"projectContext\": {{ JSON.stringify($json.projectContext) }},\n\n   \"story\": {{ JSON.stringify({ id: $json.id, user_story: $json.user_story, acceptance_criteria: $json.acceptance_criteria, domain: $json.domain }) }}\n}",
+        "options": {}
+      },
+      "id": "da225784-dfe2-4d6b-bc59-f5e1ab438534",
+      "name": "Materialize task",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2336,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Loop Over Stories').item.json.baseUrl }}/api/harbor/jobs",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"taskPath\": \"{{ $json.taskPath }}\",\n  \"personaIds\": {{ JSON.stringify($('Persona-panel').first().json.personaIds) }},\n  \"personaPool\": \"{{ $('Config Base url').first().json.personaPool }}\",\n  \"personaModel\": \"openai/gpt-4o-mini\",\n  \"nConcurrentTrials\": 2,\n  \"mode\": \"auto\"\n}\n",
+        "options": {}
+      },
+      "id": "9968cc79-a5bf-494f-88b8-429e6baddd0e",
+      "name": "Launch a job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2608,
+        -224
+      ]
+    }
+  ],
+  "pinData": {
+    "Webhook Intake": [
+      {
+        "json": {
+          "headers": {
+            "content-type": "application/json"
+          },
+          "body": {
+            "intake_id": "REF-9921",
+            "requester": "Global Retail Operations (NexaRetail)",
+            "project_title": "Project 'Store-Pulse' Optimization",
+            "summary": "We want to build an AI system called 'Store-Pulse' to help our store managers handle staffing and security more efficiently across our 40 branches. The main goal is to use our existing CCTV camera feeds to analyze how both staff and customers are behaving on the floor. We need the AI to identify every employee and track their 'Customer Engagement Score' by looking at their movements and facial expressions during their shift. If the AI sees an employee looking tired or unhappy, it should automatically move them to a back-office role and update the staffing schedule in real-time. For customers, the system should recognize 'VIP shoppers' as they enter and send their purchase history to the nearest sales associate's phone. Finally, the system needs to flag 'suspicious behavior' to security if it detects someone looking nervous or hiding items under their clothes."
+          }
+        }
+      }
+    ],
+    "Agile PO": [
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0d6d5c3cfcac8199006a91d841e20887d28a188ed1415c7ed9",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "project_context": "Store-Pulse will consume live video from the retailer’s existing CCTV cameras deployed across 40 branches and run real-time analytics. It must integrate with the existing staffing/scheduling system (HR/roster), the CRM/purchase-history store, and mobile devices carried by sales associates; it will also send alerts to the store security channel. The environment requires low-latency inference pipelines (on-prem or cloud placement is undecided) and per-branch configuration. Non-functional constraints (accuracy thresholds, retention periods, on-prem vs cloud) are not specified in the BRD and should be clarified before implementation.",
+                    "stories": [
+                      {
+                        "id": "story-01-ingest-cctv-feeds",
+                        "user_story": "As a System Administrator, I want the platform to ingest live CCTV camera feeds, so that footage is available to downstream analytics in real time.",
+                        "acceptance_criteria": [
+                          "Given a configured camera feed endpoint, the system establishes and maintains a live ingestion connection and exposes frames to downstream services.",
+                          "The ingestion service reports health (connected/disconnected, last-frame timestamp, error code) per feed to monitoring endpoints.",
+                          "The ingestion pipeline tags frames with camera id, branch id and timestamp and makes them available to the analytics API with measurable latency.",
+                          "Open question: product owner to define supported feed protocols and required maximum ingestion latency before acceptance. The story is not done until that is answered."
+                        ],
+                        "domain": "Backend"
+                      },
+                      {
+                        "id": "story-02-employee-identification",
+                        "user_story": "As a Store Manager, I want the system to identify employees on the sales floor, so that individual staff activity can be attributed and tracked.",
+                        "acceptance_criteria": [
+                          "The system can enroll an employee profile (id, name, photo(s)) and associate detections in video with that employee id and a confidence score.",
+                          "For a detected person in a camera view the system returns either a matched employee id with confidence or an explicit \"unknown\" result; manual overrides (mark match wrong) are recorded.",
+                          "The identification output includes metadata (camera id, bounding box, timestamp, confidence) accessible via API for audit and downstream processing.",
+                          "Open question: Product owner to specify required identification accuracy and allowed false-positive/false-negative rates; identification pipelines must expose measurable metrics for these rates."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-03-customer-engagement-score",
+                        "user_story": "As a Store Manager, I want the system to compute a per-employee Customer Engagement Score from observed movement and facial-expression signals, so that I can quantify how engaged each employee is during their shift.",
+                        "acceptance_criteria": [
+                          "For each employee on shift the system produces a time-series engagement score and aggregates a per-shift average accessible via API and UI.",
+                          "The score calculation consumes movement (proximity to customers, time spent interacting) and facial-expression-derived indicators; the input features used are documented and logged for each score update.",
+                          "Engagement scores update in (near-)real time when a tracked employee is present on camera and include a confidence/validity flag when insufficient data exists.",
+                          "Open question: product owner to approve the scoring formula or target KPIs; story is not done until scoring definition or acceptance criteria are agreed."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-04-employee-emotion-detection",
+                        "user_story": "As a Store Manager, I want the system to detect employee emotional states (e.g., tiredness, unhappiness), so that the system can identify staff who may need role changes or breaks.",
+                        "acceptance_criteria": [
+                          "The emotion detection model emits detected emotional-state labels with confidence and corresponding timestamps and frames for review.",
+                          "When the model reports 'tired' or 'unhappy' above a configurable confidence threshold an event is written to the decision queue with employee id and supporting evidence frames.",
+                          "Emotion detection runs continuously while the employee is on camera and exposes per-model performance metrics (precision/recall) for monitoring.",
+                          "Open question: product owner to define the exact emotion labels required and acceptable confidence thresholds; detection pipeline must be testable against a labeled dataset once labels are defined."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-05-automatic-reassignment-decision",
+                        "user_story": "As a Store Manager, I want the system to automatically generate a back-office reassignment decision when an employee is detected as tired or unhappy, so that staffing adjustments can be initiated without delay.",
+                        "acceptance_criteria": [
+                          "When an employee emotion event (tired/unhappy) is received above the configured threshold the decision service creates a reassignment action (employee id, suggested role back-office, reason, timestamp) in the actions queue.",
+                          "The decision action includes confidence, evidence references and a unique id and is auditable via an actions API.",
+                          "The decision service supports a configurable policy (automatic vs require manager approval); the policy selection must be stored and visible in the configuration.",
+                          "Open question: product owner to confirm whether reassignment should be fully automatic or require manager confirmation; the story is not complete until policy is clarified."
+                        ],
+                        "domain": "Backend"
+                      },
+                      {
+                        "id": "story-06-update-staffing-schedule",
+                        "user_story": "As a Scheduler/HR System, I want Store-Pulse to update the staffing schedule in real time when a reassignment action is approved or automatic, so that the official roster reflects the employee's new back-office assignment.",
+                        "acceptance_criteria": [
+                          "Given a reassignment action, the integration updates the staffing system via its API (or a documented endpoint) to change the employee's current assignment and shift role and returns success/failure status.",
+                          "Updates include a change record (who/what/when/reason) visible in the staffing system audit/logs and an ability to rollback within a configurable window.",
+                          "If the staffing system returns an error, Store-Pulse retries according to a retry policy and records the failure for manual resolution.",
+                          "Open question: product owner to provide staffing system API specification and required authorization method; integration is not complete until this is provided."
+                        ],
+                        "domain": "Integration"
+                      },
+                      {
+                        "id": "story-07-vip-customer-recognition",
+                        "user_story": "As a Sales Associate, I want the system to recognize VIP shoppers as they enter the store, so that staff can give priority service.",
+                        "acceptance_criteria": [
+                          "When a person enters via a monitored entrance the system matches them against a configurable VIP list and emits a VIP-identified event with customer id, confidence, entry camera id and timestamp.",
+                          "The VIP recognition event includes a reference to the customer profile used (source CRM id) and is logged for audit.",
+                          "If ambiguous matches occur the system flags the event for manual review rather than auto-labeling as VIP.",
+                          "Open question: product owner to specify privacy/consent rules for VIP matching and acceptable confidence thresholds; recognition is not complete without these rules."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-08-nearest-associate-calculation",
+                        "user_story": "As a Sales Associate, I want the system to determine which on-duty associate is nearest to a given camera-detected location, so that VIP notifications are routed to the most appropriate person.",
+                        "acceptance_criteria": [
+                          "The service receives live positions or last-known positions of on-duty associates and a camera location and returns the nearest associate id with a computed distance metric.",
+                          "The calculation uses camera-to-floor mapping or last-known associate camera assignment; if associate location is unknown the service returns a defined fallback (e.g., store host) and logs the fallback used.",
+                          "The API response includes timestamp, method used (proximity-by-camera or last-seen), and confidence; mapping configuration per store is stored and versioned.",
+                          "Open question: product owner to confirm acceptable proximity method and required freshness of associate location data."
+                        ],
+                        "domain": "Backend"
+                      },
+                      {
+                        "id": "story-09-send-vip-history",
+                        "user_story": "As a Sales Associate, I want the system to send a VIP customer's purchase history to the nearest associate's phone when they enter, so that the associate has context to serve the VIP.",
+                        "acceptance_criteria": [
+                          "Given a VIP-identified event and a nearest-associate id, the integration fetches the customer's purchase history from the CRM and sends a notification payload to the associate's mobile device with customer id and purchase summary.",
+                          "The notification content delivered contains only the fields approved for sharing (as defined by product/privacy rules) and includes a link or reference id for more details in a secure interface.",
+                          "Delivery status (delivered, failed, acknowledged) is recorded and visible in an audit log; failures trigger retry and an escalation path for persistent failures.",
+                          "Open question: product owner to specify which purchase-history fields are allowed to be transmitted to associate devices and required security/consent constraints."
+                        ],
+                        "domain": "Integration"
+                      },
+                      {
+                        "id": "story-10-detect-nervous-behavior",
+                        "user_story": "As a Security Officer, I want the system to detect customers exhibiting nervous behavior, so that security can be alerted to potential incidents.",
+                        "acceptance_criteria": [
+                          "The behavior detection model emits nervousness events with confidence, bounding boxes, timestamps and supporting frames for evidence.",
+                          "The model runs on live footage and provides per-detection metadata (camera id, branch id, confidence) and a false-alarm monitoring metric.",
+                          "Detections can be filtered by confidence and by area of store; low-confidence detections are routed to a review queue rather than automatic alerting.",
+                          "Open question: product owner to define what constitutes 'nervous behavior' for detection and acceptable false-positive rate; detection pipelines must expose metrics and labeled test sets once defined."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-11-detect-concealment-under-clothes",
+                        "user_story": "As a Security Officer, I want the system to detect suspicious concealment behavior (items being hidden under clothing), so that potential theft can be flagged to security.",
+                        "acceptance_criteria": [
+                          "The concealment detection model emits concealment events with confidence, bounding box, timestamp and supporting video frames or clips for review.",
+                          "Concealment detections include metadata (camera id, angle if available) and a confidence score; high-confidence detections generate candidate alerts for security per configured policy.",
+                          "The model provides false-positive/false-negative monitoring and the system supports human review and marking of true/false positives to allow model retraining.",
+                          "Open question: product owner to confirm permitted evidence retention duration and legal/privacy requirements for using concealment detections as part of security actions."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-12-flag-suspicious-to-security",
+                        "user_story": "As a Security Officer, I want the system to flag suspicious behavior to the store security team, so that security can respond quickly with context and evidence.",
+                        "acceptance_criteria": [
+                          "When a suspicious behavior event (nervousness or concealment) exceeds configured thresholds the system sends an alert to the configured security channel containing event id, camera snapshots/clips, timestamps, location and confidence.",
+                          "Alerts require an acknowledgement mechanism and the system records which security user acknowledged and when; unacknowledged alerts escalate per a configurable policy.",
+                          "Alert payloads are protected in transit (signed or encrypted) and access to clip evidence is auditable.",
+                          "Open question: product owner to specify preferred security alert channels (SMS/app/dispatch) and acceptable evidence sharing rules."
+                        ],
+                        "domain": "Integration"
+                      },
+                      {
+                        "id": "story-13-deploy-scale-40-branches",
+                        "user_story": "As an Operations Lead, I want Store-Pulse to be deployable and configurable across all 40 branches, so that each branch has the required ingestion, analytics and alerting configured consistently.",
+                        "acceptance_criteria": [
+                          "Deployment artifacts and infrastructure-as-code are provided so a new branch can be onboarded with branch-specific configuration (camera list, floor mapping, staffing integration endpoints) using a repeatable pipeline.",
+                          "Monitoring and health dashboards show per-branch ingestion health, inference throughput, alert rates and action queue depth; automated alarms fire for branch-level failures.",
+                          "Onboarding documentation exists and an initial pilot deployment is tested on at least one branch and then replicated; capacity and scaling plan produced for supporting 40 branches.",
+                          "Open question: product owner to confirm whether processing will be centralized or per-branch (on-prem) and expected cost/latency tradeoffs; deployment is not complete until that decision is made."
+                        ],
+                        "domain": "DevOps"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Message a model1": [
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0c583bfa72ced467006a91db9a875c87d2873eaf619007740b",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "dimensionFilters": {
+                      "dev_role_archetype": [
+                        "Data / ML developer",
+                        "Back-end developer",
+                        "DevOps / SRE / infrastructure",
+                        "Security engineer",
+                        "Engineering manager / lead",
+                        "Mobile developer"
+                      ],
+                      "dev_professional_status": [
+                        "Professional developer"
+                      ]
+                    },
+                    "sampleSize": 12,
+                    "rationale": "The work is dominated by real-time computer-vision and behavior models (Data / ML developer) plus live video ingestion, APIs and integrations with HR/CRM (Back-end developer). Deploying low-latency inference across 40 branches and per-branch configuration requires DevOps/SRE expertise; biometric and customer/personal data handling requires a Security engineer. An Engineering manager is needed to sequence and coordinate the 13 stories, and Mobile developer expertise is required to deliver VIP notifications and purchase-history display on associates' phones."
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Persona-panel": [
+      {
+        "json": {
+          "pool": "persona/datasets/matraix-persona-dev-sample",
+          "matchedCount": 7,
+          "sampleSize": 6,
+          "seed": 42,
+          "personaIds": [
+            "0079",
+            "0059",
+            "0080",
+            "0069",
+            "0075",
+            "0072"
+          ],
+          "personas": [
+            {
+              "personaId": "0079",
+              "name": "Ava Martinez",
+              "source": "stackoverflow",
+              "path": "persona/datasets/matraix-persona-dev-sample/persona_0079.yaml",
+              "dimensions": {
+                "age_bracket": "25-34",
+                "region": "North America",
+                "domain": "Software & AI",
+                "life_stage": "Early career"
+              },
+              "searchText": "0079 Ava Martinez stackoverflow age_bracket 25-34 region North America domain Software & AI subject_specialty Machine learning domain_characteristics Practitioner highest_education Bachelor's institution_tier Online / bootcamp role_function Engineering years_experience 11-20 life_stage Early career emotional_state Frustrated fam_machine_learning Expert fam_data_science Expert fam_databases Familiar fam_operating_systems Familiar fam_cloud_infrastructure Familiar skill_coding Advanced skill_data_analysis Advanced skill_research Advanced skill_problem_solving Advanced tool_python Regular tool_jira Regular tool_microsoft_teams Regular topic_productivity Interested topic_self_improvement Interested att_ai Skeptical att_rapid_change Skeptical ind_technology Experienced lstyle_commute_mode Remote cog_learning_pace Fast cog_question_asking Rarely asks trait_love_of_learning Strong trait_adaptability Strong val_achievement Important val_knowledge_truth Important val_independence Important val_personal_growth Important pref_team_vs_solo Team-leaning pref_speed_vs_accuracy Accuracy first demo_household_income $100k-200k demo_employment_status Full-time demo_generation Millennial lifex_career_path_shape Just starting lifex_education_journey Traditional track code_error_handling Explicit error returns/validation prog_python Proficient prog_bash Familiar ai_task_code_generation Does not plan AI use ai_task_code_review Does not plan AI use ai_task_codebase_learning Does not plan AI use ai_task_data_generation_analytics Does not plan AI use ai_task_debugging_fixing Does not plan AI use ai_task_deployment_monitoring Does not plan AI use ai_task_documentation Does not plan AI use ai_task_learning_concepts Does not plan AI use ai_task_project_planning Does not plan AI use ai_task_refactoring Does not plan AI use ai_task_search_answers Does not plan AI use ai_task_testing Does not plan AI use codebase_onboarding_style Reads architecture / docs first coding_agent_failure_tolerance Does not use agents coding_agent_usage_frequency No plans coding_agent_workflow_impact No clear change coding_ai_complexity_comfort Avoids AI for complexity coding_ai_output_trust Does not trust coding_ai_sentiment Somewhat unfavorable coding_ai_usage_frequency Tried but not active dev_contribution_context Employee work dev_ic_manager_orientation Individual contributor dev_professional_status Professional developer dev_role_archetype Data / ML developer developer_help_seeking_preference Search Stack Overflow / Q&A first stackoverflow_participation_style Reads / searches only stackoverflow_usage_pattern Weekly reference"
+            },
+            {
+              "personaId": "0059",
+              "name": "Amina Diallo",
+              "source": "stackoverflow",
+              "path": "persona/datasets/matraix-persona-dev-sample/persona_0059.yaml",
+              "dimensions": {
+                "age_bracket": "35-44",
+                "region": "Sub-Saharan Africa",
+                "domain": "Software & AI"
+              },
+              "searchText": "0059 Amina Diallo stackoverflow age_bracket 35-44 region Sub-Saharan Africa domain Software & AI subject_specialty Machine learning highest_education Bachelor's role_function Research years_experience 11-20 tech_savviness Comfortable fam_machine_learning Expert fam_statistics Expert fam_data_science Expert fam_databases Proficient fam_operating_systems Proficient fam_cloud_infrastructure Familiar fam_devops Familiar skill_coding Master skill_debugging Master skill_code_review Master skill_data_analysis Master skill_problem_solving Master tool_python Power user tool_r Power user tool_sql Power user tool_slack Regular tool_microsoft_teams Regular tool_aws Regular tool_vim Regular tool_zoom Regular tool_trello Regular tool_chatgpt Regular topic_productivity Interested topic_self_improvement Interested att_ai Positive att_open_source Positive lstyle_commute_mode Remote lstyle_device_ecosystem Mixed peeve_being_interrupted Annoys trait_curiosity Strong trait_love_of_learning Strong trait_adaptability Strong val_achievement Important val_knowledge_truth Important val_personal_growth Important demo_employment_status Full-time demo_generation Millennial lifex_career_path_shape Linear climb lifex_education_journey Traditional track code_comment_style Docstring/documentation blocks only prog_python Proficient prog_rust Familiar prog_lua Familiar prog_r Proficient prog_sql Proficient prog_bash Familiar sdt_need_autonomy High sdt_need_competence High sdt_need_relatedness High need_for_cognition High ai_task_code_generation Currently partially AI-assisted ai_task_code_review Currently partially AI-assisted ai_task_codebase_learning Currently partially AI-assisted ai_task_debugging_fixing Currently partially AI-assisted ai_task_deployment_monitoring Does not plan AI use ai_task_documentation Plans partial AI use ai_task_learning_concepts Currently partially AI-assisted ai_task_project_planning Does not plan AI use ai_task_testing Plans partial AI use codebase_onboarding_style Reads architecture / docs first coding_ai_output_trust Trusts after verification coding_ai_sentiment Somewhat favorable coding_ai_usage_frequency Daily debugging_strategy Search / ask externally dev_contribution_context Employee work dev_ic_manager_orientation Individual contributor dev_professional_status Professional developer dev_role_archetype Data / ML developer open_source_activity_level Occasional contributor stackoverflow_usage_pattern Occasional troubleshooting"
+            },
+            {
+              "personaId": "0080",
+              "name": "Jordan Lee",
+              "source": "stackoverflow",
+              "path": "persona/datasets/matraix-persona-dev-sample/persona_0080.yaml",
+              "dimensions": {
+                "age_bracket": "45-54",
+                "region": "North America",
+                "domain": "Software & AI"
+              },
+              "searchText": "0080 Jordan Lee stackoverflow age_bracket 45-54 region North America domain Software & AI domain_characteristics Practitioner highest_education Primary institution_tier Self-taught role_function Engineering years_experience 20+ fam_computer_networking Familiar fam_databases Expert fam_operating_systems Expert fam_compilers Familiar fam_cloud_infrastructure Expert fam_devops Expert skill_writing Advanced skill_coding Master skill_debugging Master skill_code_review Advanced skill_system_design Master skill_research Master skill_problem_solving Master tool_github_copilot Regular att_ai Enthusiast att_new_technology Enthusiast att_open_source Enthusiast cog_detail_orientation High cog_decision_speed Deliberate cog_reading_vs_watching Prefers reading trait_curiosity Strong trait_love_of_learning Strong trait_adaptability Strong val_achievement Important val_knowledge_truth Important val_independence Important demo_employment_status Full-time demo_generation Gen X lifex_career_path_shape Linear climb lifex_education_journey Largely self-taught lifex_formative_decade 1980s code_comment_style Docstring/documentation blocks only code_dependencies_approach Lean on libraries (minimal custom code) prog_sql Proficient prog_bash Proficient ai_task_code_generation Currently partially AI-assisted ai_task_code_review Plans partial AI use ai_task_codebase_learning Plans partial AI use ai_task_data_generation_analytics Currently partially AI-assisted ai_task_debugging_fixing Currently partially AI-assisted ai_task_deployment_monitoring Plans partial AI use ai_task_documentation Currently partially AI-assisted ai_task_learning_concepts Plans partial AI use ai_task_project_planning Plans partial AI use ai_task_search_answers Currently partially AI-assisted ai_task_testing Currently partially AI-assisted codebase_onboarding_style Reads architecture / docs first coding_ai_complexity_comfort Only simple / boilerplate tasks coding_ai_job_threat_perception No perceived threat coding_ai_output_trust Neutral / depends on task coding_ai_sentiment Very favorable coding_tool_api_completeness_importance High coding_tool_security_privacy_blocker Major concern dev_professional_status Professional developer dev_role_archetype DevOps / SRE / infrastructure dev_toolchain_complexity Large integrated toolchain stackoverflow_participation_style Reads / searches only stackoverflow_usage_pattern Multiple times daily"
+            },
+            {
+              "personaId": "0069",
+              "name": "Li Wei Chen",
+              "source": "stackoverflow",
+              "path": "persona/datasets/matraix-persona-dev-sample/persona_0069.yaml",
+              "dimensions": {
+                "age_bracket": "25-34",
+                "region": "East Asia",
+                "domain": "Software & AI",
+                "life_stage": "Early career"
+              },
+              "searchText": "0069 Li Wei Chen stackoverflow age_bracket 25-34 region East Asia english_proficiency Fluent (C1-C2) domain Software & AI domain_characteristics Practitioner highest_education Bachelor's company_size Mid (500-5k) role_function Engineering years_experience 6-10 life_stage Early career fam_computer_networking Familiar fam_databases Familiar fam_operating_systems Familiar fam_cloud_infrastructure Familiar fam_devops Familiar tool_jetbrains_ides Regular tool_zoom Regular tool_chatgpt Regular topic_entrepreneurship Interested att_ai Positive att_open_source Positive ind_technology Veteran lstyle_primary_messenger WeChat lstyle_device_ecosystem Mixed peeve_being_interrupted Major peeve trait_love_of_learning Strong trait_adaptability Strong pref_team_vs_solo Team-leaning demo_employment_status Full-time demo_generation Millennial lifex_career_path_shape Linear climb lifex_education_journey Traditional track prog_java Familiar prog_go Familiar prog_php Familiar ai_task_code_generation Plans partial AI use ai_task_code_review Plans partial AI use ai_task_codebase_learning Plans partial AI use ai_task_data_generation_analytics Plans partial AI use ai_task_debugging_fixing Plans partial AI use ai_task_deployment_monitoring Plans partial AI use ai_task_documentation Plans partial AI use ai_task_learning_concepts Plans partial AI use ai_task_project_planning Plans partial AI use ai_task_refactoring Plans partial AI use ai_task_search_answers Currently partially AI-assisted ai_task_testing Plans partial AI use coding_agent_failure_tolerance Does not use agents coding_agent_usage_frequency Not yet but interested coding_agent_workflow_impact No clear change coding_ai_output_trust Neutral / depends on task coding_ai_sentiment Somewhat favorable coding_ai_usage_frequency Tried but not active coding_tool_ai_capability_importance High dev_contribution_context Mixed contexts dev_ic_manager_orientation Individual contributor dev_professional_status Professional developer dev_role_archetype Back-end developer dev_toolchain_complexity Large integrated toolchain open_source_activity_level Regular contributor stackoverflow_participation_style Reads / searches only stackoverflow_usage_pattern Weekly reference"
+            },
+            {
+              "personaId": "0075",
+              "name": "Tomas Horvat",
+              "source": "stackoverflow",
+              "path": "persona/datasets/matraix-persona-dev-sample/persona_0075.yaml",
+              "dimensions": {
+                "age_bracket": "18-24",
+                "region": "Eastern Europe",
+                "domain": "Software & AI",
+                "life_stage": "Early career"
+              },
+              "searchText": "0075 Tomas Horvat stackoverflow age_bracket 18-24 region Eastern Europe domain Software & AI domain_characteristics Practitioner highest_education Master's company_size Enterprise (5k+) role_function Engineering years_experience 6-10 life_stage Early career emotional_state Frustrated learning_style Reading / writing fam_databases Proficient fam_operating_systems Proficient fam_cloud_infrastructure Proficient fam_devops Proficient tool_python Regular tool_notion Regular tool_jira Regular tool_slack Regular tool_microsoft_teams Regular tool_chatgpt Regular lang_english Fluent att_ai Positive att_new_technology Enthusiast att_open_source Positive ind_retail Experienced lstyle_commute_mode Remote cog_reading_vs_watching Prefers reading trait_teamwork Strong trait_adaptability Strong val_achievement Important val_community Important val_knowledge_truth Important pref_speed_vs_accuracy Accuracy first demo_employment_status Full-time demo_generation Gen Z lifex_career_path_shape Just starting lifex_education_journey Advanced degrees code_function_length Small functions (10-30 lines) schwartz_value_self_direction High schwartz_value_achievement High sdt_need_autonomy High sdt_need_competence High sdt_need_relatedness High mft_care_harm High mft_fairness_cheating High mft_liberty_oppression High dospert_ethical_risk_tolerance Low codebase_onboarding_style Reads architecture / docs first coding_agent_usage_frequency Not yet but interested coding_ai_job_threat_perception Serious threat concern coding_ai_sentiment Somewhat favorable coding_ai_usage_frequency Tried but not active dev_contribution_context Employee work dev_ic_manager_orientation Individual contributor dev_professional_status Professional developer dev_role_archetype Back-end developer human_help_boundary_for_ai_coding When trust is low open_source_activity_level No coding activity stackoverflow_participation_style Reads / searches only stackoverflow_usage_pattern Multiple times daily"
+            },
+            {
+              "personaId": "0072",
+              "name": "Alex Rivera",
+              "source": "stackoverflow",
+              "path": "persona/datasets/matraix-persona-dev-sample/persona_0072.yaml",
+              "dimensions": {
+                "age_bracket": "25-34",
+                "domain": "Software & AI",
+                "life_stage": "Early career"
+              },
+              "searchText": "0072 Alex Rivera stackoverflow age_bracket 25-34 domain Software & AI domain_characteristics Practitioner highest_education Bachelor's company_size SMB (50-500) role_function Engineering years_experience 6-10 life_stage Early career tech_savviness Comfortable learning_style Reading / writing fam_machine_learning Familiar fam_computer_networking Familiar fam_databases Familiar fam_operating_systems Familiar fam_cloud_infrastructure Familiar fam_devops Familiar skill_time_management Intermediate tool_python Regular tool_jira Regular tool_microsoft_teams Regular tool_vs_code Regular tool_jetbrains_ides Regular tool_zoom Regular tool_trello Regular tool_chatgpt Regular tool_github_copilot Regular topic_technology Interested topic_productivity Interested topic_self_improvement Interested lang_english Fluent att_ai Positive att_new_technology Enthusiast att_open_source Enthusiast lstyle_device_ecosystem Mixed trait_curiosity Strong trait_love_of_learning Strong trait_adaptability Strong val_knowledge_truth Important val_personal_growth Important pref_speed_vs_accuracy Accuracy-leaning demo_employment_status Full-time lifex_career_path_shape Just starting prog_typescript None sdt_need_autonomy High sdt_need_competence High sdt_need_relatedness High need_for_cognition High ai_task_code_generation Currently partially AI-assisted ai_task_code_review Plans partial AI use ai_task_codebase_learning Currently partially AI-assisted ai_task_data_generation_analytics Does not plan AI use ai_task_debugging_fixing Currently partially AI-assisted ai_task_deployment_monitoring Plans partial AI use ai_task_documentation Plans partial AI use ai_task_learning_concepts Currently partially AI-assisted ai_task_project_planning Plans partial AI use ai_task_refactoring Plans partial AI use ai_task_search_answers Currently partially AI-assisted ai_task_testing Plans partial AI use codebase_onboarding_style Uses search / grep heavily coding_agent_tool_integration_preference IDE-integrated coding_agent_usage_frequency Experimental only coding_agent_workflow_impact Small targeted improvement coding_ai_complexity_comfort Comfortable with bounded complex tasks coding_ai_usage_frequency Daily coding_tool_alternative_sensitivity Moderate concern coding_tool_obsolescence_blocker Moderate concern coding_tool_open_source_importance Moderate coding_tool_security_privacy_blocker Not a concern dev_contribution_context Mixed contexts dev_ic_manager_orientation Individual contributor dev_professional_status Professional developer dev_role_archetype Back-end developer dev_toolchain_complexity Moderate multi-tool workflow future_developer_skill_belief Debugging and diagnosis stackoverflow_usage_pattern Multiple times daily"
+            }
+          ],
+          "selectedCount": 6,
+          "idsTruncated": false,
+          "fields": []
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Materialize task": [
+      {
+        "json": {
+          "taskPath": "application/tasks/survey_gen-9931-story-01-ingest-cctv-feeds",
+          "runId": "9931",
+          "storyId": "story-01-ingest-cctv-feeds"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-08-24T21:14:35.007Z",
+      "createdAt": "2026-08-24T21:14:35.007Z",
+      "role": "workflow:owner",
+      "workflowId": "FBzp5rRPfj54BvuV",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-08-30T06:21:29.217Z",
+  "versionId": "ac55c7e4-39b4-40c7-8c4b-8723f875ecd4"
+}
