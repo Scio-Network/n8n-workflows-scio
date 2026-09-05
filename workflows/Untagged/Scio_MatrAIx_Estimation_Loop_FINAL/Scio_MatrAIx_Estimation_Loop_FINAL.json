@@ -14,33 +14,6 @@
         ]
       ]
     },
-    "PO: Decompose BRD": {
-      "main": [
-        [
-          {
-            "node": "Message a model",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "PO: Decompose BRD",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Message a model": {
-      "main": [
-        []
-      ]
-    },
     "Agile PO": {
       "main": [
         [
@@ -207,89 +180,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        784,
-        144
+        480,
+        -112
       ],
       "webhookId": "cd429fda-60b1-49f2-ac87-a4346f742c23"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "={{ $json.body.brd_text }}",
-        "options": {
-          "systemMessage": "=You are the Scio Compliance & Triage Agent. Your goal is to analyze the provided Business Requirement Document (BRD) and generate a Triage Report based on the Scio Delivery System\n\n### 1. The 6-Point Screen:\nAssess the project on:\n1. **Personal data:** Does it process names, CVs, health, or voice?\n2. **People-impacting:** Does the AI make decisions about individuals?\n3. **Risk class:** Green (Internal/Clean), Yellow (Business Data), Red (Sensitive/Human Impact).\n4. **AI Act posture:** Is output user-facing? Any prohibited practices (emotion inference, etc.)?\n5. **DPIA trigger:** Is there a high risk to individuals?\n6. **Client constraints:** Any hosting or residency requirements?\n\n### 2. Tier Determination:\nBased on the Screen and the complexity, assign a Tier:\n- **T1 Spike:**  A Proof of Concept/MVP focusing on a core skill.\n- **T2 Prototype:** A functional, end-to-end model for user testing.\n- **T3 Pilot:** A production-ready, fully integrated digital product.\n\n### Output Format\n> {\n  \"project_name\": \"string\",\n  \"assigned_tier\": \"T1 | T2 | T3\",\n  \"compliance_screen\": {\n    \"risk_class\": \"Green | Yellow | Red\",\n    \"has_personal_data\": boolean,\n    \"is_people_impacting\": boolean,\n    \"dpia_required\": boolean,\n    \"labeling_required\": boolean,\n    \"constraints\": [\"list of strings\"]\n },\n  \"triage_summary\": \"string explaining why this tier and risk class were chosen.\"\n }\n\n\n"
-        }
-      },
-      "id": "984a4961-1ca6-49ad-b527-c0f433a1d892",
-      "name": "PO: Decompose BRD",
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1.7,
-      "position": [
-        288,
-        -16
-      ]
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "mode": "list",
-          "value": "gpt-4.1-mini"
-        },
-        "builtInTools": {},
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.3,
-      "position": [
-        160,
-        192
-      ],
-      "id": "77caf7a0-9a83-42de-a2b1-2a8ddf34ff91",
-      "name": "OpenAI Chat Model",
-      "credentials": {
-        "openAiApi": {
-          "id": "a4ja82V4nnlunpii",
-          "name": "openai"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelId": {
-          "__rl": true,
-          "value": "gpt-4o-mini",
-          "mode": "list",
-          "cachedResultName": "GPT-4O-MINI"
-        },
-        "responses": {
-          "values": [
-            {
-              "content": "=Screening Traige results{{ $json.output }}\n\nRaw BRD: {{ $('Webhook Intake').item.json.body.summary }}"
-            },
-            {
-              "role": "system",
-              "content": "You are the **Scio Senior Security Architect & AI Compliance Consultant**. Your task is to perform a rigorous technical audit of a project proposal to ensure it meets the **Scio Delivery System** standards for security and privacy.\n\n### YOUR INPUTS:\nYou will receive the raw BRD content and a json output containing the triage screening results\n\n ### YOUR OBJECTIVE:\n Analyze the BRD and design three specific pillars of compliance. You must \"see through\" the business language to find hidden technical risks.\n\n #### PILLAR A: Data & Privacy Screen\n - **Inventory:** Identify exactly what PII (Personally Identifiable Information) or sensitive business data will be handled.\n - **Data Subjects:** Who does this data belong to?\n - **LLM Leakage Assessment:** Evaluate the risk of this specific data being leaked to a third-party LLM provider.\n\n #### PILLAR B: AI Feasibility (Technical & Ethical)\nIf the project invovles use of an LLM\n - **Technical Viability:** Is the AI actually capable of performing this task with high accuracy?\n - **Ethical & Legal Audit:** Check for \"Prohibited Practices\" under the EU AI Act  \n - **Failure Impact:** What happens if the AI makes a wrong decision?\n\n #### PILLAR C: Privacy-Preserving Setup (The Technical Fence)\n - **Required Strategy:**  Propose a technical mitigation strategy and a set of security controls (e.g., PII Redaction, Local LLM deployment, Synthetic Data only). This strategy must be calibrated specifically to the Project Tier assigned in Phase 1 and the technical risks you identified in Pillars A and B. You must decide what level of infrastructure, encryption, or data-handling logic is necessary to make this project viable for Scio to build.\n\n ### OUTPUT INSTRUCTIONS:\n\n{\n  \"pillar_a_privacy_screen\": {\n    \"detected_data_categories\": [\"list of strings\"],\n    \"data_subjects\": [\"list of strings\"],\n    \"leakage_risk_score\": \"High | Medium | Low\",\n    \"leakage_rationale\": \"string\"\n  },\n  \"pillar_b_ai_feasibility\": {\n    \"technical_viability_score\": \"0.0 to 1.0\",\n    \"ethical_red_flags\": [\"list of strings or empty\"],\n    \"legal_posture\": \"Compliant | High-Risk | Prohibited\",\n    \"viability_notes\": \"string\"\n  },\n  \n  \"pillar_c_recommendations\": {\n    \"proposed_technical_mitigation_strategy\": \"string\",\n    \"mandatory_security_controls\": [\"string\"],\n    \"infrastructure_and_hosting_requirements\": \"string\",\n    \"architectural_justification\": \"string\"\n}"
-            }
-          ]
-        },
-        "builtInTools": {},
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.openAi",
-      "typeVersion": 2.1,
-      "position": [
-        384,
-        -240
-      ],
-      "id": "6fb7f5ff-232c-4a70-8d4d-f94c65ae38d6",
-      "name": "Message a model",
-      "credentials": {
-        "openAiApi": {
-          "id": "a4ja82V4nnlunpii",
-          "name": "openai"
-        }
-      }
     },
     {
       "parameters": {
@@ -379,7 +273,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://magnificent-usgs-considerations-bowl.trycloudflare.com/api/persona-pool/sample",
+        "url": "https://debug-celebrate-shade-hero.trycloudflare.com/api/persona-pool/sample",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"pool\": \"persona/datasets/matraix-persona-dev-sample\",\n  \"seed\": 42,\n  \"includePersonaIds\": true,\n  \"sampleSize\": 6,\n  \"dimensionFilters\":\n{{ JSON.stringify($json.output[0].content[0].text.dimensionFilters) }}\n}\n",
@@ -429,8 +323,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2864,
-        -224
+        2848,
+        -336
       ],
       "webhookId": "8236895c-be00-44d9-a9d2-78585ec01821"
     },
@@ -451,7 +345,7 @@
       "typeVersion": 4.2,
       "position": [
         3040,
-        -224
+        -320
       ]
     },
     {
@@ -465,13 +359,22 @@
           },
           "conditions": [
             {
-              "leftValue": "=={{ $json.counts.done + $json.counts.error }}",
-              "rightValue": "finished",
+              "leftValue": "={{ $json.launchStatus }}",
+              "rightValue": "completed",
               "operator": {
                 "type": "string",
                 "operation": "equals"
               },
               "id": "3eaf92ed-b60a-4025-b01a-4ae90827660d"
+            },
+            {
+              "id": "52b4da0a-ea6b-4dd0-85f8-65ed056ca668",
+              "leftValue": "={{ $json.counts.done }}",
+              "rightValue": "={{ $json.trialCount }}",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
             }
           ],
           "combinator": "and"
@@ -483,16 +386,13 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        3264,
-        -224
+        3248,
+        -288
       ]
     },
     {
       "parameters": {
-        "url": "={{ $('Config Base url').first().json.baseUrl }}/api/harbor/jobs/{{ $('Materialize task').first().json.jobName }}/aggregation",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"taskPath\": \"{{ $json.taskPath }}\",\n  \"personaIds\": {{ JSON.stringify($('Recruit Panel').first().json.personaIds) }},\n  \"personaPool\": \"{{ $('Config Base url').first().json.personaPool }}\",\n  \"personaModel\": \"openai/gpt-4o-mini\",\n  \"nConcurrentTrials\": 2,\n  \"mode\": \"auto\"\n}\n",
+        "url": "={{ $('Config Base url').first().json.baseUrl }}/api/harbor/jobs/{{ $json.jobName }}/aggregation",
         "options": {}
       },
       "id": "4ab17b48-3169-4bdf-b394-efb435f5fed9",
@@ -519,7 +419,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const CONFIG = {\n  baseUrl: \"https://magnificent-usgs-considerations-bowl.trycloudflare.com\",\n  personaPool: \"persona/datasets/matraix-persona-dev-sample\"\n};\n\nreturn $input.all().map(item => ({\n  json: { ...item.json, ...CONFIG }\n}));\n"
+        "jsCode": "const CONFIG = {\n  baseUrl: \"https://debug-celebrate-shade-hero.trycloudflare.com\",\n  personaPool: \"persona/datasets/matraix-persona-dev-sample\"\n};\n\nreturn $input.all().map(item => ({\n  json: { ...item.json, ...CONFIG }\n}));\n"
       },
       "id": "61e827a7-613b-40b0-8a1a-ecd9800060a1",
       "name": "Config Base url",
@@ -588,7 +488,7 @@
         "json": {
           "output": [
             {
-              "id": "msg_0d6d5c3cfcac8199006a91d841e20887d28a188ed1415c7ed9",
+              "id": "msg_0d23a77577d4fb42006a97fabc44ec87d291825424df3aaa10",
               "type": "message",
               "status": "completed",
               "content": [
@@ -597,150 +497,161 @@
                   "annotations": [],
                   "logprobs": [],
                   "text": {
-                    "project_context": "Store-Pulse will consume live video from the retailer’s existing CCTV cameras deployed across 40 branches and run real-time analytics. It must integrate with the existing staffing/scheduling system (HR/roster), the CRM/purchase-history store, and mobile devices carried by sales associates; it will also send alerts to the store security channel. The environment requires low-latency inference pipelines (on-prem or cloud placement is undecided) and per-branch configuration. Non-functional constraints (accuracy thresholds, retention periods, on-prem vs cloud) are not specified in the BRD and should be clarified before implementation.",
+                    "project_context": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally.",
                     "stories": [
                       {
-                        "id": "story-01-ingest-cctv-feeds",
-                        "user_story": "As a System Administrator, I want the platform to ingest live CCTV camera feeds, so that footage is available to downstream analytics in real time.",
+                        "id": "story-01-cctv-ingestion",
+                        "user_story": "As a System Operator, I want the system to ingest existing CCTV camera feeds from each branch so that video frames are available for real-time analysis.",
                         "acceptance_criteria": [
-                          "Given a configured camera feed endpoint, the system establishes and maintains a live ingestion connection and exposes frames to downstream services.",
-                          "The ingestion service reports health (connected/disconnected, last-frame timestamp, error code) per feed to monitoring endpoints.",
-                          "The ingestion pipeline tags frames with camera id, branch id and timestamp and makes them available to the analytics API with measurable latency.",
-                          "Open question: product owner to define supported feed protocols and required maximum ingestion latency before acceptance. The story is not done until that is answered."
-                        ],
-                        "domain": "Backend"
-                      },
-                      {
-                        "id": "story-02-employee-identification",
-                        "user_story": "As a Store Manager, I want the system to identify employees on the sales floor, so that individual staff activity can be attributed and tracked.",
-                        "acceptance_criteria": [
-                          "The system can enroll an employee profile (id, name, photo(s)) and associate detections in video with that employee id and a confidence score.",
-                          "For a detected person in a camera view the system returns either a matched employee id with confidence or an explicit \"unknown\" result; manual overrides (mark match wrong) are recorded.",
-                          "The identification output includes metadata (camera id, bounding box, timestamp, confidence) accessible via API for audit and downstream processing.",
-                          "Open question: Product owner to specify required identification accuracy and allowed false-positive/false-negative rates; identification pipelines must expose measurable metrics for these rates."
-                        ],
-                        "domain": "AI/ML"
-                      },
-                      {
-                        "id": "story-03-customer-engagement-score",
-                        "user_story": "As a Store Manager, I want the system to compute a per-employee Customer Engagement Score from observed movement and facial-expression signals, so that I can quantify how engaged each employee is during their shift.",
-                        "acceptance_criteria": [
-                          "For each employee on shift the system produces a time-series engagement score and aggregates a per-shift average accessible via API and UI.",
-                          "The score calculation consumes movement (proximity to customers, time spent interacting) and facial-expression-derived indicators; the input features used are documented and logged for each score update.",
-                          "Engagement scores update in (near-)real time when a tracked employee is present on camera and include a confidence/validity flag when insufficient data exists.",
-                          "Open question: product owner to approve the scoring formula or target KPIs; story is not done until scoring definition or acceptance criteria are agreed."
-                        ],
-                        "domain": "AI/ML"
-                      },
-                      {
-                        "id": "story-04-employee-emotion-detection",
-                        "user_story": "As a Store Manager, I want the system to detect employee emotional states (e.g., tiredness, unhappiness), so that the system can identify staff who may need role changes or breaks.",
-                        "acceptance_criteria": [
-                          "The emotion detection model emits detected emotional-state labels with confidence and corresponding timestamps and frames for review.",
-                          "When the model reports 'tired' or 'unhappy' above a configurable confidence threshold an event is written to the decision queue with employee id and supporting evidence frames.",
-                          "Emotion detection runs continuously while the employee is on camera and exposes per-model performance metrics (precision/recall) for monitoring.",
-                          "Open question: product owner to define the exact emotion labels required and acceptable confidence thresholds; detection pipeline must be testable against a labeled dataset once labels are defined."
-                        ],
-                        "domain": "AI/ML"
-                      },
-                      {
-                        "id": "story-05-automatic-reassignment-decision",
-                        "user_story": "As a Store Manager, I want the system to automatically generate a back-office reassignment decision when an employee is detected as tired or unhappy, so that staffing adjustments can be initiated without delay.",
-                        "acceptance_criteria": [
-                          "When an employee emotion event (tired/unhappy) is received above the configured threshold the decision service creates a reassignment action (employee id, suggested role back-office, reason, timestamp) in the actions queue.",
-                          "The decision action includes confidence, evidence references and a unique id and is auditable via an actions API.",
-                          "The decision service supports a configurable policy (automatic vs require manager approval); the policy selection must be stored and visible in the configuration.",
-                          "Open question: product owner to confirm whether reassignment should be fully automatic or require manager confirmation; the story is not complete until policy is clarified."
-                        ],
-                        "domain": "Backend"
-                      },
-                      {
-                        "id": "story-06-update-staffing-schedule",
-                        "user_story": "As a Scheduler/HR System, I want Store-Pulse to update the staffing schedule in real time when a reassignment action is approved or automatic, so that the official roster reflects the employee's new back-office assignment.",
-                        "acceptance_criteria": [
-                          "Given a reassignment action, the integration updates the staffing system via its API (or a documented endpoint) to change the employee's current assignment and shift role and returns success/failure status.",
-                          "Updates include a change record (who/what/when/reason) visible in the staffing system audit/logs and an ability to rollback within a configurable window.",
-                          "If the staffing system returns an error, Store-Pulse retries according to a retry policy and records the failure for manual resolution.",
-                          "Open question: product owner to provide staffing system API specification and required authorization method; integration is not complete until this is provided."
-                        ],
-                        "domain": "Integration"
-                      },
-                      {
-                        "id": "story-07-vip-customer-recognition",
-                        "user_story": "As a Sales Associate, I want the system to recognize VIP shoppers as they enter the store, so that staff can give priority service.",
-                        "acceptance_criteria": [
-                          "When a person enters via a monitored entrance the system matches them against a configurable VIP list and emits a VIP-identified event with customer id, confidence, entry camera id and timestamp.",
-                          "The VIP recognition event includes a reference to the customer profile used (source CRM id) and is logged for audit.",
-                          "If ambiguous matches occur the system flags the event for manual review rather than auto-labeling as VIP.",
-                          "Open question: product owner to specify privacy/consent rules for VIP matching and acceptable confidence thresholds; recognition is not complete without these rules."
-                        ],
-                        "domain": "AI/ML"
-                      },
-                      {
-                        "id": "story-08-nearest-associate-calculation",
-                        "user_story": "As a Sales Associate, I want the system to determine which on-duty associate is nearest to a given camera-detected location, so that VIP notifications are routed to the most appropriate person.",
-                        "acceptance_criteria": [
-                          "The service receives live positions or last-known positions of on-duty associates and a camera location and returns the nearest associate id with a computed distance metric.",
-                          "The calculation uses camera-to-floor mapping or last-known associate camera assignment; if associate location is unknown the service returns a defined fallback (e.g., store host) and logs the fallback used.",
-                          "The API response includes timestamp, method used (proximity-by-camera or last-seen), and confidence; mapping configuration per store is stored and versioned.",
-                          "Open question: product owner to confirm acceptable proximity method and required freshness of associate location data."
-                        ],
-                        "domain": "Backend"
-                      },
-                      {
-                        "id": "story-09-send-vip-history",
-                        "user_story": "As a Sales Associate, I want the system to send a VIP customer's purchase history to the nearest associate's phone when they enter, so that the associate has context to serve the VIP.",
-                        "acceptance_criteria": [
-                          "Given a VIP-identified event and a nearest-associate id, the integration fetches the customer's purchase history from the CRM and sends a notification payload to the associate's mobile device with customer id and purchase summary.",
-                          "The notification content delivered contains only the fields approved for sharing (as defined by product/privacy rules) and includes a link or reference id for more details in a secure interface.",
-                          "Delivery status (delivered, failed, acknowledged) is recorded and visible in an audit log; failures trigger retry and an escalation path for persistent failures.",
-                          "Open question: product owner to specify which purchase-history fields are allowed to be transmitted to associate devices and required security/consent constraints."
-                        ],
-                        "domain": "Integration"
-                      },
-                      {
-                        "id": "story-10-detect-nervous-behavior",
-                        "user_story": "As a Security Officer, I want the system to detect customers exhibiting nervous behavior, so that security can be alerted to potential incidents.",
-                        "acceptance_criteria": [
-                          "The behavior detection model emits nervousness events with confidence, bounding boxes, timestamps and supporting frames for evidence.",
-                          "The model runs on live footage and provides per-detection metadata (camera id, branch id, confidence) and a false-alarm monitoring metric.",
-                          "Detections can be filtered by confidence and by area of store; low-confidence detections are routed to a review queue rather than automatic alerting.",
-                          "Open question: product owner to define what constitutes 'nervous behavior' for detection and acceptable false-positive rate; detection pipelines must expose metrics and labeled test sets once defined."
-                        ],
-                        "domain": "AI/ML"
-                      },
-                      {
-                        "id": "story-11-detect-concealment-under-clothes",
-                        "user_story": "As a Security Officer, I want the system to detect suspicious concealment behavior (items being hidden under clothing), so that potential theft can be flagged to security.",
-                        "acceptance_criteria": [
-                          "The concealment detection model emits concealment events with confidence, bounding box, timestamp and supporting video frames or clips for review.",
-                          "Concealment detections include metadata (camera id, angle if available) and a confidence score; high-confidence detections generate candidate alerts for security per configured policy.",
-                          "The model provides false-positive/false-negative monitoring and the system supports human review and marking of true/false positives to allow model retraining.",
-                          "Open question: product owner to confirm permitted evidence retention duration and legal/privacy requirements for using concealment detections as part of security actions."
-                        ],
-                        "domain": "AI/ML"
-                      },
-                      {
-                        "id": "story-12-flag-suspicious-to-security",
-                        "user_story": "As a Security Officer, I want the system to flag suspicious behavior to the store security team, so that security can respond quickly with context and evidence.",
-                        "acceptance_criteria": [
-                          "When a suspicious behavior event (nervousness or concealment) exceeds configured thresholds the system sends an alert to the configured security channel containing event id, camera snapshots/clips, timestamps, location and confidence.",
-                          "Alerts require an acknowledgement mechanism and the system records which security user acknowledged and when; unacknowledged alerts escalate per a configurable policy.",
-                          "Alert payloads are protected in transit (signed or encrypted) and access to clip evidence is auditable.",
-                          "Open question: product owner to specify preferred security alert channels (SMS/app/dispatch) and acceptable evidence sharing rules."
-                        ],
-                        "domain": "Integration"
-                      },
-                      {
-                        "id": "story-13-deploy-scale-40-branches",
-                        "user_story": "As an Operations Lead, I want Store-Pulse to be deployable and configurable across all 40 branches, so that each branch has the required ingestion, analytics and alerting configured consistently.",
-                        "acceptance_criteria": [
-                          "Deployment artifacts and infrastructure-as-code are provided so a new branch can be onboarded with branch-specific configuration (camera list, floor mapping, staffing integration endpoints) using a repeatable pipeline.",
-                          "Monitoring and health dashboards show per-branch ingestion health, inference throughput, alert rates and action queue depth; automated alarms fire for branch-level failures.",
-                          "Onboarding documentation exists and an initial pilot deployment is tested on at least one branch and then replicated; capacity and scaling plan produced for supporting 40 branches.",
-                          "Open question: product owner to confirm whether processing will be centralized or per-branch (on-prem) and expected cost/latency tradeoffs; deployment is not complete until that decision is made."
+                          "System can be configured with one or more camera endpoints (RTSP/HTTP) and successfully open the stream for at least one branch in staging.",
+                          "System emits time-ordered frames and basic metadata (camera_id, branch_id, timestamp) into the downstream processing pipeline.",
+                          "Connection failures are logged and a configurable retry policy is applied; retry attempts and error logs are observable.",
+                          "Open question recorded: supported camera protocols, expected frame rates, and network constraints must be confirmed before production rollout."
                         ],
                         "domain": "DevOps"
+                      },
+                      {
+                        "id": "story-02-branch-camera-mapping",
+                        "user_story": "As a Store Admin, I want to register branches and map each camera to a branch and physical location so that analytics and alerts are tagged to the correct branch and area.",
+                        "acceptance_criteria": [
+                          "API exists to create/update/delete branch records and to register camera_id → branch_id → location_label mappings for each camera.",
+                          "Mappings are retrievable via API and used by the ingestion pipeline to tag incoming frames with branch and location metadata.",
+                          "It is possible to bulk-import mappings for multiple cameras/branches to support the 40-branch rollout.",
+                          "Open question recorded: required location granularity (e.g., zone, aisle, register) must be defined by stakeholders."
+                        ],
+                        "domain": "Database"
+                      },
+                      {
+                        "id": "story-03-employee-registry-enrollment",
+                        "user_story": "As an HR/Admin user, I want to enroll employees into a registry with reference biometric data so that the system can identify employees on camera.",
+                        "acceptance_criteria": [
+                          "API to create, read, update, delete employee records exists and stores employee_id, role, and enrollment references (e.g., facial embeddings or reference images).",
+                          "Enrollment process produces and persists a reference embedding and returns an enrollment success response that can be verified with a test match.",
+                          "Consent and policy fields are present on the employee record; the presence/meaning of these fields is noted as an open question for legal/compliance.",
+                          "Enrollment records are versioned and updates to a reference replace or archive prior embeddings per a defined audit trail."
+                        ],
+                        "domain": "Database"
+                      },
+                      {
+                        "id": "story-04-face-recognition-real-time",
+                        "user_story": "As the AI system, I want to identify employees and returning customers in camera frames so that persons on the floor are attributed to known identities.",
+                        "acceptance_criteria": [
+                          "Real-time face detector + recognizer returns person detections with bounding_box, predicted_identity (employee_id or customer_id) and a confidence score for each processed frame.",
+                          "Recognitions include a confidence score and the recognizer exposes a configurable confidence threshold; matches above threshold are emitted as identity events.",
+                          "Identity events include camera_id, timestamp, and the recognition confidence; recognition latency (detection->identity event) is measurable and instrumented as a metric.",
+                          "Open question recorded: acceptable recognition accuracy and privacy/consent requirements for face recognition must be clarified before production use."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-05-person-tracking-across-frames",
+                        "user_story": "As the AI system, I want to track detected people across consecutive frames (and across overlapping cameras where available) so that movement trajectories can be built for behavior analysis.",
+                        "acceptance_criteria": [
+                          "Tracker assigns persistent track_id to detections and emits track updates (track_id, bounding_box, camera_id, timestamp) for each frame while the person is continuously visible.",
+                          "When a person exits visibility and re-enters, the system emits a new track_id unless an overlap-based re-association is possible; behavior of re-association is documented and testable.",
+                          "Track continuity is demonstrable in tests: a single continuous presence in view produces a single track_id for the duration of visibility.",
+                          "Open question recorded: expected behavior and accuracy for cross-camera re-association (when and how to link tracks across cameras) must be specified by stakeholders."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-06-extract-movement-features",
+                        "user_story": "As a Store Manager, I want the system to extract movement-based features for each employee so that part of the Customer Engagement Score can be calculated.",
+                        "acceptance_criteria": [
+                          "Pipeline extracts per-employee movement metrics (e.g., time spent in customer zones, number of approaches to customers, proximity events) and outputs them in a standardized JSON schema per time window.",
+                          "Movement features are timestamped, associated with employee_id and branch_id, and persisted to the feature store or event log.",
+                          "Feature outputs include provenance metadata (source camera_ids and track_ids) so downstream scoring can attribute features correctly.",
+                          "Open question recorded: definition of 'customer zone' and the mapping from camera locations to zones must be confirmed."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-07-extract-facial-expression-features",
+                        "user_story": "As a Store Manager, I want the system to extract facial-expression features for employees so that emotion-based inputs to the Customer Engagement Score are available.",
+                        "acceptance_criteria": [
+                          "Facial expression inference produces per-frame labels and confidence scores (e.g., attentive, neutral, happy, sad, tired) for each detected face and writes them to the feature store with timestamps and employee_id when recognized.",
+                          "Expression features are aggregated into time-window summaries (e.g., percent time attentive) and exposed via API for scoring.",
+                          "Model outputs include confidence scores and are accompanied by metadata about input frame and camera_id for auditing.",
+                          "Open question recorded: exact class definitions (what constitutes 'tired' or 'unhappy') and acceptable false positive/negative rates must be defined by stakeholders."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-08-engagement-score-service",
+                        "user_story": "As a Store Manager, I want a service that consumes movement and facial features and produces a Customer Engagement Score per employee so that engagement can be monitored in real-time.",
+                        "acceptance_criteria": [
+                          "Service ingests movement and facial-expression feature records and emits a timestamped engagement_score (numeric) for each employee along with the contributing feature breakdown.",
+                          "Engagement scores are available via a query API by employee_id, branch_id, and time range, and are persisted for the length of retention policy.",
+                          "Score computation parameters (weights) are configurable; the service records which feature inputs contributed to each score for traceability.",
+                          "Open question recorded: default scoring formula and required SLA for update frequency must be confirmed by stakeholders before production."
+                        ],
+                        "domain": "Backend"
+                      },
+                      {
+                        "id": "story-09-detect-tired-unhappy",
+                        "user_story": "As the AI system, I want to detect when an employee appears tired or unhappy so that automated workflow actions can be triggered.",
+                        "acceptance_criteria": [
+                          "Emotion detection component emits an event (employee_id, timestamp, flag: tired_or_unhappy, confidence) when model output exceeds a configurable threshold.",
+                          "Events are deduplicated within a configurable time window to avoid repeated triggers for the same condition.",
+                          "Events are logged and visible in the audit trail with the source frames and model confidence for manual review.",
+                          "Open question recorded: whether automatic actions may be taken without manager approval and acceptable sensitivity/specificity must be clarified."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-10-automatic-reassignment-scheduling-call",
+                        "user_story": "As Store-Pulse, I want to call the staffing/scheduling system to change an employee's role to a back-office assignment when they are detected tired/unhappy so that the staffing plan is updated in real-time.",
+                        "acceptance_criteria": [
+                          "When a tired/unhappy event (per story-09) is emitted, the system invokes the scheduling system API with employee_id, current_shift_id, and new_role(back-office) and records the scheduling API response (success/failure).",
+                          "Successful calls result in a scheduling_change event recorded in the system event log with timestamp, actor (automated), and API response payload.",
+                          "If scheduling API returns failure, the system retries per a configurable policy and creates an incident/alert if retries exhaust.",
+                          "Open question recorded: requirement for manager approval or human-in-the-loop before role change must be clarified and implemented if required."
+                        ],
+                        "domain": "Integration"
+                      },
+                      {
+                        "id": "story-11-vip-recognition-on-entry",
+                        "user_story": "As the AI system, I want to recognize VIP shoppers at entry so that VIP events can trigger personalized service workflows.",
+                        "acceptance_criteria": [
+                          "Entry detection produces an 'entry' event for a person crossing an entry camera line and the face recognizer compares against the VIP list, emitting VIP_detected (customer_id, camera_id, timestamp, confidence) when matched.",
+                          "VIP_detected events include the camera_id and exact timestamp of entry and are written to the event stream for downstream consumers.",
+                          "Model returns a confidence score and VIP detection uses a configurable threshold; VIP detection events are auditable with reference frames.",
+                          "Open question recorded: how the VIP list is maintained (who can modify it) and customer consent policy must be confirmed."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-12-deliver-vip-history-to-nearest-associate",
+                        "user_story": "As a Store Associate, I want to receive a VIP shopper's purchase history on my phone when a VIP enters so that I can provide personalized assistance.",
+                        "acceptance_criteria": [
+                          "On VIP_detected event, the system queries the customer purchase-history database and retrieves the customer's anonymized purchase history payload.",
+                          "System determines the nearest sales associate to the VIP entry location using current staff locations or camera-to-staff mapping and selects one associate as the recipient; selection logic is logged.",
+                          "System sends the purchase-history payload to the selected associate's phone via the configured delivery channel (push/SMS/other) and records a delivery receipt or failure.",
+                          "Open question recorded: delivery channel(s) and data fields allowed in purchase-history payload (PII scope) must be defined by stakeholders and legal/compliance."
+                        ],
+                        "domain": "Integration"
+                      },
+                      {
+                        "id": "story-13-detect-suspicious-behavior",
+                        "user_story": "As a Security Analyst, I want the system to detect suspicious behaviors such as nervousness or concealing items so that security can be alerted.",
+                        "acceptance_criteria": [
+                          "Behavior model emits suspicious_behavior events with category labels (e.g., nervous, concealing), confidence scores, camera_id, and timestamps when thresholds are exceeded.",
+                          "Each suspicious_behavior event includes supporting evidence: one or more cropped frame images and corresponding track_id(s) for the person-of-interest.",
+                          "Events are rate-limited and de-duplicated to prevent alert storms; deduplication window is configurable.",
+                          "Open question recorded: minimum evidence required for an alert and acceptable false-positive rate must be agreed with security/legal teams prior to rollout."
+                        ],
+                        "domain": "AI/ML"
+                      },
+                      {
+                        "id": "story-14-deliver-security-alerts",
+                        "user_story": "As the Security System, I want suspicious behavior alerts delivered to security endpoints so that security personnel can respond quickly.",
+                        "acceptance_criteria": [
+                          "On suspicious_behavior event, the system posts an alert payload (camera snapshot(s), camera_id, branch_id, timestamp, track_id, category, confidence) to a configurable security endpoint (webhook, dashboard API or push channel) and records delivery status.",
+                          "System requires and logs an acknowledgement or escalation if the configured security endpoint does not acknowledge within a configurable timeout.",
+                          "Alert payloads are stored in the audit log and associated with the original camera frames to allow post-incident review.",
+                          "Open question recorded: the preferred delivery channels for security and the on-call/response procedure must be defined by stakeholders."
+                        ],
+                        "domain": "Integration"
                       }
                     ]
                   }
@@ -760,7 +671,7 @@
         "json": {
           "output": [
             {
-              "id": "msg_0c583bfa72ced467006a91db9a875c87d2873eaf619007740b",
+              "id": "msg_0885e4aee41af66f006a97fadbd88487d2a3fa4aa44a346521",
               "type": "message",
               "status": "completed",
               "content": [
@@ -775,21 +686,260 @@
                         "Back-end developer",
                         "DevOps / SRE / infrastructure",
                         "Security engineer",
-                        "Engineering manager / lead",
-                        "Mobile developer"
+                        "Engineering manager / lead"
                       ],
                       "dev_professional_status": [
                         "Professional developer"
                       ]
                     },
-                    "sampleSize": 12,
-                    "rationale": "The work is dominated by real-time computer-vision and behavior models (Data / ML developer) plus live video ingestion, APIs and integrations with HR/CRM (Back-end developer). Deploying low-latency inference across 40 branches and per-branch configuration requires DevOps/SRE expertise; biometric and customer/personal data handling requires a Security engineer. An Engineering manager is needed to sequence and coordinate the 13 stories, and Mobile developer expertise is required to deliver VIP notifications and purchase-history display on associates' phones."
+                    "sampleSize": 10,
+                    "rationale": "The work is dominated by ML surfaces (face recognition, tracking, expression/behavior models) so Data / ML developers are required. Persistent metadata, integrations with scheduling and customer DBs, and notification APIs require Back-end developers. Low-latency streaming, branch deployments, and monitoring demand DevOps/SRE expertise. Biometric/PII handling and alerting require a Security engineer. With 14 stories and multiple teams coordinated, an Engineering manager/lead is needed to judge sequencing and integration costs."
                   }
                 }
               ],
               "role": "assistant"
             }
           ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "split x stories": [
+      {
+        "json": {
+          "id": "story-01-cctv-ingestion",
+          "user_story": "As a System Operator, I want the system to ingest existing CCTV camera feeds from each branch so that video frames are available for real-time analysis.",
+          "acceptance_criteria": [
+            "System can be configured with one or more camera endpoints (RTSP/HTTP) and successfully open the stream for at least one branch in staging.",
+            "System emits time-ordered frames and basic metadata (camera_id, branch_id, timestamp) into the downstream processing pipeline.",
+            "Connection failures are logged and a configurable retry policy is applied; retry attempts and error logs are observable.",
+            "Open question recorded: supported camera protocols, expected frame rates, and network constraints must be confirmed before production rollout."
+          ],
+          "domain": "DevOps",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-02-branch-camera-mapping",
+          "user_story": "As a Store Admin, I want to register branches and map each camera to a branch and physical location so that analytics and alerts are tagged to the correct branch and area.",
+          "acceptance_criteria": [
+            "API exists to create/update/delete branch records and to register camera_id → branch_id → location_label mappings for each camera.",
+            "Mappings are retrievable via API and used by the ingestion pipeline to tag incoming frames with branch and location metadata.",
+            "It is possible to bulk-import mappings for multiple cameras/branches to support the 40-branch rollout.",
+            "Open question recorded: required location granularity (e.g., zone, aisle, register) must be defined by stakeholders."
+          ],
+          "domain": "Database",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-03-employee-registry-enrollment",
+          "user_story": "As an HR/Admin user, I want to enroll employees into a registry with reference biometric data so that the system can identify employees on camera.",
+          "acceptance_criteria": [
+            "API to create, read, update, delete employee records exists and stores employee_id, role, and enrollment references (e.g., facial embeddings or reference images).",
+            "Enrollment process produces and persists a reference embedding and returns an enrollment success response that can be verified with a test match.",
+            "Consent and policy fields are present on the employee record; the presence/meaning of these fields is noted as an open question for legal/compliance.",
+            "Enrollment records are versioned and updates to a reference replace or archive prior embeddings per a defined audit trail."
+          ],
+          "domain": "Database",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-04-face-recognition-real-time",
+          "user_story": "As the AI system, I want to identify employees and returning customers in camera frames so that persons on the floor are attributed to known identities.",
+          "acceptance_criteria": [
+            "Real-time face detector + recognizer returns person detections with bounding_box, predicted_identity (employee_id or customer_id) and a confidence score for each processed frame.",
+            "Recognitions include a confidence score and the recognizer exposes a configurable confidence threshold; matches above threshold are emitted as identity events.",
+            "Identity events include camera_id, timestamp, and the recognition confidence; recognition latency (detection->identity event) is measurable and instrumented as a metric.",
+            "Open question recorded: acceptable recognition accuracy and privacy/consent requirements for face recognition must be clarified before production use."
+          ],
+          "domain": "AI/ML",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-05-person-tracking-across-frames",
+          "user_story": "As the AI system, I want to track detected people across consecutive frames (and across overlapping cameras where available) so that movement trajectories can be built for behavior analysis.",
+          "acceptance_criteria": [
+            "Tracker assigns persistent track_id to detections and emits track updates (track_id, bounding_box, camera_id, timestamp) for each frame while the person is continuously visible.",
+            "When a person exits visibility and re-enters, the system emits a new track_id unless an overlap-based re-association is possible; behavior of re-association is documented and testable.",
+            "Track continuity is demonstrable in tests: a single continuous presence in view produces a single track_id for the duration of visibility.",
+            "Open question recorded: expected behavior and accuracy for cross-camera re-association (when and how to link tracks across cameras) must be specified by stakeholders."
+          ],
+          "domain": "AI/ML",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-06-extract-movement-features",
+          "user_story": "As a Store Manager, I want the system to extract movement-based features for each employee so that part of the Customer Engagement Score can be calculated.",
+          "acceptance_criteria": [
+            "Pipeline extracts per-employee movement metrics (e.g., time spent in customer zones, number of approaches to customers, proximity events) and outputs them in a standardized JSON schema per time window.",
+            "Movement features are timestamped, associated with employee_id and branch_id, and persisted to the feature store or event log.",
+            "Feature outputs include provenance metadata (source camera_ids and track_ids) so downstream scoring can attribute features correctly.",
+            "Open question recorded: definition of 'customer zone' and the mapping from camera locations to zones must be confirmed."
+          ],
+          "domain": "AI/ML",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-07-extract-facial-expression-features",
+          "user_story": "As a Store Manager, I want the system to extract facial-expression features for employees so that emotion-based inputs to the Customer Engagement Score are available.",
+          "acceptance_criteria": [
+            "Facial expression inference produces per-frame labels and confidence scores (e.g., attentive, neutral, happy, sad, tired) for each detected face and writes them to the feature store with timestamps and employee_id when recognized.",
+            "Expression features are aggregated into time-window summaries (e.g., percent time attentive) and exposed via API for scoring.",
+            "Model outputs include confidence scores and are accompanied by metadata about input frame and camera_id for auditing.",
+            "Open question recorded: exact class definitions (what constitutes 'tired' or 'unhappy') and acceptable false positive/negative rates must be defined by stakeholders."
+          ],
+          "domain": "AI/ML",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-08-engagement-score-service",
+          "user_story": "As a Store Manager, I want a service that consumes movement and facial features and produces a Customer Engagement Score per employee so that engagement can be monitored in real-time.",
+          "acceptance_criteria": [
+            "Service ingests movement and facial-expression feature records and emits a timestamped engagement_score (numeric) for each employee along with the contributing feature breakdown.",
+            "Engagement scores are available via a query API by employee_id, branch_id, and time range, and are persisted for the length of retention policy.",
+            "Score computation parameters (weights) are configurable; the service records which feature inputs contributed to each score for traceability.",
+            "Open question recorded: default scoring formula and required SLA for update frequency must be confirmed by stakeholders before production."
+          ],
+          "domain": "Backend",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-09-detect-tired-unhappy",
+          "user_story": "As the AI system, I want to detect when an employee appears tired or unhappy so that automated workflow actions can be triggered.",
+          "acceptance_criteria": [
+            "Emotion detection component emits an event (employee_id, timestamp, flag: tired_or_unhappy, confidence) when model output exceeds a configurable threshold.",
+            "Events are deduplicated within a configurable time window to avoid repeated triggers for the same condition.",
+            "Events are logged and visible in the audit trail with the source frames and model confidence for manual review.",
+            "Open question recorded: whether automatic actions may be taken without manager approval and acceptable sensitivity/specificity must be clarified."
+          ],
+          "domain": "AI/ML",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-10-automatic-reassignment-scheduling-call",
+          "user_story": "As Store-Pulse, I want to call the staffing/scheduling system to change an employee's role to a back-office assignment when they are detected tired/unhappy so that the staffing plan is updated in real-time.",
+          "acceptance_criteria": [
+            "When a tired/unhappy event (per story-09) is emitted, the system invokes the scheduling system API with employee_id, current_shift_id, and new_role(back-office) and records the scheduling API response (success/failure).",
+            "Successful calls result in a scheduling_change event recorded in the system event log with timestamp, actor (automated), and API response payload.",
+            "If scheduling API returns failure, the system retries per a configurable policy and creates an incident/alert if retries exhaust.",
+            "Open question recorded: requirement for manager approval or human-in-the-loop before role change must be clarified and implemented if required."
+          ],
+          "domain": "Integration",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-11-vip-recognition-on-entry",
+          "user_story": "As the AI system, I want to recognize VIP shoppers at entry so that VIP events can trigger personalized service workflows.",
+          "acceptance_criteria": [
+            "Entry detection produces an 'entry' event for a person crossing an entry camera line and the face recognizer compares against the VIP list, emitting VIP_detected (customer_id, camera_id, timestamp, confidence) when matched.",
+            "VIP_detected events include the camera_id and exact timestamp of entry and are written to the event stream for downstream consumers.",
+            "Model returns a confidence score and VIP detection uses a configurable threshold; VIP detection events are auditable with reference frames.",
+            "Open question recorded: how the VIP list is maintained (who can modify it) and customer consent policy must be confirmed."
+          ],
+          "domain": "AI/ML",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-12-deliver-vip-history-to-nearest-associate",
+          "user_story": "As a Store Associate, I want to receive a VIP shopper's purchase history on my phone when a VIP enters so that I can provide personalized assistance.",
+          "acceptance_criteria": [
+            "On VIP_detected event, the system queries the customer purchase-history database and retrieves the customer's anonymized purchase history payload.",
+            "System determines the nearest sales associate to the VIP entry location using current staff locations or camera-to-staff mapping and selects one associate as the recipient; selection logic is logged.",
+            "System sends the purchase-history payload to the selected associate's phone via the configured delivery channel (push/SMS/other) and records a delivery receipt or failure.",
+            "Open question recorded: delivery channel(s) and data fields allowed in purchase-history payload (PII scope) must be defined by stakeholders and legal/compliance."
+          ],
+          "domain": "Integration",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-13-detect-suspicious-behavior",
+          "user_story": "As a Security Analyst, I want the system to detect suspicious behaviors such as nervousness or concealing items so that security can be alerted.",
+          "acceptance_criteria": [
+            "Behavior model emits suspicious_behavior events with category labels (e.g., nervous, concealing), confidence scores, camera_id, and timestamps when thresholds are exceeded.",
+            "Each suspicious_behavior event includes supporting evidence: one or more cropped frame images and corresponding track_id(s) for the person-of-interest.",
+            "Events are rate-limited and de-duplicated to prevent alert storms; deduplication window is configurable.",
+            "Open question recorded: minimum evidence required for an alert and acceptable false-positive rate must be agreed with security/legal teams prior to rollout."
+          ],
+          "domain": "AI/ML",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "story-14-deliver-security-alerts",
+          "user_story": "As the Security System, I want suspicious behavior alerts delivered to security endpoints so that security personnel can respond quickly.",
+          "acceptance_criteria": [
+            "On suspicious_behavior event, the system posts an alert payload (camera snapshot(s), camera_id, branch_id, timestamp, track_id, category, confidence) to a configurable security endpoint (webhook, dashboard API or push channel) and records delivery status.",
+            "System requires and logs an acknowledgement or escalation if the configured security endpoint does not acknowledge within a configurable timeout.",
+            "Alert payloads are stored in the audit log and associated with the original camera frames to allow post-incident review.",
+            "Open question recorded: the preferred delivery channels for security and the on-call/response procedure must be defined by stakeholders."
+          ],
+          "domain": "Integration",
+          "projectContext": "Store-Pulse will be deployed to process live CCTV camera feeds from 40 retail branches using existing camera endpoints. The system must integrate with the stores' existing scheduling system and the customer purchase-history database, and deliver notifications to store staff phones and security endpoints. Real-time processing requirements imply a low-latency streaming pipeline, ML inference services for face recognition, expression and behavior models, and backend services to persist staff/customer metadata and events. Deployments must be branch-configurable so camera-to-location mappings and branch-specific settings can be managed centrally."
         },
         "pairedItem": {
           "item": 0
@@ -896,18 +1046,6 @@
           "item": 0
         }
       }
-    ],
-    "Materialize task": [
-      {
-        "json": {
-          "taskPath": "application/tasks/survey_gen-9931-story-01-ingest-cctv-feeds",
-          "runId": "9931",
-          "storyId": "story-01-ingest-cctv-feeds"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
     ]
   },
   "settings": {
@@ -925,6 +1063,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-08-30T06:21:29.217Z",
-  "versionId": "ac55c7e4-39b4-40c7-8c4b-8723f875ecd4"
+  "updatedAt": "2026-09-02T10:47:22.315Z",
+  "versionId": "277e65ea-2e15-4df6-8dec-493d003b700f"
 }
