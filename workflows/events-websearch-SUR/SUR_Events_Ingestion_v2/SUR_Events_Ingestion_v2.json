@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-05T11:17:47.162Z",
-    "createdAt": "2026-06-05T11:17:47.162Z",
-    "versionId": "c5d923cf-695b-4945-ab3b-da8ebc6fa78c",
+    "updatedAt": "2026-09-03T19:46:42.118Z",
+    "createdAt": "2026-09-03T19:46:42.118Z",
+    "versionId": "0512b9c6-dbd9-4910-bc69-47475bbce986",
     "workflowId": "P7VzgpTFym7i9PPl",
     "nodes": [
       {
@@ -602,7 +602,7 @@
     "name": null,
     "description": null
   },
-  "activeVersionId": "c5d923cf-695b-4945-ab3b-da8ebc6fa78c",
+  "activeVersionId": "0512b9c6-dbd9-4910-bc69-47475bbce986",
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -1205,7 +1205,11 @@
   ],
   "pinData": {},
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "gz1SScQ6DdkhMGqW"
   },
   "shared": [
     {
@@ -1232,6 +1236,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-06-05T11:17:47.161Z",
-  "versionId": "c5d923cf-695b-4945-ab3b-da8ebc6fa78c"
+  "updatedAt": "2026-09-03T19:46:42.117Z",
+  "versionId": "0512b9c6-dbd9-4910-bc69-47475bbce986"
 }
