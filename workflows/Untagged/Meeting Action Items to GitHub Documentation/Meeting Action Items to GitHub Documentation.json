@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-08-18T06:15:31.959Z",
-    "createdAt": "2026-08-18T06:15:31.959Z",
-    "versionId": "23b0cbb8-2bc7-4c31-8b34-fa643d5676ff",
+    "updatedAt": "2026-09-03T20:29:39.134Z",
+    "createdAt": "2026-09-03T20:29:39.134Z",
+    "versionId": "f3f05c64-ee51-458c-ae9f-74b8f48acc54",
     "workflowId": "5nR7DRdU7huAr7xi",
     "nodes": [
       {
@@ -565,7 +565,7 @@
     "name": null,
     "description": null
   },
-  "activeVersionId": "23b0cbb8-2bc7-4c31-8b34-fa643d5676ff",
+  "activeVersionId": "f3f05c64-ee51-458c-ae9f-74b8f48acc54",
   "connections": {
     "Message a model": {
       "main": [
@@ -1168,132 +1168,14 @@
           "executionMode": "test"
         }
       }
-    ],
-    "Message a model": [
-      {
-        "json": {
-          "output": [
-            {
-              "id": "msg_030e935598affa9b006a83e805ad40819f925e2ec3b3a338ed",
-              "type": "message",
-              "status": "completed",
-              "content": [
-                {
-                  "type": "output_text",
-                  "annotations": [],
-                  "logprobs": [],
-                  "text": {
-                    "meeting": {
-                      "title": "Sheba - Flo 2026-08-04 Meeting",
-                      "date": "2026-08-04",
-                      "quarter": "Q3",
-                      "summary": "Flo and Nyairo aligned on converting existing digital work into an operating-system style setup over the next 30–90 days. They agreed Nyairo will map current digital tools, create standard operating procedures and recurring checks, and consolidate repositories and documentation. Flo requested improved time-tracking transparency via QuickBooks and clearer documentation of the 4h/week research time (short slide summaries). They also agreed to regular check-ins (Tuesday and a late-week wrap-up) and to explore automating recurring reminders (e.g., monthly Google Search Console review).",
-                      "source_document": "https://docs.google.com/document/d/1SPA-D5XKMf3XMMcNY059zx7FlqaSi7MUk0uONXkhg2I/edit"
-                    },
-                    "decisions": [
-                      "Adopt a 90-day sprint focus with concrete 30-day goals to consolidate digital tooling into an operating system.",
-                      "Nyairo will map all digital tools, identify legacy automations (e.g., app scripts) and create standard operating procedures and recurring checklists for upkeep.",
-                      "Start using QuickBooks time tracking consistently and document the agreed 4 hours/week of research with short deliverables.",
-                      "Establish a cadence of check-ins (primary on Tuesday and a short wrap-up Thursday/Friday) and run a deep-dive workshop before September to align on the 90-day plan."
-                    ],
-                    "action_items": [
-                      {
-                        "status": "UPDATE",
-                        "issue_number": 74,
-                        "owners": [
-                          "nyairo-k"
-                        ],
-                        "task": "Review operations documentation and map digital tools",
-                        "update_summary": "Meeting decision: perform a full mapping of digital tools (ticket system, knowledge base, prompt library, app scripts, Google Cloud deployments) and evaluate the internal operations document for completeness. Nyairo will identify deprecated automations and surface gaps so the runbook/documentation can be updated."
-                      },
-                      {
-                        "status": "NEW",
-                        "issue_number": null,
-                        "owners": [
-                          "nyairo-k"
-                        ],
-                        "task": "Create SOPs and recurring checklists for digital operations",
-                        "update_summary": "Draft a set of standard operating procedures and a recurrent checklist (weekly, monthly) for maintaining the 'digital house' including Google Workspace/GCP checks and rotation of sensitive keys. The checklist should include concrete routines (e.g., Tuesday 30-min search-performance check, monthly Google Search Console review) and clear owner responsibilities."
-                      },
-                      {
-                        "status": "UPDATE",
-                        "issue_number": 79,
-                        "owners": [
-                          "nyairo-k"
-                        ],
-                        "task": "Update work hours: Record all hours worked in QuickBooks.",
-                        "update_summary": "Agreement to consistently use QuickBooks time tracking going forward and to update missed weeks. Also agreed to explicitly document the 4 hours/week research time with short summaries of work done and plans for the next week to provide visibility."
-                      },
-                      {
-                        "status": "UPDATE",
-                        "issue_number": 60,
-                        "owners": [
-                          "nyairo-k"
-                        ],
-                        "task": "Push repository: Push the repository containing work on the prompt library for testing and feedback.",
-                        "update_summary": "Nyairo will consolidate the prompt library, ticket system snippets and knowledge-base links into the repository and push it for Flo's review. This consolidation is intended to support the operating-system goal and enable easier reuse for client demos and internal processes."
-                      },
-                      {
-                        "status": "UPDATE",
-                        "issue_number": 76,
-                        "owners": [
-                          "nyairo-k"
-                        ],
-                        "task": "Back up N8N flows: Create recurring backups of N8N flows to ensure operational continuity.",
-                        "update_summary": "Meeting action: prioritize an audit of legacy automations (including app scripts and N8N flows) and implement recurring backups or archival for critical flows. Identify any app scripts still running and either deprecate them or incorporate them into the new backup/process list."
-                      },
-                      {
-                        "status": "NEW",
-                        "issue_number": null,
-                        "owners": [
-                          "nyairo-k"
-                        ],
-                        "task": "Implement recurring task reminders/automation for operational loops",
-                        "update_summary": "Investigate and implement a solution (GitHub recurring issues, GitHub Actions, or alternative) to create automated monthly/weekly reminders for operational checks (e.g., Google Search Console review) and overdue alerts. Integrate notifications into Slack or the team's chosen channel to surface outstanding recurring tasks."
-                      },
-                      {
-                        "status": "NEW",
-                        "issue_number": null,
-                        "owners": [
-                          "nyairo-k"
-                        ],
-                        "task": "Document weekly research outputs for demo and internal use",
-                        "update_summary": "For each research session (including the agreed 4 hours/week), produce a 2–3 slide summary with key learnings, a proposed internal or client use case, and brief notes on how it could be demonstrated on the demo platform. These summaries should be stored in the knowledge base and linked to the repo for reuse in workshops and client materials."
-                      },
-                      {
-                        "status": "NEW",
-                        "issue_number": null,
-                        "owners": [
-                          "nyairo-k"
-                        ],
-                        "task": "Establish recurring team check-ins and daily update habit",
-                        "update_summary": "Set up recurring calendar invites or issues for a 30-minute Tuesday check and a short Thursday/Friday wrap-up to report achievements and next-week availability. Encourage a lightweight daily loop in Slack (morning intent, evening update) to improve visibility and time reporting."
-                      },
-                      {
-                        "status": "NEW",
-                        "issue_number": null,
-                        "owners": [
-                          "nyairo-k"
-                        ],
-                        "task": "Plan internal systems deep-dive workshop before September",
-                        "update_summary": "Coordinate a ~2-hour workshop with Flo to review internal systems, walk through the mapped tools and SOPs, and produce a prioritized list of tasks to meet the 90-day plan. Prepare materials (repo links, checklists, and research summaries) in advance to make the session actionable."
-                      }
-                    ]
-                  }
-                }
-              ],
-              "role": "assistant"
-            }
-          ]
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
     ]
   },
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "gz1SScQ6DdkhMGqW"
   },
   "shared": [
     {
@@ -1307,6 +1189,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-08-18T06:15:31.957Z",
-  "versionId": "23b0cbb8-2bc7-4c31-8b34-fa643d5676ff"
+  "updatedAt": "2026-09-03T20:29:39.133Z",
+  "versionId": "f3f05c64-ee51-458c-ae9f-74b8f48acc54"
 }
