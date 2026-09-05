@@ -1,0 +1,204 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Every Monday at 9AM": {
+      "main": [
+        [
+          {
+            "node": "Get All Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get All Workflows": {
+      "main": [
+        [
+          {
+            "node": "Get Failed Executions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Failed Executions": {
+      "main": [
+        [
+          {
+            "node": "Build Weekly Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Weekly Summary": {
+      "main": [
+        [
+          {
+            "node": "Create GitHub Issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-09-01T15:50:04.572Z",
+  "id": "0FMdJmDG06B29QUf",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Weekly n8n Error Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "9b89bf3f-c53a-4366-8d4b-89274027e784",
+      "name": "Every Monday at 9AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        1168,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://scionetwork.app.n8n.cloud/api/v1/workflows",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "n8nApi",
+        "options": {}
+      },
+      "id": "7aea1798-312c-44c7-8fc7-4a3523f8a8c8",
+      "name": "Get All Workflows",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1376,
+        288
+      ],
+      "credentials": {
+        "n8nApi": {
+          "id": "9yLmiRcZZkHzV6Lm",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://scionetwork.app.n8n.cloud/api/v1/executions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "n8nApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "error"
+            },
+            {
+              "name": "limit",
+              "value": "50"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7146e64d-61b7-4fed-8ad5-88749e2f9dae",
+      "name": "Get Failed Executions",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1648,
+        208
+      ],
+      "credentials": {
+        "n8nApi": {
+          "id": "9yLmiRcZZkHzV6Lm",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const workflowList = $items(\"Get All Workflows\")[0].json.data;\nconst workflowMap = {};\n\nworkflowList.forEach(w => {\n  workflowMap[w.id] = w.name;\n});\n\nconst executionList = $items(\"Get Failed Executions\")[0].json.data;\nconst lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);\n\nconst recentErrors = executionList.filter(e => new Date(e.stoppedAt) > lastWeek);\n\nif (recentErrors.length === 0) return [];\n\nconst summary = {};\nrecentErrors.forEach(err => {\n  const id = err.workflowId;\n  const name = workflowMap[id] || \"Deleted/Unknown Workflow\";\n  \n  if (!summary[id]) {\n    summary[id] = {\n      name: name,\n      count: 0,\n      workflowLink: `https://scionetwork.app.n8n.cloud/workflow/${id}`,\n      lastExecutionLink: `https://scionetwork.app.n8n.cloud/execution/${err.id}`\n    };\n  }\n  summary[id].count++;\n});\n\nlet report = \"### 📊 Weekly n8n Error Summary\\n\";\nreport += `*Reporting Period: ${lastWeek.toLocaleDateString()} to ${new Date().toLocaleDateString()}*\\n\\n`;\nreport += `Total failed execution events: **${recentErrors.length}**\\n\\n`;\nreport += \"| Workflow Name | Failures | Action |\\n\";\nreport += \"| :--- | :---: | :--- |\\n\";\n\nfor (const id in summary) {\n  const item = summary[id];\n  // link to the Workflow Editor and the specific Execution\n  report += `| **${item.name}** | ${item.count} | [Open Workflow](${item.workflowLink}) / [View Error](${item.lastExecutionLink}) |\\n`;\n}\n\nreturn [{ json: { report, count: recentErrors.length } }];"
+      },
+      "id": "b48fdd0a-8e94-4875-8b81-cc35879ca538",
+      "name": "Build Weekly Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1808,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "owner": {
+          "__rl": true,
+          "value": "Scio-Network",
+          "mode": "string"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "digital-footprint",
+          "mode": "string"
+        },
+        "title": "=n8n Weekly Error Summary: {{ $now.format('yyyy-MM-dd') }}",
+        "body": "={{ $json.report }}",
+        "labels": [],
+        "assignees": []
+      },
+      "id": "9721376b-8487-4938-b3ab-aeacdaf4f81b",
+      "name": "Create GitHub Issue",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        272
+      ],
+      "webhookId": "e88e58d8-f78b-4826-aee1-b952b7dfbbfc",
+      "credentials": {
+        "githubApi": {
+          "id": "SZYHQ2VAQfsrE9bT",
+          "name": "GitHu-Scio"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-01T15:50:04.578Z",
+      "createdAt": "2026-09-01T15:50:04.578Z",
+      "role": "workflow:owner",
+      "workflowId": "0FMdJmDG06B29QUf",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-09-03T19:46:56.000Z",
+  "versionId": "8f46d63b-7220-4229-ab85-022716571f16"
+}
