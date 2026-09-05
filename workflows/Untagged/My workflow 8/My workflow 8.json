@@ -1,0 +1,78 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2026-09-03T20:03:32.072Z",
+  "id": "R774tBY6RjFKjHpB",
+  "isArchived": true,
+  "meta": null,
+  "name": "My workflow 8",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0233a800-f9d9-45cb-b768-0383e6634a31",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "throw new Error(\"This is a test crash!\");"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "cd1cb736-0ae4-47bc-8372-bba3a6260328",
+      "name": "ERROR"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "gz1SScQ6DdkhMGqW"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-03T20:03:32.078Z",
+      "createdAt": "2026-09-03T20:03:32.078Z",
+      "role": "workflow:owner",
+      "workflowId": "R774tBY6RjFKjHpB",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-09-03T20:27:06.000Z",
+  "versionId": "4ae9f718-5030-4c0c-812b-9fd88cc143bd"
+}
