@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-05-19T06:23:30.256Z",
-    "createdAt": "2026-05-19T06:23:30.256Z",
-    "versionId": "06bbc476-df81-4602-881f-df1255395e1e",
+    "updatedAt": "2026-09-09T07:02:05.665Z",
+    "createdAt": "2026-09-09T07:02:05.665Z",
+    "versionId": "6873fed4-aa3f-42ef-b8a8-98c363d668f1",
     "workflowId": "0YMVGuhuu4HRxHB0",
     "nodes": [
       {
@@ -752,7 +752,7 @@
     "name": null,
     "description": null
   },
-  "activeVersionId": "06bbc476-df81-4602-881f-df1255395e1e",
+  "activeVersionId": "6873fed4-aa3f-42ef-b8a8-98c363d668f1",
   "connections": {
     "Google Drive Trigger": {
       "main": [
@@ -1505,7 +1505,11 @@
   ],
   "pinData": {},
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "gz1SScQ6DdkhMGqW"
   },
   "shared": [
     {
@@ -1518,11 +1522,11 @@
   ],
   "staticData": {
     "node:Google Drive Trigger": {
-      "lastTimeChecked": "2026-09-03T07:02:30Z"
+      "lastTimeChecked": "2026-09-09T07:02:05Z"
     }
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-05-19T06:23:30.255Z",
-  "versionId": "06bbc476-df81-4602-881f-df1255395e1e"
+  "updatedAt": "2026-09-09T07:02:05.663Z",
+  "versionId": "6873fed4-aa3f-42ef-b8a8-98c363d668f1"
 }
