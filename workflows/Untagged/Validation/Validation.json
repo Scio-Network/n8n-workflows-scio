@@ -55,7 +55,7 @@
   },
   "createdAt": "2026-03-26T11:52:17.097Z",
   "id": "SqOVuxK5s8hxfuyx",
-  "isArchived": false,
+  "isArchived": true,
   "meta": null,
   "name": "Validation",
   "nodes": [
@@ -220,6 +220,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-04-15T11:23:06.637Z",
-  "versionId": "e1cd6bd4-e8bc-46ab-bedf-a5eebf7d7e93"
+  "updatedAt": "2026-09-23T06:55:11.000Z",
+  "versionId": "64733834-c5b6-4bcd-a4b5-a1f12952d4c4"
 }
