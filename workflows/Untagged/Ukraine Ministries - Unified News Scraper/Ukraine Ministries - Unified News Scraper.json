@@ -1,0 +1,657 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Get Scrape Targets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Scrape Targets": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Ministries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Ministries": {
+      "main": [
+        [
+          {
+            "node": "Dedupe In Run",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Start Scrape Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Scrape Job": {
+      "main": [
+        [
+          {
+            "node": "Wait 20s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 20s": {
+      "main": [
+        [
+          {
+            "node": "Get Job Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Job Result": {
+      "main": [
+        [
+          {
+            "node": "Still Running?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Still Running?": {
+      "main": [
+        [
+          {
+            "node": "Wait 20s",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Articles": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Ministries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedupe In Run": {
+      "main": [
+        [
+          {
+            "node": "Earliest Start Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Earliest Start Date": {
+      "main": [
+        [
+          {
+            "node": "Get Stored URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Stored URLs": {
+      "main": [
+        [
+          {
+            "node": "Keep New Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep New Articles": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Articles": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-09-23T16:26:47.619Z",
+  "id": "C8l00PzzpLNBFDxs",
+  "isArchived": false,
+  "meta": null,
+  "name": "Ukraine Ministries - Unified News Scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 4
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1696,
+        944
+      ],
+      "id": "fb0a079a-ba22-476d-9631-b885e63d1733",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "780493dd-f207-4a2b-aec1-dbfc8cc4aba1",
+              "name": "scraper_base_url",
+              "value": "https://4ds1451b-8080.uks1.devtunnels.ms",
+              "type": "string"
+            },
+            {
+              "id": "5681b364-0b07-4717-97e6-a25103b1d6b1",
+              "name": "supabase_url",
+              "value": "https://xzulfjussvbykwnzgdba.supabase.co",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1472,
+        944
+      ],
+      "id": "0bca704a-529e-4dac-ac92-6bd7a0eb14ef",
+      "name": "Config"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.supabase_url }}/rest/v1/rpc/get_scrape_targets",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1248,
+        944
+      ],
+      "id": "c775e1cd-d788-484b-8e67-aa5a8d74e156",
+      "name": "Get Scrape Targets",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1024,
+        944
+      ],
+      "id": "439d8a60-d731-48c3-87b0-6cac0b5984f6",
+      "name": "Loop Over Ministries"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config').first().json.scraper_base_url }}/jobs",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "source",
+              "value": "={{ $json.scraper_key }}"
+            },
+            {
+              "name": "start",
+              "value": "={{ $json.start_date }}"
+            },
+            {
+              "name": "end",
+              "value": "={{ $json.end_date }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 60000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -816,
+        1104
+      ],
+      "id": "04f866af-cef7-4546-8728-5a2997f7b0d9",
+      "name": "Start Scrape Job",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -608,
+        1104
+      ],
+      "id": "b49f5e5c-c64f-4f66-9217-b62fa3c91f6d",
+      "name": "Wait 20s",
+      "webhookId": "3b84b307-9c38-431e-87b9-8b0a1efc35fa"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config').first().json.scraper_base_url }}/jobs/{{ $('Start Scrape Job').first().json.job_id }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 60000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -416,
+        1104
+      ],
+      "id": "8361454d-7208-414a-bd68-e0aa722f532c",
+      "name": "Get Job Result",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "03cc4996-f76e-4d01-9ac2-31458e034fb6",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "running",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "6bdd9121-1bcf-4641-8826-d8643c374290",
+              "leftValue": "={{ $json.elapsed_seconds }}",
+              "rightValue": 1800,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -208,
+        1104
+      ],
+      "id": "ca04e8c5-3c79-41aa-b6b4-44e1808114ec",
+      "name": "Still Running?"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Runs once per ministry (inside the loop).\n// Turns the scraper response into one item per article, with source_id and\n// n8n_content_hash taken from here - never from the AI model.\nconst crypto = require('crypto');\n\nfunction normalizeWhitespace(s) {\n  return String(s ?? '').replace(/\\s+/g, ' ').trim();\n}\n\nfunction canonicalUrl(url) {\n  const raw = String(url ?? '').trim();\n  if (!raw) return raw;\n  try {\n    const u = new URL(raw);\n    const drop = new Set([\n      'utm_source','utm_medium','utm_campaign','utm_term','utm_content',\n      'at_medium','at_campaign','at_custom1','at_custom2','at_custom3',\n      'fbclid','gclid','igshid','mc_cid','mc_eid'\n    ]);\n    for (const k of [...u.searchParams.keys()]) {\n      if (drop.has(k.toLowerCase())) u.searchParams.delete(k);\n    }\n    const params = [...u.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b));\n    u.search = '';\n    for (const [k, v] of params) u.searchParams.append(k, v);\n    u.pathname = u.pathname.replace(/\\/+$/, '');\n    return u.toString();\n  } catch {\n    return raw;\n  }\n}\n\nfunction sha256Hex(input) {\n  return crypto.createHash('sha256').update(input, 'utf8').digest('hex');\n}\n\nconst target = $('Loop Over Ministries').first().json;\nconst res = $input.first().json || {};\nconst data = Array.isArray(res.data) ? res.data : [];\n\nconst articles = data\n  .filter(a => a && a.link && a.title)\n  .map(a => {\n    const source_id = target.source_id;\n    // Same hash material as the original workflow\n    const hashMaterial = [\n      'v1',\n      source_id,\n      canonicalUrl(a.link),\n      normalizeWhitespace(a.title).toLowerCase(),\n      normalizeWhitespace(a.content).toLowerCase()\n    ].join('|');\n\n    return {\n      json: {\n        source_id,\n        source_name: target.name_en,\n        scraper_key: target.scraper_key,\n        title: a.title,\n        content: a.content || '',\n        link: a.link,\n        published_date: a.date_iso || null,\n        raw_date: a.date || null,\n        n8n_content_hash: sha256Hex(hashMaterial)\n      }\n    };\n  });\n\n// Always return at least one item, otherwise the loop stops early.\nif (articles.length === 0) {\n  return [{\n    json: {\n      __empty: true,\n      scraper_key: target.scraper_key,\n      scrape_status: res.status || 'error',\n      scrape_message: res.message || res.error || null\n    }\n  }];\n}\nreturn articles;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        1184
+      ],
+      "id": "f5b68b62-fc18-4af1-a28b-9187850d018f",
+      "name": "Prepare Articles"
+    },
+    {
+      "parameters": {
+        "jsCode": "// All ministries done. Drop empty markers and repeated URLs within this run.\nconst seen = new Set();\nconst out = [];\nfor (const item of $input.all()) {\n  const j = item.json;\n  if (j.__empty) {\n    console.log(`[${j.scraper_key}] no articles (${j.scrape_status}: ${j.scrape_message ?? ''})`);\n    continue;\n  }\n  if (seen.has(j.link)) continue;\n  seen.add(j.link);\n  out.push({ json: j });\n}\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -784,
+        784
+      ],
+      "id": "5b0a68fb-9380-4317-89f4-06b9d72e150c",
+      "name": "Dedupe In Run"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Earliest start date across all ministries = oldest article date we could have re-scraped.\nconst starts = $('Get Scrape Targets').all().map(i => i.json.start_date).filter(Boolean).sort();\nreturn [{ json: { since: starts[0] } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -576,
+        784
+      ],
+      "id": "b96f3b0d-fded-4141-ba2d-0d9c8e6fe434",
+      "name": "Earliest Start Date"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config').first().json.supabase_url }}/rest/v1/articles",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "source_url"
+            },
+            {
+              "name": "published_date",
+              "value": "=gte.{{ $json.since }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -352,
+        784
+      ],
+      "id": "af34cae3-f3f8-4963-a136-4a091bad6f15",
+      "name": "Get Stored URLs",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Keep only articles whose URL is not already in the articles table.\n// Input: rows {source_url} already stored in Supabase since the earliest start date.\nconst existing = new Set();\nfor (const item of $input.all()) {\n  const r = item.json;\n  if (!r || Object.keys(r).length === 0) continue;          // empty result\n  if (typeof r === 'string') { existing.add(r); continue; }\n  const url = r.url ?? r.source_url ?? r.p_url ?? r.article_url;\n  if (!url) continue;\n  if (r.url_exists === undefined || r.url_exists === true) existing.add(url);\n}\n\nconst all = $('Dedupe In Run').all();\nconst fresh = all.filter(i => !existing.has(i.json.link));\nconsole.log(`scraped ${all.length}, already in Supabase ${all.length - fresh.length}, new ${fresh.length}`);\nreturn fresh.map(i => ({ json: i.json }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        784
+      ],
+      "id": "5f04a1f2-5ce8-4f88-85d3-c35039ee5658",
+      "name": "Keep New Articles"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        96,
+        784
+      ],
+      "id": "972566ee-f696-4b89-a803-8697e17887c0",
+      "name": "Loop Over Articles"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=# Role\nYou are a multilingual policy and infrastructure analysis assistant with expertise in public-sector news, disaster risk management, infrastructure, housing, and urban resilience.\n\nYou can read and translate Ukrainian, English, and other European languages accurately.\n\n---\n\n# Task\nGiven a news article **title** and **content**, perform the following tasks using ONLY the provided input text.\n\nIf the title or content is **not in English**, first translate it internally to English before performing summarization and classification.\n\n---\n\n## 1. Title Translation\nProvide the article title in **English**, **German** and **Ukrainian**.\n- If the original title is already in one of these languages, copy it verbatim for that language\n- Preserve original meaning and professional tone\n- Do NOT add interpretation\n\n---\n\n## 2. Context Summarization\nGenerate **three short summaries**, each **1–2 sentences**, capturing the main context of the article:\n- One summary in **English**\n- One summary in **German**\n- One summary in **Ukrainian**\n\nRules:\n- If the source content is Ukrainian or another language, translate it internally before summarizing\n- Summaries must reflect the **true meaning** of the original content\n- Be concise, factual, and neutral\n- Do not speculate or introduce external information\n\n---\n\n## 3. Sector Classification\nClassify the article into one or more sectors based **ONLY on the article title and content**.\n\n### Allowed Sectors (STRICT LIST — no other values allowed)\n- **Disaster Risk Management**\n- **Basic Infrastructure**\n- **Housing**\n- **Urban Resilience**\n\n### Sector Definitions\n- **Disaster Risk Management**: Activities, systems, and governance focused on anticipating, reducing, managing, and recovering from hazards through preparedness, emergency response, and recovery coordination.\n- **Basic Infrastructure**: Essential public utilities and everyday service infrastructure such as energy, water, wastewater, transport, communications, and critical public facilities.\n- **Housing**: Repair, reconstruction, or development of permanent residential dwellings to restore safe, adequate long-term living conditions.\n- **Urban Resilience**: City- or neighborhood-level planning and multi-sector interventions that strengthen a city’s ability to withstand shocks and long-term stresses.\n\n### Classification Rules\n- An article may belong to **multiple sectors**\n- Output sectors as an **array**\n- Classification must be based on the **translated meaning**, not surface keywords\n- If unclear or ambiguous, **default to \"Basic Infrastructure\"**\n- Do NOT invent categories or infer beyond the text\n\n---\n\n## Input\n- **Article Title:** {{ $json.title }}\n- **Article Content:** {{ ($json.content || '').slice(0, 12000) }}\n\n---\n\n## Output Format (STRICT)\nReturn ONLY a JSON object with exactly these keys:\n\n{\n  \"title_en\": \"\",\n  \"title_de\": \"\",\n  \"title_uk\": \"\",\n  \"summary_en\": \"\",\n  \"summary_de\": \"\",\n  \"summary_uk\": \"\",\n  \"sector_classification\": []\n}\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        336,
+        944
+      ],
+      "id": "0989431b-d542-428a-953f-ea09e5ba287b",
+      "name": "Message a model",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "summary_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_en }}"
+            },
+            {
+              "fieldId": "summary_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_de }}"
+            },
+            {
+              "fieldId": "summary_uk",
+              "fieldValue": "={{ $json.output[0].content[0].text.summary_uk }}"
+            },
+            {
+              "fieldId": "title_en",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_en }}"
+            },
+            {
+              "fieldId": "title_de",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_de }}"
+            },
+            {
+              "fieldId": "title_uk",
+              "fieldValue": "={{ $json.output[0].content[0].text.title_uk }}"
+            },
+            {
+              "fieldId": "primary_sector",
+              "fieldValue": "={{ [].concat($json.output[0].content[0].text.sector_classification || 'Basic Infrastructure') }}"
+            },
+            {
+              "fieldId": "source_url",
+              "fieldValue": "={{ $('Loop Over Articles').item.json.link }}"
+            },
+            {
+              "fieldId": "published_date",
+              "fieldValue": "={{ $('Loop Over Articles').item.json.published_date }}"
+            },
+            {
+              "fieldId": "article_type",
+              "fieldValue": "news"
+            },
+            {
+              "fieldId": "n8n_content_hash",
+              "fieldValue": "={{ $('Loop Over Articles').item.json.n8n_content_hash }}"
+            },
+            {
+              "fieldId": "source_id",
+              "fieldValue": "={{ $('Loop Over Articles').item.json.source_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        576,
+        944
+      ],
+      "id": "ca7f7322-4dc4-4d87-b0d1-fa205960ca08",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MlU51CIejkM7G5Fa",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-23T16:26:47.621Z",
+      "createdAt": "2026-09-23T16:26:47.621Z",
+      "role": "workflow:owner",
+      "workflowId": "C8l00PzzpLNBFDxs",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-09-23T17:37:25.565Z",
+  "versionId": "64c922c0-6f9d-41f8-91bc-75b7f7f78f33"
+}
