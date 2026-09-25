@@ -47,55 +47,15 @@
         ],
         [
           {
-            "node": "Start Scrape Job",
+            "node": "Scrape Ministry",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Start Scrape Job": {
+    "Scrape Ministry": {
       "main": [
-        [
-          {
-            "node": "Wait 20s",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Wait 20s": {
-      "main": [
-        [
-          {
-            "node": "Get Job Result",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Job Result": {
-      "main": [
-        [
-          {
-            "node": "Still Running?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Still Running?": {
-      "main": [
-        [
-          {
-            "node": "Wait 20s",
-            "type": "main",
-            "index": 0
-          }
-        ],
         [
           {
             "node": "Prepare Articles",
@@ -120,25 +80,25 @@
       "main": [
         [
           {
-            "node": "Earliest Start Date",
+            "node": "Collect URLs",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Earliest Start Date": {
+    "Collect URLs": {
       "main": [
         [
           {
-            "node": "Get Stored URLs",
+            "node": "Check Existing URLs",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get Stored URLs": {
+    "Check Existing URLs": {
       "main": [
         [
           {
@@ -202,8 +162,8 @@
       ]
     }
   },
-  "createdAt": "2026-09-23T16:26:47.619Z",
-  "id": "C8l00PzzpLNBFDxs",
+  "createdAt": "2026-09-23T16:21:08.715Z",
+  "id": "ewQnuSGaqsSLEcB9",
   "isArchived": false,
   "meta": null,
   "name": "Ukraine Ministries - Unified News Scraper",
@@ -221,10 +181,10 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        -1696,
-        944
+        -720,
+        112
       ],
-      "id": "fb0a079a-ba22-476d-9631-b885e63d1733",
+      "id": "ce70c5df-c13b-4fe6-9115-96802e37b146",
       "name": "Schedule Trigger"
     },
     {
@@ -232,13 +192,13 @@
         "assignments": {
           "assignments": [
             {
-              "id": "780493dd-f207-4a2b-aec1-dbfc8cc4aba1",
+              "id": "6d31aba5-bc87-4749-9abf-a62552bf51b9",
               "name": "scraper_base_url",
-              "value": "https://4ds1451b-8080.uks1.devtunnels.ms",
+              "value": "https://YOUR-SCRAPER-HOST",
               "type": "string"
             },
             {
-              "id": "5681b364-0b07-4717-97e6-a25103b1d6b1",
+              "id": "88f0f471-901a-4bc1-a1fd-24078c7b037e",
               "name": "supabase_url",
               "value": "https://xzulfjussvbykwnzgdba.supabase.co",
               "type": "string"
@@ -250,10 +210,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1472,
-        944
+        -512,
+        112
       ],
-      "id": "0bca704a-529e-4dac-ac92-6bd7a0eb14ef",
+      "id": "e6211ea5-7699-445f-83d9-c1bd3671a542",
       "name": "Config"
     },
     {
@@ -270,10 +230,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -1248,
-        944
+        -288,
+        112
       ],
-      "id": "c775e1cd-d788-484b-8e67-aa5a8d74e156",
+      "id": "b2406419-d5df-4044-a568-b3e2b0b9bdc0",
       "name": "Get Scrape Targets",
       "credentials": {
         "supabaseApi": {
@@ -289,15 +249,15 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -1024,
-        944
+        -64,
+        112
       ],
-      "id": "439d8a60-d731-48c3-87b0-6cac0b5984f6",
+      "id": "67c38b39-e73e-4c11-a4da-4f9052d0f43c",
       "name": "Loop Over Ministries"
     },
     {
       "parameters": {
-        "url": "={{ $('Config').first().json.scraper_base_url }}/jobs",
+        "url": "={{ $('Config').first().json.scraper_base_url }}/scrape",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -322,102 +282,19 @@
               "responseFormat": "json"
             }
           },
-          "timeout": 60000
+          "timeout": 900000
         }
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -816,
-        1104
+        176,
+        272
       ],
-      "id": "04f866af-cef7-4546-8728-5a2997f7b0d9",
-      "name": "Start Scrape Job",
+      "id": "6ce72f5e-cfdd-4cf3-ba53-45cac7a2280b",
+      "name": "Scrape Ministry",
       "alwaysOutputData": true,
       "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "amount": 20
-      },
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
-      "position": [
-        -608,
-        1104
-      ],
-      "id": "b49f5e5c-c64f-4f66-9217-b62fa3c91f6d",
-      "name": "Wait 20s",
-      "webhookId": "3b84b307-9c38-431e-87b9-8b0a1efc35fa"
-    },
-    {
-      "parameters": {
-        "url": "={{ $('Config').first().json.scraper_base_url }}/jobs/{{ $('Start Scrape Job').first().json.job_id }}",
-        "options": {
-          "response": {
-            "response": {
-              "neverError": true,
-              "responseFormat": "json"
-            }
-          },
-          "timeout": 60000
-        }
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        -416,
-        1104
-      ],
-      "id": "8361454d-7208-414a-bd68-e0aa722f532c",
-      "name": "Get Job Result",
-      "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000,
-      "alwaysOutputData": true,
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "loose",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "03cc4996-f76e-4d01-9ac2-31458e034fb6",
-              "leftValue": "={{ $json.status }}",
-              "rightValue": "running",
-              "operator": {
-                "type": "string",
-                "operation": "equals"
-              }
-            },
-            {
-              "id": "6bdd9121-1bcf-4641-8826-d8643c374290",
-              "leftValue": "={{ $json.elapsed_seconds }}",
-              "rightValue": 1800,
-              "operator": {
-                "type": "number",
-                "operation": "lt"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -208,
-        1104
-      ],
-      "id": "ca04e8c5-3c79-41aa-b6b4-44e1808114ec",
-      "name": "Still Running?"
     },
     {
       "parameters": {
@@ -426,10 +303,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        16,
-        1184
+        400,
+        272
       ],
-      "id": "f5b68b62-fc18-4af1-a28b-9187850d018f",
+      "id": "4504d8d9-23fd-498f-b34b-f0d27de62124",
       "name": "Prepare Articles"
     },
     {
@@ -439,54 +316,44 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -784,
-        784
+        176,
+        -48
       ],
-      "id": "5b0a68fb-9380-4317-89f4-06b9d72e150c",
+      "id": "fb5d507c-4b31-4e3a-991a-f3f6cc73751a",
       "name": "Dedupe In Run"
     },
     {
       "parameters": {
-        "jsCode": "// Earliest start date across all ministries = oldest article date we could have re-scraped.\nconst starts = $('Get Scrape Targets').all().map(i => i.json.start_date).filter(Boolean).sort();\nreturn [{ json: { since: starts[0] } }];\n"
+        "jsCode": "// One request body with every scraped URL.\nreturn [{ json: { p_urls: $input.all().map(i => i.json.link) } }];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -576,
-        784
+        400,
+        -48
       ],
-      "id": "b96f3b0d-fded-4141-ba2d-0d9c8e6fe434",
-      "name": "Earliest Start Date"
+      "id": "61b147fe-34bc-4e74-bfaa-5a71ee143e6a",
+      "name": "Collect URLs"
     },
     {
       "parameters": {
-        "url": "={{ $('Config').first().json.supabase_url }}/rest/v1/articles",
+        "method": "POST",
+        "url": "={{ $('Config').first().json.supabase_url }}/rest/v1/rpc/existing_article_urls",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "supabaseApi",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "select",
-              "value": "source_url"
-            },
-            {
-              "name": "published_date",
-              "value": "=gte.{{ $json.since }}"
-            }
-          ]
-        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -352,
-        784
+        624,
+        -48
       ],
-      "id": "af34cae3-f3f8-4963-a136-4a091bad6f15",
-      "name": "Get Stored URLs",
-      "alwaysOutputData": true,
+      "id": "15710dff-05e2-43f4-8ba5-cb8da8dad95f",
+      "name": "Check Existing URLs",
       "credentials": {
         "supabaseApi": {
           "id": "MlU51CIejkM7G5Fa",
@@ -496,15 +363,15 @@
     },
     {
       "parameters": {
-        "jsCode": "// Keep only articles whose URL is not already in the articles table.\n// Input: rows {source_url} already stored in Supabase since the earliest start date.\nconst existing = new Set();\nfor (const item of $input.all()) {\n  const r = item.json;\n  if (!r || Object.keys(r).length === 0) continue;          // empty result\n  if (typeof r === 'string') { existing.add(r); continue; }\n  const url = r.url ?? r.source_url ?? r.p_url ?? r.article_url;\n  if (!url) continue;\n  if (r.url_exists === undefined || r.url_exists === true) existing.add(url);\n}\n\nconst all = $('Dedupe In Run').all();\nconst fresh = all.filter(i => !existing.has(i.json.link));\nconsole.log(`scraped ${all.length}, already in Supabase ${all.length - fresh.length}, new ${fresh.length}`);\nreturn fresh.map(i => ({ json: i.json }));\n"
+        "jsCode": "// Keep only articles whose URL is not already in the articles table.\nconst existing = new Set($input.first().json.existing || []);\nreturn $('Dedupe In Run').all()\n  .filter(i => !existing.has(i.json.link))\n  .map(i => ({ json: i.json }));\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -128,
-        784
+        848,
+        -48
       ],
-      "id": "5f04a1f2-5ce8-4f88-85d3-c35039ee5658",
+      "id": "cb445031-7801-44bc-8624-064d209ff0e4",
       "name": "Keep New Articles"
     },
     {
@@ -514,10 +381,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        96,
-        784
+        1056,
+        -48
       ],
-      "id": "972566ee-f696-4b89-a803-8697e17887c0",
+      "id": "7abbebb2-8575-4b1c-ac56-49fbcd0d4488",
       "name": "Loop Over Articles"
     },
     {
@@ -547,10 +414,10 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2.1,
       "position": [
-        336,
-        944
+        1296,
+        112
       ],
-      "id": "0989431b-d542-428a-953f-ea09e5ba287b",
+      "id": "4082522c-89b7-49d1-856f-8e94cac0d045",
       "name": "Message a model",
       "retryOnFail": true,
       "maxTries": 3,
@@ -622,10 +489,10 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        576,
-        944
+        1536,
+        112
       ],
-      "id": "ca7f7322-4dc4-4d87-b0d1-fa205960ca08",
+      "id": "9cd87ca2-6050-489a-8a98-9513483b4fca",
       "name": "Create a row",
       "credentials": {
         "supabaseApi": {
@@ -642,16 +509,16 @@
   },
   "shared": [
     {
-      "updatedAt": "2026-09-23T16:26:47.621Z",
-      "createdAt": "2026-09-23T16:26:47.621Z",
+      "updatedAt": "2026-09-23T16:21:08.721Z",
+      "createdAt": "2026-09-23T16:21:08.721Z",
       "role": "workflow:owner",
-      "workflowId": "C8l00PzzpLNBFDxs",
+      "workflowId": "ewQnuSGaqsSLEcB9",
       "projectId": "cFPhnNmamSW061Vq"
     }
   ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-09-23T17:37:25.565Z",
-  "versionId": "64c922c0-6f9d-41f8-91bc-75b7f7f78f33"
+  "updatedAt": "2026-09-23T16:21:08.715Z",
+  "versionId": "f058d8a0-7613-46c1-aafc-e633f652e4e6"
 }
