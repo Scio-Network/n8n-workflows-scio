@@ -165,7 +165,7 @@
   },
   "createdAt": "2026-03-31T09:05:48.376Z",
   "id": "nNT20xw2vnbxFL8v",
-  "isArchived": false,
+  "isArchived": true,
   "meta": {
     "templateId": "rag-starter-template",
     "templateCredsSetupCompleted": true
@@ -628,6 +628,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-07-21T14:26:35.942Z",
-  "versionId": "86cc4ff4-991d-4488-afc1-8afdc6c2ad6d"
+  "updatedAt": "2026-09-23T06:55:16.000Z",
+  "versionId": "3e5ac547-21e3-47c6-ab41-7782712ce51b"
 }
