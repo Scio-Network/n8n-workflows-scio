@@ -1,0 +1,195 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Search platform index",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search platform index": {
+      "main": [
+        [
+          {
+            "node": "Draft answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft answer": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Draft answer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-09-22T13:15:24.164Z",
+  "id": "QzqBWo7I7zYPTxbi",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SCIO AI Lab · Document RAG inside a workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "scio-document-rag",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "r1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        304
+      ],
+      "webhookId": "scio-document-rag"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.body.public_base_url }}/api/rag/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Callback-Secret",
+              "value": "={{ $json.body.callback_secret }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ question: $json.body.question, top_k: Number($json.body.top_k || 6) }) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "r2",
+      "name": "Search platform index",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        224,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Question: {{ $('Webhook').first().json.body.question }}\n\nPassages ({{ ($json.retrieved || []).length }}):\n\n{{ ($json.retrieved || []).map((r, i) => '[' + (i + 1) + '] ' + r.filename + ' · chunk ' + (r.position + 1) + ' · similarity ' + r.similarity + '\\n' + r.text).join('\\n\\n') }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You draft a reply email that answers the question using only the numbered passages below. Do not add outside knowledge. Cite each claim with the passage number in square brackets, like [2] or [1][3]. If the passages do not cover something the question asks, say so in one sentence rather than guessing.\nStructure the email in Markdown: a one-line direct answer, a short paragraph of key details with citations, one line on what the documents do not say, and a closing line. Passages may come from different documents that use different words for the same idea; connect them when they clearly refer to the same thing."
+            }
+          ]
+        }
+      },
+      "id": "r3",
+      "name": "Draft answer",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        448,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "options": {}
+      },
+      "id": "r3m",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        528
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "a4ja82V4nnlunpii",
+          "name": "openai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ execution_id: $execution.id, answer: $json.text, passages: $('Search platform index').first().json.retrieved || [], search_run_id: $('Search platform index').first().json.run_id || null, question: $('Webhook').first().json.body.question }) }}",
+        "options": {}
+      },
+      "id": "r4",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        304
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-22T13:15:24.173Z",
+      "createdAt": "2026-09-22T13:15:24.173Z",
+      "role": "workflow:owner",
+      "workflowId": "QzqBWo7I7zYPTxbi",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-09-22T13:21:35.742Z",
+  "versionId": "526e00f6-23c7-494e-9b7a-9dc8184c98e1"
+}
