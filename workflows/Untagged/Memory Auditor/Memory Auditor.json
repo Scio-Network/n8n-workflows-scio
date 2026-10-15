@@ -1,0 +1,152 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Run Auditor": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Fetch Execution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Execution": {
+      "main": [
+        [
+          {
+            "node": "Analyze Memory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-14T08:31:44.401Z",
+  "id": "DfZYuz6xSJovgTOT",
+  "isArchived": false,
+  "meta": null,
+  "name": "Memory Auditor",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1c32267f-da06-4d11-b924-867559577567",
+      "name": "Run Auditor",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        416,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "s1",
+              "name": "n8nBaseUrl",
+              "value": "https://scionetwork.app.n8n.cloud/",
+              "type": "string"
+            },
+            {
+              "id": "s2",
+              "name": "workflowId",
+              "value": "PASTE_WORKFLOW_ID",
+              "type": "string"
+            },
+            {
+              "id": "s3",
+              "name": "executionId",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "s4",
+              "name": "planLimitMB",
+              "value": 320,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f90cffdb-5678-4c7b-86f8-b347e80e8774",
+      "name": "Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        640,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.n8nBaseUrl.replace(/\\/$/, '') + ($json.executionId ? '/api/v1/executions/' + $json.executionId + '?includeData=true' : '/api/v1/executions?includeData=true&limit=1&workflowId=' + $json.workflowId) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "f38a226b-d33b-4384-92aa-df130a68e52c",
+      "name": "Fetch Execution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        864,
+        496
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "g084iTX4HgTc0ja6",
+          "name": "Supabase Service Role"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Memory Auditor — analysis step (runs inside an n8n Code node, \"Run Once for All Items\").\n// Input: the response of GET /api/v1/executions/{id}?includeData=true\n//        or GET /api/v1/executions?workflowId=...&includeData=true&limit=1\n// Output: one summary item, then one item per node sorted by data size (largest first).\n\nconst settings = $('Settings').first().json;\nconst res = $input.first().json;\nconst exec = Array.isArray(res.data) ? res.data[0] : res;\n\nif (!exec) {\n  throw new Error('No execution found. Run the workflow you want to measure once, then try again.');\n}\nconst runData = exec.data && exec.data.resultData && exec.data.resultData.runData;\nif (!runData) {\n  throw new Error(\n    `Execution ${exec.id} has no saved node data. Check that the workflow saves execution data ` +\n      '(Workflow settings > Save execution progress / Save manual executions). A crashed (OOM) execution usually has no data; run it again with a smaller sample.'\n  );\n}\n\nconst MB = 1024 * 1024;\nconst UNITS = { b: 1, kb: 1024, mb: MB, gb: 1024 * MB };\n\n// Binary metadata carries a human-readable fileSize such as \"1.23 MB\" or \"456 kB\".\nfunction parseFileSize(text) {\n  const m = /([\\d.]+)\\s*([kmg]?b)/i.exec(String(text || ''));\n  return m ? parseFloat(m[1]) * UNITS[m[2].toLowerCase()] : 0;\n}\n\nfunction binaryBytes(binary) {\n  let total = 0;\n  for (const file of Object.values(binary)) {\n    if (!file) continue;\n    // In-memory binary mode: base64 payload is inline. Filesystem/S3 mode: only metadata.\n    if (typeof file.data === 'string' && file.data.length > 0 && !file.id) {\n      total += Math.floor((file.data.length * 3) / 4);\n    } else {\n      total += parseFileSize(file.fileSize);\n    }\n  }\n  return total;\n}\n\nconst rows = [];\nfor (const [node, runs] of Object.entries(runData)) {\n  let items = 0;\n  let jsonBytes = 0;\n  let binBytes = 0;\n  let ms = 0;\n  for (const run of runs || []) {\n    ms += run.executionTime || 0;\n    for (const outputs of Object.values(run.data || {})) {\n      for (const output of outputs || []) {\n        for (const item of output || []) {\n          items++;\n          jsonBytes += JSON.stringify(item.json === undefined ? {} : item.json).length;\n          if (item.binary) binBytes += binaryBytes(item.binary);\n        }\n      }\n    }\n  }\n  rows.push({\n    node,\n    runs: (runs || []).length,\n    items,\n    jsonMB: +(jsonBytes / MB).toFixed(3),\n    binaryMB: +(binBytes / MB).toFixed(3),\n    totalMB: +((jsonBytes + binBytes) / MB).toFixed(3),\n    executionMs: ms,\n  });\n}\n\nrows.sort((a, b) => b.totalMB - a.totalMB);\n\n// n8n keeps every node's output in memory until the execution ends, so the\n// footprint is the SUM of all nodes, not the largest one. A JS object usually\n// takes 2-4x its JSON size on the heap; manual runs also copy data for the editor.\nconst dataMB = rows.reduce((s, r) => s + r.totalMB, 0);\nconst jsonMB = rows.reduce((s, r) => s + r.jsonMB, 0);\nconst binMB = dataMB - jsonMB;\nconst estLowMB = jsonMB * 2 + binMB;\nconst estHighMB = jsonMB * 4 + binMB * 2;\nconst limitMB = Number(settings.planLimitMB) || 0;\nconst pct = limitMB ? Math.round((estHighMB / limitMB) * 100) : null;\n\nlet verdict = 'Set planLimitMB in Settings to get a verdict.';\nif (limitMB) {\n  if (pct >= 60) verdict = `HIGH RISK: up to ~${pct}% of your plan limit, and n8n itself also needs memory. Batch or split this workflow.`;\n  else if (pct >= 30) verdict = `CAUTION: up to ~${pct}% of plan limit. Concurrent runs or bigger inputs could tip it over.`;\n  else verdict = `OK: up to ~${pct}% of plan limit for this input size.`;\n}\n\nconst summary = {\n  node: '=== SUMMARY ===',\n  executionId: exec.id,\n  workflowId: exec.workflowId,\n  status: exec.status,\n  mode: exec.mode,\n  nodes: rows.length,\n  dataHeldMB: +dataMB.toFixed(2),\n  estimatedHeapMB: `${estLowMB.toFixed(0)}-${estHighMB.toFixed(0)}`,\n  planLimitMB: limitMB || null,\n  verdict,\n  topOffenders: rows.slice(0, 3).map((r) => `${r.node} (${r.totalMB} MB)`).join(', '),\n};\n\nreturn [summary, ...rows].map((json) => ({ json }));\n"
+      },
+      "id": "c903131f-1189-436d-b3e8-437fa424f0fc",
+      "name": "Analyze Memory",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        496
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-10-14T08:31:44.404Z",
+      "createdAt": "2026-10-14T08:31:44.404Z",
+      "role": "workflow:owner",
+      "workflowId": "DfZYuz6xSJovgTOT",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-10-14T10:03:42.198Z",
+  "versionId": "b7524f10-725c-4a32-9583-a31e2a96dda6"
+}
