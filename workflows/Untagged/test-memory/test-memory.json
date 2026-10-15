@@ -1,0 +1,92 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Salesforce Trigger": {
+      "main": [
+        [
+          {
+            "node": "Create a contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-14T11:24:19.080Z",
+  "id": "BOmiUfJMcPe1wOAe",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "test-memory",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "userCreated"
+      },
+      "type": "n8n-nodes-base.salesforceTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c48fd053-dab5-47fc-b935-82e5f662b946",
+      "name": "Salesforce Trigger",
+      "credentials": {
+        "salesforceOAuth2Api": {
+          "id": "1JVUQfvBt7AbBSQM",
+          "name": "Salesforce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "contact",
+        "lastname": "test",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.salesforce",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "403a9b1b-7088-4755-9ecc-2d7fe536c6bc",
+      "name": "Create a contact",
+      "credentials": {
+        "salesforceOAuth2Api": {
+          "id": "1JVUQfvBt7AbBSQM",
+          "name": "Salesforce account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-10-14T11:24:19.085Z",
+      "createdAt": "2026-10-14T11:24:19.085Z",
+      "role": "workflow:owner",
+      "workflowId": "BOmiUfJMcPe1wOAe",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-10-14T11:24:19.080Z",
+  "versionId": "b3074de7-82d0-44e1-9cef-b291ff3cc28b"
+}
