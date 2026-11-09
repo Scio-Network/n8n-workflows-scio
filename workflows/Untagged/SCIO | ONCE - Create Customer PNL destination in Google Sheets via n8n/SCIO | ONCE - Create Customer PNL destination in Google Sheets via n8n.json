@@ -1,0 +1,2907 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "01 - Weekly Monday": {
+      "main": [
+        [
+          {
+            "node": "02 - weekly inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "01 - Monthly 3rd": {
+      "main": [
+        [
+          {
+            "node": "02 - monthly inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "01 - Manual backfill": {
+      "main": [
+        [
+          {
+            "node": "02 - backfill inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "02 - weekly inputs": {
+      "main": [
+        [
+          {
+            "node": "03 - Build run window",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "02 - monthly inputs": {
+      "main": [
+        [
+          {
+            "node": "03 - Build run window",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "02 - backfill inputs": {
+      "main": [
+        [
+          {
+            "node": "03 - Build run window",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "03 - Build run window": {
+      "main": [
+        [
+          {
+            "node": "04S - Get SF Opportunities",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "04G - Read GW_INPUTS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "04Q - Find PNL Report",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "10Q - Find Sales Report",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "04FX - ECB Monthly Rates",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "15Q - Find Customer PNL Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "04Q - Read fee rules": {
+      "main": [
+        [
+          {
+            "node": "05Q - Get QBO Invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "05Q - Get QBO Invoices": {
+      "main": [
+        [
+          {
+            "node": "06Q - Normalise QBO fee lines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "06Q - Normalise QBO fee lines": {
+      "main": [
+        [
+          {
+            "node": "07Q - Upsert FACT_QBO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "04S - Get SF Opportunities": {
+      "main": [
+        [
+          {
+            "node": "05S - Normalise SF current state",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "05S - Normalise SF current state": {
+      "main": [
+        [
+          {
+            "node": "06S - Upsert FACT_SF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "04G - Read GW_INPUTS": {
+      "main": [
+        [
+          {
+            "node": "05G - Validate approved inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "05G - Validate approved inputs": {
+      "main": [
+        [
+          {
+            "node": "06G - Upsert METRIC_VALUES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "04Q - Find PNL Report": {
+      "main": [
+        [
+          {
+            "node": "05Q - Download PNL Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "05Q - Download PNL Report": {
+      "main": [
+        [
+          {
+            "node": "06Q - Extract PNL XLSX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "06Q - Extract PNL XLSX": {
+      "main": [
+        [
+          {
+            "node": "07Q - Normalize PNL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "07Q - Normalize PNL": {
+      "main": [
+        [
+          {
+            "node": "08Q - Prepare PNL Metrics",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "09QF - Upsert FACT_QBO_PNL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "08Q - Prepare PNL Metrics": {
+      "main": [
+        [
+          {
+            "node": "09Q - Upsert PNL Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10Q - Find Sales Report": {
+      "main": [
+        [
+          {
+            "node": "11Q - Download Sales Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11Q - Download Sales Report": {
+      "main": [
+        [
+          {
+            "node": "12Q - Extract Sales XLSX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12Q - Extract Sales XLSX": {
+      "main": [
+        [
+          {
+            "node": "13Q - Normalize Sales Detail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13Q - Normalize Sales Detail": {
+      "main": [
+        [
+          {
+            "node": "14Q - Upsert Sales FACT_QBO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "04FX - ECB Monthly Rates": {
+      "main": [
+        [
+          {
+            "node": "05FX - ECB Latest Daily Rates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "05FX - ECB Latest Daily Rates": {
+      "main": [
+        [
+          {
+            "node": "06FX - Normalize ECB Rates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "06FX - Normalize ECB Rates": {
+      "main": [
+        [
+          {
+            "node": "06G - Upsert METRIC_VALUES1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15Q - Find Customer PNL Report": {
+      "main": [
+        [
+          {
+            "node": "15QV - Validate one Customer PNL file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15QV - Validate one Customer PNL file": {
+      "main": [
+        [
+          {
+            "node": "16Q - Download Customer PNL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "16Q - Download Customer PNL": {
+      "main": [
+        [
+          {
+            "node": "17Q - Extract Customer PNL XLSX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "17Q - Extract Customer PNL XLSX": {
+      "main": [
+        [
+          {
+            "node": "18Q - Normalize Customer PNL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "18Q - Normalize Customer PNL": {
+      "main": [
+        [
+          {
+            "node": "19Q - Upsert FACT_QBO_CUSTOMER_PNL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "06S - Upsert FACT_SF": {
+      "main": [
+        [
+          {
+            "node": "07S - Prepare Salesforce Sync Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "07S - Prepare Salesforce Sync Log": {
+      "main": [
+        [
+          {
+            "node": "09QF - Upsert FACT_QBO_PNL1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-11-02T15:29:23.042Z",
+  "id": "P4y1nwcCEe5CjQvA",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SCIO | ONCE - Create Customer PNL destination in Google Sheets via n8n",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 6,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "id": "49cb4ef3-9e02-4743-adc4-24eb0435fc1a",
+      "name": "01 - Weekly Monday",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "triggerAtDayOfMonth": 3,
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "718f005d-aacd-40b0-9c4a-00d8f2b8325f",
+      "name": "01 - Monthly 3rd",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        816
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "4bc453eb-c850-43b1-9860-a7138f21c7fd",
+      "name": "01 - Manual backfill",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        1056
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "mode",
+              "name": "mode",
+              "type": "string",
+              "value": "weekly"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4768ee0c-48c1-4ba5-bd46-fe95f83b2161",
+      "name": "02 - weekly inputs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "mode",
+              "name": "mode",
+              "type": "string",
+              "value": "monthly"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5c486955-f469-49e7-8b1f-de9e2d6cd279",
+      "name": "02 - monthly inputs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "mode",
+              "name": "mode",
+              "type": "string",
+              "value": "backfill"
+            },
+            {
+              "id": "backfill_from",
+              "name": "backfill_from",
+              "type": "string",
+              "value": "2025-01-01"
+            },
+            {
+              "id": "backfill_through",
+              "name": "backfill_through",
+              "type": "string",
+              "value": "2026-10-31"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8dacb03f-10b0-4272-a41b-dee6925c4b83",
+      "name": "02 - backfill inputs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        1056
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// SCIO monthly/weekly source refresh window. Inclusive calendar dates in Europe/Vienna.\n// For historical backfill, edit the \"02 - backfill inputs\" node. This fetches transactions by date;\n// it must never infer old pipeline stages from the current Salesforce Opportunity state.\nconst p=$input.first().json;\nconst pad=n=>String(n).padStart(2,'0');\nconst fmt=d=>`${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`;\nconst utc=(y,m,d)=>new Date(Date.UTC(y,m,d));\nconst today=new Date(); const d=utc(today.getUTCFullYear(),today.getUTCMonth(),today.getUTCDate());\nlet from,to;\nif (p.mode==='weekly') { const start=new Date(d); start.setUTCDate(start.getUTCDate()-90); from=fmt(start); to=fmt(d); }\nelse if (p.mode==='monthly') { const monthStart=utc(d.getUTCFullYear(),d.getUTCMonth(),1);const threeBack=utc(monthStart.getUTCFullYear(),monthStart.getUTCMonth()-3,1);const through=new Date(monthStart);through.setUTCDate(through.getUTCDate()-1);from=fmt(threeBack);to=fmt(through); }\nelse { from=p.backfill_from;to=p.backfill_through; }\nif(!/^\\d{4}-\\d{2}-\\d{2}$/.test(from)||!/^\\d{4}-\\d{2}-\\d{2}$/.test(to)||from>to)throw Error('Invalid from/through dates');\nreturn [{json:{mode:p.mode,date_from:from,date_to:to,run_id:`SCIO_${p.mode}_${Date.now()}`,run_at:new Date().toISOString()}}];"
+      },
+      "id": "416ad78f-4701-43a2-9ab1-1151bf678dd4",
+      "name": "03 - Build run window",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_GOOGLE_SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "QBO_FEE_RULES",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "ee92c989-68bd-440f-8d6a-42c222dd9a69",
+      "name": "04Q - Read fee rules",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        752,
+        -160
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "invoice",
+        "operation": "getAll",
+        "limit": 5,
+        "filters": {
+          "query": "=WHERE TxnDate >= '{{ $('03 - Build run window').first().json.date_from }}' AND TxnDate <= '{{ $('03 - Build run window').first().json.date_to }}'"
+        }
+      },
+      "id": "537ab5b1-4bbd-4e3e-b9da-74929fc993fc",
+      "name": "05Q - Get QBO Invoices",
+      "type": "n8n-nodes-base.quickbooks",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        -160
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "quickBooksOAuth2Api": {
+          "id": "pAad7tQgAEiKGvIV",
+          "name": "QuickBooks Online account"
+        }
+      },
+      "disabled": true,
+      "notes": "QuickBooks OAuth2 credential must be selected. Invoice line amounts are NOT recognized revenue, and CreditMemo is a separate follow-on extraction. Set approved fee items in QBO_FEE_RULES."
+    },
+    {
+      "parameters": {
+        "jsCode": "const run=$('03 - Build run window').first().json;\nconst rules=$('04Q - Read fee rules').all().map(x=>x.json);\nconst allowed=new Set(rules.filter(x=>String(x.classification).toUpperCase()==='FEE'&&String(x.include_as_fee).toUpperCase()==='Y'&&x.approved_by).map(x=>String(x.qbo_item_id)));\nfunction serial(d){return Math.round((Date.parse(d+'T00:00:00Z')-Date.UTC(1899,11,30))/86400000);}\nconst now=new Date().toISOString();const out=[];\nfor(const item of $input.all()){\n const inv=item.json; if(!inv.Id||!inv.TxnDate)continue;\n const currency=inv.CurrencyRef?.value||'EUR';\n for(const ln of inv.Line||[]){\n  if(ln.DetailType!=='SalesItemLineDetail')continue;\n  const id=String(ln.Id??ln.LineNum??'no-line-id');\n  const itemId=String(ln.SalesItemLineDetail?.ItemRef?.value??'');\n  const amt=Number(ln.Amount??0);\n  const status=currency!=='EUR'?'FX_REVIEW':allowed.has(itemId)?'APPROVED_FEE':'UNCLASSIFIED';\n  const record={record_key:`QBO|Invoice|${inv.Id}|${id}`,object_type:'Invoice',source_id:String(inv.Id),source_line_id:id,\n    txn_date_iso:inv.TxnDate,txn_date_serial:serial(inv.TxnDate),qbo_customer_id:String(inv.CustomerRef?.value||''),\n    sales_line_amount_eur:currency==='EUR'?amt:'',approved_fee_amount_eur:status==='APPROVED_FEE'?amt:'',\n    classification:status,qbo_item_id:itemId,currency,modified_at:inv.MetaData?.LastUpdatedTime||'',sync_at:now,run_id:run.run_id,\n    note:status==='APPROVED_FEE'?'Approved item mapping; still excludes credit notes until added':'Requires item and FX mapping; NOT revenue'};\n  out.push({json:record});\n }\n}\nreturn out;"
+      },
+      "id": "d9962fc2-1813-4fca-aabc-d98972c231ed",
+      "name": "06Q - Normalise QBO fee lines",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        -160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "name",
+          "cachedResultName": "",
+          "cachedResultUrl": ""
+        }
+      },
+      "id": "e3db5f5f-ed30-4453-96a0-04252aac6862",
+      "name": "07Q - Upsert FACT_QBO",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2032,
+        -160
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true,
+      "notes": "Before running, select your Google Sheets credential, spreadsheet and FACT_QBO tab; match on unique key."
+    },
+    {
+      "parameters": {
+        "resource": "opportunity",
+        "operation": "getAll",
+        "returnAll": true,
+        "options": {
+          "fields": "Id, Name, AccountId, Account.Name, OwnerId, Owner.Name, Amount, CurrencyIsoCode, Probability, Type, StageName, IsClosed, IsWon, CreatedDate, CloseDate, LastModifiedDate, Sector__c, Expected_Profit__c, ProfitabilityRatio__c, Project_New_Id__c"
+        }
+      },
+      "id": "f97059be-7349-4663-bab8-27071eb80df9",
+      "name": "04S - Get SF Opportunities",
+      "type": "n8n-nodes-base.salesforce",
+      "typeVersion": 1,
+      "position": [
+        752,
+        1264
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "salesforceOAuth2Api": {
+          "id": "1JVUQfvBt7AbBSQM",
+          "name": "Salesforce account"
+        }
+      },
+      "notes": "Requires Salesforce API entitlement. This reads current Opportunity state; CloseDate is NOT guaranteed actual decision date. Update normalization before trusting win rate."
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst run = $('03 - Build run window').first().json;\nconst now = new Date().toISOString();\nconst output = [];\n\nfunction dateSerial(value) {\n  const date = String(value ?? '').slice(0, 10);\n\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) return '';\n\n  const timestamp = Date.parse(date + 'T00:00:00Z');\n  if (!Number.isFinite(timestamp)) return '';\n\n  return Math.round(\n    (timestamp - Date.UTC(1899, 11, 30)) / 86400000\n  );\n}\n\nfunction numericOrBlank(value, field, id) {\n  if (\n    value === null ||\n    value === undefined ||\n    String(value).trim() === ''\n  ) {\n    return '';\n  }\n\n  const number = Number(value);\n\n  if (!Number.isFinite(number)) {\n    throw new Error(\n      `Invalid ${field} for opportunity ${id}: ${value}`\n    );\n  }\n\n  return number;\n}\n\nfunction multiSelect(value) {\n  return (\n    Array.isArray(value)\n      ? value\n      : String(value ?? '').split(';')\n  )\n    .map(v => String(v).trim())\n    .filter(Boolean)\n    .join(';');\n}\n\nfor (const item of $input.all()) {\n  const o = item.json;\n\n  if (!o.Id) continue;\n\n  if (\n    typeof o.IsClosed !== 'boolean' ||\n    typeof o.IsWon !== 'boolean'\n  ) {\n    throw new Error(\n      `Missing IsClosed/IsWon for ${o.Id}`\n    );\n  }\n\n  if (o.IsWon && !o.IsClosed) {\n    throw new Error(\n      `Inconsistent Won/Closed for ${o.Id}`\n    );\n  }\n\n  const currency =\n    String(o.CurrencyIsoCode ?? '').trim() || 'UNKNOWN';\n\n  // Preserve original Salesforce amounts in their\n  // own currency without applying an FX assumption.\n  const sourceAmount = numericOrBlank(\n    o.Amount, 'Amount', o.Id\n  );\n\n  const sourceProfit = numericOrBlank(\n    o.Expected_Profit__c, 'Expected Profit', o.Id\n  );\n\n  const profitabilityRatio = numericOrBlank(\n    o.ProfitabilityRatio__c,\n    'Profitability Ratio',\n    o.Id\n  );\n\n  const probability = numericOrBlank(\n    o.Probability, 'Probability', o.Id\n  );\n\n  const decisionDate = String(\n    o.Decision_Date__c || o.CloseDate || ''\n  ).slice(0, 10);\n\n  output.push({\n    json: {\n      record_key: `SF|Opportunity|${o.Id}`,\n      opportunity_id: String(o.Id),\n      account_id: String(o.AccountId || ''),\n      account_name: String(\n        o.Account?.Name || o['Account.Name'] || ''\n      ),\n      created_at: String(o.CreatedDate || ''),\n      name: String(o.Name || ''),\n\n      // EUR-only columns\n      amount_eur:\n        currency === 'EUR' ? sourceAmount : '',\n\n      currency: currency,\n      stage: String(o.StageName || ''),\n      is_closed: o.IsClosed ? 'Y' : 'N',\n      is_won: o.IsWon ? 'Y' : 'N',\n\n      closed_at: String(o.CloseDate || ''),\n      decision_date_iso: decisionDate,\n      decision_date_serial: dateSerial(decisionDate),\n\n      proposal_submitted:\n        typeof o.Proposal_Submitted__c === 'boolean'\n          ? (o.Proposal_Submitted__c ? 'Y' : 'N')\n          : 'REVIEW',\n\n      qualified:\n        typeof o.Qualified__c === 'boolean'\n          ? (o.Qualified__c ? 'Y' : 'N')\n          : 'REVIEW',\n\n      owner_name: String(\n        o.Owner?.Name || o['Owner.Name'] || ''\n      ),\n      owner_id: String(o.OwnerId || ''),\n      last_modified: String(o.LastModifiedDate || ''),\n      sync_at: now,\n      run_id: run.run_id,\n\n      decision_date_basis: o.Decision_Date__c\n        ? 'ACTUAL_DECISION_DATE'\n        : 'CLOSEDATE_PROXY_REVIEW',\n\n      sector_raw: multiSelect(o.Sector__c),\n\n      expected_profit_eur:\n        currency === 'EUR' ? sourceProfit : '',\n\n      profitability_ratio_raw: profitabilityRatio,\n\n      project_id: String(\n        o.Project_New_Id__c ?? ''\n      ).trim(),\n\n      probability_pct: probability,\n      opportunity_type: String(o.Type ?? '').trim(),\n\n      // New fields: source-currency values\n      amount_source_currency: sourceAmount,\n      expected_profit_source_currency: sourceProfit\n    }\n  });\n}\n\nif (!output.length) {\n  throw new Error('No Salesforce opportunities received.');\n}\n\nconst keys = output.map(x => x.json.record_key);\n\nif (new Set(keys).size !== keys.length) {\n  throw new Error('Duplicate opportunity keys found.');\n}\n\nconst records = output.map(x => x.json);\n\nconsole.log('Salesforce reporting extraction:', {\n  total: records.length,\n  currencies: records.reduce((acc, r) => {\n    acc[r.currency] = (acc[r.currency] || 0) + 1;\n    return acc;\n  }, {}),\n  withSourceAmount: records.filter(\n    r => r.amount_source_currency !== ''\n  ).length,\n  withSourceProfit: records.filter(\n    r => r.expected_profit_source_currency !== ''\n  ).length,\n  withVertical: records.filter(\n    r => r.sector_raw !== ''\n  ).length\n});\n\nreturn output;\n"
+      },
+      "id": "a8133746-2c74-4cd7-9c35-1370e6b880d0",
+      "name": "05S - Normalise SF current state",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        1264
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "FACT_SF",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "record_key"
+          ],
+          "schema": [
+            {
+              "id": "record_key",
+              "displayName": "record_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "opportunity_id",
+              "displayName": "opportunity_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "account_id",
+              "displayName": "account_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "account_name",
+              "displayName": "account_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "amount_eur",
+              "displayName": "amount_eur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "currency",
+              "displayName": "currency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "stage",
+              "displayName": "stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "is_closed",
+              "displayName": "is_closed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "is_won",
+              "displayName": "is_won",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "closed_at",
+              "displayName": "closed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "decision_date_iso",
+              "displayName": "decision_date_iso",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "decision_date_serial",
+              "displayName": "decision_date_serial",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "proposal_submitted",
+              "displayName": "proposal_submitted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "qualified",
+              "displayName": "qualified",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "owner_name",
+              "displayName": "owner_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "owner_id",
+              "displayName": "owner_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_modified",
+              "displayName": "last_modified",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sync_at",
+              "displayName": "sync_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "run_id",
+              "displayName": "run_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "decision_date_basis",
+              "displayName": "decision_date_basis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sector_raw",
+              "displayName": "sector_raw",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "expected_profit_eur",
+              "displayName": "expected_profit_eur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "profitability_ratio_raw",
+              "displayName": "profitability_ratio_raw",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "project_id",
+              "displayName": "project_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "probability_pct",
+              "displayName": "probability_pct",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "opportunity_type",
+              "displayName": "opportunity_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "amount_source_currency",
+              "displayName": "amount_source_currency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "expected_profit_source_currency",
+              "displayName": "expected_profit_source_currency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "9e47474d-9d54-466a-b914-56d1b8c8404d",
+      "name": "06S - Upsert FACT_SF",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2032,
+        1264
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "Before running, select your Google Sheets credential, spreadsheet and FACT_SF tab; match on unique key."
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit?gid=1196701885#gid=1196701885",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 802113281,
+          "mode": "list",
+          "cachedResultName": "GW_INPUTS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit#gid=802113281"
+        },
+        "options": {}
+      },
+      "id": "7c650c38-a761-40b4-93dc-6b86f45eb786",
+      "name": "04G - Read GW_INPUTS",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        752,
+        1504
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst run = $('03 - Build run window').first().json;\nconst rows = $input.all().map(item => item.json);\n\nconst now = new Date().toISOString();\nconst output = [];\nconst keys = new Set();\n\nconst stats = {\n  total: rows.length,\n  accepted: 0,\n  blank: 0,\n  unapproved: 0,\n  unverifiedZero: 0,\n  invalid: 0\n};\n\nfunction validDate(value) {\n  const text = String(value ?? '').trim().slice(0, 10);\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(text)) return false;\n  const date = new Date(text + 'T00:00:00Z');\n  return !Number.isNaN(date.getTime()) &&\n    date.toISOString().slice(0, 10) === text;\n}\n\nfor (const row of rows) {\n  const approval = String(\n    row.approval_status ?? ''\n  ).trim().toLowerCase();\n\n  if (approval !== 'approved') {\n    stats.unapproved++;\n    continue;\n  }\n\n  const metricId = String(row.metric_id ?? '').trim();\n  const grain = String(row.grain ?? '').trim().toUpperCase();\n  const periodStart = String(row.period_start ?? '').trim();\n  const periodEnd = String(row.period_end ?? '').trim();\n  const approvedBy = String(row.approved_by ?? '').trim();\n  const evidence = String(row.evidence_link ?? '').trim();\n  const scope = String(row.scope ?? 'ALL').trim() || 'ALL';\n\n  if (\n    !metricId ||\n    !['M', 'W'].includes(grain) ||\n    !validDate(periodStart) ||\n    (periodEnd && !validDate(periodEnd)) ||\n    (periodEnd && periodEnd <= periodStart) ||\n    !approvedBy\n  ) {\n    stats.invalid++;\n    continue;\n  }\n\n  const raw = row.value_numeric;\n\n  if (\n    raw === null ||\n    raw === undefined ||\n    String(raw).trim() === ''\n  ) {\n    stats.blank++;\n    continue;\n  }\n\n  const rawText = String(raw).trim();\n\n  if (\n    !/^[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)$/.test(rawText)\n  ) {\n    stats.invalid++;\n    continue;\n  }\n\n  const value = Number(rawText);\n\n  if (!Number.isFinite(value)) {\n    stats.invalid++;\n    continue;\n  }\n\n  // A zero without evidence must not be\n  // interpreted as a verified measurement.\n  if (value === 0 && !evidence) {\n    stats.unverifiedZero++;\n    continue;\n  }\n\n  const metricKey =\n    `${metricId}|${grain}|${periodStart}|${scope}`;\n\n  if (keys.has(metricKey)) {\n    throw new Error(\n      `Duplicate GW input metric key: ${metricKey}`\n    );\n  }\n\n  keys.add(metricKey);\n\n  // No evidence means provisional, even when\n  // the source row says \"Approved\".\n  const status = evidence\n    ? 'APPROVED MANUAL'\n    : 'PROVISIONAL - REVIEW';\n\n  output.push({\n    json: {\n      metric_key: metricKey,\n      metric_id: metricId,\n      grain: grain,\n      period_start: periodStart,\n      period_end: periodEnd,\n      value_numeric: value,\n      unit: String(row.unit ?? ''),\n      status: status,\n      source: 'Google Workspace manual tracker',\n      updated_at: String(row.updated_at || now),\n      approved_by: approvedBy,\n      evidence_link: evidence,\n      run_id: run.run_id,\n      notes: String(row.notes ?? '') +\n        (evidence\n          ? ''\n          : ' | Evidence missing; provisional only.'),\n      data_as_of: String(row.updated_at || '')\n    }\n  });\n\n  stats.accepted++;\n}\n\nconsole.log('GW validation summary:', stats);\n\nreturn output;\n"
+      },
+      "id": "d3ee2932-792a-4b6e-b761-4990819e36d7",
+      "name": "05G - Validate approved inputs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        1504
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "METRIC_VALUES",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "metric_key"
+          ],
+          "schema": [
+            {
+              "id": "metric_key",
+              "displayName": "metric_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "metric_id",
+              "displayName": "metric_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "grain",
+              "displayName": "grain",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "period_start",
+              "displayName": "period_start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "period_end",
+              "displayName": "period_end",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "value_numeric",
+              "displayName": "value_numeric",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "unit",
+              "displayName": "unit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "approved_by",
+              "displayName": "approved_by",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "evidence_link",
+              "displayName": "evidence_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "run_id",
+              "displayName": "run_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_as_of",
+              "displayName": "data_as_of",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "010d2e18-da40-4b5e-aa8a-a2aff9f39fdd",
+      "name": "06G - Upsert METRIC_VALUES",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2032,
+        1504
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "Before running, select your Google Sheets credential, spreadsheet and METRIC_VALUES tab; match on unique key."
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "'1bcoIMkUY8Q9-lbWfTx7_E6lM1T0u9s2q' in parents and name = 'QBO_PNL_MONTH_LATEST.xlsx' and trashed = false",
+        "returnAll": true,
+        "filter": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        752,
+        576
+      ],
+      "id": "233a8846-dea9-49ce-9145-f6e80234490b",
+      "name": "04Q - Find PNL Report",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1008,
+        576
+      ],
+      "id": "1a3938d0-2656-4c99-a222-61df2936b054",
+      "name": "05Q - Download PNL Report",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Scio Network - 07Q - Normalize PNL\n// Full replacement, November 2026. Input: 06Q - Extract PNL XLSX.\n// Output: one reconciled P&L record per completed month.\n// Keeps the fields used by 08Q - Prepare PNL Metrics unchanged.\n\nconst rows = $input.all().map(item => item.json.row);\n\nif (!rows.length || !rows.every(Array.isArray)) {\n  throw new Error('No valid QuickBooks Excel rows received.');\n}\n\nconst monthNumbers = {\n  Jan: 1, Feb: 2, Mar: 3, Apr: 4,\n  May: 5, Jun: 6, Jul: 7, Aug: 8,\n  Sep: 9, Oct: 10, Nov: 11, Dec: 12,\n};\n\nconst round2 = value =>\n  Math.round((value + Number.EPSILON) * 100) / 100;\n\nconst now = new Date();\nconst syncAt = now.toISOString();\nconst currentMonth = syncAt.slice(0, 7);\n\nfunction nextMonth(period) {\n  const [year, month] = period.split('-').map(Number);\n  return new Date(Date.UTC(year, month, 1))\n    .toISOString().slice(0, 10);\n}\n\n// Locate the exact month headers; ignore the Total column and partial\n// ranges such as 'Nov 1-3 2026'. Exclude the current unfinished month.\nconst header = rows.find(row =>\n  row.some(value =>\n    /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) 20\\d{2}$/\n      .test(String(value).trim())\n  )\n);\n\nif (!header) {\n  throw new Error('QuickBooks month header not found.');\n}\n\nconst months = [];\n\nheader.forEach((value, column) => {\n  const match = String(value).trim().match(\n    /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (20\\d{2})$/\n  );\n\n  if (!match) return;\n\n  const year = Number(match[2]);\n  const month = monthNumbers[match[1]];\n  const period = `${year}-${String(month).padStart(2, '0')}`;\n\n  if (period >= currentMonth) return;\n\n  months.push({ column, period, year });\n});\n\nmonths.sort((a, b) => a.period.localeCompare(b.period));\n\nif (!months.length) {\n  throw new Error('No completed monthly columns found.');\n}\n\nfunction findRow(label) {\n  const matches = rows.filter(\n    row => String(row[0] ?? '').trim() === label\n  );\n\n  if (matches.length !== 1) {\n    throw new Error(\n      `Expected exactly one P&L line '${label}', ` +\n      `found ${matches.length}.`\n    );\n  }\n\n  return matches[0];\n}\n\nfunction amount(row, col, label) {\n  const raw = row[col];\n\n  if (\n    raw === null ||\n    raw === undefined ||\n    String(raw).trim() === ''\n  ) {\n    return 0;\n  }\n\n  const value = Number(raw);\n\n  if (!Number.isFinite(value)) {\n    throw new Error(\n      `Invalid amount in '${label}', column ${col}: ${raw}`\n    );\n  }\n\n  return round2(value);\n}\n\nconst accountLabels = {\n  fee_revenue: '31000 Project Honorarium',\n\n  reimbursable_income:\n    'Total for 39000 Other operating income',\n\n  total_income: 'Total Income',\n\n  subcontractor_fees:\n    '41100 Honorarium_Sub-contractors',\n\n  partner_fees:\n    '41200 Honorarium_Partners',\n\n  project_backstopping:\n    '41300 Project Backstopping',\n\n  expert_costs:\n    'Total for 41000 Expert Costs',\n\n  other_project_costs:\n    'Total for 42000 Other Project Costs',\n\n  cost_of_sales: 'Total Cost of Sales',\n\n  gross_profit: 'Gross Profit',\n\n  salaries_operating:\n    '61100 Salaries',\n\n  social_security_operating:\n    '61300 Social Security Contributions',\n\n  professional_fees_internal_operating:\n    '62100 Professional Services Fees - Internal',\n\n  operating_expenses:\n    'Total Expenses',\n\n  other_expenses:\n    'Total Other Expenses',\n\n  net_earnings:\n    'Net Earnings'\n};\n\nconst sourceRows = Object.fromEntries(\n  Object.entries(accountLabels).map(\n    ([key, label]) => [key, findRow(label)]\n  )\n);\n\nfunction reconcile(period, name, reported, calculated) {\n  if (Math.abs(reported - calculated) > 0.03) {\n    throw new Error(\n      `${period}: ${name} does not reconcile. ` +\n      `QuickBooks=${reported}; calculated=${calculated}`\n    );\n  }\n}\n\nconst ytdByYear = {};\nconst output = [];\n\nfor (const entry of months) {\n  const p = {};\n\n  for (const [key, row] of Object.entries(sourceRows)) {\n    p[key] = amount(\n      row,\n      entry.column,\n      accountLabels[key]\n    );\n  }\n\n  // Check the QuickBooks totals.\n\n  reconcile(\n    entry.period,\n    'Total income',\n    p.total_income,\n    round2(p.fee_revenue + p.reimbursable_income)\n  );\n\n  reconcile(\n    entry.period,\n    'Expert-cost subtotal',\n    p.expert_costs,\n    round2(\n      p.subcontractor_fees +\n      p.partner_fees +\n      p.project_backstopping\n    )\n  );\n\n  reconcile(\n    entry.period,\n    'Cost of sales',\n    p.cost_of_sales,\n    round2(p.expert_costs + p.other_project_costs)\n  );\n\n  reconcile(\n    entry.period,\n    'Gross profit',\n    p.gross_profit,\n    round2(p.total_income - p.cost_of_sales)\n  );\n\n  reconcile(\n    entry.period,\n    'Net earnings',\n    p.net_earnings,\n    round2(\n      p.gross_profit -\n      p.operating_expenses -\n      p.other_expenses\n    )\n  );\n\n  // Calculate YTD fee revenue.\n\n  const ytd = ytdByYear[entry.year] ?? 0;\n\n  ytdByYear[entry.year] = round2(\n    ytd + p.fee_revenue\n  );\n\n  // Flag figures that may require Finance review.\n\n  const flags = [];\n\n  if (p.total_income < 0) {\n    flags.push('NEGATIVE_INCOME');\n  }\n\n  if (\n    p.total_income > 0 &&\n    p.cost_of_sales === 0\n  ) {\n    flags.push('ZERO_COST_OF_SALES');\n  }\n\n  if (\n    p.total_income > 0 &&\n    p.gross_profit / p.total_income > 0.9\n  ) {\n    flags.push('GROSS_MARGIN_OVER_90_PCT');\n  }\n\n  if (\n    p.total_income !== 0 &&\n    p.gross_profit / p.total_income < 0\n  ) {\n    flags.push('NEGATIVE_GROSS_MARGIN');\n  }\n\n  // Preserve existing property names for downstream 08Q metrics.\n\n  output.push({\n    json: {\n      record_key: `QBO|PNL|${entry.period}`,\n\n      period: entry.period,\n      period_start: `${entry.period}-01`,\n      period_end: nextMonth(entry.period),\n\n      currency: 'EUR',\n      accounting_basis: 'ACCRUAL',\n\n      // Revenue\n      fee_revenue: p.fee_revenue,\n      fee_revenue_ytd: ytdByYear[entry.year],\n      reimbursable_income: p.reimbursable_income,\n      total_income: p.total_income,\n\n      // Direct costs\n      subcontractor_fees: p.subcontractor_fees,\n      partner_fees: p.partner_fees,\n      project_backstopping: p.project_backstopping,\n      expert_costs: p.expert_costs,\n      other_project_costs: p.other_project_costs,\n      cost_of_sales: p.cost_of_sales,\n\n      // Gross profitability\n      gross_profit: p.gross_profit,\n\n      gross_margin_ratio:\n        p.total_income === 0\n          ? ''\n          : p.gross_profit / p.total_income,\n\n      // Personnel and operating expenses\n      salaries_operating: p.salaries_operating,\n      social_security_operating:\n        p.social_security_operating,\n\n      professional_fees_internal_operating:\n        p.professional_fees_internal_operating,\n\n      operating_expenses: p.operating_expenses,\n\n      operating_result_before_other_expenses:\n        round2(\n          p.gross_profit - p.operating_expenses\n        ),\n\n      // Net profitability\n      other_expenses: p.other_expenses,\n      net_earnings: p.net_earnings,\n\n      net_margin_ratio:\n        p.total_income === 0\n          ? ''\n          : p.net_earnings / p.total_income,\n\n      // Metadata\n      review_flags: flags.join(';'),\n      source: 'QBO_PNL_MONTH',\n      source_file: 'QBO_PNL_MONTH_LATEST.xlsx',\n      status: 'PROVISIONAL - REVIEW',\n      sync_at: syncAt\n    }\n  });\n}\n\n// Check for duplicate periods.\n\nif (\n  new Set(output.map(o => o.json.record_key)).size !==\n  output.length\n) {\n  throw new Error('Duplicate P&L month keys.');\n}\n\n// Log reconciliation results.\n\nconsole.log('QBO monthly P&L reconciliation:', {\n  months: output.length,\n\n  periods: output\n    .map(o => o.json.period)\n    .join(', '),\n\n  totalIncome: round2(\n    output.reduce(\n      (n, o) => n + o.json.total_income,\n      0\n    )\n  ),\n\n  grossProfit: round2(\n    output.reduce(\n      (n, o) => n + o.json.gross_profit,\n      0\n    )\n  ),\n\n  netEarnings: round2(\n    output.reduce(\n      (n, o) => n + o.json.net_earnings,\n      0\n    )\n  ),\n\n  reviewMonths: output\n    .filter(o => o.json.review_flags !== '')\n    .map(o => ({\n      month: o.json.period,\n      flags: o.json.review_flags\n    }))\n});\n\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        576
+      ],
+      "id": "5e47be4f-7500-48d5-8e58-e8531c98658f",
+      "name": "07Q - Normalize PNL"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "headerRow": false,
+          "includeEmptyCells": true,
+          "rawData": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        576
+      ],
+      "id": "cac69613-e1f5-4a8d-a7d1-38871ad68aa9",
+      "name": "06Q - Extract PNL XLSX"
+    },
+    {
+      "parameters": {
+        "jsCode": "\n/**\n * SCIO NETWORK — 08Q Prepare PNL Metrics\n *\n * Input: 07Q - Normalize PNL\n * Output: monthly financial readings for METRIC_VALUES\n *\n * Expected for 22 months:\n * 7 monthly metrics x 22 = 154\n * 2026 revenue KR x 10 = 10\n * Total = 164 items\n */\n\nconst records = $input.all().map(item => item.json);\n\nif (!records.length) {\n  throw new Error(\"No QuickBooks P&L data received\");\n}\n\nconst now = new Date().toISOString();\nconst runId = `QBO-PNL-${now}`;\nconst output = [];\nconst seen = new Set();\n\nconst evidenceLink =\n  \"https://drive.google.com/file/d/\" +\n  \"16XLD4gP4OhTBBSsKhuzM9A13KFzO0TrH/view\";\n\nfunction nextMonth(periodStart) {\n  const [year, month] = periodStart\n    .slice(0, 7)\n    .split(\"-\")\n    .map(Number);\n\n  return new Date(Date.UTC(year, month, 1))\n    .toISOString()\n    .slice(0, 10);\n}\n\nfunction addMetric(id, record, value, unit, note) {\n  if (\n    value === \"\" ||\n    value === null ||\n    value === undefined ||\n    !Number.isFinite(Number(value))\n  ) {\n    throw new Error(\n      `Invalid value for ${id}, ${record.period_start}`\n    );\n  }\n\n  const metricKey =\n    `${id}|M|${record.period_start}|ALL`;\n\n  if (seen.has(metricKey)) {\n    throw new Error(`Duplicate key: ${metricKey}`);\n  }\n\n  seen.add(metricKey);\n\n  output.push({\n    json: {\n      metric_key: metricKey,\n      metric_id: id,\n      grain: \"M\",\n      period_start: record.period_start,\n      period_end: nextMonth(record.period_start),\n      value_numeric: Number(value),\n      unit: unit,\n      status: \"PROVISIONAL - REVIEW\",\n      source: \"QuickBooks P&L by Month\",\n      updated_at: now,\n      approved_by: \"\",\n      evidence_link: evidenceLink,\n      run_id: runId,\n      notes: note,\n      data_as_of: \"\"\n    }\n  });\n}\n\nrecords.sort((a, b) =>\n  String(a.period_start).localeCompare(\n    String(b.period_start)\n  )\n);\n\nconst seenPeriods = new Set();\n\nfor (const record of records) {\n  const period = String(record.period_start || \"\");\n\n  if (!/^\\d{4}-(0[1-9]|1[0-2])-01$/.test(period)) {\n    throw new Error(`Invalid reporting period: ${period}`);\n  }\n\n  if (seenPeriods.has(period)) {\n    throw new Error(`Duplicate P&L month: ${period}`);\n  }\n\n  seenPeriods.add(period);\n\n  const financialMetrics = [\n    {\n      id: \"SUP-QB-REVENUE\",\n      value: record.fee_revenue,\n      unit: \"EUR\",\n      note: \"Monthly recognized fee revenue, excluding reimbursable income.\"\n    },\n    {\n      id: \"SUP-QB-TOTAL-INCOME\",\n      value: record.total_income,\n      unit: \"EUR\",\n      note: \"Total monthly accounting income.\"\n    },\n    {\n      id: \"SUP-QB-COST-OF-SALES\",\n      value: record.cost_of_sales,\n      unit: \"EUR\",\n      note: \"Monthly accounting cost of sales.\"\n    },\n    {\n      id: \"SUP-QB-GROSS-PROFIT\",\n      value: record.gross_profit,\n      unit: \"EUR\",\n      note: \"Total accounting income minus cost of sales.\"\n    },\n    {\n      id: \"SUP-QB-NET-EARNINGS\",\n      value: record.net_earnings,\n      unit: \"EUR\",\n      note: \"Accounting net earnings after operating and other expenses.\"\n    },\n    {\n      id: \"SUP-QB-GROSS-MARGIN-PCT\",\n      value: record.gross_margin_ratio,\n      unit: \"ratio\",\n      note: \"Gross profit divided by total accounting income. \" +\n        \"Stored as decimal ratio. Not project forecast margin.\"\n    },\n    {\n      id: \"SUP-QB-NET-MARGIN-PCT\",\n      value: record.net_margin_ratio,\n      unit: \"ratio\",\n      note: \"Net earnings divided by total accounting income. \" +\n        \"Stored as decimal ratio.\"\n    }\n  ];\n\n  // Validate accounting margin calculations\n  const income = Number(record.total_income);\n\n  if (!Number.isFinite(income) || income === 0) {\n    throw new Error(\n      `Cannot calculate margins with zero/missing income: ${period}`\n    );\n  }\n\n  const expectedGrossMargin =\n    Number(record.gross_profit) / income;\n\n  const expectedNetMargin =\n    Number(record.net_earnings) / income;\n\n  if (\n    Math.abs(expectedGrossMargin -\n      Number(record.gross_margin_ratio)) > 0.000001\n  ) {\n    throw new Error(\n      `Gross margin reconciliation failed: ${period}`\n    );\n  }\n\n  if (\n    Math.abs(expectedNetMargin -\n      Number(record.net_margin_ratio)) > 0.000001\n  ) {\n    throw new Error(\n      `Net margin reconciliation failed: ${period}`\n    );\n  }\n\n  for (const metric of financialMetrics) {\n    addMetric(\n      metric.id,\n      record,\n      metric.value,\n      metric.unit,\n      metric.note + \" Finance review pending.\"\n    );\n  }\n\n  // FY2026 annual revenue KR\n  if (period.startsWith(\"2026-\")) {\n    addMetric(\n      \"Q4-O1.1\",\n      record,\n      record.fee_revenue_ytd,\n      \"EUR\",\n      \"Cumulative FY2026 recognized fee revenue. \" +\n      \"Progress toward EUR 1.2M target. \" +\n      \"Finance review pending.\"\n    );\n  }\n}\n\nconsole.log(\"SCIO FINANCIAL METRICS\", {\n  months: records.length,\n  items: output.length,\n  firstPeriod: records[0].period_start,\n  lastPeriod: records[records.length - 1].period_start,\n  runId\n});\n\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1824,
+        576
+      ],
+      "id": "36a97274-3a5e-4683-906e-185c1d7dff88",
+      "name": "08Q - Prepare PNL Metrics"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E",
+          "mode": "list",
+          "cachedResultName": "SCIO_OBJ4_UPLOAD_TO_GOOGLE_SHEETS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1167410877,
+          "mode": "list",
+          "cachedResultName": "METRIC_VALUES",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit#gid=1167410877"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "metric_key"
+          ],
+          "schema": [
+            {
+              "id": "metric_key",
+              "displayName": "metric_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "metric_id",
+              "displayName": "metric_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "grain",
+              "displayName": "grain",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "period_start",
+              "displayName": "period_start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "period_end",
+              "displayName": "period_end",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "value_numeric",
+              "displayName": "value_numeric",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "unit",
+              "displayName": "unit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "approved_by",
+              "displayName": "approved_by",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "evidence_link",
+              "displayName": "evidence_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "run_id",
+              "displayName": "run_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_as_of",
+              "displayName": "data_as_of",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2032,
+        576
+      ],
+      "id": "66c19d33-06ed-4ea7-a7ac-b14e127534af",
+      "name": "09Q - Upsert PNL Metrics",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "'1bcoIMkUY8Q9-lbWfTx7_E6lM1T0u9s2q' in parents and name = 'QBO_SALES_DETAIL_LATEST.xlsx' and trashed = false",
+        "returnAll": true,
+        "filter": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        752,
+        336
+      ],
+      "id": "3f144d52-67ac-42d3-846e-561e000d90ad",
+      "name": "10Q - Find Sales Report",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1008,
+        336
+      ],
+      "id": "0fa28ad7-a9fd-4314-b017-ccbbeeaf6614",
+      "name": "11Q - Download Sales Report",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "headerRow": false,
+          "includeEmptyCells": true,
+          "rawData": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        336
+      ],
+      "id": "43af9c9e-aa76-4a47-89bd-713bf53cb326",
+      "name": "12Q - Extract Sales XLSX"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst rows = $input.all().map(item => item.json.row);\n\n// Change this after each newly completed accounting month.\nconst lastCompletedMonth = '2026-10';\nconst minDate = '2026-01-01';\nconst maxDate = `${lastCompletedMonth}-31`;\n\nconst now = new Date().toISOString();\nconst runId = `QBO-SALES-${now}`;\n\nif (!rows.length || !rows.every(Array.isArray)) {\n  throw new Error('No valid Sales report rows received.');\n}\n\nconst validHeader = rows.some(row =>\n  String(row[1]).trim() === 'Transaction date' &&\n  String(row[2]).trim() === 'Transaction type' &&\n  String(row[3]).trim() === 'Number' &&\n  String(row[8]).trim() === 'Amount'\n);\n\nif (!validHeader) {\n  throw new Error('Unexpected QuickBooks Sales report structure.');\n}\n\nfunction parseDate(raw) {\n  const m = String(raw).trim().match(\n    /^(\\d{2})\\.(\\d{2})\\.(\\d{4})$/\n  );\n\n  if (!m) return null;\n\n  const day = Number(m[1]);\n  const month = Number(m[2]);\n  const year = Number(m[3]);\n\n  const date = new Date(Date.UTC(year, month - 1, day));\n\n  if (\n    date.getUTCDate() !== day ||\n    date.getUTCMonth() !== month - 1 ||\n    date.getUTCFullYear() !== year\n  ) {\n    throw new Error(`Invalid transaction date: ${raw}`);\n  }\n\n  return date.toISOString().slice(0, 10);\n}\n\nfunction money(raw) {\n  if (raw === '' || raw === null || raw === undefined) {\n    throw new Error('Missing transaction amount.');\n  }\n\n  const value = Number(raw);\n\n  if (!Number.isFinite(value)) {\n    throw new Error(`Invalid amount: ${raw}`);\n  }\n\n  return Math.round((value + Number.EPSILON) * 100) / 100;\n}\n\n// Two hashes used to create a repeatable report-based line key.\nfunction hashText(text) {\n  let h1 = 2166136261;\n  let h2 = 2246822519;\n\n  for (let i = 0; i < text.length; i++) {\n    const c = text.charCodeAt(i);\n    h1 = Math.imul(h1 ^ c, 16777619);\n    h2 = Math.imul(h2 ^ c, 2246822519);\n  }\n\n  return [h1, h2]\n    .map(h => (h >>> 0).toString(16).padStart(8, '0'))\n    .join('');\n}\n\nlet customer = '';\nlet project = '';\n\nconst occurrences = new Map();\nconst output = [];\n\nfor (let i = 0; i < rows.length; i++) {\n  const row = rows[i];\n\n  const label = String(row[0] ?? '').trim();\n  const date = parseDate(row[1] ?? '');\n  const type = String(row[2] ?? '').trim();\n\n  // Only actual invoice and credit-note lines.\n  if (date && ['Invoice', 'Credit Note'].includes(type)) {\n\n    // Ignore incomplete November and dates outside 2026.\n    if (date < minDate || date > maxDate) {\n      continue;\n    }\n\n    if (!customer) {\n      throw new Error(`Customer missing at row ${i + 1}`);\n    }\n\n    const documentNumber = String(row[3] ?? '').trim();\n\n    if (!documentNumber) {\n      throw new Error(`Document number missing at row ${i + 1}`);\n    }\n\n    const product = String(row[4] ?? '').trim();\n    const description = String(row[5] ?? '')\n      .trim()\n      .replace(/\\s+/g, ' ');\n\n    const value = money(row[8]);\n    const feeCandidate = product.toLowerCase() === 'honorarium';\n\n    // Stable identity across repeated exports, unless the\n    // source's identifying fields change.\n    const identity = [\n      date,\n      type,\n      documentNumber,\n      customer,\n      project,\n      product,\n      description\n    ].join('|');\n\n    const occurrence = (occurrences.get(identity) || 0) + 1;\n    occurrences.set(identity, occurrence);\n\n    const syntheticId = `${hashText(identity)}-${occurrence}`;\n\n    const txnSerial = Math.round(\n      (\n        Date.parse(`${date}T00:00:00Z`) -\n        Date.UTC(1899, 11, 30)\n      ) / 86400000\n    );\n\n    output.push({\n      json: {\n        record_key:\n          `QBOREPORT|${date}|` +\n          `${type === 'Invoice' ? 'INV' : 'CN'}|` +\n          `${documentNumber}|${syntheticId}`,\n\n        object_type:\n          type === 'Invoice'\n            ? 'INVOICE_LINE_REPORT'\n            : 'CREDIT_NOTE_LINE_REPORT',\n\n        source_id: documentNumber,\n        source_line_id: `REPORT-${syntheticId}`,\n\n        txn_date_iso: date,\n        txn_date_serial: txnSerial,\n\n        // The Excel export contains customer names, not QBO IDs.\n        qbo_customer_id: '',\n\n        sales_line_amount_eur: value,\n\n        // Not approved until Finance reviews the classification.\n        approved_fee_amount_eur: '',\n\n        classification: feeCandidate\n          ? 'HONORARIUM_CANDIDATE_REVIEW'\n          : 'OTHER_ITEM_REVIEW',\n\n        qbo_item_id: '',\n        currency: 'EUR',\n        modified_at: '',\n        sync_at: now,\n        run_id: runId,\n\n        note:\n          `QBO Sales by Customer Detail | ` +\n          `Customer: ${customer} | ` +\n          `Project: ${project || '(none)'} | ` +\n          `Product: ${product} | ` +\n          `Description: ${description}. ` +\n          `Report-based ID; fee classification pending approval.`\n      }\n    });\n\n    continue;\n  }\n\n  // Identify customer and project section headings.\n  if (!label) continue;\n\n  if (label.startsWith('Total for ')) {\n    if (label.endsWith(' with sub-customers')) {\n      customer = '';\n      project = '';\n    } else {\n      project = '';\n    }\n    continue;\n  }\n\n  // Ignore report titles, dates and grand totals.\n  if (/^(Scio Network GmbH|Sales by Customer Detail|Accrual Basis|TOTAL$|\\d{1,2} \\w+-\\d{1,2} \\w+,? 20\\d{2})/.test(label)) {\n    continue;\n  }\n\n  if (/^\\d{4}_/.test(label)) {\n    project = label;\n  } else {\n    customer = label;\n    project = '';\n  }\n}\n\nif (!output.length) {\n  throw new Error('No eligible invoice or credit-note lines found.');\n}\n\nconst keys = output.map(item => item.json.record_key);\n\nif (new Set(keys).size !== keys.length) {\n  throw new Error('Duplicate record keys detected.');\n}\n\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        336
+      ],
+      "id": "b11d592e-1838-43f8-83c7-764527f29c15",
+      "name": "13Q - Normalize Sales Detail"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E",
+          "mode": "list",
+          "cachedResultName": "SCIO_OBJ4_UPLOAD_TO_GOOGLE_SHEETS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 960735745,
+          "mode": "list",
+          "cachedResultName": "FACT_QBO",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit#gid=960735745"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "record_key"
+          ],
+          "schema": [
+            {
+              "id": "record_key",
+              "displayName": "record_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "object_type",
+              "displayName": "object_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source_id",
+              "displayName": "source_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source_line_id",
+              "displayName": "source_line_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "txn_date_iso",
+              "displayName": "txn_date_iso",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "txn_date_serial",
+              "displayName": "txn_date_serial",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "qbo_customer_id",
+              "displayName": "qbo_customer_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sales_line_amount_eur",
+              "displayName": "sales_line_amount_eur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "approved_fee_amount_eur",
+              "displayName": "approved_fee_amount_eur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "classification",
+              "displayName": "classification",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "qbo_item_id",
+              "displayName": "qbo_item_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "currency",
+              "displayName": "currency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "modified_at",
+              "displayName": "modified_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sync_at",
+              "displayName": "sync_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "run_id",
+              "displayName": "run_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "note",
+              "displayName": "note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2032,
+        336
+      ],
+      "id": "2c5273af-7279-4e28-9d2c-09d431f25890",
+      "name": "14Q - Upsert Sales FACT_QBO",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://data-api.ecb.europa.eu/service/data/EXR/M.USD+GBP.EUR.SP00.A?startPeriod=2020-01&format=csvdata",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        1824
+      ],
+      "id": "9eb1055c-ac7b-4c55-a651-37599dd52b43",
+      "name": "04FX - ECB Monthly Rates"
+    },
+    {
+      "parameters": {
+        "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A?lastNObservations=7&format=csvdata",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1008,
+        1824
+      ],
+      "id": "a9ebfc80-64bd-46aa-a286-3a7eccb35787",
+      "name": "05FX - ECB Latest Daily Rates"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst monthlyText =\n  $('04FX - ECB Monthly Rates').first().json.data;\n\nconst dailyText =\n  $('05FX - ECB Latest Daily Rates').first().json.data;\n\n// Parse the ECB's quoted CSV format.\nfunction parseCsv(text) {\n  if (typeof text !== 'string' || !text.trim()) {\n    throw new Error('ECB response is empty or not text.');\n  }\n\n  const rows = [];\n  let row = [];\n  let cell = '';\n  let quoted = false;\n\n  for (let i = 0; i < text.length; i++) {\n    const c = text[i];\n\n    if (quoted) {\n      if (c === '\"' && text[i + 1] === '\"') {\n        cell += '\"';\n        i++;\n      } else if (c === '\"') {\n        quoted = false;\n      } else {\n        cell += c;\n      }\n    } else if (c === '\"') {\n      quoted = true;\n    } else if (c === ',') {\n      row.push(cell);\n      cell = '';\n    } else if (c === '\\n') {\n      row.push(cell);\n      if (row.some(v => v.trim() !== '')) {\n        rows.push(row);\n      }\n      row = [];\n      cell = '';\n    } else if (c !== '\\r') {\n      cell += c;\n    }\n  }\n\n  if (quoted) {\n    throw new Error('Unclosed quote in ECB CSV.');\n  }\n\n  if (cell !== '' || row.length) {\n    row.push(cell);\n    rows.push(row);\n  }\n\n  if (rows.length < 2) {\n    throw new Error('ECB CSV contains no observations.');\n  }\n\n  const headers = rows.shift().map(\n    v => v.replace(/^\\uFEFF/, '').trim()\n  );\n\n  const periodIndex = headers.indexOf('TIME_PERIOD');\n  const currencyIndex = headers.indexOf('CURRENCY');\n  const valueIndex = headers.indexOf('OBS_VALUE');\n\n  if (\n    periodIndex < 0 ||\n    currencyIndex < 0 ||\n    valueIndex < 0\n  ) {\n    throw new Error(\n      `Missing ECB CSV columns: ${headers.join(', ')}`\n    );\n  }\n\n  return rows\n    .map(r => ({\n      period: String(r[periodIndex] || '').trim(),\n      currency: String(r[currencyIndex] || '').trim(),\n      value: Number(r[valueIndex])\n    }))\n    .filter(r =>\n      ['USD', 'GBP'].includes(r.currency) &&\n      Number.isFinite(r.value) &&\n      r.value > 0\n    );\n}\n\nconst monthly = parseCsv(monthlyText);\nconst daily = parseCsv(dailyText);\n\nconst today = new Date().toISOString().slice(0, 10);\nconst currentMonth = today.slice(0, 7);\nconst out = new Map();\n\nfunction addRate(period, currency, value, basis, status, note) {\n  const key = `${period}|${currency}`;\n  const frequency = basis === 'ECB_MONTHLY_AVERAGE'\n    ? 'M'\n    : 'D';\n\n  out.set(key, {\n    json: {\n      fx_key: key,\n      month: `${period}-01`,\n      currency,\n      units_per_eur_ecb: value,\n\n      rate_basis: basis,\n\n      source_url:\n        `https://data.ecb.europa.eu/data/datasets/EXR/` +\n        `EXR.${frequency}.${currency}.EUR.SP00.A`,\n\n      rate_status: status,\n      notes: note\n    }\n  });\n}\n\n// Historical monthly averages.\n// Do not use incomplete current-month averages.\nfor (const r of monthly) {\n  if (!/^\\d{4}-\\d{2}$/.test(r.period)) continue;\n  if (r.period < '2020-01') continue;\n  if (r.period >= currentMonth) continue;\n\n  addRate(\n    r.period,\n    r.currency,\n    r.value,\n    'ECB_MONTHLY_AVERAGE',\n    'PUBLISHED',\n    'Official ECB monthly average; currency units per EUR.'\n  );\n}\n\n// Latest daily observation within the current month.\nconst latest = {};\n\nfor (const r of daily) {\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(r.period)) continue;\n  if (r.period.slice(0, 7) !== currentMonth) continue;\n  if (r.period > today) continue;\n\n  const ageDays =\n    (Date.parse(today + 'T00:00:00Z') -\n      Date.parse(r.period + 'T00:00:00Z')) /\n    86400000;\n\n  if (ageDays > 7) continue;\n\n  if (\n    !latest[r.currency] ||\n    r.period > latest[r.currency].period\n  ) {\n    latest[r.currency] = r;\n  }\n}\n\nfor (const currency of ['USD', 'GBP']) {\n  const r = latest[currency];\n\n  if (!r) {\n    console.log(\n      `No recent daily ECB rate for ${currency} ` +\n      `in ${currentMonth}. Current-month rate stays pending.`\n    );\n    continue;\n  }\n\n  addRate(\n    currentMonth,\n    currency,\n    r.value,\n    'ECB_LATEST_DAILY_PROVISIONAL',\n    'PROVISIONAL',\n    `Latest daily observation: ${r.period}. ` +\n    'Replace with published monthly average after month-end.'\n  );\n}\n\n// Prevent silent partial imports.\nconst monthlyCount = [...out.values()].filter(\n  x => x.json.rate_basis === 'ECB_MONTHLY_AVERAGE'\n).length;\n\nif (monthlyCount < 100) {\n  throw new Error(\n    `Only ${monthlyCount} historical rates found. ` +\n    'Check the ECB monthly response.'\n  );\n}\n\nconsole.log('ECB FX normalization:', {\n  total: out.size,\n  historicalMonthly: monthlyCount,\n  provisionalCurrentMonth: out.size - monthlyCount,\n  currentMonth\n});\n\nreturn [...out.values()];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        1824
+      ],
+      "id": "b333e5cb-e9b2-418a-9755-9081ddd094b1",
+      "name": "06FX - Normalize ECB Rates"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "FX_RATES",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "fx_key"
+          ],
+          "schema": [
+            {
+              "id": "fx_key",
+              "displayName": "fx_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "month",
+              "displayName": "month",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "currency",
+              "displayName": "currency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "units_per_eur_ecb",
+              "displayName": "units_per_eur_ecb",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "eur_per_unit",
+              "displayName": "eur_per_unit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "rate_basis",
+              "displayName": "rate_basis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "source_url",
+              "displayName": "source_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "rate_status",
+              "displayName": "rate_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "967c3143-7d6b-4cb6-9f7a-811868565e4d",
+      "name": "06G - Upsert METRIC_VALUES1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2032,
+        1824
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "Before running, select your Google Sheets credential, spreadsheet and METRIC_VALUES tab; match on unique key."
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E",
+          "mode": "list",
+          "cachedResultName": "SCIO_OBJ4_UPLOAD_TO_GOOGLE_SHEETS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 250493811,
+          "mode": "list",
+          "cachedResultName": "FACT_QBO_PNL",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit#gid=250493811"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "record_key"
+          ],
+          "schema": [
+            {
+              "id": "record_key",
+              "displayName": "record_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "period",
+              "displayName": "period",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "period_start",
+              "displayName": "period_start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "period_end",
+              "displayName": "period_end",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "currency",
+              "displayName": "currency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "accounting_basis",
+              "displayName": "accounting_basis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fee_revenue",
+              "displayName": "fee_revenue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fee_revenue_ytd",
+              "displayName": "fee_revenue_ytd",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reimbursable_income",
+              "displayName": "reimbursable_income",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_income",
+              "displayName": "total_income",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "subcontractor_fees",
+              "displayName": "subcontractor_fees",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "partner_fees",
+              "displayName": "partner_fees",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "project_backstopping",
+              "displayName": "project_backstopping",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "expert_costs",
+              "displayName": "expert_costs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "other_project_costs",
+              "displayName": "other_project_costs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cost_of_sales",
+              "displayName": "cost_of_sales",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "gross_profit",
+              "displayName": "gross_profit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "gross_margin_ratio",
+              "displayName": "gross_margin_ratio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "salaries_operating",
+              "displayName": "salaries_operating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "social_security_operating",
+              "displayName": "social_security_operating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "professional_fees_internal_operating",
+              "displayName": "professional_fees_internal_operating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "operating_expenses",
+              "displayName": "operating_expenses",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "operating_result_before_other_expenses",
+              "displayName": "operating_result_before_other_expenses",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "other_expenses",
+              "displayName": "other_expenses",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "net_earnings",
+              "displayName": "net_earnings",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "net_margin_ratio",
+              "displayName": "net_margin_ratio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "review_flags",
+              "displayName": "review_flags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source_file",
+              "displayName": "source_file",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sync_at",
+              "displayName": "sync_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "metric_key",
+              "displayName": "metric_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "metric_id",
+              "displayName": "metric_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "value_numeric",
+              "displayName": "value_numeric",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "unit",
+              "displayName": "unit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "approved_by",
+              "displayName": "approved_by",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "evidence_link",
+              "displayName": "evidence_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "run_id",
+              "displayName": "run_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "data_as_of",
+              "displayName": "data_as_of",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2032,
+        1008
+      ],
+      "id": "9e512853-ad6d-4833-9045-c5f865e72c3f",
+      "name": "09QF - Upsert FACT_QBO_PNL",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "'1bcoIMkUY8Q9-lbWfTx7_E6lM1T0u9s2q' in parents and name = 'QBO_CUSTOMER_PNL_LATEST.xlsx' and trashed = false",
+        "returnAll": true,
+        "filter": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        752,
+        80
+      ],
+      "id": "9bcfaf37-30b5-439f-b26e-62a29cc3f177",
+      "name": "15Q - Find Customer PNL Report",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate exactly one customer P&L export in the reporting folder.\nconst files = $input.all().map(item => item.json).filter(file =>\n  file && typeof file.id === 'string' &&\n  file.name === 'QBO_CUSTOMER_PNL_LATEST.xlsx'\n);\nif (files.length !== 1) {\n  throw new Error(\n    `Customer P&L: expected exactly one QBO_CUSTOMER_PNL_LATEST.xlsx in the reporting folder; found ${files.length}. ` +\n    'Check the filename, folder, and duplicate files in Google Drive.'\n  );\n}\nreturn [{ json: files[0] }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        80
+      ],
+      "id": "07e11627-8bec-4882-af75-355ff902a6d0",
+      "name": "15QV - Validate one Customer PNL file"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1328,
+        80
+      ],
+      "id": "a60021c9-9c38-4ce1-a9ec-061fb3738197",
+      "name": "16Q - Download Customer PNL",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qFXNjPFWwXTiV6Sz",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "headerRow": false,
+          "includeEmptyCells": true,
+          "rawData": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        1584,
+        80
+      ],
+      "id": "4f9d4cc7-a607-4a01-a39c-dfc9a54ebe49",
+      "name": "17Q - Extract Customer PNL XLSX"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Scio | QuickBooks P&L by Customer | full replacement\n// Extract from File: XLSX with Header Row=false, rawData=true, includeEmptyCells=true.\n// Export is a cumulative period; do NOT treat it as monthly actuals.\nconst rows = $input.all().map(i => i.json.row);\nif (!rows.length || !rows.every(Array.isArray)) throw Error('Customer PNL: expected row arrays.');\nconst now = new Date().toISOString();\nconst monthNames = {January:1,February:2,March:3,April:4,May:5,June:6,July:7,August:8,September:9,October:10,November:11,December:12};\nfunction fmt(y,m){return `${y}-${String(m).padStart(2,'0')}-01`;}\nconst heading = rows.slice(0,5).flat().map(String).find(s => /20\\d\\d/.test(s) && /January|February|March|April|May|June|July|August|September|October|November|December/.test(s));\nif(!heading) throw Error('Customer PNL: cannot determine source reporting period.');\nlet start,end;\nlet m=heading.match(/(January|February|March|April|May|June|July|August|September|October|November|December),?\\s*(20\\d\\d)\\s*[-–]\\s*(January|February|March|April|May|June|July|August|September|October|November|December),?\\s*(20\\d\\d)/i);\nif(m){start=fmt(Number(m[2]),monthNames[m[1]]);end=fmt(Number(m[4]),monthNames[m[3]]+1);}\nelse {m=heading.match(/(January|February|March|April|May|June|July|August|September|October|November|December)\\s*[-–]\\s*(January|February|March|April|May|June|July|August|September|October|November|December),?\\s*(20\\d\\d)/i);\n if(!m)throw Error(`Customer PNL: unsupported reporting period '${heading}'.`);\n start=fmt(Number(m[3]),monthNames[m[1]]);end=fmt(Number(m[3]),monthNames[m[2]]+1);\n}\nconst header=rows.find(r => r.some(v=>String(v).trim()==='Total for GIZ Deutsche Gesellschaft für Internationale Zusammenarbeit') || (r.length>20 && r.some(v=>/^Total for /.test(String(v)))));\nif(!header)throw Error('Customer PNL: could not find customer/project header.');\nconst lineLabels={fee_revenue:'31000 Project Honorarium',reimbursable_income:'Total for 39000 Other operating income',total_income:'Total Income',expert_costs:'Total for 41000 Expert Costs',other_project_costs:'Total for 42000 Other Project Costs',cost_of_sales:'Total Cost of Sales',gross_profit:'Gross Profit',operating_expenses:'Total Expenses',other_expenses:'Total Other Expenses',net_earnings:'Net Earnings'};\nconst detail={};for(const [key,label] of Object.entries(lineLabels)){\n const match=rows.filter(r=>String(r[0]??'').trim()===label);\n if(match.length!==1)throw Error(`Customer PNL: expected one '${label}', found ${match.length}`);\n detail[key]=match[0];\n}\nfunction num(x,key,c){if(x===null||x===undefined||String(x).trim()==='')return 0;const v=Number(x);if(!Number.isFinite(v))throw Error(`Invalid ${key}, column ${c}: ${x}`);return Math.round((v+Number.EPSILON)*100)/100;}\nconst out=[];let customer='';const subTotals=[];const totals={};\nfor(let c=1;c<header.length;c++){\n const label=String(header[c]??'').trim();if(!label)continue;\n if(label==='Total'){for(const key of Object.keys(lineLabels))totals[key]=num(detail[key][c],key,c);continue;}\n let type,projectId='',projectName='',customerName='';\n if(/^Total for /.test(label)){type='CUSTOMER';customerName=label.slice(10).trim();subTotals.push(c);}\n else if(label==='Not specified'){type='UNASSIGNED';customerName='Not specified';subTotals.push(c);}\n else {const project=label.match(/^(\\d{4})[_\\s-](.+)$/);if(project){type='PROJECT';projectId=project[1];projectName=label;customerName=customer;}\n else {customer=label;continue;}}\n const p={};for(const key of Object.keys(lineLabels))p[key]=num(detail[key][c],key,c);\n for(const [field,calc] of [['income',p.fee_revenue+p.reimbursable_income],['direct_costs',p.expert_costs+p.other_project_costs],['profit',p.total_income-p.cost_of_sales],['net',p.gross_profit-p.operating_expenses-p.other_expenses]]){\n const reported=field==='income'?p.total_income:field==='direct_costs'?p.cost_of_sales:field==='profit'?p.gross_profit:p.net_earnings;\n if(Math.abs(reported-calc)>0.03)throw Error(`Customer PNL ${type} '${label}': ${field} not reconciled`);\n }\n const key=type==='PROJECT'?`PROJECT|${projectId}`:`${type}|${customerName}`;\n out.push({json:{record_key:`QBO|CUSTOMER_PNL|${start}|${end}|${key}`,period_start:start,period_end:end,grain:'CUMULATIVE',record_type:type,customer_name:customerName,project_id:projectId,project_name:projectName,fee_revenue:p.fee_revenue,reimbursable_income:p.reimbursable_income,total_income:p.total_income,expert_costs:p.expert_costs,other_project_costs:p.other_project_costs,cost_of_sales:p.cost_of_sales,gross_profit:p.gross_profit,gross_margin_ratio:p.total_income===0?'':p.gross_profit/p.total_income,operating_expenses:p.operating_expenses,other_expenses:p.other_expenses,net_earnings:p.net_earnings,source:'QBO_PNL_BY_CUSTOMER',status:'PROVISIONAL - REVIEW',sync_at:now}});\n}\nif(out.length<5)throw Error('Customer PNL produced too few records');\nif(new Set(out.map(x=>x.json.record_key)).size!==out.length)throw Error('Customer PNL duplicate keys');\nfor(const key of ['total_income','cost_of_sales','gross_profit']){\n const sum=subTotals.reduce((a,c)=>a+num(detail[key][c],key,c),0);\n if(Math.abs(sum-totals[key])>0.05)throw Error(`Customer PNL customer totals do not match company ${key}: ${sum} vs ${totals[key]}`);\n}\nconsole.log('Customer PNL normalized', {rows:out.length,start,end,projects:out.filter(x=>x.json.record_type==='PROJECT').length,customers:out.filter(x=>x.json.record_type==='CUSTOMER').length});\nreturn out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        80
+      ],
+      "id": "19863d35-be1b-473a-b062-55985d8d9460",
+      "name": "18Q - Normalize Customer PNL"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E",
+          "mode": "list",
+          "cachedResultName": "SCIO_OBJ4_UPLOAD_TO_GOOGLE_SHEETS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "FACT_QBO_CUSTOMER_PNL",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "record_key"
+          ],
+          "schema": [
+            {
+              "id": "record_key",
+              "displayName": "record_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "period_start",
+              "displayName": "period_start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "period_end",
+              "displayName": "period_end",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "grain",
+              "displayName": "grain",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "record_type",
+              "displayName": "record_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "project_id",
+              "displayName": "project_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "project_name",
+              "displayName": "project_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fee_revenue",
+              "displayName": "fee_revenue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reimbursable_income",
+              "displayName": "reimbursable_income",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_income",
+              "displayName": "total_income",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "expert_costs",
+              "displayName": "expert_costs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "other_project_costs",
+              "displayName": "other_project_costs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cost_of_sales",
+              "displayName": "cost_of_sales",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "gross_profit",
+              "displayName": "gross_profit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "gross_margin_ratio",
+              "displayName": "gross_margin_ratio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "operating_expenses",
+              "displayName": "operating_expenses",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "other_expenses",
+              "displayName": "other_expenses",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "net_earnings",
+              "displayName": "net_earnings",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sync_at",
+              "displayName": "sync_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2032,
+        80
+      ],
+      "id": "775a85f9-6509-47b6-9a59-11b5f10ffca5",
+      "name": "19Q - Upsert FACT_QBO_CUSTOMER_PNL",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst rows = $input.all();\nconst now = new Date().toISOString();\n\nreturn [{\n  json: {\n    run_id: String($execution.id || ''),\n    mode: String($execution.mode || 'UNKNOWN'),\n    from_date: '',\n    through_date: '',\n    source: 'SALESFORCE_OPPORTUNITIES',\n    status: 'SUCCESS',\n    row_count: rows.length,\n    started_at: '',\n    finished_at: now,\n    error_details: ''\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2320,
+        1264
+      ],
+      "id": "ee204a8d-3347-45f2-98c9-8802deaaf528",
+      "name": "07S - Prepare Salesforce Sync Log"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E",
+          "mode": "list",
+          "cachedResultName": "SCIO_OBJ4_UPLOAD_TO_GOOGLE_SHEETS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 877534502,
+          "mode": "list",
+          "cachedResultName": "SYNC_LOG",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_gGi8tCBs4_5LpKXd9UKRfwlwqkvJ6T38mUbyLIG_E/edit#gid=877534502"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "run_id": "={{ $json.run_id }}",
+            "mode": "={{ $json.mode }}",
+            "from_date": "={{ $json.from_date }}",
+            "through_date": "={{ $json.through_date }}",
+            "source": "={{ $json.source }}",
+            "status": "={{ $json.status }}",
+            "row_count": "={{ $json.row_count }}",
+            "started_at": "={{ $json.started_at }}",
+            "finished_at": "={{ $json.finished_at }}",
+            "error_details": "={{ $json.error_details }}"
+          },
+          "matchingColumns": [
+            "run_id"
+          ],
+          "schema": [
+            {
+              "id": "run_id",
+              "displayName": "run_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "mode",
+              "displayName": "mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "from_date",
+              "displayName": "from_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "through_date",
+              "displayName": "through_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_count",
+              "displayName": "row_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "started_at",
+              "displayName": "started_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "finished_at",
+              "displayName": "finished_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "error_details",
+              "displayName": "error_details",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2624,
+        1264
+      ],
+      "id": "ad82f71b-7634-4dcd-9d58-2dff942bfdc0",
+      "name": "09QF - Upsert FACT_QBO_PNL1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aEc5lPRiYjsh4sIp",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-11-02T15:29:23.049Z",
+      "createdAt": "2026-11-02T15:29:23.049Z",
+      "role": "workflow:owner",
+      "workflowId": "P4y1nwcCEe5CjQvA",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-11-05T15:44:09.837Z",
+  "versionId": "0cdb668f-67a4-423c-ba4e-df23f9e73e56"
+}
