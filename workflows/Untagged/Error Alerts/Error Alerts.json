@@ -1,0 +1,106 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "On workflow error": {
+      "main": [
+        [
+          {
+            "node": "Build alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build alert": {
+      "main": [
+        [
+          {
+            "node": "Send failure email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-09-03T19:40:59.744Z",
+  "id": "gz1SScQ6DdkhMGqW",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Error Alerts",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ed6e0309-42b5-4f98-8d4d-029d83b5aad7",
+      "name": "On workflow error",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// The Error Trigger sends two different shapes:\n//   node failure    -> { execution: { id, url, error, lastNodeExecuted, mode }, workflow: {...} }\n//   trigger failure -> { trigger:   { error, mode },                            workflow: {...} }\n// Read whichever one arrived.\nconst j = $input.first().json;\nconst e = j.execution || j.trigger || {};\nconst err = e.error || {};\n\nconst workflowName = (j.workflow || {}).name || 'Unknown workflow';\nconst workflowId   = (j.workflow || {}).id   || '';\nconst nodeName     = e.lastNodeExecuted || '(trigger / startup)';\nconst message      = err.message || 'No error message was provided.';\nconst stack        = (err.stack || '').split('\\n').slice(0, 6).join('\\n').trim();\n\nconst subject = `n8n workflow failed: ${workflowName}`;\n\nconst body = [\n  `Workflow : ${workflowName}`,\n  `Node     : ${nodeName}`,\n  `Error    : ${message}`,\n  '',\n  `Time     : ${new Date().toISOString()}`,\n  e.mode ? `Mode     : ${e.mode}` : null,\n  e.id   ? `Execution: ${e.id}`   : null,\n  workflowId ? `Workflow ID: ${workflowId}` : null,\n  e.url  ? `\\nOpen the run: ${e.url}` : null,\n  stack  ? `\\n--- Stack (first 6 lines) ---\\n${stack}` : null,\n].filter(Boolean).join('\\n');\n\nreturn [{ json: { subject, body, workflowName, nodeName, message } }];"
+      },
+      "id": "a326bb6d-38e2-4ca4-8ca1-e71c40b9bb25",
+      "name": "Build alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        144,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "nyairo@scio.net,kemuntonyairo13@gmail.com,florian@scio.net",
+        "subject": "={{ $json.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "94a3cab1-508d-414e-9df4-4543692b4fae",
+      "name": "Send failure email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        368,
+        336
+      ],
+      "webhookId": "fcfd98de-d20d-4003-9354-4dac158aab26",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fD8VmggKPtaXNY04",
+          "name": "Ai (gemini account)"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-03T19:40:59.753Z",
+      "createdAt": "2026-09-03T19:40:59.753Z",
+      "role": "workflow:owner",
+      "workflowId": "gz1SScQ6DdkhMGqW",
+      "projectId": "cFPhnNmamSW061Vq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-11-18T11:39:56.225Z",
+  "versionId": "8451100c-0fe6-41e5-a779-a4cc09ed4dc4"
+}
