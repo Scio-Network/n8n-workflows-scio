@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-10-28T14:58:50.281Z",
-    "createdAt": "2026-10-28T14:58:50.281Z",
-    "versionId": "6dc7dcfa-1499-423e-93d0-11ba49b50b7e",
+    "updatedAt": "2026-11-18T12:09:12.816Z",
+    "createdAt": "2026-11-18T12:09:12.816Z",
+    "versionId": "50da52f9-2576-4fc6-8c59-f134043d853d",
     "workflowId": "cn53h7CvFFZi1TPo",
     "nodes": [
       {
@@ -947,6 +947,16 @@
                 "removed": true
               },
               {
+                "id": "Maximum Daily Rate (incl. Taxes)\r\n\n",
+                "displayName": "Maximum Daily Rate (incl. Taxes)\r\n\n",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
                 "id": "Open to work in the next 6 months?",
                 "displayName": "Open to work in the next 6 months?",
                 "required": false,
@@ -1305,7 +1315,8 @@
               "Vouch 3 Role": "={{ $json.contact.Vouch_Role_3__c }}",
               "Vouch 3 Email": "={{ $json.contact.Vouch_Email_3__c }}",
               "Submission ID\r\n": "={{ $json.submissionId }}",
-              "Nationality": "={{ $json.contact.Mother_Tongue__c }}"
+              "Nationality": "={{ $json.contact.Mother_Tongue__c }}",
+              "Maximum Daily Rate (incl. Taxes)\r\n\n": "={{ $json.roster.dailyRate.max }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -1590,6 +1601,16 @@
                 "display": true,
                 "type": "string",
                 "canBeUsedToMatch": true
+              },
+              {
+                "id": "Maximum Daily Rate (incl. Taxes)\r\n\n",
+                "displayName": "Maximum Daily Rate (incl. Taxes)\r\n\n",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
               },
               {
                 "id": "Open to work in the next 6 months?",
@@ -2378,7 +2399,7 @@
     "name": null,
     "description": null
   },
-  "activeVersionId": "6dc7dcfa-1499-423e-93d0-11ba49b50b7e",
+  "activeVersionId": "50da52f9-2576-4fc6-8c59-f134043d853d",
   "connections": {
     "Merge1": {
       "main": [
@@ -3677,6 +3698,16 @@
               "removed": true
             },
             {
+              "id": "Maximum Daily Rate (incl. Taxes)\r\n\n",
+              "displayName": "Maximum Daily Rate (incl. Taxes)\r\n\n",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
               "id": "Open to work in the next 6 months?",
               "displayName": "Open to work in the next 6 months?",
               "required": false,
@@ -4035,7 +4066,8 @@
             "Vouch 3 Role": "={{ $json.contact.Vouch_Role_3__c }}",
             "Vouch 3 Email": "={{ $json.contact.Vouch_Email_3__c }}",
             "Submission ID\r\n": "={{ $json.submissionId }}",
-            "Nationality": "={{ $json.contact.Mother_Tongue__c }}"
+            "Nationality": "={{ $json.contact.Mother_Tongue__c }}",
+            "Maximum Daily Rate (incl. Taxes)\r\n\n": "={{ $json.roster.dailyRate.max }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -4320,6 +4352,16 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true
+            },
+            {
+              "id": "Maximum Daily Rate (incl. Taxes)\r\n\n",
+              "displayName": "Maximum Daily Rate (incl. Taxes)\r\n\n",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Open to work in the next 6 months?",
@@ -4759,60 +4801,51 @@
         "json": {
           "headers": {
             "host": "scionetwork.app.n8n.cloud",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
-            "content-length": "1642054",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36",
+            "content-length": "169642",
             "accept": "*/*",
             "accept-encoding": "gzip, br",
             "accept-language": "en-US,en;q=0.9",
             "cdn-loop": "cloudflare; loops=1; subreqs=1",
-            "cf-connecting-ip": "197.254.117.158",
+            "cf-connecting-ip": "41.90.172.78",
             "cf-ew-via": "15",
             "cf-ipcountry": "KE",
-            "cf-ray": "a51a99c41b41392a-LOS",
+            "cf-ray": "a5c6a8b3e9b75b2c-GVA",
             "cf-visitor": "{\"scheme\":\"https\"}",
             "cf-worker": "n8n.cloud",
-            "content-type": "multipart/form-data; boundary=----WebKitFormBoundarypyuIti6NdjUJzpuV",
+            "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryVDXrONixEG1GhDa4",
             "origin": "null",
             "priority": "u=1, i",
-            "sec-ch-ua": "\"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"156\", \"Google Chrome\";v=\"156\"",
+            "sec-ch-ua": "\"Chromium\";v=\"158\", \"Not.A/Brand\";v=\"24\", \"Google Chrome\";v=\"158\"",
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": "\"Windows\"",
             "sec-fetch-dest": "empty",
             "sec-fetch-mode": "cors",
             "sec-fetch-site": "cross-site",
-            "x-forwarded-for": "197.254.117.158, 104.22.76.135",
+            "x-forwarded-for": "41.90.172.78, 172.69.108.131",
             "x-forwarded-host": "scionetwork.app.n8n.cloud",
             "x-forwarded-port": "443",
             "x-forwarded-proto": "https",
-            "x-forwarded-server": "traefik-prod-users-gwc-20-76b98d8c9d-nsqfb",
+            "x-forwarded-server": "traefik-prod-users-gwc-20-76b98d8c9d-64w9n",
             "x-is-trusted": "yes",
-            "x-real-ip": "197.254.117.158"
+            "x-real-ip": "41.90.172.78"
           },
           "params": {},
           "query": {},
           "body": {
-            "payload": "{\"form\":\"Scio Network Onboarding\",\"submittedAt\":\"2026-10-28T14:23:48.291Z\",\"networkMember\":{\"firstName\":\"Test\",\"lastName\":\"Changes\",\"email\":\"testchanges@gmail.com\",\"mobile\":\"+43 5768395763\",\"bio\":\"testshortbio\",\"headshotFileName\":\"headshot-sample.jpg\",\"linkedin\":null,\"country\":\"Kenya\",\"workSituation\":\"Working at an organisation\",\"workSituationOrganisation\":\"testworkinganorg\",\"workSituationOther\":null,\"areasOfWork\":[\"Diversity, Equity & Inclusion\",\"Strategy & Organisational Development\"],\"areasOfWorkOther\":null,\"countriesOfExperience\":[\"Kenya\"],\"organisations\":[\"orgworked1\"],\"consultantRosterChoice\":\"Yes — take me to the roster questions\",\"consent\":{\"joinNetworkAndProcessData\":true,\"scioWebsite\":true,\"linkedinAndProfessionalCommunications\":true,\"profilePicture\":true}},\"consultantRoster\":{\"availability\":\"Yes, actively looking\",\"qualification\":\"Other\",\"qualificationOther\":\"highestqualificatiother\",\"assignmentLength\":[\"Short inputs (under 10 days)\",\"Medium assignments (10–40 days)\",\"Long-term or framework roles\"],\"availableToTravel\":\"Yes\",\"roles\":[\"Facilitate workshops and events\",\"Field data collection\",\"Senior advisory & quality assurance\"],\"coreField\":\"Monitoring, Evaluation & Learning\",\"coreFieldOther\":null,\"yearsOfExperience\":\"5–10\",\"countryExperience\":[{\"country\":\"Kenya\",\"duration\":\"18months\"}],\"languages\":[{\"language\":\"Amharic\",\"languageOther\":null,\"level\":\"Native\"},{\"language\":\"Bengali\",\"languageOther\":null,\"level\":\"Working level (B1–B2)\"}],\"exampleAssignments\":null,\"references\":[],\"cvFileName\":\"Cv_Tamson Edmonds CV Nov.25.pdf\",\"dailyRate\":{\"currency\":\"EUR\",\"min\":5000,\"max\":40000000},\"accuracyConfirmed\":true,\"privacyConfirmed\":true}}"
+            "payload": "{\"form\":\"Scio Network Onboarding\",\"submittedAt\":\"2026-11-18T11:33:12.130Z\",\"networkMember\":{\"firstName\":\"test\",\"lastName\":\"alerts\",\"email\":\"testchanges@gmail.com\",\"mobile\":\"+244 96040596\",\"bio\":null,\"headshotFileName\":null,\"linkedin\":null,\"country\":\"Kenya\",\"workSituation\":\"Academic or researcher\",\"workSituationOrganisation\":null,\"workSituationOther\":null,\"areasOfWork\":[\"Conflict, Fragility & Governance\",\"Diversity, Equity & Inclusion\"],\"areasOfWorkOther\":null,\"countriesOfExperience\":[\"Kenya\"],\"organisations\":[\"org1\"],\"consultantRosterChoice\":\"Yes — take me to the roster questions\",\"consent\":{\"joinNetworkAndProcessData\":true,\"scioWebsite\":true,\"linkedinAndProfessionalCommunications\":true,\"profilePicture\":true}},\"consultantRoster\":{\"availability\":\"Yes, actively looking\",\"qualification\":\"Bachelor’s degree or equivalent\",\"qualificationOther\":null,\"assignmentLength\":[\"Medium assignments (10–40 days)\"],\"availableToTravel\":\"Yes\",\"roles\":[\"Provide specific technical expertise\",\"Support with research, data and analysis\"],\"coreField\":\"Higher Education Management\",\"coreFieldOther\":null,\"yearsOfExperience\":\"5–10\",\"countryExperience\":[{\"country\":\"Kenya\",\"duration\":\"10years\"}],\"languages\":[{\"language\":\"Amharic\",\"languageOther\":null,\"level\":\"Working level (B1–B2)\"}],\"exampleAssignments\":null,\"references\":[],\"cvFileName\":\"Cv_Tamson Edmonds CV Nov.25.pdf\",\"dailyRate\":{\"currency\":\"EUR\",\"min\":1000,\"max\":99953},\"accuracyConfirmed\":true,\"privacyConfirmed\":true}}"
           },
           "webhookUrl": "https://scionetwork.app.n8n.cloud/webhook/scio-onboarding",
           "executionMode": "production"
         },
         "binary": {
-          "Profile_Picture": {
-            "mimeType": "image/jpeg",
-            "fileType": "image",
-            "fileExtension": "jpg",
-            "data": "filesystem-v2",
-            "fileName": "headshot-sample.jpg",
-            "id": "filesystem-v2:workflows/cn53h7CvFFZi1TPo/executions/temp/binary_data/14a2b4f5-bbf4-4b45-a039-e28a09c405ca",
-            "fileSize": "1.47 MB"
-          },
           "Upload_your_CV": {
             "mimeType": "application/pdf",
             "fileType": "pdf",
             "fileExtension": "pdf",
             "data": "filesystem-v2",
             "fileName": "Cv_Tamson Edmonds CV Nov.25.pdf",
-            "id": "filesystem-v2:workflows/cn53h7CvFFZi1TPo/executions/temp/binary_data/c94858ef-af9a-4e06-b075-4ced57691860",
+            "id": "filesystem-v2:workflows/cn53h7CvFFZi1TPo/executions/temp/binary_data/c883c0ea-4d9e-4f5b-aa09-96b1976bd16e",
             "fileSize": "168 kB"
           }
         },
@@ -4824,7 +4857,11 @@
     ]
   },
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "gz1SScQ6DdkhMGqW"
   },
   "shared": [
     {
@@ -4838,6 +4875,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-10-28T14:58:50.277Z",
-  "versionId": "6dc7dcfa-1499-423e-93d0-11ba49b50b7e"
+  "updatedAt": "2026-11-18T12:09:12.810Z",
+  "versionId": "50da52f9-2576-4fc6-8c59-f134043d853d"
 }
